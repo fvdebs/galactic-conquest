@@ -11,7 +11,7 @@ v2.0.3 or higher
 https://www.vagrantup.com/downloads.html
 ```
 
-### 2. Install Vagrant plugins.
+### 2. Install Vagrant plugins. 
 Open shell/cmd and execute the following commands:
 ```
 vagrant plugin install vagrant-bindfs
