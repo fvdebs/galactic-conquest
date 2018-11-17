@@ -1,7 +1,7 @@
 # Install a quick and simple development environment
 ### 1. Download and install software
 ```
-VirtualBox 
+VirtualBox
 v5.2.8 or higher with guest additions 
 (open virtualbox after install and you will be asked to install guest additions as well) 
 https://www.virtualbox.org/wiki/Downloads
