@@ -1,0 +1,12 @@
+.idea
+vendor
+data/cache/**
+data/logs/**
+
+composer.lock
+
+.DS_Store
+.vagrant/machines/
+database/migrations/**
+database/proxies/**
+database/seeds/**
