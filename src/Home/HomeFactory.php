@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Acme\Home;
+namespace GC\Home;
 
+use GC\Home\Handler\HomeHandler;
 use Inferno\Application\Factory\AbstractFactory;
-use Inferno\TwigBridge\TwigRenderer;
+use Inferno\TwigBridge\Renderer\TwigRenderer;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class HomeFactory extends AbstractFactory

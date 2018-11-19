@@ -15,6 +15,7 @@ use Inferno\MonologBridge\MonologBridgeConstants;
 use Inferno\Routing\RoutingConstants;
 use Inferno\Translation\TranslationConstants;
 use Inferno\TwigBridge\TwigBridgeConstants;
+use Inferno\Error\ErrorConstants;
 
 return [
     /*
@@ -23,8 +24,15 @@ return [
     |--------------------------------------------------------------------------
     */
     ConfigConstants::CONFIG_ENVIRONMENT => ConfigConstants::CONFIG_ENVIRONMENT_DEV,
-    HttpFoundationConstants::HTTP_FOUNDATION_REQUEST_FACTORY => '',
-    HttpFoundationConstants::HTTP_FOUNDATION_ERROR_RESPONSE_FACTORY => '',
+    HttpFoundationConstants::HTTP_FOUNDATION_REQUEST_FACTORY => \Inferno\DiactorosBridge\Request\ServerRequestFactory::class,
+    HttpFoundationConstants::HTTP_FOUNDATION_ERROR_RESPONSE_FACTORY => \Inferno\Error\Response\ErrorResponseFactory::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Error
+    |--------------------------------------------------------------------------
+    */
+    ErrorConstants::ERROR_RESPONSE_FACTORY => \Inferno\DiactorosBridge\Response\ResponseFactory::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -64,7 +72,11 @@ return [
         \Inferno\Translation\TranslationFactory::class,
         \Inferno\TwigBridge\TwigBridgeFactory::class,
         \Inferno\Maintenance\MaintenanceFactory::class,
-   ],
+        \Inferno\Routing\RoutingFactory::class,
+        \Inferno\FastRouteBridge\FastRouteBridgeFactory::class,
+        \Inferno\Error\ErrorFactory::class,
+        \GC\Home\HomeFactory::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -82,8 +94,11 @@ return [
         \Inferno\MonologBridge\Service\MonologBridgeServiceProvider::class,
         \Inferno\Session\Service\SessionServiceProvider::class,
         \Inferno\Translation\Service\TranslationServiceProvider::class,
+        \Inferno\Routing\Service\RoutingServiceProvider::class,
         \Inferno\TwigBridge\Service\TwigBridgeServiceProvider::class,
         \Inferno\Maintenance\Service\MaintenanceServiceProvider::class,
+        \Inferno\FastRouteBridge\Service\FastRouteBridgeServiceProvider::class,
+        \Inferno\Error\Service\ErrorServiceProvider::class,
     ],
 
     /*
@@ -92,6 +107,7 @@ return [
     |--------------------------------------------------------------------------
     */
     HttpFoundationConstants::HTTP_FOUNDATION_MIDDLEWARES => [
+        \Inferno\Error\Middleware\WhoopsMiddleware::class,
         \Inferno\Maintenance\Middleware\MaintenanceMiddleware::class,
         \Inferno\Locale\Middleware\LocaleMiddleware::class,
         \Inferno\Translation\Middleware\SetTranslatorLocaleMiddleware::class,
@@ -114,7 +130,7 @@ return [
     |--------------------------------------------------------------------------
     */
     RoutingConstants::ROUTING_ROUTE_PROVIDER => [
-        \Acme\Home\HomeRouteProvider::class
+        \GC\Home\Provider\HomeRouteProvider::class
     ],
 
     /*
@@ -153,6 +169,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | DiactorosBridge
+    |--------------------------------------------------------------------------
+    */
+    DiactorosBridgeConstants::DIACTOROS_BRIDGE_RESPONSE_FACTORY => \Inferno\DiactorosBridge\Response\ResponseFactory::class,
+
+    /*
+    |--------------------------------------------------------------------------
     | TwigBridge
     |--------------------------------------------------------------------------
     */
@@ -160,6 +183,7 @@ return [
     TwigBridgeConstants::TWIG_BRIDGE_CACHE_DIR => '%baseDir%/data/cache/twig',
     TwigBridgeConstants::TWIG_BRIDGE_TEMPLATE_PATHS => ['{{FactoryPath}}/Theme/{{Theme}}'],
     TwigBridgeConstants::TWIG_BRIDGE_THEME_DIR => 'default',
+    TwigBridgeConstants::TWIG_BRIDGE_NAMESPACED_TPL_FACTORY_KEY => ApplicationConstants::APPLICATION_FACTORIES,
 
     /*
     |--------------------------------------------------------------------------

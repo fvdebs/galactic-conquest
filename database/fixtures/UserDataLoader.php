@@ -2,7 +2,6 @@
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use Inferno\Demo\User\Persistence\User;
 
 class UserDataLoader implements FixtureInterface
 {
@@ -11,6 +10,7 @@ class UserDataLoader implements FixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        /*
         $hasher = new \Inferno\Utility\PasswordHasher();
         $faker = Faker\Factory::create();
 
@@ -20,6 +20,7 @@ class UserDataLoader implements FixtureInterface
         }
 
         $manager->flush();
+        */
     }
 
     /**

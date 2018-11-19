@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Acme\Home;
+namespace GC\Home\Handler;
 
 use Inferno\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;

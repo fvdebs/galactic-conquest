@@ -1,5 +1,7 @@
-# Install a quick and simple development environment
-### 1. Download and install software
+# GC
+
+## Install
+### 1. Software
 ```
 VirtualBox
 v5.2.8 or higher with guest additions 

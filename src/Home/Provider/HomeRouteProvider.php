@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Acme\Home;
+namespace GC\Home\Provider;
 
+use GC\Home\HomeFactory;
 use Inferno\Routing\Route\RouteCollection;
 use Inferno\Routing\Route\RouteProviderInterface;
 use Psr\Container\ContainerInterface;

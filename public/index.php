@@ -1,5 +1,4 @@
 <?php
-echo 'hello world'; exit;
 
 $baseDir = __DIR__ . '/..';
 
@@ -7,23 +6,15 @@ require_once $baseDir . '/vendor/autoload.php';
 
 use Inferno\Config\Loader\DirectoryConfigLoader;
 use Inferno\Application\Boot\BootLoader;
-use Inferno\HttpFoundation\HttpFoundationFactory;
 use Inferno\Config\Config;
 use Inferno\Dependency\Container\Container;
+use Inferno\Application\Application;
 
-$bootLoader = new BootLoader(
-    new Config($baseDir, (new DirectoryConfigLoader($baseDir . '/configs'))->load()),
-    new Container()
-);
+$container = new Container();
+$config = new Config($baseDir, (new DirectoryConfigLoader($baseDir . '/config'))->load());
+$bootLoader = new BootLoader($config, $container);
 
-$factory = new HttpFoundationFactory();
-
-$app = $factory->createHttpApplication(
-    $bootLoader,
-    new \Inferno\HttpFoundation\Handler\RequestHandlerRunner()
-);
-
-
+$app = new Application($bootLoader);
 $app->boot()
-    ->run()
+    ->run($container->get(\Inferno\HttpFoundation\Kernel\HttpKernel::class))
     ->terminate();
