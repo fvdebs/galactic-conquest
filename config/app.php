@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Inferno\Application\ApplicationConstants;
 use Inferno\Locale\LocaleConstants;
 use Inferno\Routing\RoutingConstants;
-
+ 
 return [
     /*
     |--------------------------------------------------------------------------

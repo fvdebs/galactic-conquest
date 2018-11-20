@@ -18,7 +18,7 @@ use Inferno\TwigBridge\TwigBridgeConstants;
 use Inferno\Error\ErrorConstants;
 
 return [
-    /*
+     /*
     |--------------------------------------------------------------------------
     | Application
     |--------------------------------------------------------------------------
