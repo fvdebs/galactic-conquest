@@ -47,6 +47,7 @@ return [
     |--------------------------------------------------------------------------
     */
     ApplicationConstants::APPLICATION_BOOTSTRAPPER => [
+        \Inferno\Application\Bootstrapper\ConfigBootstrapper::class,
         \Inferno\Application\Bootstrapper\FactoriesBootstrapper::class,
         \Inferno\Application\Bootstrapper\ServiceProviderBootstrapper::class,
         \Inferno\Routing\Bootstrapper\RouterChainBootstrapper::class,
@@ -75,7 +76,6 @@ return [
         \Inferno\Routing\RoutingFactory::class,
         \Inferno\FastRouteBridge\FastRouteBridgeFactory::class,
         \Inferno\Error\ErrorFactory::class,
-        \GC\Home\HomeFactory::class,
     ],
 
     /*
@@ -129,9 +129,7 @@ return [
     | Route Provider
     |--------------------------------------------------------------------------
     */
-    RoutingConstants::ROUTING_ROUTE_PROVIDER => [
-        \GC\Home\Provider\HomeRouteProvider::class
-    ],
+    RoutingConstants::ROUTING_ROUTE_PROVIDER => [],
 
     /*
     |--------------------------------------------------------------------------
