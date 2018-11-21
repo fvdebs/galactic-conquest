@@ -1,6 +1,7 @@
 {
   "name": "fvdebs/galactic-conquest",
   "homepage": "https://github.com/fvdebs",
+  "license": "MIT",
   "repositories": [
     {
       "type": "git",

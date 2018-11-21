@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 use Inferno\Application\ApplicationConstants;
 use Inferno\Cache\CacheConstants;
@@ -18,7 +16,7 @@ use Inferno\TwigBridge\TwigBridgeConstants;
 use Inferno\Error\ErrorConstants;
 
 return [
-     /*
+    /*
     |--------------------------------------------------------------------------
     | Application
     |--------------------------------------------------------------------------
@@ -213,7 +211,7 @@ return [
    | MonologBridge
    |--------------------------------------------------------------------------
    */
-    MonologBridgeConstants::MONOLOG_BRIDGE_APP_EXCEPTION_LOG => '%baseDir%/data/logs/app_%environment%.log',
+    MonologBridgeConstants::MONOLOG_BRIDGE_APP_EXCEPTION_LOG => '%baseDir%/data/logs/exception_%environment%.log',
     MonologBridgeConstants::MONOLOG_BRIDGE_LOG_FORMAT => "[%datetime%] [%level_name%] %message% %context% %extra%\n",
     MonologBridgeConstants::MONOLOG_BRIDGE_EXTRA_FIELDS => [
         'url' => 'REQUEST_URI',

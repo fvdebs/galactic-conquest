@@ -8,5 +8,5 @@ use Inferno\HttpFoundation\Kernel\HttpKernel;
 
 $app = ApplicationFactory::createDefaultApplication();
 $app->boot(ApplicationConstants::APPLICATION_BOOTSTRAPPER);
- $app->run(HttpKernel::class);
+$app->run(HttpKernel::class);
 $app->terminate();
