@@ -1,12 +1,8 @@
-.idea
-vendor
-data/cache/**
-data/logs/**
-
 composer.lock
-
+vendor
+.idea/
 .DS_Store
-.vagrant/machines/
-database/migrations/**
-database/proxies/**
-database/seeds/**
+
+# App
+/data/cache/*
+/data/logs/*

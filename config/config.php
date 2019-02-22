@@ -1,102 +1,54 @@
-<?php declare(strict_types=1);
+<?php
 
-use Inferno\Application\ApplicationConstants;
-use Inferno\Cache\CacheConstants;
-use Inferno\Config\ConfigConstants;
-use Inferno\DiactorosBridge\DiactorosBridgeConstants;
-use Inferno\FastRouteBridge\FastRouteBridgeConstants;
-use Inferno\HttpFoundation\HttpFoundationConstants;
-use Inferno\Doctrine\DoctrineConstants;
-use Inferno\Locale\LocaleConstants;
-use Inferno\Maintenance\MaintenanceConstants;
-use Inferno\MonologBridge\MonologBridgeConstants;
-use Inferno\Routing\RoutingConstants;
-use Inferno\Translation\TranslationConstants;
-use Inferno\TwigBridge\TwigBridgeConstants;
-use Inferno\Error\ErrorConstants;
+declare(strict_types=1);
 
 return [
     /*
     |--------------------------------------------------------------------------
-    | Application
+    | Environment
     |--------------------------------------------------------------------------
     */
-    ConfigConstants::CONFIG_ENVIRONMENT => ConfigConstants::CONFIG_ENVIRONMENT_DEV,
-    HttpFoundationConstants::HTTP_FOUNDATION_REQUEST_FACTORY => \Inferno\DiactorosBridge\Request\ServerRequestFactory::class,
-    HttpFoundationConstants::HTTP_FOUNDATION_ERROR_RESPONSE_FACTORY => \Inferno\Error\Response\ErrorResponseFactory::class,
+    'env' => 'dev',
+    'isDev' => false,
+    'isCli' => \php_sapi_name() === 'cli',
+
+    /*
+   |--------------------------------------------------------------------------
+   | Whoops
+   |--------------------------------------------------------------------------
+   */
+    'whoops-catch-errors' => true,
 
     /*
     |--------------------------------------------------------------------------
-    | Error
+    | Http Factories
     |--------------------------------------------------------------------------
     */
-    ErrorConstants::ERROR_RESPONSE_FACTORY => \Inferno\DiactorosBridge\Response\ResponseFactory::class,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Maintenance
-    |--------------------------------------------------------------------------
-    */
-    MaintenanceConstants::MAINTENANCE_MODE => false,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Bootstrapper
-    |--------------------------------------------------------------------------
-    */
-    ApplicationConstants::APPLICATION_BOOTSTRAPPER => [
-        \Inferno\Application\Bootstrapper\ConfigBootstrapper::class,
-        \Inferno\Application\Bootstrapper\FactoriesBootstrapper::class,
-        \Inferno\Application\Bootstrapper\ServiceProviderBootstrapper::class,
-        \Inferno\Routing\Bootstrapper\RouterChainBootstrapper::class,
-        \Inferno\Routing\Bootstrapper\RouteProviderBootstrapper::class,
-        \Inferno\HttpFoundation\Bootstrapper\MiddlewareBootstrapper::class,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Factories
-    |--------------------------------------------------------------------------
-    */
-    ApplicationConstants::APPLICATION_FACTORIES => [
-        \Inferno\HttpFoundation\HttpFoundationFactory::class,
-        \Inferno\DiactorosBridge\DiactorosBridgeFactory::class,
-        \Inferno\Cache\CacheFactory::class,
-        \Inferno\Doctrine\DoctrineFactory::class,
-        \Inferno\Event\EventFactory::class,
-        \Inferno\Filesystem\FilesystemFactory::class,
-        \Inferno\Locale\LocaleFactory::class,
-        \Inferno\MonologBridge\MonologBridgeFactory::class,
-        \Inferno\Session\SessionFactory::class,
-        \Inferno\Translation\TranslationFactory::class,
-        \Inferno\TwigBridge\TwigBridgeFactory::class,
-        \Inferno\Maintenance\MaintenanceFactory::class,
-        \Inferno\Routing\RoutingFactory::class,
-        \Inferno\FastRouteBridge\FastRouteBridgeFactory::class,
-        \Inferno\Error\ErrorFactory::class,
-    ],
+    'server-request-factory-class' => \Inferno\Http\Request\ServerRequestFactory::class,
+    'response-factory-class' => \Inferno\Http\Response\ResponseFactory::class,
+    'uri-factory-class' => \Inferno\Http\Uri\UriFactory::class,
 
     /*
     |--------------------------------------------------------------------------
     | Service Provider
     |--------------------------------------------------------------------------
     */
-    ApplicationConstants::APPLICATION_SERVICE_PROVIDER => [
-        \Inferno\HttpFoundation\Service\HttpFoundationServiceProvider::class,
-        \Inferno\DiactorosBridge\Service\DiactorosBridgeServiceProvider::class,
-        \Inferno\Cache\Service\CacheServiceProvider::class,
-        \Inferno\Doctrine\Service\DoctrineServiceProvider::class,
-        \Inferno\Event\Service\EventServiceProvider::class,
-        \Inferno\Filesystem\Service\FilesystemServiceProvider::class,
-        \Inferno\Locale\Service\LocaleServiceProvider::class,
-        \Inferno\MonologBridge\Service\MonologBridgeServiceProvider::class,
-        \Inferno\Session\Service\SessionServiceProvider::class,
-        \Inferno\Translation\Service\TranslationServiceProvider::class,
-        \Inferno\Routing\Service\RoutingServiceProvider::class,
-        \Inferno\TwigBridge\Service\TwigBridgeServiceProvider::class,
-        \Inferno\Maintenance\Service\MaintenanceServiceProvider::class,
-        \Inferno\FastRouteBridge\Service\FastRouteBridgeServiceProvider::class,
-        \Inferno\Error\Service\ErrorServiceProvider::class,
+    'providers' => [
+        \Inferno\Http\HttpServiceProvider::class,
+        \Inferno\Console\ConsoleServiceProvider::class,
+        \Inferno\Doctrine\DoctrineServiceProvider::class,
+        \Inferno\Whoops\WhoopsServiceProvider::class,
+        \Inferno\Filesystem\FilesystemServiceProvider::class,
+        \Inferno\HttpFoundation\HttpFoundationServiceProvider::class,
+        \Inferno\HttpRequestHandler\HttpRequestHandlerServiceProvider::class,
+        \Inferno\Language\LanguageServiceProvider::class,
+        \Inferno\Monolog\MonologServiceProvider::class,
+        \Inferno\Routing\RoutingServiceProvider::class,
+        \Inferno\Session\SessionServiceProvider::class,
+        \Inferno\Translation\TranslationServiceProvider::class,
+        \Inferno\Renderer\RendererServiceProvider::class,
+        \Inferno\Predis\PredisServiceProvider::class,
+        \Inferno\RabbitMq\RabbitMqServiceProvider::class,
     ],
 
     /*
@@ -104,56 +56,57 @@ return [
     | Middleware
     |--------------------------------------------------------------------------
     */
-    HttpFoundationConstants::HTTP_FOUNDATION_MIDDLEWARES => [
-        \Inferno\Error\Middleware\WhoopsMiddleware::class,
-        \Inferno\Maintenance\Middleware\MaintenanceMiddleware::class,
-        \Inferno\Locale\Middleware\LocaleMiddleware::class,
-        \Inferno\Translation\Middleware\SetTranslatorLocaleMiddleware::class,
+    'middleware-runner' => \Inferno\HttpRequestHandler\Runner\Runner::class,
+    'middlewares' => [
+        \Inferno\Whoops\Middleware\WhoopsMiddleware::class,
+        \Inferno\Language\Middleware\LanguageDetectorMiddleware::class,
         \Inferno\Session\Middleware\StartSessionMiddleware::class,
         \Inferno\Routing\Middleware\DispatcherMiddleware::class,
-    ],
-
-    /*
-   |--------------------------------------------------------------------------
-   | Router Chain
-   |--------------------------------------------------------------------------
-   */
-    RoutingConstants::ROUTING_ROUTER_CHAIN => [
-        \Inferno\FastRouteBridge\Router\FastRouter::class
+        \Inferno\Routing\Middleware\RouteNotFoundMiddleware::class,
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Route Provider
+    | Routing
     |--------------------------------------------------------------------------
     */
-    RoutingConstants::ROUTING_ROUTE_PROVIDER => [],
+    'next-middleware-on-not-found' => false,
+    'invocation-strategy' => \Inferno\Routing\Strategy\ContainerHandlerStrategy::class,
+    'router-chain' => [
+        \Inferno\Routing\Router\Router::class
+    ],
 
     /*
     |--------------------------------------------------------------------------
     | Doctrine
     |--------------------------------------------------------------------------
     */
-    DoctrineConstants::DOCTRINE_PROXY_DIR => '%baseDir%/data/persistence/proxies',
-    DoctrineConstants::DOCTRINE_FIXTURE_DIR => '%baseDir%/data/persistence/fixtures',
-    DoctrineConstants::DOCTRINE_ENTITY_DIR => ['%baseDir%/src'],
-    DoctrineConstants::DOCTRINE_IS_DEV => false,
-    DoctrineConstants::DOCTRINE_CONFIG => [
+    'doctrine-migration-dir' => '%baseDir%/database/migrations',
+    'doctrine-proxy-dir' => '%baseDir%/database/proxies',
+    'doctrine-fixture-dir' => '%baseDir%/database/fixtures',
+    'doctrine-entity-dir' => ['%baseDir%/src'],
+    'doctrine-is-dev' => true,
+    'doctrine-cache' => \Doctrine\Common\Cache\PredisCache::class,
+    'doctrine-config' => [
         'host' => 'localhost',
         'user' => 'dev',
-        'password' => 'secret',
-        'dbname' => 'demo',
+        'password' => 'dev',
+        'dbname' => 'gc',
     ],
 
     /*
-    |--------------------------------------------------------------------------
-    | Locale (route prefix => iso locale) @todo
-    |--------------------------------------------------------------------------
-    */
-    LocaleConstants::LOCALE_FALLBACK => 'en_EN',
-    LocaleConstants::LOCALE_AVAILABLE => [
-        'en' => 'en_EN',
-        'de' => 'de_DE',
+   |--------------------------------------------------------------------------
+   | Monolog
+   |--------------------------------------------------------------------------
+   */
+    'monolog-log' => '%baseDir%/data/logs/exception.log',
+    'monolog-format' => "[%datetime%] [%level_name%] %message% %context% %extra%\n",
+    'monolog-level' => \Monolog\Logger::DEBUG,
+    'monolog-fields' => [
+        'url' => 'REQUEST_URI',
+        'ip' => 'REMOTE_ADDR',
+        'method' => 'REQUEST_METHOD',
+        'referrer' => 'HTTP_REFERER'
     ],
 
     /*
@@ -161,62 +114,52 @@ return [
    | Translation
    |--------------------------------------------------------------------------
    */
-    TranslationConstants::TRANSLATION_DIR => '%baseDir%/data/translations',
-
-    /*
-    |--------------------------------------------------------------------------
-    | DiactorosBridge
-    |--------------------------------------------------------------------------
-    */
-    DiactorosBridgeConstants::DIACTOROS_BRIDGE_RESPONSE_FACTORY => \Inferno\DiactorosBridge\Response\ResponseFactory::class,
-
-    /*
-    |--------------------------------------------------------------------------
-    | TwigBridge
-    |--------------------------------------------------------------------------
-    */
-    TwigBridgeConstants::TWIG_RESPONSE_FACTORY_CONTAINER_KEY => DiactorosBridgeConstants::DIACTOROS_BRIDGE_RESPONSE_FACTORY,
-    TwigBridgeConstants::TWIG_BRIDGE_CACHE_DIR => '%baseDir%/data/cache/twig',
-    TwigBridgeConstants::TWIG_BRIDGE_TEMPLATE_PATHS => ['{{FactoryPath}}/Theme/{{Theme}}'],
-    TwigBridgeConstants::TWIG_BRIDGE_THEME_DIR => 'default',
-    TwigBridgeConstants::TWIG_BRIDGE_NAMESPACED_TPL_FACTORY_KEY => ApplicationConstants::APPLICATION_FACTORIES,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Routing
-    |--------------------------------------------------------------------------
-    */
-    FastRouteBridgeConstants::FAST_ROUTE_BRIDGE_CACHE_FILE => '%baseDir%/data/cache/route/route.cache.php',
-    RoutingConstants::ROUTING_INVOCATION_STRATEGY => \Inferno\Routing\Strategy\RequestContainerStrategy::NAME,
-    RoutingConstants::ROUTING_ROUTE_LOADER => [
-        \Inferno\Routing\Loader\RouteCollectionLoader::class,
-        // PhpFileRouteLoader::class,
-    ],
-    RoutingConstants::ROUTING_ROUTE_LOADER_PHP_FILEPATH => [
-        '%baseDir%/config/routes.php',
+    'translation-file-globs' => [
+        '%baseDir%/data/translations/*.ini',
+        '%baseDir%/src/*/Translations/*.ini',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Cache
+    | Language
     |--------------------------------------------------------------------------
     */
-    CacheConstants::CACHE_REDIS_HOST => 'localhost',
-    CacheConstants::CACHE_REDIS_PORT => 6379,
-    CacheConstants::CACHE_DIRECTORIES => ['%baseDir%/data/cache', '%baseDir%/data/logs'],
-    CacheConstants::CACHE_FILES => [],
+    'language-fallback' => 'en',
+    'language-current' => 'en',
+
+    // route prefix => iso language code (translation filename)
+    'language-available' => [
+        'en' => 'en_EN',
+        'de' => 'de-DE',
+    ],
 
     /*
-   |--------------------------------------------------------------------------
-   | MonologBridge
-   |--------------------------------------------------------------------------
-   */
-    MonologBridgeConstants::MONOLOG_BRIDGE_APP_EXCEPTION_LOG => '%baseDir%/data/logs/exception_%environment%.log',
-    MonologBridgeConstants::MONOLOG_BRIDGE_LOG_FORMAT => "[%datetime%] [%level_name%] %message% %context% %extra%\n",
-    MonologBridgeConstants::MONOLOG_BRIDGE_EXTRA_FIELDS => [
-        'url' => 'REQUEST_URI',
-        'ip' => 'REMOTE_ADDR',
-        'method' => 'REQUEST_METHOD',
-        'referrer' => 'HTTP_REFERER'
+    |--------------------------------------------------------------------------
+    | Renderer
+    |--------------------------------------------------------------------------
+    */
+    'template-cache' => false,
+    'template-cache-dir' => '%baseDir%/data/cache/twig',
+    'template-dir-globs' => [
+        '%baseDir%/src/*/Templates',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Redis
+    |--------------------------------------------------------------------------
+    */
+    'redis-host' => 'localhost',
+    'redis-port' => 6379,
+
+    /*
+    |--------------------------------------------------------------------------
+    | RabbitMQ
+    |--------------------------------------------------------------------------
+    */
+    'rabbitmq-host' => 'localhost',
+    'rabbitmq-port' => 5672,
+    'rabbitmq-user' => 'rabbit',
+    'rabbitmq-password' => 'rabbit',
+    'rabbitmq-vhost' => '/',
 ];

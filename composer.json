@@ -1,22 +1,25 @@
 {
-  "name": "fvdebs/galactic-conquest",
-  "homepage": "https://github.com/fvdebs",
+  "name": "galactic-conquest/galactic-conquest",
+  "homepage": "https://github.com/galactic-conquest",
   "license": "MIT",
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/fvdebs/inferno"
-    }
-  ],
+  "type": "project",
+  "description": "Galactic Conquest",
   "require": {
     "php": ">=7.2",
-    "fvdebs/inferno": "dev-master"
+    "fzaninotto/faker": "^1.8",
+    "inferno/framework": "dev-master",
+    "psr/simple-cache": "^1.0"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^0.11",
+    "roave/security-advisories": "dev-master"
   },
   "autoload" : {
     "psr-4": {
       "GC\\": "src/"
     }
   },
+  "prefer-stable": true,
   "minimum-stability": "dev",
   "config": {
     "sort-packages": true

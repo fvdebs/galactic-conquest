@@ -1,24 +1,28 @@
-<?php declare(strict_types=1);
+<?php
 
-use Inferno\Application\ApplicationConstants;
-use Inferno\Routing\RoutingConstants;
- 
+declare(strict_types=1);
+
 return [
     /*
     |--------------------------------------------------------------------------
-    | Factories
+    | Clear Cache Command
     |--------------------------------------------------------------------------
     */
-    ApplicationConstants::APPLICATION_FACTORIES => [
-        \GC\Home\HomeFactory::class,
+    'cache-dirs' => [
+        '%baseDir%/data/cache',
+        '%baseDir%/data/logs'
+    ],
+    'cache-files' => [
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Route Provider
+    | App Service Providers
     |--------------------------------------------------------------------------
     */
-    RoutingConstants::ROUTING_ROUTE_PROVIDER => [
-        \GC\Home\Provider\HomeRouteProvider::class
+    'providers' => [
+        \GC\App\AppServiceProvider::class,
+        \GC\Home\HomeServiceProvider::class,
+        \GC\User\UserServiceProvider::class,
     ],
 ];

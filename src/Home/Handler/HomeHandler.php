@@ -1,25 +1,46 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace GC\Home\Handler;
 
-use Inferno\Template\TemplateRendererInterface;
+use GC\User\Model\UserRepository;
+use Inferno\Http\Response\ResponseFactoryInterface;
+use Inferno\Renderer\RendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class HomeHandler implements RequestHandlerInterface
+final class HomeHandler implements RequestHandlerInterface
 {
     /**
-     * @var \Inferno\Template\TemplateRendererInterface
+     * @var \Inferno\Http\Response\ResponseFactoryInterface
      */
-    protected $renderer;
+    private $responseFactory;
 
     /**
-     * @param \Inferno\Template\TemplateRendererInterface $renderer
+     * @var \Inferno\Renderer\RendererInterface
      */
-    public function __construct(TemplateRendererInterface $renderer)
-    {
+    private $renderer;
+
+    /**
+     * @var \GC\User\Model\UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * @param \Inferno\Http\Response\ResponseFactoryInterface $responseFactory
+     * @param \Inferno\Renderer\RendererInterface $renderer
+     * @param \GC\User\Model\UserRepository $userRepository
+     */
+    public function __construct(
+        ResponseFactoryInterface $responseFactory,
+        RendererInterface $renderer,
+        UserRepository $userRepository
+    ) {
+        $this->responseFactory = $responseFactory;
         $this->renderer = $renderer;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -29,6 +50,16 @@ class HomeHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->renderer->renderResponse('@Home/home.twig');
+        try {
+            $userCount = $this->userRepository->countUsers();
+        } catch (\Throwable $throwable) {
+            $userCount = 0;
+        }
+
+        return $this->responseFactory->createFromContent(
+            $this->renderer->render('@Home/home.twig', [
+                'userCount' => $userCount,
+            ])
+        );
     }
 }
