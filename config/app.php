@@ -24,5 +24,6 @@ return [
         \GC\App\AppServiceProvider::class,
         \GC\Home\HomeServiceProvider::class,
         \GC\User\UserServiceProvider::class,
+        \GC\Alliance\AllianceServiceProvider::class,
     ],
 ];

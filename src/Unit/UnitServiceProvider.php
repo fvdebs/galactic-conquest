@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace GC\Home;
+namespace GC\Unit;
 
-use GC\User\Model\UserRepository;
 use Inferno\Routing\Loader\RouteProviderLoader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-final class HomeServiceProvider implements ServiceProviderInterface
+final class UnitServiceProvider implements ServiceProviderInterface
 {
     /**
      * @param \Pimple\Container $pimple

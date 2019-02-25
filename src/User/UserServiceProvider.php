@@ -18,20 +18,7 @@ final class UserServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->provideUserFactory($pimple);
         $this->provideUserRepository($pimple);
-    }
-
-    /**
-     * @param \Pimple\Container $container
-     *
-     * @return void
-     */
-    protected function provideUserFactory(Container $container): void
-    {
-        $container->offsetSet(UserFactory::class, function(Container $container) {
-            return new UserFactory();
-        });
     }
 
     /**

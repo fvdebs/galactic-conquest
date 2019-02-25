@@ -10,29 +10,29 @@ namespace GC\User\Model;
  */
 class User
 {
-	/**
-	 * @var int
-	 * @Id
-	 * @Column(type="bigint", name="user_id", nullable=FALSE, length=20)
-	 * @GeneratedValue
-	 */
-	private $userId;
-	
-	/**
-	 * @var string
-	 * @Column(type="string", name="name", nullable=FALSE, length=30)
-	 */
-	private $name;
-	
-	/**
-	 * @var string
-	 * @Column(type="string", name="mail", nullable=FALSE, length=150)
-	 */
-	private $mail;
+    /**
+     * @var int
+     * @Column(name="user_id", type="bigint", nullable=false)
+     * @Id
+     * @GeneratedValue(strategy="IDENTITY")
+     */
+    private $userId;
 
     /**
      * @var string
-     * @Column(type="string", name="password", nullable=FALSE, length=50)
+     * @Column(name="name", type="string", length=100, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     * @Column(name="mail", type="string", length=150, nullable=false)
+     */
+    private $mail;
+
+    /**
+     * @var string
+     * @Column(name="password", type="string", length=70, nullable=false)
      */
     private $password;
 
