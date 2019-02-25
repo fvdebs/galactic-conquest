@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace GC\Technology;
 
+use Doctrine\ORM\EntityManager;
+use GC\Technology\Model\TechnologyRepository;
 use Inferno\Routing\Loader\RouteProviderLoader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -17,7 +19,8 @@ final class TechnologyServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->addHomeRouteProvider($pimple);
+        $this->provideTechnologyRouteProvider($pimple);
+        $this->provideTechnologyRepository($pimple);
     }
 
     /**
@@ -25,12 +28,22 @@ final class TechnologyServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function addHomeRouteProvider(Container $container): void
+    private function provideTechnologyRouteProvider(Container $container): void
     {
         $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            $routeProviderLoader->addRouteProvider(new HomeRouteProvider());
+            return $routeProviderLoader->addRouteProvider(new TechnologyRouteProvider());
+        });
+    }
 
-            return $routeProviderLoader;
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideTechnologyRepository(Container $container): void
+    {
+        $container->offsetSet(TechnologyRepository::class, function(Container $container) {
+            return new TechnologyRepository($container->offsetGet(EntityManager::class));
         });
     }
 }

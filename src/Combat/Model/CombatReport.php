@@ -57,6 +57,7 @@ final class CombatReport
      * @param string $dataJson
      * @param string $externalId
      * @param \GC\Player\Model\Player $player
+     * @throws \Exception
      */
     public function __construct(string $dataJson, string $externalId, Player $player)
     {
@@ -83,31 +84,11 @@ final class CombatReport
     }
 
     /**
-     * @param string $dataJson
-     *
-     * @return void
-     */
-    public function setDataJson(string $dataJson): void
-    {
-        $this->dataJson = $dataJson;
-    }
-
-    /**
      * @return DateTime
      */
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @param DateTime $createdAt
-     *
-     * @return void
-     */
-    public function setCreatedAt(DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
     }
 
     /**
@@ -119,30 +100,10 @@ final class CombatReport
     }
 
     /**
-     * @param string $externalId
-     *
-     * @return void
-     */
-    public function setExternalId(string $externalId): void
-    {
-        $this->externalId = $externalId;
-    }
-
-    /**
      * @return \GC\Player\Model\Player
      */
     public function getPlayer(): Player
     {
         return $this->player;
-    }
-
-    /**
-     * @param \GC\Player\Model\Player $player
-     *
-     * @return void
-     */
-    public function setPlayer(Player $player): void
-    {
-        $this->player = $player;
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace GC\Unit;
 
+use Doctrine\ORM\EntityManager;
+use GC\Unit\Model\UnitRepository;
 use Inferno\Routing\Loader\RouteProviderLoader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -17,7 +19,8 @@ final class UnitServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->addHomeRouteProvider($pimple);
+        $this->provideUnitRouteProvider($pimple);
+        $this->provideUnitRepository($pimple);
     }
 
     /**
@@ -25,12 +28,22 @@ final class UnitServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function addHomeRouteProvider(Container $container): void
+    private function provideUnitRouteProvider(Container $container): void
     {
         $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            $routeProviderLoader->addRouteProvider(new HomeRouteProvider());
+            return $routeProviderLoader->addRouteProvider(new UnitRouteProvider());
+        });
+    }
 
-            return $routeProviderLoader;
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideUnitRepository(Container $container): void
+    {
+        $container->offsetSet(UnitRepository::class, function(Container $container) {
+            return new UnitRepository($container->offsetGet(EntityManager::class));
         });
     }
 }

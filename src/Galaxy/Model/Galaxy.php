@@ -11,7 +11,7 @@ use GC\Player\Model\Player;
  * @Table(name="galaxy", indexes={@Index(name="fk-galaxy-commander_player_id", columns={"commander_player_id"}), @Index(name="fk-galaxy-alliance_id", columns={"alliance_id"})})
  * @Entity
  */
-class Galaxy
+final class Galaxy
 {
     /**
      * @var int
@@ -72,9 +72,9 @@ class Galaxy
     private $extractorPoints;
 
     /**
-     * @var int|null
+     * @var int
      *
-     * @Column(name="ranking_position", type="integer", nullable=true)
+     * @Column(name="ranking_position", type="integer", nullable=false)
      */
     private $rankingPosition;
 
@@ -110,7 +110,7 @@ class Galaxy
         $this->taxCrystal = 0;
         $this->taxMetal = 0;
         $this->extractorPoints = 0;
-        $this->rankingPosition = null;
+        $this->rankingPosition = 0;
         $this->alliance = null;
         $this->commanderPlayer = null;
     }
@@ -250,9 +250,9 @@ class Galaxy
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getRankingPosition(): ?int
+    public function getRankingPosition(): int
     {
         return $this->rankingPosition;
     }
@@ -270,7 +270,7 @@ class Galaxy
     /**
      * @return \GC\Alliance\Model\Alliance|null
      */
-    public function getAlliance(): Alliance
+    public function getAlliance(): ?Alliance
     {
         return $this->alliance;
     }
@@ -280,7 +280,7 @@ class Galaxy
      *
      * @return void
      */
-    public function setAlliance(?Alliance $alliance = null): void
+    public function setAlliance(?Alliance $alliance): void
     {
         $this->alliance = $alliance;
     }
@@ -288,7 +288,7 @@ class Galaxy
     /**
      * @return \GC\Player\Model\Player|null
      */
-    public function getCommanderPlayer(): Player
+    public function getCommanderPlayer(): ?Player
     {
         return $this->commanderPlayer;
     }
@@ -298,7 +298,7 @@ class Galaxy
      *
      * @return void
      */
-    public function setCommanderPlayer(?Player $commanderPlayer = null): void
+    public function setCommanderPlayer(?Player $commanderPlayer): void
     {
         $this->commanderPlayer = $commanderPlayer;
     }

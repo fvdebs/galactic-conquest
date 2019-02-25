@@ -10,7 +10,7 @@ use GC\Technology\Model\Technology;
  * @Table(name="galaxy_technology", indexes={@Index(name="fk-galaxy_technology-galaxy_id", columns={"galaxy_id"}), @Index(name="fk-galaxy_technology-technology_id", columns={"technology_id"})})
  * @Entity
  */
-class GalaxyTechnology
+final class GalaxyTechnology
 {
     /**
      * @var int

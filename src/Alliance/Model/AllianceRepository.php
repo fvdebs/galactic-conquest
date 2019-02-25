@@ -15,7 +15,7 @@ final class AllianceRepository extends DoctrineRepository
 	 */
 	public function __construct(EntityManager $entityManager)
     {
-		parent::__construct($entityManager, 'GC\Alliance\Model\Alliance');
+		parent::__construct($entityManager, Alliance::class);
 	}
 
     /**
@@ -28,6 +28,8 @@ final class AllianceRepository extends DoctrineRepository
 
     /**
      * @param int $allianceId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\Alliance\Model\Alliance|null
      */

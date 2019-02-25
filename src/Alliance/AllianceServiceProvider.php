@@ -28,7 +28,7 @@ final class AllianceServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function provideAllianceRouteProvider(Container $container): void
+    private function provideAllianceRouteProvider(Container $container): void
     {
         $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
             return $routeProviderLoader->addRouteProvider(new AllianceRouteProvider());
@@ -40,7 +40,7 @@ final class AllianceServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function provideAllianceRepository(Container $container): void
+    private function provideAllianceRepository(Container $container): void
     {
         $container->offsetSet(AllianceRepository::class, function(Container $container) {
             return new AllianceRepository($container->offsetGet(EntityManager::class));

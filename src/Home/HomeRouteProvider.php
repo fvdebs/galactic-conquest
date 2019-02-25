@@ -25,6 +25,6 @@ final class HomeRouteProvider implements RouteProviderInterface
                 $container->get('renderer'),
                 $container->get(UserRepository::class)
             );
-        }, 'home');
+        }, HomeHandler::NAME);
     }
 }

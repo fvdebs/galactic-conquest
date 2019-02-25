@@ -15,7 +15,7 @@ final class CombatReportRepository extends DoctrineRepository
 	 */
 	public function __construct(EntityManager $entityManager)
     {
-		parent::__construct($entityManager, 'GC\Combat\Model\CombatReport');
+		parent::__construct($entityManager, CombatReport::class);
 	}
 
     /**
@@ -28,6 +28,8 @@ final class CombatReportRepository extends DoctrineRepository
 
     /**
      * @param int $combatReportId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\Combat\Model\CombatReport|null
      */

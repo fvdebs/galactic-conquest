@@ -8,8 +8,10 @@ namespace GC\User\Model;
  * @Entity
  * @Table(name="user")
  */
-class User
+final class User
 {
+    public const SESSION_KEY_USER_ID = 'userId';
+
     /**
      * @var int
      * @Column(name="user_id", type="bigint", nullable=false)

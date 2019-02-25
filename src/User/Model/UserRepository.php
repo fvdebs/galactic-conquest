@@ -8,14 +8,14 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Inferno\Doctrine\Repository\DoctrineRepository;
 
-class UserRepository extends DoctrineRepository
+final class UserRepository extends DoctrineRepository
 {
 	/**
 	 * @param \Doctrine\ORM\EntityManager $entityManager
 	 */
 	public function __construct(EntityManager $entityManager)
     {
-		parent::__construct($entityManager, 'GC\User\Model\User');
+		parent::__construct($entityManager, User::class);
 	}
 
     /**
@@ -28,6 +28,8 @@ class UserRepository extends DoctrineRepository
 
     /**
      * @param int $userId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\User\Model\User|null
      */
@@ -43,6 +45,8 @@ class UserRepository extends DoctrineRepository
     /**
      * @param string $mail
      *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      * @return \GC\User\Model\User|null
      */
 	public function findByMail(string $mail): ?User
@@ -56,6 +60,8 @@ class UserRepository extends DoctrineRepository
 
     /**
      * @param string $name
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\User\Model\User|null
      */
@@ -78,10 +84,12 @@ class UserRepository extends DoctrineRepository
 
 		return $queryBuilder->getQuery()->getResult();
 	}
-	
-	/**
-	 * @return int
-	 */
+
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return int
+     */
 	public function countUsers(): int
     {
 		$count = $this->getQueryBuilder()

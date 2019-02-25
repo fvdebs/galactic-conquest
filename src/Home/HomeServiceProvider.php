@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace GC\Home;
 
-use GC\User\Model\UserRepository;
 use Inferno\Routing\Loader\RouteProviderLoader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -26,12 +25,10 @@ final class HomeServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function addHomeRouteProvider(Container $container): void
+    private function addHomeRouteProvider(Container $container): void
     {
         $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            $routeProviderLoader->addRouteProvider(new HomeRouteProvider());
-
-            return $routeProviderLoader;
+            return $routeProviderLoader->addRouteProvider(new HomeRouteProvider());
         });
     }
 }

@@ -17,8 +17,19 @@ final class CombatRouteProvider implements RouteProviderInterface
      */
     public function provide(RouteCollectionInterface $collection): void
     {
-        $collection->get('/{locale}/{universe}/combat', function(ContainerInterface $container) {
+        // display external combat report
+        $collection->get('/{locale}/combat/{combatReportExternalId}', function(ContainerInterface $container) {
 
-        }, 'name');
+        }, 'combat.report.external');
+
+        // display report
+        $collection->get('/{locale}/{universe}/combat/report/{combatReportId}', function(ContainerInterface $container) {
+
+        }, 'combat.report');
+
+        // list of last combat reports
+        $collection->get('/{locale}/{universe}/combat/reports', function(ContainerInterface $container) {
+
+        }, 'combat.reports');
     }
 }

@@ -13,6 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class HomeHandler implements RequestHandlerInterface
 {
+    public const NAME = 'home';
+
     /**
      * @var \Inferno\Http\Response\ResponseFactoryInterface
      */

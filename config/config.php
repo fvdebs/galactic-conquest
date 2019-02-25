@@ -43,7 +43,7 @@ return [
         \Inferno\HttpRequestHandler\HttpRequestHandlerServiceProvider::class,
         \Inferno\Language\LanguageServiceProvider::class,
         \Inferno\Monolog\MonologServiceProvider::class,
-        \Inferno\Routing\RoutingServiceProvider::class,
+        \GC\App\Routing\RoutingServiceProvider::class,
         \Inferno\Session\SessionServiceProvider::class,
         \Inferno\Translation\TranslationServiceProvider::class,
         \Inferno\Renderer\RendererServiceProvider::class,
@@ -61,6 +61,7 @@ return [
         \Inferno\Whoops\Middleware\WhoopsMiddleware::class,
         \Inferno\Language\Middleware\LanguageDetectorMiddleware::class,
         \Inferno\Session\Middleware\StartSessionMiddleware::class,
+        \GC\App\Middleware\GameMiddleware::class,
         \Inferno\Routing\Middleware\DispatcherMiddleware::class,
         \Inferno\Routing\Middleware\RouteNotFoundMiddleware::class,
     ],
@@ -71,7 +72,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'next-middleware-on-not-found' => false,
-    'invocation-strategy' => \Inferno\Routing\Strategy\ContainerHandlerStrategy::class,
+    'invocation-strategy' => \GC\App\Routing\Strategy\GCHandlerStrategy::class,
     'router-chain' => [
         \Inferno\Routing\Router\Router::class
     ],
@@ -84,7 +85,9 @@ return [
     'doctrine-migration-dir' => '%baseDir%/database/migrations',
     'doctrine-proxy-dir' => '%baseDir%/database/proxies',
     'doctrine-fixture-dir' => '%baseDir%/database/fixtures',
-    'doctrine-entity-dir' => ['%baseDir%/src'],
+    'doctrine-entity-dir' => [
+        '%baseDir%/src'
+    ],
     'doctrine-is-dev' => true,
     'doctrine-cache' => \Doctrine\Common\Cache\PredisCache::class,
     'doctrine-config' => [

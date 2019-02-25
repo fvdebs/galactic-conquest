@@ -8,7 +8,7 @@ namespace GC\Unit\Model;
  * @Table(name="unit_combat", indexes={@Index(name="fk-unit_combat-target_unit_id", columns={"target_unit_id"}), @Index(name="fk-unit_combat-source_unit_id", columns={"source_unit_id"})})
  * @Entity
  */
-class UnitCombat
+final class UnitCombat
 {
     /**
      * @var int
@@ -34,9 +34,9 @@ class UnitCombat
     private $attackPower;
 
     /**
-     * @var \Unit
+     * @var \GC\Unit\Model\Unit
      *
-     * @ManyToOne(targetEntity="Unit")
+     * @ManyToOne(targetEntity="\GC\Unit\Model\Unit")
      * @JoinColumns({
      *   @JoinColumn(name="source_unit_id", referencedColumnName="unit_id")
      * })
@@ -44,14 +44,106 @@ class UnitCombat
     private $sourceUnit;
 
     /**
-     * @var \Unit
+     * @var \GC\Unit\Model\Unit
      *
-     * @ManyToOne(targetEntity="Unit")
+     * @ManyToOne(targetEntity="\GC\Unit\Model\Unit")
      * @JoinColumns({
      *   @JoinColumn(name="target_unit_id", referencedColumnName="unit_id")
      * })
      */
     private $targetUnit;
 
+    /**
+     * @param \GC\Unit\Model\Unit $sourceUnit
+     * @param \GC\Unit\Model\Unit $targetUnit
+     * @param int $distribution
+     * @param string $attackPower
+     */
+    public function __construct(Unit $sourceUnit, Unit $targetUnit, int $distribution, string $attackPower)
+    {
+        $this->sourceUnit = $sourceUnit;
+        $this->targetUnit = $targetUnit;
+        $this->distribution = $distribution;
+        $this->attackPower = $attackPower;
+    }
 
+    /**
+     * @return int
+     */
+    public function getUnitCombatId(): int
+    {
+        return $this->unitCombatId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDistribution(): int
+    {
+        return $this->distribution;
+    }
+
+    /**
+     * @param int $distribution
+     *
+     * @return void
+     */
+    public function setDistribution(int $distribution): void
+    {
+        $this->distribution = $distribution;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttackPower(): string
+    {
+        return $this->attackPower;
+    }
+
+    /**
+     * @param string $attackPower
+     *
+     * @return void
+     */
+    public function setAttackPower(string $attackPower): void
+    {
+        $this->attackPower = $attackPower;
+    }
+
+    /**
+     * @return \GC\Unit\Model\Unit
+     */
+    public function getSourceUnit(): Unit
+    {
+        return $this->sourceUnit;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $sourceUnit
+     *
+     * @return void
+     */
+    public function setSourceUnit(Unit $sourceUnit): void
+    {
+        $this->sourceUnit = $sourceUnit;
+    }
+
+    /**
+     * @return \GC\Unit\Model\Unit
+     */
+    public function getTargetUnit(): Unit
+    {
+        return $this->targetUnit;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $targetUnit
+     *
+     * @return void
+     */
+    public function setTargetUnit(Unit $targetUnit): void
+    {
+        $this->targetUnit = $targetUnit;
+    }
 }

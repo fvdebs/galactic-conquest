@@ -37,9 +37,9 @@ final class Alliance
     private $code;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @Column(name="description", type="text", length=65535, nullable=true)
+     * @Column(name="description", type="text", length=65535, nullable=false)
      */
     private $description;
 
@@ -61,7 +61,7 @@ final class Alliance
      * @var int
      *
      * @Column(name="tax_metal", type="integer", nullable=false)
-     */
+     */dfsdf
     private $taxMetal;
 
     /**
@@ -187,19 +187,19 @@ final class Alliance
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
 
     /**
-     * @param string|null $description
+     * @param string $description
      *
      * @return void
      */
-    public function setDescription(?string $description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }

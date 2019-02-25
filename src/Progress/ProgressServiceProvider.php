@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace GC\Progress;
 
-use GC\User\Model\UserRepository;
-use Inferno\Routing\Loader\RouteProviderLoader;
+use Doctrine\ORM\EntityManager;
+use GC\Progress\Model\ProgressRepository;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -18,7 +18,7 @@ final class ProgressServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->addHomeRouteProvider($pimple);
+        $this->provideProgressRepository($pimple);
     }
 
     /**
@@ -26,12 +26,10 @@ final class ProgressServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function addHomeRouteProvider(Container $container): void
+    private function provideProgressRepository(Container $container): void
     {
-        $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            $routeProviderLoader->addRouteProvider(new HomeRouteProvider());
-
-            return $routeProviderLoader;
+        $container->offsetSet(ProgressRepository::class, function(Container $container) {
+            return new ProgressRepository($container->offsetGet(EntityManager::class));
         });
     }
 }

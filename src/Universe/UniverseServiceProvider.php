@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace GC\Universe;
 
+use Doctrine\ORM\EntityManager;
+use GC\Universe\Model\UniverseRepository;
 use Inferno\Routing\Loader\RouteProviderLoader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -17,7 +19,8 @@ final class UniverseServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->addHomeRouteProvider($pimple);
+        $this->provideUniverseRouteProvider($pimple);
+        $this->provideUniverseRepository($pimple);
     }
 
     /**
@@ -25,12 +28,22 @@ final class UniverseServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function addHomeRouteProvider(Container $container): void
+    private function provideUniverseRouteProvider(Container $container): void
     {
         $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            $routeProviderLoader->addRouteProvider(new HomeRouteProvider());
+            return $routeProviderLoader->addRouteProvider(new UniverseRouteProvider());
+        });
+    }
 
-            return $routeProviderLoader;
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideUniverseRepository(Container $container): void
+    {
+        $container->offsetSet(UniverseRepository::class, function(Container $container) {
+            return new UniverseRepository($container->offsetGet(EntityManager::class));
         });
     }
 }

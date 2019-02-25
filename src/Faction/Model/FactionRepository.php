@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace GC\User\Model;
+namespace GC\Faction\Model;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Inferno\Doctrine\Repository\DoctrineRepository;
 
-class FactionRepository extends DoctrineRepository
+final class FactionRepository extends DoctrineRepository
 {
 	/**
 	 * @param \Doctrine\ORM\EntityManager $entityManager
 	 */
 	public function __construct(EntityManager $entityManager)
     {
-		parent::__construct($entityManager, 'GC\Faction\Model\Faction');
+		parent::__construct($entityManager, Faction::class);
 	}
 
     /**
@@ -29,9 +29,11 @@ class FactionRepository extends DoctrineRepository
     /**
      * @param int $factionId
      *
-     * @return \GC\Faction\Model\Faction|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return \GC\User\Model\User|null
      */
-	public function findById(int $factionId): ?User
+	public function findById(int $factionId): ?Faction
     {
 		$queryBuilder = $this->getQueryBuilder();
 		$queryBuilder->where('faction.factionId = :factionId')

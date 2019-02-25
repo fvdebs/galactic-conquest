@@ -28,7 +28,7 @@ final class GalaxyServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function provideGalaxyRouteProvider(Container $container): void
+    private function provideGalaxyRouteProvider(Container $container): void
     {
         $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
             return $routeProviderLoader->addRouteProvider(new GalaxyRouteProvider());
@@ -40,12 +40,10 @@ final class GalaxyServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function provideGalaxyRepository(Container $container): void
+    private function provideGalaxyRepository(Container $container): void
     {
         $container->offsetSet(GalaxyRepository::class, function(Container $container) {
-            return new GalaxyRepository(
-                $container->offsetGet(EntityManager::class)
-            );
+            return new GalaxyRepository($container->offsetGet(EntityManager::class));
         });
     }
 }

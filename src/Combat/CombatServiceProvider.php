@@ -28,7 +28,7 @@ final class CombatServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function provideCombatRouteProvider(Container $container): void
+    private function provideCombatRouteProvider(Container $container): void
     {
         $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
             return $routeProviderLoader->addRouteProvider(new CombatRouteProvider());
@@ -40,7 +40,7 @@ final class CombatServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function provideCombatReportRepository(Container $container): void
+    private function provideCombatReportRepository(Container $container): void
     {
         $container->offsetSet(CombatReportRepository::class, function(Container $container) {
             return new CombatReportRepository($container->offsetGet(EntityManager::class));

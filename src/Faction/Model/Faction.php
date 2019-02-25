@@ -8,7 +8,7 @@ namespace GC\Faction\Model;
  * @Table(name="faction")
  * @Entity
  */
-class Faction
+final class Faction
 {
     /**
      * @var int
@@ -37,7 +37,7 @@ class Faction
      * @param string $name
      * @param string $description
      */
-    public function __construct(string $name, string $description)
+    public function __construct(string $name, string $description = '')
     {
         $this->name = $name;
         $this->description = $description;
