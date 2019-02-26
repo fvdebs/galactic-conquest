@@ -5,28 +5,19 @@ namespace GC\App\Aware;
 use GC\App\Dependency\SingletonContainer;
 use Inferno\Http\Response\ResponseFactoryInterface;
 use Inferno\Renderer\RendererInterface;
-use Inferno\Routing\UrlGenerator\UrlGenerator;
-use Inferno\Routing\UrlGenerator\UrlGeneratorInterface;
-use Pimple\Container;
+use Inferno\Routing\Router\RouterChain;
+use Inferno\Routing\Router\RouterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
 trait HandlerAwareTrait
 {
     /**
-     * @return \Pimple\Container
-     */
-    private function getContainer(): Container
-    {
-        return SingletonContainer::getContainer();
-    }
-
-    /**
      * @return \Inferno\Http\Response\ResponseFactoryInterface
      */
     protected function getResponseFactory(): ResponseFactoryInterface
     {
-        return $this->getContainer()->offsetGet('response-factory');
+        return SingletonContainer::getContainer()->offsetGet('response-factory');
     }
 
     /**
@@ -34,7 +25,7 @@ trait HandlerAwareTrait
      */
     protected function getUriFactory(): UriFactoryInterface
     {
-        return $this->getContainer()->offsetGet('uri-factory');
+        return SingletonContainer::getContainer()->offsetGet('uri-factory');
     }
 
     /**
@@ -42,15 +33,15 @@ trait HandlerAwareTrait
      */
     protected function getRenderer(): RendererInterface
     {
-        return $this->getContainer()->offsetGet('renderer');
+        return SingletonContainer::getContainer()->offsetGet('renderer');
     }
 
     /**
-     * @return \Inferno\Routing\UrlGenerator\UrlGeneratorInterface
+     * @return \Inferno\Routing\Router\RouterInterface
      */
-    protected function getUrlGenerator(): UrlGeneratorInterface
+    protected function getRouterChain(): RouterInterface
     {
-        return $this->getContainer()->offsetGet(UrlGenerator::class);
+        return SingletonContainer::getContainer()->offsetGet(RouterChain::class);
     }
 
     /**
@@ -81,7 +72,7 @@ trait HandlerAwareTrait
     protected function redirectRoute(string $name, array $parameters = [], int $code = 200, array $headers = []): ResponseInterface
     {
         return $this->getResponseFactory()->createFromContent(
-            $this->getUriFactory()->createUri($this->getUrlGenerator()->generate($name, $parameters)),
+            $this->getUriFactory()->createUri($this->getRouterChain()->generate($name, $parameters)),
             $code,
             $headers
         );

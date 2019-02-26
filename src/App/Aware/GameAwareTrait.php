@@ -5,24 +5,16 @@ namespace GC\App\Aware;
 use GC\App\Dependency\SingletonContainer;
 use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
-use Pimple\Container;
+use GC\User\Model\User;
 
 trait GameAwareTrait
 {
-    /**
-     * @return \Pimple\Container
-     */
-    private function getContainer(): Container
-    {
-        return SingletonContainer::getContainer();
-    }
-
     /**
      * @return \GC\Player\Model\Player
      */
     protected function getPlayer(): Player
     {
-        return $this->getContainer()->offsetGet(Player::class);
+        return SingletonContainer::getContainer()->offsetGet(Player::class);
     }
 
     /**
@@ -30,6 +22,14 @@ trait GameAwareTrait
      */
     protected function getUniverse(): Universe
     {
-        return $this->getContainer()->offsetGet(Universe::class);
+        return SingletonContainer::getContainer()->offsetGet(Universe::class);
+    }
+
+    /**
+     * @return \GC\User\Model\User
+     */
+    protected function getUser(): User
+    {
+        return SingletonContainer::getContainer()->offsetGet(User::class);
     }
 }

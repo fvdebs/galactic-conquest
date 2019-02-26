@@ -24,7 +24,7 @@ final class AllianceRouteProvider implements RouteProviderInterface
      */
     public function provide(RouteCollectionInterface $collection): void
     {
-        $collection->get('/{locale}/{universe}/alliance/{allianceId}', AlliancePublicOverviewHandler::NAME);
+        $collection->get('/{locale}/{universe}/alliance/{allianceId}', AlliancePublicOverviewHandler::class);
         $collection->get('/{locale}/{universe}/alliance/edit', AllianceEditHandler::class);
         $collection->get('/{locale}/{universe}/alliance/create', AllianceCreateHandler::class);
         $collection->get('/{locale}/{universe}/alliance/applications', AllianceApplicationsHandler::class);

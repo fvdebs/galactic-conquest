@@ -163,6 +163,8 @@ final class Player
         $this->allianceScanRelays = 0;
         $this->points = 0;
         $this->rankingPosition = 0;
+        $this->extractorMetal = 0;
+        $this->extractorCrystal = 0;
     }
 
     /**

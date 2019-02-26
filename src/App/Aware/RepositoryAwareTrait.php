@@ -14,24 +14,15 @@ use GC\Technology\Model\TechnologyRepository;
 use GC\Unit\Model\UnitRepository;
 use GC\Universe\Model\UniverseRepository;
 use GC\User\Model\UserRepository;
-use Pimple\Container;
 
 trait RepositoryAwareTrait
 {
-    /**
-     * @return \Pimple\Container
-     */
-    private function getContainer(): Container
-    {
-        return SingletonContainer::getContainer();
-    }
-
     /**
      * @return \GC\Alliance\Model\AllianceRepository
      */
     protected function getAllianceRepository(): AllianceRepository
     {
-        return $this->getContainer()->offsetGet(AllianceRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(AllianceRepository::class);
     }
 
     /**
@@ -39,7 +30,7 @@ trait RepositoryAwareTrait
      */
     protected function getCombatReportRepository(): CombatReportRepository
     {
-        return $this->getContainer()->offsetGet(CombatReportRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(CombatReportRepository::class);
     }
 
     /**
@@ -47,7 +38,7 @@ trait RepositoryAwareTrait
      */
     protected function getFactionRepository(): FactionRepository
     {
-        return $this->getContainer()->offsetGet(FactionRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(FactionRepository::class);
     }
 
     /**
@@ -55,7 +46,7 @@ trait RepositoryAwareTrait
      */
     protected function getGalaxyRepository(): GalaxyRepository
     {
-        return $this->getContainer()->offsetGet(GalaxyRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(GalaxyRepository::class);
     }
 
     /**
@@ -63,7 +54,7 @@ trait RepositoryAwareTrait
      */
     protected function getPlayerRepository(): PlayerRepository
     {
-        return $this->getContainer()->offsetGet(PlayerRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(PlayerRepository::class);
     }
 
     /**
@@ -71,7 +62,7 @@ trait RepositoryAwareTrait
      */
     protected function getProgressRepository(): ProgressRepository
     {
-        return $this->getContainer()->offsetGet(ProgressRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(ProgressRepository::class);
     }
 
     /**
@@ -79,7 +70,7 @@ trait RepositoryAwareTrait
      */
     protected function getScanRepository(): ScanRepository
     {
-        return $this->getContainer()->offsetGet(ScanRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(ScanRepository::class);
     }
 
     /**
@@ -87,7 +78,7 @@ trait RepositoryAwareTrait
      */
     protected function getTechnologyRepository(): TechnologyRepository
     {
-        return $this->getContainer()->offsetGet(TechnologyRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(TechnologyRepository::class);
     }
 
     /**
@@ -95,7 +86,7 @@ trait RepositoryAwareTrait
      */
     protected function getUnitRepository(): UnitRepository
     {
-        return $this->getContainer()->offsetGet(UnitRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(UnitRepository::class);
     }
 
     /**
@@ -103,7 +94,7 @@ trait RepositoryAwareTrait
      */
     protected function getUniverseRepository(): UniverseRepository
     {
-        return $this->getContainer()->offsetGet(UniverseRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(UniverseRepository::class);
     }
 
     /**
@@ -111,6 +102,6 @@ trait RepositoryAwareTrait
      */
     protected function getUserRepository(): UserRepository
     {
-        return $this->getContainer()->offsetGet(UserRepository::class);
+        return SingletonContainer::getContainer()->offsetGet(UserRepository::class);
     }
 }

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace GC\User;
 
+use GC\User\Handler\UserLoginHandler;
+use GC\User\Handler\UserLogoutHandler;
+use GC\User\Handler\UserRegisterHandler;
 use Inferno\Routing\Route\RouteCollectionInterface;
 use Inferno\Routing\Route\RouteProviderInterface;
-use Psr\Container\ContainerInterface;
 
 final class UserRouteProvider implements RouteProviderInterface
 {
@@ -17,19 +19,8 @@ final class UserRouteProvider implements RouteProviderInterface
      */
     public function provide(RouteCollectionInterface $collection): void
     {
-        // register user
-        $collection->post('/{locale}/user/register', function(ContainerInterface $container) {
-
-        }, 'user.register.post');
-
-        // login user
-        $collection->post('/{locale}/user/login', function(ContainerInterface $container) {
-
-        }, 'user.login.post');
-
-        // login logout
-        $collection->post('/{locale}/user/logout', function(ContainerInterface $container) {
-
-        }, 'user.logout.post');
+        $collection->post('/{locale}/{universe}/user/register', UserRegisterHandler::class);
+        $collection->post('/{locale}/{universe}/user/login', UserLoginHandler::class);
+        $collection->get('/{locale}/{universe}/user/logout', UserLogoutHandler::class);
     }
 }

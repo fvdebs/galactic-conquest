@@ -47,7 +47,7 @@ class RoutingServiceProvider extends InfernoRoutingServiceProvider
     protected function provideGCHandlerStrategy(Container $container): void
     {
         $container->extend(StrategyCollection::class, function(StrategyCollectionInterface $strategyCollection, Container $container) {
-            $strategyCollection->addStrategy(new GCHandlerStrategy(new \Pimple\Psr11\Container($container)));
+            return $strategyCollection->addStrategy(new GCHandlerStrategy(new \Pimple\Psr11\Container($container)));
         });
     }
 }

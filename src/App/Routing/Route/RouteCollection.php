@@ -33,7 +33,7 @@ class RouteCollection extends InfernoRouteCollection
     protected function resolveRouteName($handler, ?string $name): ?string
     {
         if (\is_string($handler) && $name === null && class_exists($handler) && defined("$handler::NAME")) {
-            $name = get_class($handler). '::NAME';
+            $name = constant($handler . '::NAME');
         }
 
         return $name;

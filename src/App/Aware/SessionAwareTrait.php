@@ -6,24 +6,15 @@ use GC\App\Dependency\SingletonContainer;
 use Inferno\Session\Bag\AttributeBagInterface;
 use Inferno\Session\Bag\FlashBagInterface;
 use Inferno\Session\Manager\SessionManagerInterface;
-use Pimple\Container;
 
 trait SessionAwareTrait
 {
-    /**
-     * @return \Pimple\Container
-     */
-    private function getContainer(): Container
-    {
-        return SingletonContainer::getContainer();
-    }
-
     /**
      * @return \Inferno\Session\Bag\AttributeBagInterface
      */
     protected function getAttributeBag(): AttributeBagInterface
     {
-        return $this->getContainer()->offsetGet(SessionManagerInterface::class)->getAttributeBag();
+        return SingletonContainer::getContainer()->offsetGet(SessionManagerInterface::class)->getAttributeBag();
     }
 
     /**
@@ -31,6 +22,6 @@ trait SessionAwareTrait
      */
     protected function getFlashBag(): FlashBagInterface
     {
-        return $this->getContainer()->offsetGet(SessionManagerInterface::class)->getFlashBag();
+        return SingletonContainer::getContainer()->offsetGet(SessionManagerInterface::class)->getFlashBag();
     }
 }

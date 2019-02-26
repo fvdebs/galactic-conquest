@@ -12,7 +12,7 @@ use GC\Universe\Model\UniverseRepository;
 use GC\User\Model\User;
 use GC\User\Model\UserRepository;
 use Inferno\Http\Response\ResponseFactoryInterface;
-use Inferno\Routing\UrlGenerator\UrlGenerator;
+use Inferno\Routing\Router\RouterInterface;
 use Inferno\Session\Manager\SessionManagerInterface;
 use Pimple\Container;
 use Psr\Http\Message\ResponseInterface;
@@ -60,9 +60,9 @@ final class GameMiddleware implements MiddlewareInterface
     private $responseFactory;
 
     /**
-     * @var \Inferno\Routing\UrlGenerator\UrlGenerator
+     * @var \Inferno\Routing\Router\RouterInterface
      */
-    private $urlGenerator;
+    private $router;
 
     /**
      * @var \Pimple\Container
@@ -77,7 +77,7 @@ final class GameMiddleware implements MiddlewareInterface
      * @param \Twig_Environment $twig
      * @param \Psr\Http\Message\UriFactoryInterface $uriFactory
      * @param \Inferno\Http\Response\ResponseFactoryInterface $responseFactory
-     * @param \Inferno\Routing\UrlGenerator\UrlGenerator $urlGenerator
+     * @param \Inferno\Routing\Router\RouterInterface $router
      * @param \Pimple\Container $container
      */
     public function __construct(
@@ -88,7 +88,7 @@ final class GameMiddleware implements MiddlewareInterface
         Twig_Environment $twig,
         UriFactoryInterface $uriFactory,
         ResponseFactoryInterface $responseFactory,
-        UrlGenerator $urlGenerator,
+        RouterInterface $router,
         Container $container
     ) {
         $this->sessionManager = $sessionManager;
@@ -98,7 +98,7 @@ final class GameMiddleware implements MiddlewareInterface
         $this->userRepository = $userRepository;
         $this->uriFactory = $uriFactory;
         $this->responseFactory = $responseFactory;
-        $this->urlGenerator = $urlGenerator;
+        $this->router = $router;
         $this->container = $container;
     }
 
@@ -106,51 +106,86 @@ final class GameMiddleware implements MiddlewareInterface
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Psr\Http\Server\RequestHandlerInterface $handler
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Inferno\Routing\Exception\ResourceNotFoundException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        //////////////// UNIVERSE ////////////////
-        $pathChunks = explode('/', $request->getUri()->getPath());
-        if (\count($pathChunks) < 2) {
+        $user = $this->getCurrentUser();
+
+        $universeName = $request->getAttribute('universe');
+        if ($request->getAttribute('universe') === null) {
             return $handler->handle($request);
         }
 
-        // if universe is not found execute next middleware
-        $universe = $this->universeRepository->findByName($pathChunks[2]);
-        if ($universe === null) {
-            return $handler->handle($request);
-        }
-
-        // add current universe to container and twig
-        $this->container->offsetSet(Universe::class, $universe);
-        $this->twig->addGlobal('universe', $universe);
-
-        //////////////// USER ////////////////
-        // redirect to home if user is not logged in
-        $user = $this->userRepository->findById($this->sessionManager->getAttributeBag()->get(User::SESSION_KEY_USER_ID));
-        if ($user === null) {
+        $universe = $this->getUniverseByName($universeName);
+        if ($universe === null || $user === null) {
             return $this->createRedirect(HomeHandler::NAME);
         }
 
-        $this->container->offsetSet(User::class, $user);
-        $this->twig->addGlobal('user', $user);
-
-        //////////////// PLAYER ////////////////
-        // redirect to universe selection if player is not found
-        $player = $this->playerRepository->findByUserIdAndUniverseId($user->getUserId(), $universe->getUniverseId());
+        $player = $this->getCurrentPlayer($user, $universe);
         if ($player === null) {
             return $this->createRedirect('universe.select');
         }
 
-        // add current player to container and twig
-        $this->container->offsetSet(Player::class, $player);
-        $this->twig->addGlobal('player', $player);
-
         return $handler->handle($request);
+    }
+
+    /**
+     * @return \GC\User\Model\User|null
+     */
+    private function getCurrentUser(): ?User
+    {
+        $userId = $this->sessionManager->getAttributeBag()->get(User::SESSION_KEY_USER_ID);
+        if (! \is_int($userId)) {
+            return null;
+        }
+
+        $user = $this->userRepository->findById($userId);
+        if ($user !== null) {
+            $this->container->offsetSet(User::class, $user);
+            $this->twig->addGlobal('user', $user);
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param string $universeName
+     *
+     * @return \GC\Universe\Model\Universe|null
+     */
+    private function getUniverseByName(string $universeName): ?Universe
+    {
+        $universe = $this->universeRepository->findByName($universeName);
+        if ($universe !== null) {
+            $this->container->offsetSet(Universe::class, $universe);
+            $this->twig->addGlobal('universe', $universe);
+        }
+
+        return $universe;
+    }
+
+    /**
+     * @param \GC\User\Model\User|null $user
+     * @param \GC\Universe\Model\Universe|null $universe
+     *
+     * @return \GC\Player\Model\Player|null
+     */
+    private function getCurrentPlayer(?User $user, ?Universe $universe): ?Player
+    {
+        if ($user === null || $universe === null) {
+            return null;
+        }
+
+        $player = $this->playerRepository->findByUserIdAndUniverseId($user->getUserId(), $universe->getUniverseId());
+        if ($player !== null) {
+            $this->container->offsetSet(Player::class, $player);
+            $this->twig->addGlobal('player', $player);
+        }
+
+        return $player;
     }
 
     /**
@@ -164,7 +199,7 @@ final class GameMiddleware implements MiddlewareInterface
     {
         return $this->responseFactory->createFromContent(
             $this->uriFactory->createUri(
-                $this->urlGenerator->generate($name)
+                $this->router->generate($name)
             )
         );
     }

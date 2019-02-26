@@ -10,6 +10,9 @@ namespace GC\Technology\Model;
  */
 final class TechnologyRelation
 {
+    public const RELATION_DEPENDS = 'depends';
+    public const RELATION_OR = 'or';
+
     /**
      * @var int
      *

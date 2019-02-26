@@ -61,9 +61,8 @@ return [
         \Inferno\Whoops\Middleware\WhoopsMiddleware::class,
         \Inferno\Language\Middleware\LanguageDetectorMiddleware::class,
         \Inferno\Session\Middleware\StartSessionMiddleware::class,
-        \GC\App\Middleware\GameMiddleware::class,
         \Inferno\Routing\Middleware\DispatcherMiddleware::class,
-        \Inferno\Routing\Middleware\RouteNotFoundMiddleware::class,
+        \GC\App\Middleware\GameMiddleware::class,
     ],
 
     /*

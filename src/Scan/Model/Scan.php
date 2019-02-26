@@ -40,7 +40,7 @@ final class Scan
     /**
      * @var \GC\Alliance\Model\Alliance|null
      *
-     * @ManyToOne(targetEntity="Alliance")
+     * @ManyToOne(targetEntity="\GC\Alliance\Model\Alliance")
      * @JoinColumns({
      *   @JoinColumn(name="alliance_id", referencedColumnName="alliance_id")
      * })
@@ -50,7 +50,7 @@ final class Scan
     /**
      * @var \GC\Player\Model\Player|null
      *
-     * @ManyToOne(targetEntity="Player")
+     * @ManyToOne(targetEntity="\GC\Player\Model\Player")
      * @JoinColumns({
      *   @JoinColumn(name="player_id", referencedColumnName="player_id")
      * })

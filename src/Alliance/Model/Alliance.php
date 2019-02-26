@@ -61,7 +61,7 @@ final class Alliance
      * @var int
      *
      * @Column(name="tax_metal", type="integer", nullable=false)
-     */dfsdf
+     */
     private $taxMetal;
 
     /**
