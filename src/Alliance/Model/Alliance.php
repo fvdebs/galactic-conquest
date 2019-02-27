@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace GC\Alliance\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
 
 /**
- * @Table(name="alliance", indexes={@Index(name="fk-alliance-admiral_player_id", columns={"admiral_player_id"}), @Index(name="fk-alliance-universe_id", columns={"universe_id"})})
- * @Entity
+ * @Table(name="alliance")
+ * @Entity(repositoryClass="GC\Alliance\Model\AllianceRepository")
  */
-final class Alliance
+class Alliance
 {
     /**
      * @var int
      *
-     * @Column(name="alliance_id", type="bigint", nullable=false)
+     * @Column(name="alliance_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -103,9 +104,7 @@ final class Alliance
      * @var \GC\Universe\Model\Universe
      *
      * @ManyToOne(targetEntity="\GC\Universe\Model\Universe")
-     * @JoinColumns({
-     *   @JoinColumn(name="admiral_player_id", referencedColumnName="player_id")
-     * })
+     * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
     private $universe;
 
@@ -113,24 +112,29 @@ final class Alliance
      * @var \GC\Player\Model\Player
      *
      * @ManyToOne(targetEntity="\GC\Player\Model\Player")
-     * @JoinColumns({
-     *   @JoinColumn(name="admiral_player_id", referencedColumnName="player_id")
-     * })
+     * @JoinColumn(name="admiral_player_id", referencedColumnName="player_id", nullable=false)
      */
     private $admiralPlayer;
+
+    /**
+     * @var \GC\Alliance\Model\AllianceTechnology[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Alliance\Model\AllianceTechnology", mappedBy="technology", cascade={"all"}, orphanRemoval=true)
+     */
+    private $allianceTechnologies;
 
     /**
      * @param string $name
      * @param string $code
      * @param \GC\Player\Model\Player $admiralPlayer
-     * @param \GC\Universe\Model\Universe $universe
      */
-    public function __construct(string $name, string $code, Player $admiralPlayer, Universe $universe)
+    public function __construct(string $name, string $code, Player $admiralPlayer)
     {
+        $this->allianceTechnologies = new ArrayCollection();
         $this->name = $name;
         $this->code = $code;
         $this->admiralPlayer = $admiralPlayer;
-        $this->universe = $universe;
+        $this->universe = $admiralPlayer->getUniverse();
         $this->description = '';
         $this->metal = 0;
         $this->crystal = 0;

@@ -11,10 +11,9 @@ use GC\Galaxy\Model\Galaxy;
 use GC\Player\Model\Player;
 use GC\Player\Model\PlayerFleet;
 use GC\Technology\Model\Technology;
-use GC\Technology\Model\TechnologyRelation;
+use GC\Technology\Model\TechnologyCondition;
 use GC\Unit\Model\Unit;
-use GC\Unit\Model\UnitCombat;
-use GC\Unit\Model\UnitTechnologyCondition;
+use GC\Unit\Model\UnitCombatSetting;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
 
@@ -35,8 +34,8 @@ class TestDataFixture extends AbstractFixture
         $manager->persist($userSecond);
 
         // universe
-        $universeFirst = new Universe('Hauptrunde');
-        $universeSecond = new Universe('Speedrunde', null, 5);
+        $universeFirst = new Universe('sirius');
+        $universeSecond = new Universe('eridanus', null, 5);
         $manager->persist($universeFirst);
         $manager->persist($universeSecond);
 
@@ -60,8 +59,8 @@ class TestDataFixture extends AbstractFixture
         $manager->flush();
 
         // technology relation
-        $technologyRelationFirst = new TechnologyRelation($technologyFirst, $technologySecond, TechnologyRelation::RELATION_DEPENDS);
-        $technologyRelationSecond = new TechnologyRelation($technologySecond, $technologyThird, TechnologyRelation::RELATION_DEPENDS);
+        $technologyRelationFirst = new TechnologyCondition($technologyFirst, $technologySecond, TechnologyCondition::CONDITION_DEPENDS);
+        $technologyRelationSecond = new TechnologyCondition($technologySecond, $technologyThird, TechnologyCondition::CONDITION_DEPENDS);
         $manager->persist($technologyRelationFirst);
         $manager->persist($technologyRelationSecond);
 
@@ -76,20 +75,12 @@ class TestDataFixture extends AbstractFixture
         $manager->flush();
 
         // unit combat
-        $unitCombatFirst = new UnitCombat($unitFirst, $unitSecond, 100, '0.75');
-        $unitCombatSecond = new UnitCombat($unitSecond, $unitThird, 100, '0.5');
-        $unitCombatThird = new UnitCombat($unitThird, $unitFirst, 100, '0.2');
+        $unitCombatFirst = new UnitCombatSetting($unitFirst, $unitSecond, 100, '0.75');
+        $unitCombatSecond = new UnitCombatSetting($unitSecond, $unitThird, 100, '0.5');
+        $unitCombatThird = new UnitCombatSetting($unitThird, $unitFirst, 100, '0.2');
         $manager->persist($unitCombatFirst);
         $manager->persist($unitCombatSecond);
         $manager->persist($unitCombatThird);
-
-        // unit technology condition
-        $unitTechnologyConditionFirst = new UnitTechnologyCondition($unitFirst, $technologyFirst);
-        $unitTechnologyConditionSecond = new UnitTechnologyCondition($unitSecond, $technologySecond);
-        $unitTechnologyConditionThird = new UnitTechnologyCondition($unitThird, $technologyThird);
-        $manager->persist($unitTechnologyConditionFirst);
-        $manager->persist($unitTechnologyConditionSecond);
-        $manager->persist($unitTechnologyConditionThird);
 
         $manager->flush();
 

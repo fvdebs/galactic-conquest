@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace GC\Galaxy\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
 use GC\Player\Model\Player;
 
 /**
- * @Table(name="galaxy", indexes={@Index(name="fk-galaxy-commander_player_id", columns={"commander_player_id"}), @Index(name="fk-galaxy-alliance_id", columns={"alliance_id"})})
+ * @Table(name="galaxy")
  * @Entity
  */
-final class Galaxy
+class Galaxy
 {
     /**
      * @var int
      *
-     * @Column(name="galaxy_id", type="bigint", nullable=false)
+     * @Column(name="galaxy_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -82,9 +83,7 @@ final class Galaxy
      * @var \GC\Alliance\Model\Alliance|null
      *
      * @ManyToOne(targetEntity="\GC\Alliance\Model\Alliance")
-     * @JoinColumns({
-     *   @JoinColumn(name="alliance_id", referencedColumnName="alliance_id")
-     * })
+     * @JoinColumn(name="alliance_id", referencedColumnName="alliance_id", nullable=true)
      */
     private $alliance;
 
@@ -92,17 +91,31 @@ final class Galaxy
      * @var \GC\Player\Model\Player|null
      *
      * @ManyToOne(targetEntity="\GC\Player\Model\Player")
-     * @JoinColumns({
-     *   @JoinColumn(name="commander_player_id", referencedColumnName="player_id")
-     * })
+     * @JoinColumn(name="commander_player_id", referencedColumnName="player_id", nullable=true)
      */
     private $commanderPlayer;
+
+    /**
+     * @var \GC\Galaxy\Model\GalaxyTechnology[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Galaxy\Model\GalaxyTechnology", mappedBy="galaxy", cascade={"all"}, orphanRemoval=true)
+     */
+    private $galaxyTechnologies;
+
+    /**
+     * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="galaxy", cascade={"all"}, orphanRemoval=true)
+     */
+    private $players;
 
     /**
      * @param int $number
      */
     public function __construct(int $number)
     {
+        $this->players = new ArrayCollection();
+        $this->galaxyTechnologies = new ArrayCollection();
         $this->number = $number;
         $this->password = null;
         $this->metal = 0;
@@ -113,6 +126,14 @@ final class Galaxy
         $this->rankingPosition = 0;
         $this->alliance = null;
         $this->commanderPlayer = null;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection|\GC\Player\Model\Player[]
+     */
+    public function getPlayers()
+    {
+        return $this->players;
     }
 
     /**

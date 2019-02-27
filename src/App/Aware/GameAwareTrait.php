@@ -12,7 +12,7 @@ trait GameAwareTrait
     /**
      * @return \GC\Player\Model\Player
      */
-    protected function getPlayer(): Player
+    protected function getCurrentPlayer(): Player
     {
         return SingletonContainer::getContainer()->offsetGet(Player::class);
     }
@@ -20,7 +20,7 @@ trait GameAwareTrait
     /**
      * @return \GC\Universe\Model\Universe
      */
-    protected function getUniverse(): Universe
+    protected function getCurrentUniverse(): Universe
     {
         return SingletonContainer::getContainer()->offsetGet(Universe::class);
     }
@@ -28,7 +28,7 @@ trait GameAwareTrait
     /**
      * @return \GC\User\Model\User
      */
-    protected function getUser(): User
+    protected function getCurrentUser(): User
     {
         return SingletonContainer::getContainer()->offsetGet(User::class);
     }

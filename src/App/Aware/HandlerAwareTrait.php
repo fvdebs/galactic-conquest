@@ -21,30 +21,6 @@ trait HandlerAwareTrait
     }
 
     /**
-     * @return \Psr\Http\Message\UriFactoryInterface
-     */
-    protected function getUriFactory(): UriFactoryInterface
-    {
-        return SingletonContainer::getContainer()->offsetGet('uri-factory');
-    }
-
-    /**
-     * @return \Inferno\Renderer\RendererInterface
-     */
-    protected function getRenderer(): RendererInterface
-    {
-        return SingletonContainer::getContainer()->offsetGet('renderer');
-    }
-
-    /**
-     * @return \Inferno\Routing\Router\RouterInterface
-     */
-    protected function getRouterChain(): RouterInterface
-    {
-        return SingletonContainer::getContainer()->offsetGet(RouterChain::class);
-    }
-
-    /**
      * @param string $path
      * @param string[] $placeholders
      * @param int $code
@@ -55,7 +31,7 @@ trait HandlerAwareTrait
     protected function renderResponse(string $path, array $placeholders = [], int $code = 200, array $headers = []): ResponseInterface
     {
         return $this->getResponseFactory()->createFromContent(
-            $this->getRenderer()->render($path, $placeholders),
+            SingletonContainer::getContainer()->offsetGet('renderer')->render($path, $placeholders),
             $code,
             $headers
         );
@@ -71,8 +47,11 @@ trait HandlerAwareTrait
      */
     protected function redirectRoute(string $name, array $parameters = [], int $code = 200, array $headers = []): ResponseInterface
     {
+        $routerChain = SingletonContainer::getContainer()->offsetGet(RouterChain::class);
+        $uriFactory = SingletonContainer::getContainer()->offsetGet('uri-factory');
+
         return $this->getResponseFactory()->createFromContent(
-            $this->getUriFactory()->createUri($this->getRouterChain()->generate($name, $parameters)),
+            $uriFactory->createUri($routerChain->generate($name, $parameters)),
             $code,
             $headers
         );

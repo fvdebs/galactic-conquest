@@ -10,7 +10,7 @@ use DateTime;
  * @Table(name="universe")
  * @Entity
  */
-final class Universe
+class Universe
 {
     public const STATUS_INACTIVE = 0;
     public const STATUS_ACTIVE = 1;
@@ -18,7 +18,7 @@ final class Universe
     /**
      * @var int
      *
-     * @Column(name="universe_id", type="bigint", nullable=false)
+     * @Column(name="universe_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -136,7 +136,7 @@ final class Universe
      */
     public function getUniverseId(): int
     {
-        return $this->universeId;
+        return (int) $this->universeId;
     }
 
     /**

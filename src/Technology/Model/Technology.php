@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace GC\Technology\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
 
 /**
- * @Table(name="technology", indexes={@Index(name="fk-technology-faction_id", columns={"faction_id"})})
+ * @Table(name="technology")
  * @Entity
  */
 final class Technology
@@ -15,7 +16,7 @@ final class Technology
     /**
      * @var int
      *
-     * @Column(name="technology_id", type="bigint", nullable=false)
+     * @Column(name="technology_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -88,11 +89,16 @@ final class Technology
      * @var \GC\Faction\Model\Faction
      *
      * @ManyToOne(targetEntity="\GC\Faction\Model\Faction")
-     * @JoinColumns({
-     *   @JoinColumn(name="faction_id", referencedColumnName="faction_id")
-     * })
+     * @JoinColumn(name="faction_id", referencedColumnName="faction_id", nullable=false)
      */
     private $faction;
+
+    /**
+     * @var \GC\Technology\Model\TechnologyCondition[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Technology\Model\TechnologyCondition", mappedBy="sourceTechnology", cascade={"all"}, orphanRemoval=true)
+     */
+    private $technologyConditions;
 
     /**
      * @param string $name
@@ -100,6 +106,7 @@ final class Technology
      */
     public function __construct(string $name, Faction $faction)
     {
+        $this->technologyConditions = new ArrayCollection();
         $this->name = $name;
         $this->faction = $faction;
         $this->description = '';

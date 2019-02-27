@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace GC\Player\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
- * @Table(name="player_fleet", indexes={@Index(name="fk-player_fleet-player_id", columns={"player_id"}), @Index(name="fk-player_fleet-target_player_id", columns={"target_player_id"})})
+ * @Table(name="player_fleet")
  * @Entity
  */
-final class PlayerFleet
+class PlayerFleet
 {
     public const MISSION_TYPE_ATTACK = 'attack';
     public const MISSION_TYPE_DEFEND = 'defend';
@@ -16,7 +18,7 @@ final class PlayerFleet
     /**
      * @var int
      *
-     * @Column(name="player_fleet_id", type="bigint", nullable=false)
+     * @Column(name="player_fleet_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -53,10 +55,8 @@ final class PlayerFleet
     /**
      * @var \GC\Player\Model\Player
      *
-     * @ManyToOne(targetEntity="Player")
-     * @JoinColumns({
-     *   @JoinColumn(name="player_id", referencedColumnName="player_id")
-     * })
+     * @ManyToOne(targetEntity="GC\Player\Model\Player", inversedBy="playerFleets")
+     * @JoinColumn(name="player_id", referencedColumnName="player_id", nullable=false)
      */
     private $player;
 
@@ -64,17 +64,23 @@ final class PlayerFleet
      * @var \GC\Player\Model\Player|null
      *
      * @ManyToOne(targetEntity="Player")
-     * @JoinColumns({
-     *   @JoinColumn(name="target_player_id", referencedColumnName="player_id")
-     * })
+     * @JoinColumn(name="target_player_id", referencedColumnName="player_id", nullable=true)
      */
     private $targetPlayer;
+
+    /**
+     * @var \GC\Player\Model\PlayerFleetUnit[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\PlayerFleetUnit", mappedBy="playerFleet", cascade={"all"}, orphanRemoval=true)
+     */
+    private $playerFleetUnits;
 
     /**
      * @param \GC\Player\Model\Player $player
      */
     public function __construct(Player $player)
     {
+        $this->playerFleetUnits = new ArrayCollection();
         $this->player = $player;
         $this->isOffensive = false;
         $this->isDefensive = false;

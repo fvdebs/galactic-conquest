@@ -8,12 +8,12 @@ namespace GC\Faction\Model;
  * @Table(name="faction")
  * @Entity
  */
-final class Faction
+class Faction
 {
     /**
      * @var int
      *
-     * @Column(name="faction_id", type="bigint", nullable=false)
+     * @Column(name="faction_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */

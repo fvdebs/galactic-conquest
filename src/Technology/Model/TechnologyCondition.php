@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace GC\Technology\Model;
 
 /**
- * @Table(name="technology_relation", indexes={@Index(name="fk-technology_relation-target_technology_id", columns={"target_technology_id"}), @Index(name="fk-technology_relation-source_technology_id", columns={"source_technology_id"})})
+ * @Table(name="technology_condition")
  * @Entity
  */
-final class TechnologyRelation
+final class TechnologyCondition
 {
-    public const RELATION_DEPENDS = 'depends';
-    public const RELATION_OR = 'or';
+    public const CONDITION_DEPENDS = 'depends';
+    public const CONDITION_OR = 'or';
 
     /**
      * @var int
      *
-     * @Column(name="technology_relation_id", type="bigint", nullable=false)
+     * @Column(name="technology_relation_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -32,10 +32,8 @@ final class TechnologyRelation
     /**
      * @var \GC\Technology\Model\Technology
      *
-     * @ManyToOne(targetEntity="\GC\Technology\Model\Technology")
-     * @JoinColumns({
-     *   @JoinColumn(name="source_technology_id", referencedColumnName="technology_id")
-     * })
+     * @ManyToOne(targetEntity="GC\Technology\Model\Technology", inversedBy="technologyConditions")
+     * @JoinColumn(name="source_technology_id", referencedColumnName="technology_id", nullable=false)
      */
     private $sourceTechnology;
 
@@ -43,9 +41,7 @@ final class TechnologyRelation
      * @var \GC\Technology\Model\Technology
      *
      * @ManyToOne(targetEntity="\GC\Technology\Model\Technology")
-     * @JoinColumns({
-     *   @JoinColumn(name="target_technology_id", referencedColumnName="technology_id")
-     * })
+     * @JoinColumn(name="target_technology_id", referencedColumnName="technology_id", nullable=false)
      */
     private $targetTechnology;
 

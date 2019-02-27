@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GC\Progress\Command;
+namespace GC\App\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

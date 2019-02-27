@@ -2,13 +2,13 @@
 
 namespace GC\App\Aware;
 
+use GC\Alliance\Model\Alliance;
 use GC\Alliance\Model\AllianceRepository;
 use GC\App\Dependency\SingletonContainer;
 use GC\Combat\Model\CombatReportRepository;
 use GC\Faction\Model\FactionRepository;
 use GC\Galaxy\Model\GalaxyRepository;
 use GC\Player\Model\PlayerRepository;
-use GC\Progress\Model\ProgressRepository;
 use GC\Scan\Model\ScanRepository;
 use GC\Technology\Model\TechnologyRepository;
 use GC\Unit\Model\UnitRepository;
@@ -17,12 +17,14 @@ use GC\User\Model\UserRepository;
 
 trait RepositoryAwareTrait
 {
+    use DoctrineAwareTrait;
+
     /**
      * @return \GC\Alliance\Model\AllianceRepository
      */
     protected function getAllianceRepository(): AllianceRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(AllianceRepository::class);
+        return $this->getRepository(Alliance::class);
     }
 
     /**
@@ -55,14 +57,6 @@ trait RepositoryAwareTrait
     protected function getPlayerRepository(): PlayerRepository
     {
         return SingletonContainer::getContainer()->offsetGet(PlayerRepository::class);
-    }
-
-    /**
-     * @return \GC\Progress\Model\ProgressRepository
-     */
-    protected function getProgressRepository(): ProgressRepository
-    {
-        return SingletonContainer::getContainer()->offsetGet(ProgressRepository::class);
     }
 
     /**

@@ -18,5 +18,6 @@ final class HomeRouteProvider implements RouteProviderInterface
     public function provide(RouteCollectionInterface $collection): void
     {
         $collection->get('/{locale}', HomeHandler::class);
+        $collection->get('/{locale}/{universe}/test', HomeHandler::class);
     }
 }

@@ -8,7 +8,7 @@ namespace GC\User\Model;
  * @Entity
  * @Table(name="user")
  */
-final class User
+class User
 {
     public const SESSION_KEY_USER_ID = 'userId';
 
@@ -55,7 +55,7 @@ final class User
 	 */
 	public function getUserId(): int
     {
-		return $this->userId;
+		return (int) $this->userId;
 	}
 	
 	/**

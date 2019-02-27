@@ -20,9 +20,12 @@ class RouteCollection extends InfernoRouteCollection
      */
     public function createRoute(array $methods, string $path, $handler, ?string $name = null): RouteInterface
     {
-        $name = $this->resolveRouteName($handler, $name);
-
-        return new Route($methods, $path, $handler, $name);
+        return new Route(
+            $methods,
+            $path,
+            $handler,
+            $this->resolveRouteName($handler, $name)
+        );
     }
 
     /**
@@ -32,7 +35,11 @@ class RouteCollection extends InfernoRouteCollection
      */
     protected function resolveRouteName($handler, ?string $name): ?string
     {
-        if (\is_string($handler) && $name === null && class_exists($handler) && defined("$handler::NAME")) {
+        if ($name === null
+            && \is_string($handler)
+            && class_exists($handler)
+            && defined("$handler::NAME"))
+        {
             $name = constant($handler . '::NAME');
         }
 

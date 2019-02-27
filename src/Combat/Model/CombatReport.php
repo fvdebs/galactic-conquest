@@ -8,15 +8,15 @@ use GC\Player\Model\Player;
 use DateTime;
 
 /**
- * @Table(name="combat_report", indexes={@Index(name="fk-combat_report-player_id", columns={"player_id"})})
- * @Entity
+ * @Table(name="combat_report")
+ * @Entity(repositoryClass="GC\Combat\Model\CombatReportRepository")
  */
-final class CombatReport
+class CombatReport
 {
     /**
      * @var int
      *
-     * @Column(name="combat_report_id", type="bigint", nullable=false)
+     * @Column(name="combat_report_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -39,7 +39,7 @@ final class CombatReport
     /**
      * @var string
      *
-     * @Column(name="external_id", type="string", length=40, nullable=false)
+     * @Column(name="external_id", type="string", length=60, nullable=false)
      */
     private $externalId;
 
@@ -47,9 +47,7 @@ final class CombatReport
      * @var \GC\Player\Model\Player
      *
      * @ManyToOne(targetEntity="\GC\Player\Model\Player")
-     * @JoinColumns({
-     *   @JoinColumn(name="player_id", referencedColumnName="player_id")
-     * })
+     * @JoinColumn(name="player_id", referencedColumnName="player_id", nullable=false)
      */
     private $player;
 

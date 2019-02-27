@@ -7,15 +7,15 @@ namespace GC\Player\Model;
 use GC\Unit\Model\Unit;
 
 /**
- * @Table(name="player_fleet_unit", indexes={@Index(name="fk-player_fleet_unit-unit_id", columns={"unit_id"}), @Index(name="fk-player_fleet_unit-player_fleet_id", columns={"player_fleet_id"})})
+ * @Table(name="player_fleet_unit")
  * @Entity
  */
-final class PlayerFleetUnit
+class PlayerFleetUnit
 {
     /**
      * @var int
      *
-     * @Column(name="player_fleet_unit_id", type="bigint", nullable=false)
+     * @Column(name="player_fleet_unit_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -31,10 +31,8 @@ final class PlayerFleetUnit
     /**
      * @var \GC\Player\Model\PlayerFleet
      *
-     * @ManyToOne(targetEntity="\GC\Player\Model\PlayerFleet")
-     * @JoinColumns({
-     *   @JoinColumn(name="player_fleet_id", referencedColumnName="player_fleet_id")
-     * })
+     * @ManyToOne(targetEntity="GC\Player\Model\PlayerFleet", inversedBy="playerFleetUnits")
+     * @JoinColumn(name="player_fleet_id", referencedColumnName="player_fleet_id", nullable=false)
      */
     private $playerFleet;
 
@@ -42,9 +40,7 @@ final class PlayerFleetUnit
      * @var \GC\Unit\Model\Unit
      *
      * @ManyToOne(targetEntity="\GC\Unit\Model\Unit")
-     * @JoinColumns({
-     *   @JoinColumn(name="unit_id", referencedColumnName="unit_id")
-     * })
+     * @JoinColumn(name="unit_id", referencedColumnName="unit_id", nullable=false)
      */
     private $unit;
 

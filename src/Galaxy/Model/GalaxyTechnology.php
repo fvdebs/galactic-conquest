@@ -7,15 +7,15 @@ namespace GC\Galaxy\Model;
 use GC\Technology\Model\Technology;
 
 /**
- * @Table(name="galaxy_technology", indexes={@Index(name="fk-galaxy_technology-galaxy_id", columns={"galaxy_id"}), @Index(name="fk-galaxy_technology-technology_id", columns={"technology_id"})})
+ * @Table(name="galaxy_technology")
  * @Entity
  */
-final class GalaxyTechnology
+class GalaxyTechnology
 {
     /**
      * @var int
      *
-     * @Column(name="galaxy_technology_id", type="bigint", nullable=false)
+     * @Column(name="galaxy_technology_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -24,10 +24,8 @@ final class GalaxyTechnology
     /**
      * @var \GC\Galaxy\Model\Galaxy
      *
-     * @ManyToOne(targetEntity="\GC\Galaxy\Model\Galaxy")
-     * @JoinColumns({
-     *   @JoinColumn(name="galaxy_id", referencedColumnName="galaxy_id")
-     * })
+     * @ManyToOne(targetEntity="GC\Galaxy\Model\Galaxy")
+     * @JoinColumn(name="galaxy_id", referencedColumnName="galaxy_id", nullable=false)
      */
     private $galaxy;
 
@@ -35,20 +33,27 @@ final class GalaxyTechnology
      * @var \GC\Technology\Model\Technology
      *
      * @ManyToOne(targetEntity="\GC\Technology\Model\Technology")
-     * @JoinColumns({
-     *   @JoinColumn(name="technology_id", referencedColumnName="technology_id")
-     * })
+     * @JoinColumn(name="technology_id", referencedColumnName="technology_id", nullable=false)
      */
     private $technology;
 
     /**
+     * @var int
+     *
+     * @Column(name="ticks_left", type="integer", nullable=false)
+     */
+    private $ticksLeft;
+
+    /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
      * @param \GC\Technology\Model\Technology $technology
+     * @param int $ticksLeft
      */
-    public function __construct(Galaxy $galaxy, Technology $technology)
+    public function __construct(Galaxy $galaxy, Technology $technology, int $ticksLeft)
     {
         $this->galaxy = $galaxy;
         $this->technology = $technology;
+        $this->ticksLeft = $ticksLeft;
     }
 
     /**
@@ -73,5 +78,13 @@ final class GalaxyTechnology
     public function getTechnology(): Technology
     {
         return $this->technology;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTicksLeft(): int
+    {
+        return $this->ticksLeft;
     }
 }

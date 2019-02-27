@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace GC\Unit\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
 
 /**
- * @Table(name="unit", indexes={@Index(name="fk-unit-faction_id", columns={"faction_id"})})
+ * @Table(name="unit")
  * @Entity
  */
 final class Unit
@@ -15,7 +16,7 @@ final class Unit
     /**
      * @var int
      *
-     * @Column(name="unit_id", type="bigint", nullable=false)
+     * @Column(name="unit_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -95,11 +96,16 @@ final class Unit
      * @var \GC\Faction\Model\Faction
      *
      * @ManyToOne(targetEntity="\GC\Faction\Model\Faction")
-     * @JoinColumns({
-     *   @JoinColumn(name="faction_id", referencedColumnName="faction_id")
-     * })
+     * @JoinColumn(name="faction_id", referencedColumnName="faction_id", nullable=false)
      */
     private $faction;
+
+    /**
+     * @var \GC\Unit\Model\UnitCombatSetting[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Unit\Model\UnitCombatSetting", mappedBy="sourceUnit", cascade={"all"}, orphanRemoval=true)
+     */
+    private $unitCombatSettings;
 
     /**
      * @param string $name
@@ -107,6 +113,7 @@ final class Unit
      */
     public function __construct(string $name, Faction $faction)
     {
+        $this->unitCombatSettings = new ArrayCollection();
         $this->name = $name;
         $this->description = '';
         $this->isStationary = false;

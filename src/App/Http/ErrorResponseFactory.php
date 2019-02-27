@@ -53,7 +53,7 @@ final class ErrorResponseFactory implements ErrorResponseFactoryInterface
             throw $throwable;
         }
 
-        if ($throwable instanceof RouteNotFoundException) {#
+        if ($throwable instanceof RouteNotFoundException) {
             $content =  $this->renderer->render('@App/error/not-found.twig');
             return $this->responseFactory->createFromContent($content, 404, []);
         }

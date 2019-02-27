@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace GC\Unit\Model;
 
 /**
- * @Table(name="unit_combat", indexes={@Index(name="fk-unit_combat-target_unit_id", columns={"target_unit_id"}), @Index(name="fk-unit_combat-source_unit_id", columns={"source_unit_id"})})
+ * @Table(name="unit_combat_setting")
  * @Entity
  */
-final class UnitCombat
+final class UnitCombatSetting
 {
     /**
      * @var int
      *
-     * @Column(name="unit_combat_id", type="bigint", nullable=false)
+     * @Column(name="unit_combat_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -36,10 +36,8 @@ final class UnitCombat
     /**
      * @var \GC\Unit\Model\Unit
      *
-     * @ManyToOne(targetEntity="\GC\Unit\Model\Unit")
-     * @JoinColumns({
-     *   @JoinColumn(name="source_unit_id", referencedColumnName="unit_id")
-     * })
+     * @ManyToOne(targetEntity="GC\Unit\Model\Unit", inversedBy="unitCombatSettings")
+     * @JoinColumn(name="source_unit_id", referencedColumnName="unit_id", nullable=false)
      */
     private $sourceUnit;
 
@@ -47,9 +45,7 @@ final class UnitCombat
      * @var \GC\Unit\Model\Unit
      *
      * @ManyToOne(targetEntity="\GC\Unit\Model\Unit")
-     * @JoinColumns({
-     *   @JoinColumn(name="target_unit_id", referencedColumnName="unit_id")
-     * })
+     * @JoinColumn(name="target_unit_id", referencedColumnName="unit_id", nullable=false)
      */
     private $targetUnit;
 

@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace GC\Player\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
 use GC\Galaxy\Model\Galaxy;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
 
 /**
- * @Table(name="player", indexes={@Index(name="fk-player-universe_id", columns={"universe_id"}), @Index(name="fk-player-faction_id", columns={"faction_id"}), @Index(name="fk-player-galaxy_id", columns={"galaxy_id"}), @Index(name="fk-player-user_id", columns={"user_id"})})
+ * @Table(name="player")
  * @Entity
  */
-final class Player
+class Player
 {
     /**
      * @var int
      *
-     * @Column(name="player_id", type="bigint", nullable=false)
+     * @Column(name="player_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -74,13 +75,6 @@ final class Player
     private $scanBlocker;
 
     /**
-     * @var bool
-     *
-     * @Column(name="is_alliance_scanner", type="boolean", nullable=false)
-     */
-    private $isAllianceScanner;
-
-    /**
      * @var int
      *
      * @Column(name="alliance_scan_relays", type="integer", nullable=false)
@@ -105,9 +99,7 @@ final class Player
      * @var \GC\Faction\Model\Faction
      *
      * @ManyToOne(targetEntity="\GC\Faction\Model\Faction")
-     * @JoinColumns({
-     *   @JoinColumn(name="faction_id", referencedColumnName="faction_id")
-     * })
+     * @JoinColumn(name="faction_id", referencedColumnName="faction_id", nullable=false)
      */
     private $faction;
 
@@ -115,9 +107,14 @@ final class Player
      * @var \GC\Galaxy\Model\Galaxy
      *
      * @ManyToOne(targetEntity="\GC\Galaxy\Model\Galaxy")
-     * @JoinColumns({
-     *   @JoinColumn(name="galaxy_id", referencedColumnName="galaxy_id")
-     * })
+     * @JoinColumn(name="galaxy_id", referencedColumnName="galaxy_id", nullable=false)
+     */
+
+    /**
+     * @var \GC\Galaxy\Model\Galaxy
+     *
+     * @ManyToOne(targetEntity="\GC\Galaxy\Model\Galaxy", inversedBy="players")
+     * @JoinColumn(name="galaxy_id", referencedColumnName="galaxy_id", nullable=false)
      */
     private $galaxy;
 
@@ -125,9 +122,7 @@ final class Player
      * @var \GC\Universe\Model\Universe
      *
      * @ManyToOne(targetEntity="\GC\Universe\Model\Universe")
-     * @JoinColumns({
-     *   @JoinColumn(name="universe_id", referencedColumnName="universe_id")
-     * })
+     * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
     private $universe;
 
@@ -135,11 +130,30 @@ final class Player
      * @var \GC\User\Model\User
      *
      * @ManyToOne(targetEntity="\GC\User\Model\User")
-     * @JoinColumns({
-     *   @JoinColumn(name="user_id", referencedColumnName="user_id")
-     * })
+     * @JoinColumn(name="user_id", referencedColumnName="user_id", nullable=false)
      */
     private $user;
+
+    /**
+     * @var \GC\Player\Model\PlayerFleet[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\PlayerFleet", mappedBy="player", cascade={"all"}, orphanRemoval=true)
+     */
+    private $playerFleets;
+
+    /**
+     * @var \GC\Player\Model\PlayerTechnology[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\PlayerTechnology", mappedBy="player", cascade={"all"}, orphanRemoval=true)
+     */
+    private $playerTechnologies;
+
+    /**
+     * @var \GC\Player\Model\PlayerUnitConstruction[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\PlayerUnitConstruction", mappedBy="player", cascade={"all"}, orphanRemoval=true)
+     */
+    private $playerUnitConstructions;
 
     /**
      * @param \GC\User\Model\User $user
@@ -150,6 +164,10 @@ final class Player
      */
     public function __construct(User $user, Faction $faction, Universe $universe, Galaxy $galaxy, int $galaxyPosition)
     {
+        $this->playerFleets = new ArrayCollection();
+        $this->playerTechnologies = new ArrayCollection();
+        $this->playerUnitConstructions = new ArrayCollection();
+
         $this->user = $user;
         $this->faction = $faction;
         $this->universe = $universe;
@@ -159,7 +177,6 @@ final class Player
         $this->crystal = 5000;
         $this->scanRelays = 0;
         $this->scanBlocker = 0;
-        $this->isAllianceScanner = false;
         $this->allianceScanRelays = 0;
         $this->points = 0;
         $this->rankingPosition = 0;
@@ -299,24 +316,6 @@ final class Player
     public function setScanBlocker(int $scanBlocker): void
     {
         $this->scanBlocker = $scanBlocker;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAllianceScanner(): bool
-    {
-        return $this->isAllianceScanner;
-    }
-
-    /**
-     * @param bool $isAllianceScanner
-     *
-     * @return void
-     */
-    public function setIsAllianceScanner(bool $isAllianceScanner): void
-    {
-        $this->isAllianceScanner = $isAllianceScanner;
     }
 
     /**
