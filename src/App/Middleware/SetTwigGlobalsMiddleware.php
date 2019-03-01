@@ -40,12 +40,17 @@ final class SetTwigGlobalsMiddleware implements MiddlewareInterface
         if ($currentUser) {
             $this->twig->addGlobal('currentUserId', $currentUser->getUserId());
             $this->twig->addGlobal('currentUserName', $currentUser->getName());
+            $this->twig->addGlobal('currentUser', $currentUser);
+            $this->twig->addGlobal('isLoggedIn', true);
+        } else {
+            $this->twig->addGlobal('isLoggedIn', false);
         }
 
         $universe = $this->getCurrentUniverse($request);
         if ($universe) {
             $this->twig->addGlobal('currentUniverseId', $universe->getUniverseId());
             $this->twig->addGlobal('currentUniverseName', $universe->getUniverseId());
+            $this->twig->addGlobal('currentUniverse', $universe);
         }
 
         $player = $this->getCurrentPlayer($request);
