@@ -4,28 +4,10 @@ declare(strict_types=1);
 
 namespace GC\Player\Model;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
-use Inferno\Doctrine\Repository\DoctrineRepository;
+use Doctrine\ORM\EntityRepository;
 
-final class PlayerRepository extends DoctrineRepository
+final class PlayerRepository extends EntityRepository
 {
-	/**
-	 * @param \Doctrine\ORM\EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager)
-    {
-		parent::__construct($entityManager, Player::class);
-	}
-
-    /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-	protected function getQueryBuilder(): QueryBuilder
-    {
-        return $this->getRepository()->createQueryBuilder('player');
-    }
-
     /**
      * @param int $playerId
      *
@@ -35,11 +17,11 @@ final class PlayerRepository extends DoctrineRepository
      */
 	public function findById(int $playerId): ?Player
     {
-		$queryBuilder = $this->getQueryBuilder();
-		$queryBuilder->where('player.playerId = :playerId')
-            ->setParameter(':playerId', $playerId);
-
-		return $queryBuilder->getQuery()->getOneOrNullResult();
+		return $this->createQueryBuilder('player')
+		    ->where('player.playerId = :playerId')
+            ->setParameter(':playerId', $playerId)
+            ->getQuery()
+            ->getOneOrNullResult();
 	}
 
     /**
@@ -52,13 +34,12 @@ final class PlayerRepository extends DoctrineRepository
      */
     public function findByUserIdAndUniverseId(int $userId, int $universeId): ?Player
     {
-        $queryBuilder = $this->getQueryBuilder();
-        $queryBuilder
+        return $this->createQueryBuilder('player')
             ->where('player.user = :userId')
             ->andWhere('player.universe = :universeId')
             ->setParameter(':userId', $userId)
-            ->setParameter(':universeId', $universeId);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+            ->setParameter(':universeId', $universeId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

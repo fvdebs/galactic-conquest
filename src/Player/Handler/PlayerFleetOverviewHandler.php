@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Player\Handler;
 
-use GC\App\Aware\GameAwareTrait;
 use GC\App\Aware\HandlerAwareTrait;
-use GC\App\Aware\RepositoryAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -14,8 +12,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class PlayerFleetOverviewHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
-    use GameAwareTrait;
-    use RepositoryAwareTrait;
 
     public const NAME = 'player.fleet.overview';
 
@@ -26,6 +22,6 @@ final class PlayerFleetOverviewHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->renderResponse('@Player/playerFleetOverview.twig', []);
+        return $this->render('@Player/playerFleetOverview.twig');
     }
 }

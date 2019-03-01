@@ -11,14 +11,16 @@ final class AllianceRepository extends EntityRepository
     /**
      * @param int $allianceId
      *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      * @return \GC\Alliance\Model\Alliance|null
      */
 	public function findById(int $allianceId): ?Alliance
     {
-		$queryBuilder = $this->createQueryBuilder('alliance');
-		$queryBuilder->where('alliance.allianceId = :allianceId')
-            ->setParameter(':allianceId', $allianceId);
-
-		return $queryBuilder->getQuery()->getOneOrNullResult();
+		return $this->createQueryBuilder('alliance')
+		    ->where('alliance.allianceId = :allianceId')
+            ->setParameter(':allianceId', $allianceId)
+            ->getQuery()
+            ->getOneOrNullResult();
 	}
 }

@@ -9,7 +9,7 @@ use GC\Faction\Model\Faction;
 
 /**
  * @Table(name="technology")
- * @Entity
+ * @Entity(repositoryClass="GC\Technology\Model\TechnologyRepository")
  */
 final class Technology
 {

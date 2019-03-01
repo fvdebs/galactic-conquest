@@ -48,7 +48,6 @@ return [
         \Inferno\Translation\TranslationServiceProvider::class,
         \Inferno\Renderer\RendererServiceProvider::class,
         \Inferno\Predis\PredisServiceProvider::class,
-        \Inferno\RabbitMq\RabbitMqServiceProvider::class,
     ],
 
     /*
@@ -62,7 +61,12 @@ return [
         \Inferno\Language\Middleware\LanguageDetectorMiddleware::class,
         \Inferno\Session\Middleware\StartSessionMiddleware::class,
         \Inferno\Routing\Middleware\DispatcherMiddleware::class,
-        \GC\App\Middleware\GameMiddleware::class,
+        \GC\App\Middleware\SetCurrentUserMiddleware::class,
+        \GC\App\Middleware\AuthorizationMiddleware::class,
+        \GC\App\Middleware\SetCurrentUniverseMiddleware::class,
+        \GC\App\Middleware\SetCurrentPlayerMiddleware::class,
+        \GC\App\Middleware\SetTwigGlobalsMiddleware::class,
+        \GC\App\Middleware\AuthorizationUniverseMiddleware::class,
     ],
 
     /*
@@ -153,15 +157,4 @@ return [
     */
     'redis-host' => 'localhost',
     'redis-port' => 6379,
-
-    /*
-    |--------------------------------------------------------------------------
-    | RabbitMQ
-    |--------------------------------------------------------------------------
-    */
-    'rabbitmq-host' => 'localhost',
-    'rabbitmq-port' => 5672,
-    'rabbitmq-user' => 'rabbit',
-    'rabbitmq-password' => 'rabbit',
-    'rabbitmq-vhost' => '/',
 ];

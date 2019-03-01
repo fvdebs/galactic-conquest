@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace GC\Scan;
 
-use Doctrine\ORM\EntityManager;
-use GC\Scan\Model\ScanRepository;
-use Inferno\Routing\Loader\RouteProviderLoader;
+use GC\Scan\Handler\ScanDetailHandler;
+use GC\Scan\Handler\ScanHandler;
+use Inferno\Routing\Route\RouteCollection;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -19,8 +19,7 @@ final class ScanServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->provideScanRouteProvider($pimple);
-        $this->provideScanRepository($pimple);
+        $this->provideScanRoutes($pimple);
     }
 
     /**
@@ -28,22 +27,14 @@ final class ScanServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    private function provideScanRouteProvider(Container $container): void
+    private function provideScanRoutes(Container $container): void
     {
-        $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            return $routeProviderLoader->addRouteProvider(new ScanRouteProvider());
-        });
-    }
+        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        {
+            $collection->get('/{locale}/{universe}/scan/{scanId}', ScanDetailHandler::class);
+            $collection->get('/{locale}/{universe}/scan/{scanType}', ScanHandler::class);
 
-    /**
-     * @param \Pimple\Container $container
-     *
-     * @return void
-     */
-    private function provideScanRepository(Container $container): void
-    {
-        $container->offsetSet(ScanRepository::class, function(Container $container) {
-            return new ScanRepository($container->offsetGet(EntityManager::class));
+            return $collection;
         });
     }
 }

@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace GC\User\Model;
 
 /**
- * @Entity
  * @Table(name="user")
+ * @Entity(repositoryClass="GC\User\Model\UserRepository")
  */
 class User
 {
-    public const SESSION_KEY_USER_ID = 'userId';
-
     /**
      * @var int
-     * @Column(name="user_id", type="bigint", nullable=false)
+     * @Column(name="user_id", type="integer", nullable=false)
      * @Id
      * @GeneratedValue(strategy="IDENTITY")
      */
@@ -55,7 +53,7 @@ class User
 	 */
 	public function getUserId(): int
     {
-		return (int) $this->userId;
+		return $this->userId;
 	}
 	
 	/**
@@ -66,16 +64,6 @@ class User
 		return $this->name;
 	}
 
-    /**
-     * @param string $name
-     *
-     * @return void
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
 	/**
 	 * @return string
 	 */
@@ -85,30 +73,10 @@ class User
 	}
 	
 	/**
-	 * @param string $password
-     *
-	 * @return void
-	 */
-	public function setPassword($password): void
-    {
-		$this->password = $password;
-	}
-	
-	/**
 	 * @return string
 	 */
 	public function getMail(): string
     {
 		return $this->mail;
-	}
-	
-	/**
-	 * @param string $mail
-     *
-	 * @return void
-	 */
-	public function setMail($mail): void
-    {
-		$this->mail = $mail;
 	}
 }

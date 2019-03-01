@@ -12,7 +12,7 @@ use GC\User\Model\User;
 
 /**
  * @Table(name="player")
- * @Entity
+ * @Entity(repositoryClass="GC\Player\Model\PlayerRepository")
  */
 class Player
 {
@@ -106,13 +106,6 @@ class Player
     /**
      * @var \GC\Galaxy\Model\Galaxy
      *
-     * @ManyToOne(targetEntity="\GC\Galaxy\Model\Galaxy")
-     * @JoinColumn(name="galaxy_id", referencedColumnName="galaxy_id", nullable=false)
-     */
-
-    /**
-     * @var \GC\Galaxy\Model\Galaxy
-     *
      * @ManyToOne(targetEntity="\GC\Galaxy\Model\Galaxy", inversedBy="players")
      * @JoinColumn(name="galaxy_id", referencedColumnName="galaxy_id", nullable=false)
      */
@@ -121,7 +114,7 @@ class Player
     /**
      * @var \GC\Universe\Model\Universe
      *
-     * @ManyToOne(targetEntity="\GC\Universe\Model\Universe")
+     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="players")
      * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
     private $universe;
@@ -156,6 +149,14 @@ class Player
     private $playerUnitConstructions;
 
     /**
+     * @var \GC\Player\Model\PlayerCombatReport[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\PlayerCombatReport", mappedBy="player", cascade={"all"}, orphanRemoval=true)
+     * @OrderBy({"createdAt" = "ASC"})
+     */
+    private $playerCombatReports;
+
+    /**
      * @param \GC\User\Model\User $user
      * @param \GC\Faction\Model\Faction $faction
      * @param \GC\Universe\Model\Universe $universe
@@ -167,6 +168,7 @@ class Player
         $this->playerFleets = new ArrayCollection();
         $this->playerTechnologies = new ArrayCollection();
         $this->playerUnitConstructions = new ArrayCollection();
+        $this->playerCombatReports = new ArrayCollection();
 
         $this->user = $user;
         $this->faction = $faction;
@@ -201,31 +203,11 @@ class Player
     }
 
     /**
-     * @param int $galaxyPosition
-     *
-     * @return void
-     */
-    public function setGalaxyPosition(int $galaxyPosition): void
-    {
-        $this->galaxyPosition = $galaxyPosition;
-    }
-
-    /**
      * @return int
      */
     public function getMetal(): int
     {
         return $this->metal;
-    }
-
-    /**
-     * @param int $metal
-     *
-     * @return void
-     */
-    public function setMetal(int $metal): void
-    {
-        $this->metal = $metal;
     }
 
     /**
@@ -237,31 +219,11 @@ class Player
     }
 
     /**
-     * @param int $crystal
-     *
-     * @return void
-     */
-    public function setCrystal(int $crystal): void
-    {
-        $this->crystal = $crystal;
-    }
-
-    /**
      * @return int
      */
     public function getExtractorMetal(): int
     {
         return $this->extractorMetal;
-    }
-
-    /**
-     * @param int $extractorMetal
-     *
-     * @return void
-     */
-    public function setExtractorMetal(int $extractorMetal): void
-    {
-        $this->extractorMetal = $extractorMetal;
     }
 
     /**
@@ -273,31 +235,11 @@ class Player
     }
 
     /**
-     * @param int $extractorCrystal
-     *
-     * @return void
-     */
-    public function setExtractorCrystal(int $extractorCrystal): void
-    {
-        $this->extractorCrystal = $extractorCrystal;
-    }
-
-    /**
      * @return int
      */
     public function getScanRelays(): int
     {
         return $this->scanRelays;
-    }
-
-    /**
-     * @param int $scanRelays
-     *
-     * @return void
-     */
-    public function setScanRelays(int $scanRelays): void
-    {
-        $this->scanRelays = $scanRelays;
     }
 
     /**
@@ -309,16 +251,6 @@ class Player
     }
 
     /**
-     * @param int $scanBlocker
-     *
-     * @return void
-     */
-    public function setScanBlocker(int $scanBlocker): void
-    {
-        $this->scanBlocker = $scanBlocker;
-    }
-
-    /**
      * @return int
      */
     public function getAllianceScanRelays(): int
@@ -327,31 +259,11 @@ class Player
     }
 
     /**
-     * @param int $allianceScanRelays
-     *
-     * @return void
-     */
-    public function setAllianceScanRelays(int $allianceScanRelays): void
-    {
-        $this->allianceScanRelays = $allianceScanRelays;
-    }
-
-    /**
      * @return int
      */
     public function getPoints(): int
     {
         return $this->points;
-    }
-
-    /**
-     * @param int $points
-     *
-     * @return void
-     */
-    public function setPoints(int $points): void
-    {
-        $this->points = $points;
     }
 
     /**
@@ -399,31 +311,11 @@ class Player
     }
 
     /**
-     * @param \GC\Galaxy\Model\Galaxy $galaxy
-     *
-     * @return void
-     */
-    public function setGalaxy(Galaxy $galaxy): void
-    {
-        $this->galaxy = $galaxy;
-    }
-
-    /**
      * @return \GC\Universe\Model\Universe
      */
     public function getUniverse(): Universe
     {
         return $this->universe;
-    }
-
-    /**
-     * @param \GC\Universe\Model\Universe $universe
-     *
-     * @return void
-     */
-    public function setUniverse(Universe $universe): void
-    {
-        $this->universe = $universe;
     }
 
     /**
@@ -434,13 +326,87 @@ class Player
         return $this->user;
     }
 
-    /**
-     * @param \GC\User\Model\User $user
-     *
-     * @return void
-     */
-    public function setUser(User $user): void
+    public function relocate(Galaxy $galaxy): void
     {
-        $this->user = $user;
+
+    }
+
+    public function buildCrystalExtractorsBy(int $number): void
+    {
+
+    }
+
+    public function buildMetalExtractorsBy(int $number): void
+    {
+
+    }
+
+    public function stealCrystalExtractorsFrom(Player $victim, int $maxNumber): void
+    {
+
+    }
+
+    public function stealMetalExtractorsFrom(Player $victim, int $maxNumber): void
+    {
+
+    }
+
+    public function recalculatePoints(): int
+    {
+        return $this->points;
+    }
+
+    public function giveAllianceScanRelays(): void
+    {
+
+    }
+
+    public function takeAllianceScanRelays(): void
+    {
+
+    }
+
+    public function buildScanBlocker(int $number): void
+    {
+
+    }
+
+    public function buildScanRelays(int $number): void
+    {
+
+    }
+
+    protected function increaseMetal(int $number): void
+    {
+
+    }
+
+    protected function decreaseMetal(int $number): void
+    {
+
+    }
+    protected function increaseCrystal(int $number): void
+    {
+
+    }
+
+    protected function decreaseCrystal(int $number): void
+    {
+
+    }
+
+    public function tickIncreaseResources(): void
+    {
+
+    }
+
+    public function tradeMetalWith(Player $player, int $decrease, int $increase): void
+    {
+
+    }
+
+    public function tradeCrystalWith(Player $player, int $decrease, int $increase): void
+    {
+
     }
 }

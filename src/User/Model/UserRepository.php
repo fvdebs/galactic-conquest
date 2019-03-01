@@ -4,42 +4,24 @@ declare(strict_types=1);
 
 namespace GC\User\Model;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
-use Inferno\Doctrine\Repository\DoctrineRepository;
+use Doctrine\ORM\EntityRepository;
 
-final class UserRepository extends DoctrineRepository
+final class UserRepository extends EntityRepository
 {
-	/**
-	 * @param \Doctrine\ORM\EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager)
-    {
-		parent::__construct($entityManager, User::class);
-	}
-
     /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-	protected function getQueryBuilder(): QueryBuilder
-    {
-        return $this->getRepository()->createQueryBuilder('user');
-    }
-
-    /**
-     * @param int $userId
+     * @param mixed $userId
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\User\Model\User|null
      */
-	public function findById(int $userId): ?User
+	public function findById($userId): ?User
     {
-		$queryBuilder = $this->getQueryBuilder();
-		$queryBuilder->where('user.userId = :userId')
-            ->setParameter(':userId', $userId);
-
-		return $queryBuilder->getQuery()->getOneOrNullResult();
+		return $this->createQueryBuilder('user')
+		    ->where('user.userId = :userId')
+            ->setParameter(':userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
 	}
 
     /**
@@ -51,11 +33,11 @@ final class UserRepository extends DoctrineRepository
      */
 	public function findByMail(string $mail): ?User
     {
-		$queryBuilder = $this->getQueryBuilder();
-		$queryBuilder->where('user.mail = :mail')
-            ->setParameter(':mail', $mail);
-
-		return $queryBuilder->getQuery()->getOneOrNullResult();
+		return $this->createQueryBuilder('user')
+		    ->where('user.mail = :mail')
+            ->setParameter(':mail', $mail)
+            ->getQuery()
+            ->getOneOrNullResult();
 	}
 
     /**
@@ -67,22 +49,22 @@ final class UserRepository extends DoctrineRepository
      */
 	public function findByName(string $name): ?User
     {
-		$queryBuilder = $this->getQueryBuilder();
-		$queryBuilder->where('user.name = :name')
-            ->setParameter(':name', $name);
-
-		return $queryBuilder->getQuery()->getOneOrNullResult();
+		return $this->createQueryBuilder('user')
+            ->where('user.name = :name')
+            ->setParameter(':name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
 	}
 	
 	/**
-	 * @return User[]
+	 * @return \GC\User\Model\User[]
 	 */
 	public function findAllOrderByName(): array
     {
-		$queryBuilder = $this->getRepository()->createQueryBuilder('user');
-		$queryBuilder->orderBy('user.name');
-
-		return $queryBuilder->getQuery()->getResult();
+		return $this->createQueryBuilder('user')
+            ->orderBy('user.name')
+            ->getQuery()
+            ->getResult();
 	}
 
     /**
@@ -92,11 +74,9 @@ final class UserRepository extends DoctrineRepository
      */
 	public function countUsers(): int
     {
-		$count = $this->getQueryBuilder()
+		return (int) $this->createQueryBuilder('user')
             ->select('count(user.userId)')
             ->getQuery()
             ->getSingleScalarResult();
-
-		return (int) $count;
 	}
 }

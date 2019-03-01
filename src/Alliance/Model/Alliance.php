@@ -103,7 +103,7 @@ class Alliance
     /**
      * @var \GC\Universe\Model\Universe
      *
-     * @ManyToOne(targetEntity="\GC\Universe\Model\Universe")
+     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="alliances")
      * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
     private $universe;

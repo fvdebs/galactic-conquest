@@ -2,22 +2,18 @@
 
 declare(strict_types=1);
 
-namespace GC\Combat\Handler;
+namespace GC\Universe\Handler;
 
-use GC\App\Aware\GameAwareTrait;
 use GC\App\Aware\HandlerAwareTrait;
-use GC\App\Aware\RepositoryAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class CombatReportHandler implements RequestHandlerInterface
+final class UniverseSelectHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
-    use GameAwareTrait;
-    use RepositoryAwareTrait;
 
-    public const NAME = 'combat.report';
+    public const NAME = 'universe.select';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -26,6 +22,6 @@ final class CombatReportHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->renderResponse('@Combat/combatReport.twig', []);
+        return $this->render('@Universe/universeSelect.twig');
     }
 }

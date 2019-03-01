@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace GC\User\Handler;
 
-use GC\App\Aware\GameAwareTrait;
 use GC\App\Aware\HandlerAwareTrait;
-use GC\App\Aware\RepositoryAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -14,10 +12,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class UserLoginHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
-    use GameAwareTrait;
-    use RepositoryAwareTrait;
 
     public const NAME = 'user.login';
+    public const SESSION_KEY_USER_ID = 'userId';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -26,6 +23,6 @@ final class UserLoginHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->renderResponse('@User/userLogin.twig', []);
+        return $this->render('@User/userLogin.twig');
     }
 }

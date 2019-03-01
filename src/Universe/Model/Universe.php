@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace GC\Universe\Model;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use GC\Galaxy\Model\Galaxy;
+use GC\Player\Model\Player;
 
 /**
  * @Table(name="universe")
- * @Entity
+ * @Entity(repositoryClass="GC\Universe\Model\UniverseRepository")
  */
 class Universe
 {
-    public const STATUS_INACTIVE = 0;
-    public const STATUS_ACTIVE = 1;
-
     /**
      * @var int
      *
@@ -104,23 +104,49 @@ class Universe
     /**
      * @var int
      *
-     * @Column(name="status", type="integer", nullable=false)
+     * @Column(name="is_active", type="boolean", nullable=false)
      */
-    private $status;
+    private $isActive;
+
+    /**
+     * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     * @OrderBy({"rankingPosition" = "ASC"})
+     */
+    private $players;
+
+    /**
+     * @var \GC\Galaxy\Model\Galaxy[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Galaxy\Model\Galaxy", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     * @OrderBy({"number" = "ASC"})
+     */
+    private $galaxies;
+
+    /**
+     * @var \GC\Alliance\Model\Alliance[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Alliance\Model\Alliance", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     * @OrderBy({"rankingPosition" = "ASC"})
+     */
+    private $alliances;
 
     /**
      * @param string $name
-     * @param DateTime|null $ticksStartingAt
-     * @param int|null $tickInterval
      *
      * @throws \Exception
      */
-    public function __construct(string $name, ?DateTime $ticksStartingAt = null, ?int $tickInterval = 15)
+    public function __construct(string $name)
     {
+        $this->players = new ArrayCollection();
+        $this->galaxies = new ArrayCollection();
+        $this->alliances = new ArrayCollection();
+
         $this->name = $name;
         $this->description = '';
-        $this->ticksStartingAt = $ticksStartingAt ?? (new DateTime())->modify('+ 1day');
-        $this->tickInterval = $tickInterval;
+        $this->ticksStartingAt = new DateTime();
+        $this->tickInterval = 15;
         $this->tickCurrent = 0;
         $this->ticksAttack = 30;
         $this->ticksDefense = 20;
@@ -128,7 +154,7 @@ class Universe
         $this->scanBlockerCrystalCost = 2000;
         $this->scanRelayMetalCost = 2000;
         $this->scanRelayCrystalCost = 5000;
-        $this->status = static::STATUS_INACTIVE;
+        $this->isActive = false;
     }
 
     /**
@@ -136,7 +162,7 @@ class Universe
      */
     public function getUniverseId(): int
     {
-        return (int) $this->universeId;
+        return $this->universeId;
     }
 
     /**
@@ -338,20 +364,59 @@ class Universe
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getStatus(): int
+    public function isActive(): bool
     {
-        return $this->status;
+        return $this->isActive;
     }
 
     /**
-     * @param int $status
-     *
      * @return void
      */
-    public function setStatus(int $status): void
+    public function activate(): void
     {
-        $this->status = $status;
+        $this->isActive = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function deactivate(): void
+    {
+        $this->isActive = false;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $commander
+     * @param int $number
+     *
+     * @return \GC\Galaxy\Model\Galaxy
+     */
+    public function createPublicGalaxy(Player $commander, int $number): Galaxy
+    {
+        $galaxy = new Galaxy($this, $commander, $number);
+        $this->galaxies->add($galaxy);
+
+        $commander->relocate($galaxy);
+
+        return $galaxy;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $commander
+     * @param int $number
+     * @param string $password
+     *
+     * @return \GC\Galaxy\Model\Galaxy
+     */
+    public function createPrivateGalaxy(Player $commander, int $number, string $password): Galaxy
+    {
+        $galaxy = new Galaxy($this, $commander, $number, $password);
+        $this->galaxies->add($galaxy);
+
+        $commander->relocate($galaxy);
+
+        return $galaxy;
     }
 }

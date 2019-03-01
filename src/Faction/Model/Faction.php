@@ -6,7 +6,7 @@ namespace GC\Faction\Model;
 
 /**
  * @Table(name="faction")
- * @Entity
+ * @Entity(repositoryClass="GC\Faction\Model\FactionRepository")
  */
 class Faction
 {

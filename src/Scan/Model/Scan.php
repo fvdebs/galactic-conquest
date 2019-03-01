@@ -9,7 +9,7 @@ use GC\Player\Model\Player;
 
 /**
  * @Table(name="scan")
- * @Entity
+ * @Entity(repositoryClass="GC\Scan\Model\ScanRepository")
  */
 final class Scan
 {

@@ -16,6 +16,7 @@ final class Version20190221212701 extends AbstractMigration
      */
     public function up(Schema $schema) : void
     {
+        /*
         $this->addSql('
             CREATE TABLE `user` (
                 `user_id` bigint(20) NOT NULL,
@@ -27,6 +28,7 @@ final class Version20190221212701 extends AbstractMigration
             ALTER TABLE `user` ADD PRIMARY KEY (`user_id`);
             ALTER TABLE `user` MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT;
         ');
+        */
     }
 
     /**
@@ -36,6 +38,8 @@ final class Version20190221212701 extends AbstractMigration
      */
     public function down(Schema $schema) : void
     {
+        /*
         $this->addSql('DROP TABLE user');
+        */
     }
 }

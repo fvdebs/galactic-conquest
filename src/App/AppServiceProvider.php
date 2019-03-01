@@ -7,10 +7,15 @@ namespace GC\App;
 use GC\App\Command\ClearCacheCommand;
 use GC\App\Command\CreateHandlerCommand;
 use GC\App\Http\ErrorResponseFactory;
+use GC\App\Middleware\AuthorizationMiddleware;
+use GC\App\Middleware\SetCurrentPlayerMiddleware;
+use GC\App\Middleware\SetCurrentUniverseMiddleware;
+use GC\App\Middleware\SetCurrentUserMiddleware;
+use GC\App\Middleware\SetTwigGlobalsMiddleware;
+use GC\App\Middleware\AuthorizationUniverseMiddleware;
 use GC\Player\Model\PlayerRepository;
 use GC\Universe\Model\UniverseRepository;
 use GC\User\Model\UserRepository;
-use GC\App\Middleware\GameMiddleware;
 use Inferno\Filesystem\Native\Directory;
 use Inferno\Filesystem\Native\File;
 use Inferno\Routing\Router\RouterChain;
@@ -28,13 +33,108 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
+        $this->provideSetCurrentUserMiddleware($pimple);
+        $this->provideSetCurrentUniverseMiddleware($pimple);
+        $this->provideSetCurrentPlayerMiddleware($pimple);
+        $this->provideSetTwigGlobalsMiddleware($pimple);
+        $this->provideAuthorizationMiddleware($pimple);
+        $this->provideAuthorizationUniverseMiddleware($pimple);
+
         $this->provideErrorResponseFactory($pimple);
-        $this->provideGameMiddleware($pimple);
 
         if ($pimple->offsetGet('config.isCli')) {
             $this->provideClearCacheCommand($pimple);
             $this->provideCreateHandlerCommand($pimple);
         }
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideSetCurrentUserMiddleware(Container $container): void
+    {
+        $container->offsetSet(SetCurrentUserMiddleware::class, function(Container $container) {
+            return new SetCurrentUserMiddleware(
+                $container->offsetGet(SessionManagerInterface::class),
+                $container->offsetGet(UserRepository::class)
+            );
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideSetCurrentUniverseMiddleware(Container $container): void
+    {
+        $container->offsetSet(SetCurrentUniverseMiddleware::class, function(Container $container) {
+            return new SetCurrentUniverseMiddleware(
+                $container->offsetGet(UniverseRepository::class)
+            );
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideSetCurrentPlayerMiddleware(Container $container): void
+    {
+        $container->offsetSet(SetCurrentPlayerMiddleware::class, function(Container $container) {
+            return new SetCurrentPlayerMiddleware(
+                $container->offsetGet(PlayerRepository::class)
+            );
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideSetTwigGlobalsMiddleware(Container $container): void
+    {
+        $container->offsetSet(SetTwigGlobalsMiddleware::class, function(Container $container) {
+            return new SetTwigGlobalsMiddleware(
+                $container->offsetGet(\Twig_Environment::class)
+            );
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideAuthorizationMiddleware(Container $container): void
+    {
+        $container->offsetSet(AuthorizationMiddleware::class, function(Container $container) {
+            return new AuthorizationMiddleware(
+                $container->offsetGet('uri-factory'),
+                $container->offsetGet('response-factory'),
+                $container->offsetGet(RouterChain::class)
+            );
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideAuthorizationUniverseMiddleware(Container $container): void
+    {
+        $container->offsetSet(AuthorizationUniverseMiddleware::class, function(Container $container) {
+            return new AuthorizationUniverseMiddleware(
+                $container->offsetGet('uri-factory'),
+                $container->offsetGet('response-factory'),
+                $container->offsetGet(RouterChain::class)
+            );
+        });
     }
 
     /**
@@ -96,28 +196,6 @@ final class AppServiceProvider implements ServiceProviderInterface
             ));
 
             return $application;
-        });
-    }
-
-    /**
-     * @param \Pimple\Container $container
-     *
-     * @return void
-     */
-    private function provideGameMiddleware(Container $container): void
-    {
-        $container->offsetSet(GameMiddleware::class, function(Container $container) {
-            return new GameMiddleware(
-                $container->offsetGet(SessionManagerInterface::class),
-                $container->offsetGet(UserRepository::class),
-                $container->offsetGet(UniverseRepository::class),
-                $container->offsetGet(PlayerRepository::class),
-                $container->offsetGet(\Twig_Environment::class),
-                $container->offsetGet('uri-factory'),
-                $container->offsetGet('response-factory'),
-                $container->offsetGet(RouterChain::class),
-                $container
-            );
         });
     }
 }

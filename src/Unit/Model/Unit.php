@@ -9,7 +9,7 @@ use GC\Faction\Model\Faction;
 
 /**
  * @Table(name="unit")
- * @Entity
+ * @Entity(repositoryClass="GC\Unit\Model\UnitRepository")
  */
 final class Unit
 {

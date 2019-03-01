@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace GC\User;
 
 use Doctrine\ORM\EntityManager;
+use GC\User\Handler\UserLoginHandler;
+use GC\User\Handler\UserLogoutHandler;
+use GC\User\Handler\UserRegisterHandler;
+use GC\User\Model\User;
 use GC\User\Model\UserRepository;
-use Inferno\Routing\Loader\RouteProviderLoader;
+use Inferno\Routing\Route\RouteCollection;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -19,7 +23,7 @@ final class UserServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->provideUserRouteProvider($pimple);
+        $this->provideUserRoutes($pimple);
         $this->provideUserRepository($pimple);
     }
 
@@ -28,10 +32,15 @@ final class UserServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    private function provideUserRouteProvider(Container $container): void
+    private function provideUserRoutes(Container $container): void
     {
-        $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            return $routeProviderLoader->addRouteProvider(new UserRouteProvider());
+        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        {
+            $collection->post('/{locale}/register', UserRegisterHandler::class)->addAttribute('public', true);
+            $collection->post('/{locale}/login', UserLoginHandler::class)->addAttribute('public', true);
+            $collection->get('/{locale}/logout', UserLogoutHandler::class);
+
+            return $collection;
         });
     }
 
@@ -43,7 +52,7 @@ final class UserServiceProvider implements ServiceProviderInterface
     private function provideUserRepository(Container $container): void
     {
         $container->offsetSet(UserRepository::class, function(Container $container) {
-            return new UserRepository($container->offsetGet(EntityManager::class));
+            return $container->offsetGet(EntityManager::class)->getRepository(User::class);
         });
     }
 }

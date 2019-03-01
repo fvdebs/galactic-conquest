@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace GC\Combat\Model;
+namespace GC\Player\Model;
 
-use GC\Player\Model\Player;
 use DateTime;
 
 /**
- * @Table(name="combat_report")
- * @Entity(repositoryClass="GC\Combat\Model\CombatReportRepository")
+ * @Table(name="player_combat_report")
+ * @Entity
  */
-class CombatReport
+class PlayerCombatReport
 {
     /**
      * @var int
@@ -46,7 +45,7 @@ class CombatReport
     /**
      * @var \GC\Player\Model\Player
      *
-     * @ManyToOne(targetEntity="\GC\Player\Model\Player")
+     * @ManyToOne(targetEntity="GC\Player\Model\Player", inversedBy="playerCombatReports")
      * @JoinColumn(name="player_id", referencedColumnName="player_id", nullable=false)
      */
     private $player;
@@ -55,6 +54,7 @@ class CombatReport
      * @param string $dataJson
      * @param string $externalId
      * @param \GC\Player\Model\Player $player
+     *
      * @throws \Exception
      */
     public function __construct(string $dataJson, string $externalId, Player $player)

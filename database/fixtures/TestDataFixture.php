@@ -22,6 +22,8 @@ class TestDataFixture extends AbstractFixture
     /**
      * @param \Doctrine\Common\Persistence\ObjectManager $manager
      *
+     * @throws \Exception
+     *
      * @return void
      */
     public function load(ObjectManager $manager): void
@@ -35,7 +37,7 @@ class TestDataFixture extends AbstractFixture
 
         // universe
         $universeFirst = new Universe('sirius');
-        $universeSecond = new Universe('eridanus', null, 5);
+        $universeSecond = new Universe('eridanus');
         $manager->persist($universeFirst);
         $manager->persist($universeSecond);
 
@@ -85,8 +87,8 @@ class TestDataFixture extends AbstractFixture
         $manager->flush();
 
         // galaxy
-        $galaxyFirst = new Galaxy(1);
-        $galaxySecond = new Galaxy(2);
+        $galaxyFirst = new Galaxy($universeFirst, 1);
+        $galaxySecond = new Galaxy($universeFirst, 2);
         $manager->persist($galaxyFirst);
         $manager->persist($galaxySecond);
 

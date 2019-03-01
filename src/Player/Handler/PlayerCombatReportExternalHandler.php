@@ -2,22 +2,18 @@
 
 declare(strict_types=1);
 
-namespace GC\Player\Handler;
+namespace GC\Combat\Handler;
 
-use GC\App\Aware\GameAwareTrait;
 use GC\App\Aware\HandlerAwareTrait;
-use GC\App\Aware\RepositoryAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class PlayerScansHandler implements RequestHandlerInterface
+final class PlayerCombatReportExternalHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
-    use GameAwareTrait;
-    use RepositoryAwareTrait;
 
-    public const NAME = 'player.scans';
+    public const NAME = 'player.combat.report.external';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -26,6 +22,6 @@ final class PlayerScansHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->renderResponse('@Player/playerScans.twig', []);
+        return $this->render('@Player/playerCombatReportExternal.twig');
     }
 }

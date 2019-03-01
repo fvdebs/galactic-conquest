@@ -4,9 +4,16 @@ declare(strict_types=1);
 
 namespace GC\Galaxy;
 
-use Doctrine\ORM\EntityManager;
-use GC\Galaxy\Model\GalaxyRepository;
-use Inferno\Routing\Loader\RouteProviderLoader;
+use GC\Galaxy\Handler\GalaxyAllianceApplicationHandler;
+use GC\Galaxy\Handler\GalaxyAllianceApplicationSaveHandler;
+use GC\Galaxy\Handler\GalaxyEditHandler;
+use GC\Galaxy\Handler\GalaxyEditSaveHandler;
+use GC\Galaxy\Handler\GalaxyMemberDetailHandler;
+use GC\Galaxy\Handler\GalaxyOverviewHandler;
+use GC\Galaxy\Handler\GalaxyTacticHandler;
+use GC\Galaxy\Handler\GalaxyTechnologyBuildHandler;
+use GC\Galaxy\Handler\GalaxyViewHandler;
+use Inferno\Routing\Route\RouteCollection;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -19,8 +26,7 @@ final class GalaxyServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $this->provideGalaxyRouteProvider($pimple);
-        $this->provideGalaxyRepository($pimple);
+        $this->provideGalaxyRoutes($pimple);
     }
 
     /**
@@ -28,22 +34,22 @@ final class GalaxyServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    private function provideGalaxyRouteProvider(Container $container): void
+    private function provideGalaxyRoutes(Container $container): void
     {
-        $container->extend(RouteProviderLoader::class, function(RouteProviderLoader $routeProviderLoader, Container $container) {
-            return $routeProviderLoader->addRouteProvider(new GalaxyRouteProvider());
-        });
-    }
+        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        {
+            $collection->get('/{locale}/{universe}/galaxy/{number}', GalaxyViewHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/edit', GalaxyEditHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/overview', GalaxyOverviewHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/tactic', GalaxyTacticHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/tactic/{position}', GalaxyMemberDetailHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/application', GalaxyAllianceApplicationHandler::class);
 
-    /**
-     * @param \Pimple\Container $container
-     *
-     * @return void
-     */
-    private function provideGalaxyRepository(Container $container): void
-    {
-        $container->offsetSet(GalaxyRepository::class, function(Container $container) {
-            return new GalaxyRepository($container->offsetGet(EntityManager::class));
+            $collection->post('/{locale}/{universe}/galaxy/edit', GalaxyEditSaveHandler::class);
+            $collection->post('/{locale}/{universe}/galaxy/technology', GalaxyTechnologyBuildHandler::class);
+            $collection->post('/{locale}/{universe}/galaxy/application', GalaxyAllianceApplicationSaveHandler::class);
+
+            return $collection;
         });
     }
 }

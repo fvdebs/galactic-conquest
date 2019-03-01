@@ -16,17 +16,17 @@ final class ErrorResponseFactory implements ErrorResponseFactoryInterface
     /**
      * @var bool
      */
-    protected $catchErrors;
+    private $catchErrors;
 
     /**
      * @var \Inferno\Renderer\RendererInterface $templateRenderer
      */
-    protected $renderer;
+    private $renderer;
 
     /**
      * @var \Inferno\Http\Response\ResponseFactoryInterface
      */
-    protected $responseFactory;
+    private $responseFactory;
 
     /**
      * @param bool $catchErrors
@@ -54,12 +54,16 @@ final class ErrorResponseFactory implements ErrorResponseFactoryInterface
         }
 
         if ($throwable instanceof RouteNotFoundException) {
-            $content =  $this->renderer->render('@App/error/not-found.twig');
-            return $this->responseFactory->createFromContent($content, 404, []);
+            return $this->responseFactory->createFromContent(
+                $this->renderer->render('@App/error/not-found.twig'),
+                404
+            );
         }
 
-        $content =  $this->renderer->render('@App/error/service-unavailable.twig');
-        return $this->responseFactory->createFromContent($content, 503, []);
+        return $this->responseFactory->createFromContent(
+            $this->renderer->render('@App/error/service-unavailable.twig'),
+            503
+        );
     }
 
     /**

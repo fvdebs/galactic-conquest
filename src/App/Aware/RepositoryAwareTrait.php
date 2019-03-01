@@ -2,100 +2,111 @@
 
 namespace GC\App\Aware;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use GC\Alliance\Model\Alliance;
 use GC\Alliance\Model\AllianceRepository;
-use GC\App\Dependency\SingletonContainer;
-use GC\Combat\Model\CombatReportRepository;
+use GC\Faction\Model\Faction;
 use GC\Faction\Model\FactionRepository;
+use GC\Galaxy\Model\Galaxy;
 use GC\Galaxy\Model\GalaxyRepository;
+use GC\Player\Model\Player;
 use GC\Player\Model\PlayerRepository;
+use GC\Scan\Model\Scan;
 use GC\Scan\Model\ScanRepository;
+use GC\Technology\Model\Technology;
 use GC\Technology\Model\TechnologyRepository;
+use GC\Unit\Model\Unit;
 use GC\Unit\Model\UnitRepository;
+use GC\Universe\Model\Universe;
 use GC\Universe\Model\UniverseRepository;
+use GC\User\Model\User;
 use GC\User\Model\UserRepository;
 
+/**
+ * ATTENTION: Use this class carefully. This is bad practice but speeds up development a bit.
+ * Use entity methods or inject repositories to your handlers instead.
+ */
 trait RepositoryAwareTrait
 {
-    use DoctrineAwareTrait;
+    /**
+     * @param string $entityClassPath
+     *
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    protected function getDoctrineRepository(string $entityClassPath): ObjectRepository
+    {
+        return $this->getDoctrine()->getRepository($entityClassPath);
+    }
 
     /**
-     * @return \GC\Alliance\Model\AllianceRepository
+     * @return \GC\Alliance\Model\AllianceRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getAllianceRepository(): AllianceRepository
     {
-        return $this->getRepository(Alliance::class);
+        return $this->getDoctrineRepository(Alliance::class);
     }
 
     /**
-     * @return \GC\Combat\Model\CombatReportRepository
-     */
-    protected function getCombatReportRepository(): CombatReportRepository
-    {
-        return SingletonContainer::getContainer()->offsetGet(CombatReportRepository::class);
-    }
-
-    /**
-     * @return \GC\Faction\Model\FactionRepository
+     * @return \GC\Faction\Model\FactionRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getFactionRepository(): FactionRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(FactionRepository::class);
+        return $this->getDoctrineRepository(Faction::class);
     }
 
     /**
-     * @return \GC\Galaxy\Model\GalaxyRepository
+     * @return \GC\Galaxy\Model\GalaxyRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getGalaxyRepository(): GalaxyRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(GalaxyRepository::class);
+        return $this->getDoctrineRepository(Galaxy::class);
     }
 
     /**
-     * @return \GC\Player\Model\PlayerRepository
+     * @return \GC\Player\Model\PlayerRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getPlayerRepository(): PlayerRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(PlayerRepository::class);
+        return $this->getDoctrineRepository(Player::class);
     }
 
     /**
-     * @return \GC\Scan\Model\ScanRepository
+     * @return \GC\Scan\Model\ScanRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getScanRepository(): ScanRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(ScanRepository::class);
+        return $this->getDoctrineRepository(Scan::class);
     }
 
     /**
-     * @return \GC\Technology\Model\TechnologyRepository
+     * @return \GC\Technology\Model\TechnologyRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getTechnologyRepository(): TechnologyRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(TechnologyRepository::class);
+        return $this->getDoctrineRepository(Technology::class);
     }
 
     /**
-     * @return \GC\Unit\Model\UnitRepository
+     * @return \GC\Unit\Model\UnitRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getUnitRepository(): UnitRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(UnitRepository::class);
+        return $this->getDoctrineRepository(Unit::class);
     }
 
     /**
-     * @return \GC\Universe\Model\UniverseRepository
+     * @return \GC\Universe\Model\UniverseRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getUniverseRepository(): UniverseRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(UniverseRepository::class);
+        return $this->getDoctrineRepository(Universe::class);
     }
 
     /**
-     * @return \GC\User\Model\UserRepository
+     * @return \GC\User\Model\UserRepository|\Doctrine\Common\Persistence\ObjectRepository
      */
     protected function getUserRepository(): UserRepository
     {
-        return SingletonContainer::getContainer()->offsetGet(UserRepository::class);
+        return $this->getDoctrineRepository(User::class);
     }
 }

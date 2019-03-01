@@ -2,34 +2,43 @@
 
 namespace GC\App\Aware;
 
-use GC\App\Dependency\SingletonContainer;
+use GC\App\Middleware\SetCurrentPlayerMiddleware;
+use GC\App\Middleware\SetCurrentUniverseMiddleware;
+use GC\App\Middleware\SetCurrentUserMiddleware;
 use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
+use Psr\Http\Message\ServerRequestInterface;
 
 trait GameAwareTrait
 {
     /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
      * @return \GC\Player\Model\Player
      */
-    protected function getCurrentPlayer(): Player
+    protected function getCurrentPlayer(ServerRequestInterface $request): Player
     {
-        return SingletonContainer::getContainer()->offsetGet(Player::class);
+        return $request->getAttribute(SetCurrentPlayerMiddleware::REQUEST_ATTRIBUTE_CURRENT_PLAYER);
     }
 
     /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
      * @return \GC\Universe\Model\Universe
      */
-    protected function getCurrentUniverse(): Universe
+    protected function getCurrentUniverse(ServerRequestInterface $request): Universe
     {
-        return SingletonContainer::getContainer()->offsetGet(Universe::class);
+        return $request->getAttribute(SetCurrentUniverseMiddleware::REQUEST_ATTRIBUTE_CURRENT_UNIVERSE);
     }
 
     /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
      * @return \GC\User\Model\User
      */
-    protected function getCurrentUser(): User
+    protected function getCurrentUser(ServerRequestInterface $request): User
     {
-        return SingletonContainer::getContainer()->offsetGet(User::class);
+        return $request->getAttribute(SetCurrentUserMiddleware::REQUEST_ATTRIBUTE_CURRENT_USER);
     }
 }

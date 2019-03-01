@@ -7,10 +7,11 @@ namespace GC\Galaxy\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
 use GC\Player\Model\Player;
+use GC\Universe\Model\Universe;
 
 /**
  * @Table(name="galaxy")
- * @Entity
+ * @Entity(repositoryClass="GC\Galaxy\Model\GalaxyRepository")
  */
 class Galaxy
 {
@@ -93,7 +94,7 @@ class Galaxy
      * @ManyToOne(targetEntity="\GC\Player\Model\Player")
      * @JoinColumn(name="commander_player_id", referencedColumnName="player_id", nullable=true)
      */
-    private $commanderPlayer;
+    private $commander;
 
     /**
      * @var \GC\Galaxy\Model\GalaxyTechnology[]|\Doctrine\Common\Collections\ArrayCollection
@@ -106,18 +107,33 @@ class Galaxy
      * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="galaxy", cascade={"all"}, orphanRemoval=true)
+     * @OrderBy({"rankingPosition" = "ASC"})
      */
     private $players;
 
     /**
-     * @param int $number
+     * @var \GC\Universe\Model\Universe
+     *
+     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="galaxies")
+     * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
-    public function __construct(int $number)
+    private $universe;
+
+    /**
+     * @param \GC\Universe\Model\Universe $universe
+     * @param int $number
+     * @param \GC\Player\Model\Player $commander
+     * @param string|null $password
+     */
+    public function __construct(Universe $universe, Player $commander, int $number, ?string $password = null)
     {
         $this->players = new ArrayCollection();
         $this->galaxyTechnologies = new ArrayCollection();
+
+        $this->universe = $universe;
+        $this->commander = $commander;
         $this->number = $number;
-        $this->password = null;
+        $this->password = $password;
         $this->metal = 0;
         $this->crystal = 0;
         $this->taxCrystal = 0;
@@ -125,7 +141,6 @@ class Galaxy
         $this->extractorPoints = 0;
         $this->rankingPosition = 0;
         $this->alliance = null;
-        $this->commanderPlayer = null;
     }
 
     /**
@@ -309,9 +324,9 @@ class Galaxy
     /**
      * @return \GC\Player\Model\Player|null
      */
-    public function getCommanderPlayer(): ?Player
+    public function getCommander(): ?Player
     {
-        return $this->commanderPlayer;
+        return $this->commander;
     }
 
     /**

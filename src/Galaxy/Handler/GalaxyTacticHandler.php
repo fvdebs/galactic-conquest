@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Galaxy\Handler;
 
-use GC\App\Aware\GameAwareTrait;
 use GC\App\Aware\HandlerAwareTrait;
-use GC\App\Aware\RepositoryAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -14,8 +12,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class GalaxyTacticHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
-    use GameAwareTrait;
-    use RepositoryAwareTrait;
 
     public const NAME = 'galaxy.tactic';
 
@@ -26,6 +22,6 @@ final class GalaxyTacticHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->renderResponse('@Galaxy/galaxyTactic.twig', []);
+        return $this->render('@Galaxy/galaxyTactic.twig');
     }
 }
