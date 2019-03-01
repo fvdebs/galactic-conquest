@@ -28,6 +28,48 @@ class TestDataFixture extends AbstractFixture
      */
     public function load(ObjectManager $manager): void
     {
+        // faction
+        $human = new Faction('Mensch');
+        $alien = new Faction('Alien');
+        $manager->persist($human);
+        $manager->persist($alien);
+
+        // user
+        $userFirst = new User('testuser', 'testuser@example.org', \password_hash('secret', PASSWORD_DEFAULT));
+        $manager->persist($userFirst);
+
+        // universe
+        $universe = new Universe('sirius');
+        $manager->persist($universe);
+
+        $galaxy = $universe->createPublicGalaxy();
+        $galaxy = $universe->createPublicGalaxy();
+        $galaxy = $universe->createPublicGalaxy();
+        $galaxy = $universe->createPublicGalaxy();
+        $galaxy = $universe->createPublicGalaxy();
+        $player = $galaxy->createPlayer($userFirst, $human);
+        $player = $galaxy->createPlayer($userFirst, $alien);
+        $player = $galaxy->createPlayer($userFirst, $human);
+        $player->grantCommanderRole();
+
+        $galaxy = $universe->createPrivateGalaxy();
+        $galaxy = $universe->createPrivateGalaxy();
+        $galaxy = $universe->createPrivateGalaxy();
+        $galaxy = $universe->createPrivateGalaxy();
+        $galaxy = $universe->createPrivateGalaxy();
+
+        $player = $galaxy->createPlayer($userFirst, $alien);
+        $player = $galaxy->createPlayer($userFirst, $human);
+        $player = $galaxy->createPlayer($userFirst, $alien);
+        $player = $galaxy->createPlayer($userFirst, $human);
+        $player = $galaxy->createPlayer($userFirst, $alien);
+        $player->grantCommanderRole();
+
+        $universe->calculateRanking();
+
+        $manager->flush();
+
+        /*
         //$faker = Factory::create();
         // user
         $userFirst = new User('testuser', 'testuser@example.org', \password_hash('secret', PASSWORD_DEFAULT));
@@ -109,5 +151,6 @@ class TestDataFixture extends AbstractFixture
         $manager->persist($playerFleetSecond);
 
         $manager->flush();
+        */
     }
 }

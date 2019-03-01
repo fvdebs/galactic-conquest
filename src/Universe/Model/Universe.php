@@ -76,6 +76,34 @@ class Universe
     /**
      * @var int
      *
+     * @Column(name="ticks_defense_alliance", type="integer", nullable=false)
+     */
+    private $ticksDefenseAlliance;
+
+    /**
+     * @var int
+     *
+     * @Column(name="ticks_defense_allied", type="integer", nullable=false)
+     */
+    private $ticksDefenseAllied;
+
+    /**
+     * @var int
+     *
+     * @Column(name="max_private_glaxy_players", type="integer", nullable=false)
+     */
+    private $maxPrivateGalaxyPlayers;
+
+    /**
+     * @var int
+     *
+     * @Column(name="max_public_galaxy_players", type="integer", nullable=false)
+     */
+    private $maxPublicGalaxyPlayers;
+
+    /**
+     * @var int
+     *
      * @Column(name="scan_blocker_metal_cost", type="integer", nullable=false)
      */
     private $scanBlockerMetalCost;
@@ -150,6 +178,10 @@ class Universe
         $this->tickCurrent = 0;
         $this->ticksAttack = 30;
         $this->ticksDefense = 20;
+        $this->ticksDefenseAllied = 16;
+        $this->ticksDefenseAlliance = 14;
+        $this->maxPrivateGalaxyPlayers = 8;
+        $this->maxPublicGalaxyPlayers = 12;
         $this->scanBlockerMetalCost = 5000;
         $this->scanBlockerCrystalCost = 2000;
         $this->scanRelayMetalCost = 2000;
@@ -363,6 +395,79 @@ class Universe
         $this->scanRelayCrystalCost = $scanRelayCrystalCost;
     }
 
+
+    /**
+     * @return int
+     */
+    public function getTicksDefenseAlliance(): int
+    {
+        return $this->ticksDefenseAlliance;
+    }
+
+    /**
+     * @param int $ticksDefenseAlliance
+     *
+     * @return void
+     */
+    public function setTicksDefenseAlliance(int $ticksDefenseAlliance): void
+    {
+        $this->ticksDefenseAlliance = $ticksDefenseAlliance;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTicksDefenseAllied(): int
+    {
+        return $this->ticksDefenseAllied;
+    }
+
+    /**
+     * @param int $ticksDefenseAllied
+     *
+     * @return void
+     */
+    public function setTicksDefenseAllied(int $ticksDefenseAllied): void
+    {
+        $this->ticksDefenseAllied = $ticksDefenseAllied;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxPrivateGalaxyPlayers(): int
+    {
+        return $this->maxPrivateGalaxyPlayers;
+    }
+
+    /**
+     * @param int $maxPrivateGalaxyPlayers
+     *
+     * @return void
+     */
+    public function setMaxPrivateGalaxyPlayers(int $maxPrivateGalaxyPlayers): void
+    {
+        $this->maxPrivateGalaxyPlayers = $maxPrivateGalaxyPlayers;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxPublicGalaxyPlayers(): int
+    {
+        return $this->maxPublicGalaxyPlayers;
+    }
+
+    /**
+     * @param int $maxPublicGalaxyPlayers
+     *
+     * @return void
+     */
+    public function setMaxPublicGalaxyPlayers(int $maxPublicGalaxyPlayers): void
+    {
+        $this->maxPublicGalaxyPlayers = $maxPublicGalaxyPlayers;
+    }
+
     /**
      * @return bool
      */
@@ -388,35 +493,70 @@ class Universe
     }
 
     /**
-     * @param \GC\Player\Model\Player $commander
-     * @param int $number
-     *
      * @return \GC\Galaxy\Model\Galaxy
      */
-    public function createPublicGalaxy(Player $commander, int $number): Galaxy
+    public function createPublicGalaxy(): Galaxy
     {
-        $galaxy = new Galaxy($this, $commander, $number);
+        $galaxy = new Galaxy($this);
         $this->galaxies->add($galaxy);
-
-        $commander->relocate($galaxy);
 
         return $galaxy;
     }
 
     /**
-     * @param \GC\Player\Model\Player $commander
-     * @param int $number
-     * @param string $password
-     *
      * @return \GC\Galaxy\Model\Galaxy
      */
-    public function createPrivateGalaxy(Player $commander, int $number, string $password): Galaxy
+    public function createPrivateGalaxy(): Galaxy
     {
-        $galaxy = new Galaxy($this, $commander, $number, $password);
+        $galaxy = new Galaxy($this, true);
         $this->galaxies->add($galaxy);
 
-        $commander->relocate($galaxy);
-
         return $galaxy;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNextFreeGalaxyNumber(): int
+    {
+        $freeGalaxyNumber = 1;
+        foreach ($this->galaxies as $index => $galaxy) {
+            if ($galaxy->getNumber() > $freeGalaxyNumber) {
+                return $freeGalaxyNumber;
+            }
+
+            $freeGalaxyNumber++;
+        }
+
+        return $freeGalaxyNumber;
+    }
+
+    /**
+     * return void
+     */
+    public function calculateRanking(): void
+    {
+        /** @var \GC\Player\Model\Player[] $rankedPlayers */
+        $rankedPlayers = $this->players->getValues();
+
+        foreach ($rankedPlayers as $player) {
+            $player->recalculatePoints();
+        }
+
+        usort($rankedPlayers, function(Player $playerFirst, Player $playerSecond) {
+            if ($playerFirst->getPoints() == $playerSecond->getPoints()) {
+                return 0;
+            }
+
+            if ($playerFirst->getPoints() < $playerSecond->getPoints()) {
+                return 1;
+            }
+
+            return -1;
+        });
+
+        foreach ($rankedPlayers as $index => $rankedPlayer) {
+            $rankedPlayer->setRankingPosition(($index + 1));
+        }
     }
 }

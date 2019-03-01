@@ -6,8 +6,10 @@ namespace GC\Galaxy\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
+use GC\Faction\Model\Faction;
 use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
+use GC\User\Model\User;
 
 /**
  * @Table(name="galaxy")
@@ -89,14 +91,6 @@ class Galaxy
     private $alliance;
 
     /**
-     * @var \GC\Player\Model\Player|null
-     *
-     * @ManyToOne(targetEntity="\GC\Player\Model\Player")
-     * @JoinColumn(name="commander_player_id", referencedColumnName="player_id", nullable=true)
-     */
-    private $commander;
-
-    /**
      * @var \GC\Galaxy\Model\GalaxyTechnology[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Galaxy\Model\GalaxyTechnology", mappedBy="galaxy", cascade={"all"}, orphanRemoval=true)
@@ -107,7 +101,7 @@ class Galaxy
      * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="galaxy", cascade={"all"}, orphanRemoval=true)
-     * @OrderBy({"rankingPosition" = "ASC"})
+     * @OrderBy({"galaxyPosition" = "ASC"})
      */
     private $players;
 
@@ -121,19 +115,14 @@ class Galaxy
 
     /**
      * @param \GC\Universe\Model\Universe $universe
-     * @param int $number
-     * @param \GC\Player\Model\Player $commander
-     * @param string|null $password
+     * @param bool $isPrivate
      */
-    public function __construct(Universe $universe, Player $commander, int $number, ?string $password = null)
+    public function __construct(Universe $universe, bool $isPrivate = false)
     {
         $this->players = new ArrayCollection();
         $this->galaxyTechnologies = new ArrayCollection();
 
         $this->universe = $universe;
-        $this->commander = $commander;
-        $this->number = $number;
-        $this->password = $password;
         $this->metal = 0;
         $this->crystal = 0;
         $this->taxCrystal = 0;
@@ -141,6 +130,12 @@ class Galaxy
         $this->extractorPoints = 0;
         $this->rankingPosition = 0;
         $this->alliance = null;
+
+        $this->number = $universe->getNextFreeGalaxyNumber();
+
+        if ($isPrivate) {
+            $this->generateGalaxyPassword();
+        }
     }
 
     /**
@@ -322,20 +317,96 @@ class Galaxy
     }
 
     /**
-     * @return \GC\Player\Model\Player|null
+     * @return \Doctrine\Common\Collections\ArrayCollection|\GC\Galaxy\Model\GalaxyTechnology[]
      */
-    public function getCommander(): ?Player
+    public function getGalaxyTechnologies(): array
     {
-        return $this->commander;
+        return $this->galaxyTechnologies;
     }
 
     /**
-     * @param \GC\Player\Model\Player|null $commander
-     *
-     * @return void
+     * @return \GC\Universe\Model\Universe
      */
-    public function setCommander(?Player $commander): void
+    public function getUniverse(): Universe
     {
-        $this->commander = $commander;
+        return $this->universe;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublicGalaxy(): bool
+    {
+        return $this->password === null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivateGalaxy(): bool
+    {
+        return $this->password !== null;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateGalaxyPassword(): string
+    {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $this->password = substr(str_shuffle($chars), 0, 8);
+
+        return $this->password;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaximumNumberOfPlayers(): int
+    {
+        if ($this->isPrivateGalaxy()) {
+            return $this->universe->getMaxPrivateGalaxyPlayers();
+        }
+
+        return $this->universe->getMaxPublicGalaxyPlayers();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSpaceForNewPlayer(): bool
+    {
+        return $this->players->count() < $this->getMaximumNumberOfPlayers();
+    }
+
+    /**
+     * @return int
+     */
+    public function getNextFreeGalaxyPosition(): int
+    {
+        $freeGalaxyPosition = 1;
+        foreach ($this->players as $index => $galaxyPlayer) {
+            if ($galaxyPlayer->getGalaxyPosition() > $freeGalaxyPosition) {
+                return $freeGalaxyPosition;
+            }
+
+            $freeGalaxyPosition++;
+        }
+
+        return $freeGalaxyPosition;
+    }
+
+    /**
+     * @param \GC\User\Model\User $user
+     * @param \GC\Faction\Model\Faction $faction
+     *
+     * @return \GC\Player\Model\Player
+     */
+    public function createPlayer(User $user, Faction $faction): Player
+    {
+        $player = new Player($user, $faction, $this);
+        $this->players->add($player);
+
+        return $player;
     }
 }

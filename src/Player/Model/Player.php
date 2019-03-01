@@ -89,6 +89,19 @@ class Player
     private $points;
 
     /**
+     * @var bool
+     *
+     * @Column(name="is_admiral", type="boolean", nullable=false)
+     */
+    private $isAdmiral;
+    /**
+     * @var bool
+     *
+     * @Column(name="is_commander", type="boolean", nullable=false)
+     */
+    private $isCommander;
+
+    /**
      * @var int
      *
      * @Column(name="ranking_position", type="integer", nullable=false)
@@ -159,11 +172,9 @@ class Player
     /**
      * @param \GC\User\Model\User $user
      * @param \GC\Faction\Model\Faction $faction
-     * @param \GC\Universe\Model\Universe $universe
      * @param \GC\Galaxy\Model\Galaxy $galaxy
-     * @param int $galaxyPosition
      */
-    public function __construct(User $user, Faction $faction, Universe $universe, Galaxy $galaxy, int $galaxyPosition)
+    public function __construct(User $user, Faction $faction, Galaxy $galaxy)
     {
         $this->playerFleets = new ArrayCollection();
         $this->playerTechnologies = new ArrayCollection();
@@ -172,9 +183,8 @@ class Player
 
         $this->user = $user;
         $this->faction = $faction;
-        $this->universe = $universe;
+        $this->universe = $galaxy->getUniverse();
         $this->galaxy = $galaxy;
-        $this->galaxyPosition = $galaxyPosition;
         $this->metal = 5000;
         $this->crystal = 5000;
         $this->scanRelays = 0;
@@ -184,6 +194,11 @@ class Player
         $this->rankingPosition = 0;
         $this->extractorMetal = 0;
         $this->extractorCrystal = 0;
+        $this->isAdmiral = false;
+        $this->isCommander = false;
+
+        $this->joinGalaxy($galaxy);
+        $this->recalculatePoints();
     }
 
     /**
@@ -192,6 +207,22 @@ class Player
     public function getPlayerId(): int
     {
         return $this->playerId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmiral(): bool
+    {
+        return $this->isAdmiral;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCommander(): bool
+    {
+        return $this->isCommander;
     }
 
     /**
@@ -351,9 +382,32 @@ class Player
 
     }
 
+    /**
+     * @return int
+     */
     public function recalculatePoints(): int
     {
+        $this->points = 0;
+        $this->points += $this->calculateResourcePoints();
+        $this->points += $this->calculateExtractorPoints();
+
         return $this->points;
+    }
+
+    /**
+     * @return int
+     */
+    protected function calculateResourcePoints(): int
+    {
+        return ($this->metal + $this->crystal) / 10;
+    }
+
+    /**
+     * @return int
+     */
+    protected function calculateExtractorPoints(): int
+    {
+        return ($this->getExtractorMetal() + $this->getExtractorCrystal()) * 15000;
     }
 
     public function giveAllianceScanRelays(): void
@@ -408,5 +462,35 @@ class Player
     public function tradeCrystalWith(Player $player, int $decrease, int $increase): void
     {
 
+    }
+
+    /**
+     * @return void
+     */
+    public function grantCommanderRole(): void
+    {
+        foreach ($this->galaxy->getPlayers() as $member) {
+            $member->revokeCommanderRole();
+        }
+
+        $this->isCommander = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function revokeCommanderRole(): void
+    {
+        $this->isCommander = false;
+    }
+
+    /**
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return void
+     */
+    public function joinGalaxy(Galaxy $galaxy): void
+    {
+        $this->galaxyPosition = $galaxy->getNextFreeGalaxyPosition();
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace GC\Alliance\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
 
 /**
@@ -109,14 +108,6 @@ class Alliance
     private $universe;
 
     /**
-     * @var \GC\Player\Model\Player
-     *
-     * @ManyToOne(targetEntity="\GC\Player\Model\Player")
-     * @JoinColumn(name="admiral_player_id", referencedColumnName="player_id", nullable=false)
-     */
-    private $admiralPlayer;
-
-    /**
      * @var \GC\Alliance\Model\AllianceTechnology[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Alliance\Model\AllianceTechnology", mappedBy="technology", cascade={"all"}, orphanRemoval=true)
@@ -126,15 +117,14 @@ class Alliance
     /**
      * @param string $name
      * @param string $code
-     * @param \GC\Player\Model\Player $admiralPlayer
+     * @param \GC\Universe\Model\Universe $universe
      */
-    public function __construct(string $name, string $code, Player $admiralPlayer)
+    public function __construct(string $name, string $code, Universe $universe)
     {
         $this->allianceTechnologies = new ArrayCollection();
         $this->name = $name;
         $this->code = $code;
-        $this->admiralPlayer = $admiralPlayer;
-        $this->universe = $admiralPlayer->getUniverse();
+        $this->universe = $universe;
         $this->description = '';
         $this->metal = 0;
         $this->crystal = 0;
@@ -350,24 +340,6 @@ class Alliance
     public function setAveragePoints(int $averagePoints): void
     {
         $this->averagePoints = $averagePoints;
-    }
-
-    /**
-     * @return \GC\Player\Model\Player
-     */
-    public function getAdmiralPlayer(): Player
-    {
-        return $this->admiralPlayer;
-    }
-
-    /**
-     * @param \GC\Player\Model\Player $admiralPlayer
-     *
-     * @return void
-     */
-    public function setAdmiralPlayer(Player $admiralPlayer): void
-    {
-        $this->admiralPlayer = $admiralPlayer;
     }
 
     /**
