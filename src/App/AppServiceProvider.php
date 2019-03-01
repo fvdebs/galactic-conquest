@@ -114,7 +114,6 @@ final class AppServiceProvider implements ServiceProviderInterface
     {
         $container->offsetSet(AuthorizationMiddleware::class, function(Container $container) {
             return new AuthorizationMiddleware(
-                $container->offsetGet('uri-factory'),
                 $container->offsetGet('response-factory'),
                 $container->offsetGet(RouterChain::class)
             );
@@ -130,7 +129,6 @@ final class AppServiceProvider implements ServiceProviderInterface
     {
         $container->offsetSet(AuthorizationUniverseMiddleware::class, function(Container $container) {
             return new AuthorizationUniverseMiddleware(
-                $container->offsetGet('uri-factory'),
                 $container->offsetGet('response-factory'),
                 $container->offsetGet(RouterChain::class)
             );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GC\App\Command;
 
+use http\Exception\RuntimeException;
 use Inferno\Renderer\RendererInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -54,20 +55,29 @@ final class CreateHandlerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $moduleName = ucfirst(trim($input->getArgument('moduleName')));
-        $className = ucfirst(trim($input->getArgument('className')));
-        $templateName = lcfirst($className);
-        $routeName = strtolower(str_replace(' ', '.', preg_replace('/(\w+)([A-Z])/U', '\\1 \\2', $className)));
+        $moduleName = $input->getArgument('moduleName');
+        $className = $input->getArgument('className');
+
+        if (!\is_string($moduleName) || !\is_string($className)) {
+            throw new \RuntimeException('Please add arguments for modulename and classname.');
+        }
+
+        $moduleName = \ucfirst(\trim($moduleName));
+        $className = \ucfirst(\trim($className));
+        $templateName = \lcfirst($className);
+
+        $addDotaBeforeBigLetter = (string) \preg_replace('/(\w+)([A-Z])/U', '\\1 \\2', $className);
+        $routeName = \strtolower(str_replace(' ', '.', $addDotaBeforeBigLetter));
 
         // create handler
-        $handlerFilepath = sprintf(
+        $handlerFilepath = \sprintf(
             '%s/src/%s/Handler/%sHandler.php',
             $this->baseDir,
             $moduleName,
             $className
         );
 
-        file_put_contents($handlerFilepath, $this->renderer->render('@App/generator/handler.twig', [
+        \file_put_contents($handlerFilepath, $this->renderer->render('@App/generator/handler.twig', [
             'moduleName' => $moduleName,
             'className' => $className,
             'templateName' => $templateName,
@@ -82,7 +92,7 @@ final class CreateHandlerCommand extends Command
             $templateName
         );
 
-        file_put_contents(
+        \file_put_contents(
             $templateFilepath,
             $this->renderer->render('@App/generator/template.twig')
         );

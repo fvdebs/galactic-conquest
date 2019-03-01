@@ -118,7 +118,7 @@ final class ClearCacheCommand extends Command
         foreach ($this->cacheFiles as $cacheFile) {
             try {
                 $cacheFile->write('');
-                $this->outputSuccess($cacheFile->getRealPath());
+                $this->outputSuccess((string) $cacheFile->getRealPath());
             } catch (\Throwable $throwable) {
                 $this->errors = true;
                 $this->outputError($throwable->getMessage());
@@ -135,7 +135,7 @@ final class ClearCacheCommand extends Command
         foreach ($this->cacheDirectories as $cacheDirectory) {
             try {
                 $cacheDirectory->delete(true);
-                $this->outputSuccess($cacheDirectory->getRealPath());
+                $this->outputSuccess((string) $cacheDirectory->getRealPath());
             } catch (\Throwable $throwable) {
                 $this->errors = true;
                 $this->outputError($throwable->getMessage());

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\User\Handler;
 
-use GC\App\Aware\HandlerAwareTrait;
+use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

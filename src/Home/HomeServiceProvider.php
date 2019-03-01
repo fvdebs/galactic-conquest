@@ -30,7 +30,7 @@ final class HomeServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
         {
-            $collection->post('/{locale}', HomeHandler::class)->addAttribute('public', true);
+            $collection->get('/{locale}', HomeHandler::class)->addAttribute('public', true);
 
             return $collection;
         });

@@ -43,7 +43,7 @@ return [
         \Inferno\HttpRequestHandler\HttpRequestHandlerServiceProvider::class,
         \Inferno\Language\LanguageServiceProvider::class,
         \Inferno\Monolog\MonologServiceProvider::class,
-        \GC\App\Routing\RoutingServiceProvider::class,
+        \Inferno\Routing\RoutingServiceProvider::class,
         \Inferno\Session\SessionServiceProvider::class,
         \Inferno\Translation\TranslationServiceProvider::class,
         \Inferno\Renderer\RendererServiceProvider::class,
@@ -75,7 +75,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'next-middleware-on-not-found' => false,
-    'invocation-strategy' => \GC\App\Routing\Strategy\GCHandlerStrategy::class,
+    'invocation-strategy' => \Inferno\Routing\Strategy\MultipleContainerHandlerStrategy::class,
     'router-chain' => [
         \Inferno\Routing\Router\Router::class
     ],

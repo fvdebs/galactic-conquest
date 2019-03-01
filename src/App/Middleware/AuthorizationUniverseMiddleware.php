@@ -13,17 +13,11 @@ use Inferno\Http\Response\ResponseFactoryInterface;
 use Inferno\Routing\Router\RouterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 final class AuthorizationUniverseMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var \Psr\Http\Message\UriFactoryInterface
-     */
-    private $uriFactory;
-
     /**
      * @var \Inferno\Http\Response\ResponseFactoryInterface
      */
@@ -35,13 +29,11 @@ final class AuthorizationUniverseMiddleware implements MiddlewareInterface
     private $router;
 
     /**
-     * @param \Psr\Http\Message\UriFactoryInterface $uriFactory
      * @param \Inferno\Http\Response\ResponseFactoryInterface $responseFactory
      * @param \Inferno\Routing\Router\RouterInterface $router
      */
-    public function __construct(UriFactoryInterface $uriFactory, ResponseFactoryInterface $responseFactory, RouterInterface $router)
+    public function __construct(ResponseFactoryInterface $responseFactory, RouterInterface $router)
     {
-        $this->uriFactory = $uriFactory;
         $this->responseFactory = $responseFactory;
         $this->router = $router;
     }
@@ -121,9 +113,7 @@ final class AuthorizationUniverseMiddleware implements MiddlewareInterface
     private function createRedirect(string $name): ResponseInterface
     {
         return $this->responseFactory->createFromContent(
-            $this->uriFactory->createUri(
-                $this->router->generate($name)
-            )
+            $this->router->generate($name)
         );
     }
 }

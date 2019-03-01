@@ -330,12 +330,12 @@ class Galaxy
     }
 
     /**
-     * @param \GC\Player\Model\Player|null $commanderPlayer
+     * @param \GC\Player\Model\Player|null $commander
      *
      * @return void
      */
-    public function setCommanderPlayer(?Player $commanderPlayer): void
+    public function setCommander(?Player $commander): void
     {
-        $this->commanderPlayer = $commanderPlayer;
+        $this->commander = $commander;
     }
 }

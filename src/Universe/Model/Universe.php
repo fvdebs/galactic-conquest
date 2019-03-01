@@ -102,7 +102,7 @@ class Universe
     private $scanRelayCrystalCost;
 
     /**
-     * @var int
+     * @var bool
      *
      * @Column(name="is_active", type="boolean", nullable=false)
      */

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace GC\Player;
 
 use Doctrine\ORM\EntityManager;
-use GC\Combat\Handler\PlayerCombatReportExternalHandler;
+use GC\Player\Handler\PlayerCombatReportExternalHandler;
 use GC\Player\Handler\PlayerCombatReportHandler;
 use GC\Player\Handler\PlayerCombatReportListHandler;
 use GC\Player\Handler\PlayerCreateHandler;

@@ -12,17 +12,11 @@ use Inferno\Routing\Route\Route;
 use Inferno\Routing\Router\RouterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 final class AuthorizationMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var \Psr\Http\Message\UriFactoryInterface
-     */
-    private $uriFactory;
-
     /**
      * @var \Inferno\Http\Response\ResponseFactoryInterface
      */
@@ -34,13 +28,11 @@ final class AuthorizationMiddleware implements MiddlewareInterface
     private $router;
 
     /**
-     * @param \Psr\Http\Message\UriFactoryInterface $uriFactory
      * @param \Inferno\Http\Response\ResponseFactoryInterface $responseFactory
      * @param \Inferno\Routing\Router\RouterInterface $router
      */
-    public function __construct(UriFactoryInterface $uriFactory, ResponseFactoryInterface $responseFactory, RouterInterface $router)
+    public function __construct(ResponseFactoryInterface $responseFactory, RouterInterface $router)
     {
-        $this->uriFactory = $uriFactory;
         $this->responseFactory = $responseFactory;
         $this->router = $router;
     }
@@ -98,7 +90,7 @@ final class AuthorizationMiddleware implements MiddlewareInterface
      */
     private function isPublicRoute(Route $route): bool
     {
-        return \array_key_exists('public', $route->getAttributes()) && $route->getAttributes()['public'] === true;
+        return \array_key_exists('public', $route->getAttributes()) && (bool) $route->getAttributes()['public'] === true;
     }
 
     /**
@@ -111,9 +103,7 @@ final class AuthorizationMiddleware implements MiddlewareInterface
     private function createRedirect(string $name): ResponseInterface
     {
         return $this->responseFactory->createFromContent(
-            $this->uriFactory->createUri(
-                $this->router->generate($name)
-            )
+            $this->router->generate($name)
         );
     }
 }

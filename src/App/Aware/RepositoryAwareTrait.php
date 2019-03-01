@@ -22,10 +22,6 @@ use GC\Universe\Model\UniverseRepository;
 use GC\User\Model\User;
 use GC\User\Model\UserRepository;
 
-/**
- * ATTENTION: Use this class carefully. This is bad practice but speeds up development a bit.
- * Use entity methods or inject repositories to your handlers instead.
- */
 trait RepositoryAwareTrait
 {
     /**
