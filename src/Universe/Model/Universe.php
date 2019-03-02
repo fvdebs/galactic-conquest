@@ -6,8 +6,12 @@ namespace GC\Universe\Model;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use GC\Faction\Model\Faction;
 use GC\Galaxy\Model\Galaxy;
 use GC\Player\Model\Player;
+use GC\Technology\Model\Technology;
+use GC\Unit\Model\Unit;
+use GC\User\Model\User;
 
 /**
  * @Table(name="universe")
@@ -44,6 +48,13 @@ class Universe
      * @Column(name="ticks_starting_at", type="datetime", nullable=false)
      */
     private $ticksStartingAt;
+
+    /**
+     * @var DateTime|null
+     *
+     * @Column(name="last_tick_at", type="datetime", nullable=true)
+     */
+    private $lastTickAt;
 
     /**
      * @var int
@@ -130,6 +141,41 @@ class Universe
     private $scanRelayCrystalCost;
 
     /**
+     * @var int
+     *
+     * @Column(name="extractor_metal_income", type="integer", nullable=false)
+     */
+    private $extractorMetalIncome;
+
+    /**
+     * @var int
+     *
+     * @Column(name="extractor_crystal_income", type="integer", nullable=false)
+     */
+    private $extractorCrystalIncome;
+
+    /**
+     * @var int
+     *
+     * @Column(name="extractor_start_cost", type="integer", nullable=false)
+     */
+    private $extractorStartCost;
+
+    /**
+     * @var int
+     *
+     * @Column(name="extractor_points", type="integer", nullable=false)
+     */
+    private $extractorPoints;
+
+    /**
+     * @var int
+     *
+     * @Column(name="resource_points_divider", type="integer", nullable=false)
+     */
+    private $resourcePointsDivider;
+
+    /**
      * @var bool
      *
      * @Column(name="is_active", type="boolean", nullable=false)
@@ -161,6 +207,27 @@ class Universe
     private $alliances;
 
     /**
+     * @var \GC\Unit\Model\Unit[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Unit\Model\Unit", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     */
+    private $units;
+
+    /**
+     * @var \GC\Technology\Model\Technology[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Technology\Model\Technology", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     */
+    private $technologies;
+
+    /**
+     * @var \GC\Faction\Model\Faction[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Faction\Model\Faction", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     */
+    private $factions;
+
+    /**
      * @param string $name
      *
      * @throws \Exception
@@ -170,6 +237,9 @@ class Universe
         $this->players = new ArrayCollection();
         $this->galaxies = new ArrayCollection();
         $this->alliances = new ArrayCollection();
+        $this->units = new ArrayCollection();
+        $this->technologies = new ArrayCollection();
+        $this->factions = new ArrayCollection();
 
         $this->name = $name;
         $this->description = '';
@@ -186,6 +256,11 @@ class Universe
         $this->scanBlockerCrystalCost = 2000;
         $this->scanRelayMetalCost = 2000;
         $this->scanRelayCrystalCost = 5000;
+        $this->extractorMetalIncome = 50;
+        $this->extractorCrystalIncome = 50;
+        $this->extractorStartCost = 65;
+        $this->extractorPoints = 15000;
+        $this->resourcePointsDivider = 10;
         $this->isActive = false;
     }
 
@@ -195,6 +270,38 @@ class Universe
     public function getUniverseId(): int
     {
         return $this->universeId;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastTickAt(): ?DateTime
+    {
+        return $this->lastTickAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getResourcePointsDivider(): int
+    {
+        return $this->resourcePointsDivider;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExtractorPoints(): int
+    {
+        return $this->extractorPoints;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExtractorStartCost(): int
+    {
+        return $this->extractorStartCost;
     }
 
     /**
@@ -469,6 +576,42 @@ class Universe
     }
 
     /**
+     * @return int
+     */
+    public function getExtractorMetalIncome(): int
+    {
+        return $this->extractorMetalIncome;
+    }
+
+    /**
+     * @param int $extractorMetalIncome
+     *
+     * @return void
+     */
+    public function setExtractorMetalIncome(int $extractorMetalIncome): void
+    {
+        $this->extractorMetalIncome = $extractorMetalIncome;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExtractorCrystalIncome(): int
+    {
+        return $this->extractorCrystalIncome;
+    }
+
+    /**
+     * @param int $extractorCrystalIncome
+     *
+     * @return void
+     */
+    public function setExtractorCrystalIncome(int $extractorCrystalIncome): void
+    {
+        $this->extractorCrystalIncome = $extractorCrystalIncome;
+    }
+
+    /**
      * @return bool
      */
     public function isActive(): bool
@@ -493,6 +636,47 @@ class Universe
     }
 
     /**
+     * @param string $name
+     *
+     * @return \GC\Faction\Model\Faction
+     */
+    public function createFaction(string $name): Faction
+    {
+        $faction = new Faction($name, $this);
+        $this->factions->add($faction);
+
+        return $faction;
+    }
+
+    /**
+     * @param string $name
+     * @param \GC\Faction\Model\Faction $faction
+     *
+     * @return \GC\Unit\Model\Unit
+     */
+    public function createUnit(string $name, Faction $faction): Unit
+    {
+        $unit = new Unit($name, $faction);
+        $this->units->add($unit);
+
+        return $unit;
+    }
+
+    /**
+     * @param string $name
+     * @param \GC\Faction\Model\Faction $faction
+     *
+     * @return \GC\Technology\Model\Technology
+     */
+    public function createTechnology(string $name, Faction $faction): Technology
+    {
+        $technology = new Technology($name, $faction);
+        $this->technologies->add($technology);
+
+        return $technology;
+    }
+
+    /**
      * @return \GC\Galaxy\Model\Galaxy
      */
     public function createPublicGalaxy(): Galaxy
@@ -512,6 +696,40 @@ class Universe
         $this->galaxies->add($galaxy);
 
         return $galaxy;
+    }
+
+    /**
+     * @param \GC\User\Model\User $user
+     * @param \GC\Faction\Model\Faction $faction
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return \GC\Player\Model\Player
+     */
+    public function createPlayer(User $user, Faction $faction, Galaxy $galaxy): Player
+    {
+        $player = new Player($user, $faction, $galaxy);
+        $this->players->add($player);
+
+        return $player;
+    }
+
+    /**
+     * @return \GC\Galaxy\Model\Galaxy|null
+     */
+    public function getRandomPublicGalaxyWithFreeSpace(): ?Galaxy
+    {
+        /** @var \GC\Galaxy\Model\Galaxy[] $galaxies */
+        $galaxies = $this->galaxies->getValues();
+
+        \shuffle($galaxies);
+
+        foreach ($galaxies as $galaxy) {
+            if ($galaxy->isPublicGalaxy() && $galaxy->hasSpaceForNewPlayer()) {
+                return $galaxy;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -538,9 +756,8 @@ class Universe
     {
         /** @var \GC\Player\Model\Player[] $rankedPlayers */
         $rankedPlayers = $this->players->getValues();
-
         foreach ($rankedPlayers as $player) {
-            $player->recalculatePoints();
+            $player->calculatePoints();
         }
 
         usort($rankedPlayers, function(Player $playerFirst, Player $playerSecond) {

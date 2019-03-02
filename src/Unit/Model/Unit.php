@@ -6,6 +6,7 @@ namespace GC\Unit\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
+use GC\Universe\Model\Universe;
 
 /**
  * @Table(name="unit")
@@ -108,12 +109,21 @@ final class Unit
     private $unitCombatSettings;
 
     /**
+     * @var \GC\Universe\Model\Universe
+     *
+     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="units")
+     * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
+     */
+    private $universe;
+
+    /**
      * @param string $name
      * @param \GC\Faction\Model\Faction $faction
      */
     public function __construct(string $name, Faction $faction)
     {
         $this->unitCombatSettings = new ArrayCollection();
+        $this->universe = $faction->getUniverse();
         $this->name = $name;
         $this->description = '';
         $this->isStationary = false;
@@ -331,5 +341,13 @@ final class Unit
     public function setFaction(Faction $faction): void
     {
         $this->faction = $faction;
+    }
+
+    /**
+     * @return \GC\Universe\Model\Universe
+     */
+    public function getUniverse(): Universe
+    {
+        return $this->universe;
     }
 }

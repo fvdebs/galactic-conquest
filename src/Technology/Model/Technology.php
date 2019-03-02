@@ -6,6 +6,7 @@ namespace GC\Technology\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
+use GC\Universe\Model\Universe;
 
 /**
  * @Table(name="technology")
@@ -81,6 +82,20 @@ final class Technology
     /**
      * @var int
      *
+     * @Column(name="metal_production", type="integer", nullable=false)
+     */
+    private $metalProduction;
+
+    /**
+     * @var int
+     *
+     * @Column(name="crystal_production", type="integer", nullable=false)
+     */
+    private $crystalProduction;
+
+    /**
+     * @var int
+     *
      * @Column(name="ticks_to_build", type="integer", nullable=false)
      */
     private $ticksToBuild;
@@ -101,12 +116,21 @@ final class Technology
     private $technologyConditions;
 
     /**
+     * @var \GC\Universe\Model\Universe
+     *
+     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="technologies")
+     * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
+     */
+    private $universe;
+
+    /**
      * @param string $name
      * @param \GC\Faction\Model\Faction $faction
      */
     public function __construct(string $name, Faction $faction)
     {
         $this->technologyConditions = new ArrayCollection();
+        $this->universe = $faction->getUniverse();
         $this->name = $name;
         $this->faction = $faction;
         $this->description = '';
@@ -117,6 +141,8 @@ final class Technology
         $this->metalCost = 5000;
         $this->crystalCost = 5000;
         $this->ticksToBuild = 10;
+        $this->crystalProduction = 0;
+        $this->metalProduction = 0;
     }
 
     /**
@@ -125,6 +151,42 @@ final class Technology
     public function getTechnologyId(): int
     {
         return $this->technologyId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMetalProduction(): int
+    {
+        return $this->metalProduction;
+    }
+
+    /**
+     * @param int $metalProduction
+     *
+     * @return void
+     */
+    public function setMetalProduction(int $metalProduction): void
+    {
+        $this->metalProduction = $metalProduction;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCrystalProduction(): int
+    {
+        return $this->crystalProduction;
+    }
+
+    /**
+     * @param int $crystalProduction
+     *
+     * @return void
+     */
+    public function setCrystalProduction(int $crystalProduction): void
+    {
+        $this->crystalProduction = $crystalProduction;
     }
 
     /**
@@ -305,5 +367,13 @@ final class Technology
     public function setFaction(Faction $faction): void
     {
         $this->faction = $faction;
+    }
+
+    /**
+     * @return \GC\Universe\Model\Universe
+     */
+    public function getUniverse(): Universe
+    {
+        return $this->universe;
     }
 }

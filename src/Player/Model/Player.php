@@ -184,6 +184,7 @@ class Player
         $this->user = $user;
         $this->faction = $faction;
         $this->universe = $galaxy->getUniverse();
+        $this->galaxyPosition = $galaxy->getNextFreeGalaxyPosition();
         $this->galaxy = $galaxy;
         $this->metal = 5000;
         $this->crystal = 5000;
@@ -197,8 +198,7 @@ class Player
         $this->isAdmiral = false;
         $this->isCommander = false;
 
-        $this->joinGalaxy($galaxy);
-        $this->recalculatePoints();
+        $this->calculatePoints();
     }
 
     /**
@@ -357,35 +357,93 @@ class Player
         return $this->user;
     }
 
+    /**
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     */
     public function relocate(Galaxy $galaxy): void
     {
-
-    }
-
-    public function buildCrystalExtractorsBy(int $number): void
-    {
-
-    }
-
-    public function buildMetalExtractorsBy(int $number): void
-    {
-
-    }
-
-    public function stealCrystalExtractorsFrom(Player $victim, int $maxNumber): void
-    {
-
-    }
-
-    public function stealMetalExtractorsFrom(Player $victim, int $maxNumber): void
-    {
-
+        $this->galaxy = $galaxy;
+        $this->galaxyPosition = $galaxy->getNextFreeGalaxyPosition();
     }
 
     /**
      * @return int
      */
-    public function recalculatePoints(): int
+    public function getNumberOfExtractors(): int
+    {
+        return $this->extractorCrystal + $this->extractorMetal;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function buildMetalExtractors(int $number): void
+    {
+        $this->extractorMetal = $this->extractorMetal + $number;
+        $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function buildCrystalExtractors(int $number): void
+    {
+        $this->extractorCrystal = $this->extractorCrystal + $number;
+        $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
+    }
+
+    /**
+     * @param int $number
+     * @param int $startExtractors
+     *
+     * @return int
+     */
+    public function calculateMetalCostForExtractors(int $number, int $startExtractors): int
+    {
+        $resourceCostPerExtractor = $this->universe->getExtractorStartCost();
+
+        $initialExtractorCost = $resourceCostPerExtractor;
+        for ($currentExtractors = 0; $currentExtractors < $startExtractors; $currentExtractors++) {
+            $initialExtractorCost = $resourceCostPerExtractor * $currentExtractors;
+        }
+
+        $total = 0;
+        $currentCostForExtractor = $initialExtractorCost;
+        for ($currentExtractors = 0; $currentExtractors < $number; $currentExtractors++) {
+            $currentCostForExtractor = $currentCostForExtractor + $resourceCostPerExtractor;
+            $total += $currentCostForExtractor;
+        }
+
+        return $total;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateMaxExtractorConstruction(): int
+    {
+        $extractorCost = $this->universe->getExtractorStartCost();
+        $metal = $this->metal;
+        $numberOfExtractors = $this->getNumberOfExtractors();
+
+        $numberOfPossibleExtractors = 0;
+        while ($metal >= $numberOfExtractors * $extractorCost) {
+            $metal -= $numberOfExtractors * $extractorCost;
+            $numberOfExtractors++;
+            $numberOfPossibleExtractors++;
+        }
+
+        return $numberOfPossibleExtractors;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculatePoints(): int
     {
         $this->points = 0;
         $this->points += $this->calculateResourcePoints();
@@ -399,7 +457,9 @@ class Player
      */
     protected function calculateResourcePoints(): int
     {
-        return ($this->metal + $this->crystal) / 10;
+        $calculation = ($this->metal + $this->crystal) / $this->universe->getResourcePointsDivider();
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
     }
 
     /**
@@ -407,61 +467,98 @@ class Player
      */
     protected function calculateExtractorPoints(): int
     {
-        return ($this->getExtractorMetal() + $this->getExtractorCrystal()) * 15000;
+        $calculation = ($this->getExtractorMetal() + $this->getExtractorCrystal()) * $this->universe->getExtractorPoints();
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
     }
 
-    public function giveAllianceScanRelays(): void
-    {
-
-    }
-
-    public function takeAllianceScanRelays(): void
-    {
-
-    }
-
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
     public function buildScanBlocker(int $number): void
     {
-
+        $this->scanBlocker = $this->scanBlocker + $number;
+        $this->decreaseMetal($this->universe->getScanBlockerMetalCost() * $number);
+        $this->decreaseCrystal($this->universe->getScanBlockerCrystalCost() * $number);
     }
 
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
     public function buildScanRelays(int $number): void
     {
-
+        $this->scanRelays = $this->scanRelays + $number;
+        $this->decreaseMetal($this->universe->getScanRelayMetalCost() * $number);
+        $this->decreaseCrystal($this->universe->getScanRelayCrystalCost() * $number);
     }
 
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
     protected function increaseMetal(int $number): void
     {
-
+        $this->metal = $this->metal + $number;
     }
 
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
     protected function decreaseMetal(int $number): void
     {
-
+        $this->metal = $this->metal - $number;
     }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
     protected function increaseCrystal(int $number): void
     {
-
+        $this->crystal = $this->crystal + $number;
     }
 
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
     protected function decreaseCrystal(int $number): void
     {
-
+        $this->crystal = $this->crystal - $number;
     }
 
-    public function tickIncreaseResources(): void
+    /**
+     * @return int
+     */
+    protected function getMetalIncomePerTick(): int
     {
-
+        return $this->extractorMetal * $this->universe->getExtractorMetalIncome();
     }
 
-    public function tradeMetalWith(Player $player, int $decrease, int $increase): void
+    /**
+     * @return int
+     */
+    protected function getCrystalIncomePerTick(): int
     {
-
+        return $this->extractorCrystal * $this->universe->getExtractorCrystalIncome();
     }
 
-    public function tradeCrystalWith(Player $player, int $decrease, int $increase): void
+    /**
+     * @return void
+     */
+    public function increaseResourceIncome(): void
     {
-
+        $this->increaseMetal($this->getMetalIncomePerTick());
+        $this->increaseCrystal($this->getCrystalIncomePerTick());
     }
 
     /**
@@ -485,12 +582,28 @@ class Player
     }
 
     /**
-     * @param \GC\Galaxy\Model\Galaxy $galaxy
-     *
      * @return void
      */
-    public function joinGalaxy(Galaxy $galaxy): void
+    public function grantAdmiralRole(): void
     {
-        $this->galaxyPosition = $galaxy->getNextFreeGalaxyPosition();
+        if ($this->galaxy->getAlliance() === null) {
+            return;
+        }
+
+        foreach ($this->galaxy->getAlliance()->getGalaxies() as $memberGalaxy) {
+            foreach ($memberGalaxy->getPlayers() as $member) {
+                $member->revokeAdmiralRole();
+            }
+        }
+
+        $this->isAdmiral = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function revokeAdmiralRole(): void
+    {
+        $this->isAdmiral = false;
     }
 }

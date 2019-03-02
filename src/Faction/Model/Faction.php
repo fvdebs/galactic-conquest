@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace GC\Faction\Model;
 
+use GC\Universe\Model\Universe;
+
 /**
  * @Table(name="faction")
  * @Entity(repositoryClass="GC\Faction\Model\FactionRepository")
@@ -34,13 +36,22 @@ class Faction
     private $description;
 
     /**
-     * @param string $name
-     * @param string $description
+     * @var \GC\Universe\Model\Universe
+     *
+     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="factions")
+     * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
-    public function __construct(string $name, string $description = '')
+    private $universe;
+
+    /**
+     * @param string $name
+     * @param \GC\Universe\Model\Universe $universe
+     */
+    public function __construct(string $name, Universe $universe)
     {
         $this->name = $name;
-        $this->description = $description;
+        $this->universe = $universe;
+        $this->description = '';
     }
 
     /**
@@ -85,5 +96,13 @@ class Faction
     public function setDescription(string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return \GC\Universe\Model\Universe
+     */
+    public function getUniverse(): Universe
+    {
+        return $this->universe;
     }
 }

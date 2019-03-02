@@ -6,10 +6,7 @@ namespace GC\Galaxy\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
-use GC\Faction\Model\Faction;
-use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
-use GC\User\Model\User;
 
 /**
  * @Table(name="galaxy")
@@ -85,7 +82,7 @@ class Galaxy
     /**
      * @var \GC\Alliance\Model\Alliance|null
      *
-     * @ManyToOne(targetEntity="\GC\Alliance\Model\Alliance")
+     * @ManyToOne(targetEntity="\GC\Alliance\Model\Alliance", inversedBy="galaxies")
      * @JoinColumn(name="alliance_id", referencedColumnName="alliance_id", nullable=true)
      */
     private $alliance;
@@ -353,8 +350,7 @@ class Galaxy
      */
     public function generateGalaxyPassword(): string
     {
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        $this->password = substr(str_shuffle($chars), 0, 8);
+        $this->password = \substr(\str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
 
         return $this->password;
     }
@@ -394,19 +390,5 @@ class Galaxy
         }
 
         return $freeGalaxyPosition;
-    }
-
-    /**
-     * @param \GC\User\Model\User $user
-     * @param \GC\Faction\Model\Faction $faction
-     *
-     * @return \GC\Player\Model\Player
-     */
-    public function createPlayer(User $user, Faction $faction): Player
-    {
-        $player = new Player($user, $faction, $this);
-        $this->players->add($player);
-
-        return $player;
     }
 }

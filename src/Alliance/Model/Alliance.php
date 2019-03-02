@@ -108,6 +108,13 @@ class Alliance
     private $universe;
 
     /**
+     * @var \GC\Galaxy\Model\Galaxy[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Galaxy\Model\Galaxy", mappedBy="alliance", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     */
+    private $galaxies;
+
+    /**
      * @var \GC\Alliance\Model\AllianceTechnology[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Alliance\Model\AllianceTechnology", mappedBy="technology", cascade={"all"}, orphanRemoval=true)
@@ -121,7 +128,9 @@ class Alliance
      */
     public function __construct(string $name, string $code, Universe $universe)
     {
+        $this->galaxies = new ArrayCollection();
         $this->allianceTechnologies = new ArrayCollection();
+
         $this->name = $name;
         $this->code = $code;
         $this->universe = $universe;
@@ -142,6 +151,14 @@ class Alliance
     public function getAllianceId(): int
     {
         return $this->allianceId;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection|\GC\Galaxy\Model\Galaxy[]
+     */
+    public function getGalaxies()
+    {
+        return $this->galaxies;
     }
 
     /**

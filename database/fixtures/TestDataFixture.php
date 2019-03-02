@@ -6,6 +6,7 @@ namespace GCFixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Faker\Factory;
 use GC\Faction\Model\Faction;
 use GC\Galaxy\Model\Galaxy;
 use GC\Player\Model\Player;
@@ -28,129 +29,78 @@ class TestDataFixture extends AbstractFixture
      */
     public function load(ObjectManager $manager): void
     {
-        // faction
-        $human = new Faction('Mensch');
-        $alien = new Faction('Alien');
-        $manager->persist($human);
-        $manager->persist($alien);
-
-        // user
-        $userFirst = new User('testuser', 'testuser@example.org', \password_hash('secret', PASSWORD_DEFAULT));
-        $manager->persist($userFirst);
-
         // universe
         $universe = new Universe('sirius');
         $manager->persist($universe);
 
-        $galaxy = $universe->createPublicGalaxy();
-        $galaxy = $universe->createPublicGalaxy();
-        $galaxy = $universe->createPublicGalaxy();
-        $galaxy = $universe->createPublicGalaxy();
-        $galaxy = $universe->createPublicGalaxy();
-        $player = $galaxy->createPlayer($userFirst, $human);
-        $player = $galaxy->createPlayer($userFirst, $alien);
-        $player = $galaxy->createPlayer($userFirst, $human);
-        $player->grantCommanderRole();
+        // faction
+        $human = $universe->createFaction('Human');
+        $alien = $universe->createFaction('Alien');
 
-        $galaxy = $universe->createPrivateGalaxy();
-        $galaxy = $universe->createPrivateGalaxy();
-        $galaxy = $universe->createPrivateGalaxy();
-        $galaxy = $universe->createPrivateGalaxy();
-        $galaxy = $universe->createPrivateGalaxy();
+        // units
+        $unitrubium = $universe->createUnit('Rubium', $human);
+        $unitpulsar = $universe->createUnit('Pulsar', $human);
+        $unitcoon = $universe->createUnit('Coon', $human);
+        $unitcenturion = $universe->createUnit('Centurion', $human);
+        $unithorus = $universe->createUnit('Horus', $human);
+        $unitleo = $universe->createUnit('Leo', $human);
+        $unitaquilae = $universe->createUnit('Aquilae', $human);
+        $unitfornax = $universe->createUnit('Fornax', $human);
+        $unitdraco = $universe->createUnit('Draco', $human);
+        $unitgoron = $universe->createUnit('Goron', $human);
+        $unitpentalin = $universe->createUnit('Pentalin', $human);
+        $unitzenit = $universe->createUnit('Zenit', $human);
+        $unitcancri = $universe->createUnit('Cancri', $human);
 
-        $player = $galaxy->createPlayer($userFirst, $alien);
-        $player = $galaxy->createPlayer($userFirst, $human);
-        $player = $galaxy->createPlayer($userFirst, $alien);
-        $player = $galaxy->createPlayer($userFirst, $human);
-        $player = $galaxy->createPlayer($userFirst, $alien);
-        $player->grantCommanderRole();
+        // tech
+        $techcolony = $universe->createTechnology('Koloniezentrum', $human);
+        $techrubium = $universe->createTechnology('Rubium', $human);
+        $techpulsar = $universe->createTechnology('Pulsar', $human);
+        $techcoon = $universe->createTechnology('Coon', $human);
+        $techcenturion = $universe->createTechnology('Centurion', $human);
+        $techhorus = $universe->createTechnology('Horus', $human);
+        $techleo = $universe->createTechnology('Leo', $human);
+        $techaquilae = $universe->createTechnology('Aquilae', $human);
+        $techfornax = $universe->createTechnology('Fornax', $human);
+        $techdraco = $universe->createTechnology('Draco', $human);
+        $techgoron = $universe->createTechnology('Goron', $human);
+        $techpentalin = $universe->createTechnology('Pentalin', $human);
+        $techzenit = $universe->createTechnology('Zenit', $human);
+        $techcancri = $universe->createTechnology('Cancri', $human);
+
+        // create user and galaxy
+        $faker = Factory::create();
+        for ($i=0; $i < 10; $i++) {
+            $user = new User($faker->userName, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
+            $manager->persist($user);
+
+            $galaxy = $universe->createPrivateGalaxy();
+
+            $player = $universe->createPlayer($user, $human, $galaxy);
+            $player->grantCommanderRole();
+            $player->buildCrystalExtractors(5);
+        }
+
+        // create user and public galaxy if no galaxy space is available
+        $faker = Factory::create();
+        for ($i=0; $i < 10; $i++) {
+            $user = new User($faker->name, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
+            $manager->persist($user);
+
+            $galaxy = $universe->getRandomPublicGalaxyWithFreeSpace();
+            if ($galaxy === null) {
+                $galaxy = $universe->createPublicGalaxy();
+                $player = $universe->createPlayer($user, $human, $galaxy);
+                $player->grantCommanderRole();
+            } else {
+                $player = $universe->createPlayer($user, $human, $galaxy);
+            }
+
+            $player->buildMetalExtractors(2);
+        }
 
         $universe->calculateRanking();
 
         $manager->flush();
-
-        /*
-        //$faker = Factory::create();
-        // user
-        $userFirst = new User('testuser', 'testuser@example.org', \password_hash('secret', PASSWORD_DEFAULT));
-        $userSecond = new User('testuser2', 'testuser2@example.org', \password_hash('secret', PASSWORD_DEFAULT));
-        $manager->persist($userFirst);
-        $manager->persist($userSecond);
-
-        // universe
-        $universeFirst = new Universe('sirius');
-        $universeSecond = new Universe('eridanus');
-        $manager->persist($universeFirst);
-        $manager->persist($universeSecond);
-
-        // faction
-        $factionFirst = new Faction('Mensch');
-        $factionSecond = new Faction('Alien');
-        $manager->persist($factionFirst);
-        $manager->persist($factionSecond);
-
-        // technology
-        $technologyFirst = new Technology('Zerstörer Forschung', $factionFirst);
-        $technologyFirst->setFeatureKey('zerris');
-        $technologySecond = new Technology('Kreuzer Forschung', $factionFirst);
-        $technologySecond->setFeatureKey('kreuzer');
-        $technologyThird = new Technology('Fregatten Forschung', $factionFirst);
-        $technologyThird->setFeatureKey('fregs');
-        $manager->persist($technologyFirst);
-        $manager->persist($technologySecond);
-        $manager->persist($technologyThird);
-
-        $manager->flush();
-
-        // technology relation
-        $technologyRelationFirst = new TechnologyCondition($technologyFirst, $technologySecond, TechnologyCondition::CONDITION_DEPENDS);
-        $technologyRelationSecond = new TechnologyCondition($technologySecond, $technologyThird, TechnologyCondition::CONDITION_DEPENDS);
-        $manager->persist($technologyRelationFirst);
-        $manager->persist($technologyRelationSecond);
-
-        // unit
-        $unitFirst = new Unit('Zerstörer', $factionFirst);
-        $unitSecond = new Unit('Kreuzer', $factionFirst);
-        $unitThird = new Unit('Fregatte', $factionFirst);
-        $manager->persist($unitFirst);
-        $manager->persist($unitSecond);
-        $manager->persist($unitThird);
-
-        $manager->flush();
-
-        // unit combat
-        $unitCombatFirst = new UnitCombatSetting($unitFirst, $unitSecond, 100, '0.75');
-        $unitCombatSecond = new UnitCombatSetting($unitSecond, $unitThird, 100, '0.5');
-        $unitCombatThird = new UnitCombatSetting($unitThird, $unitFirst, 100, '0.2');
-        $manager->persist($unitCombatFirst);
-        $manager->persist($unitCombatSecond);
-        $manager->persist($unitCombatThird);
-
-        $manager->flush();
-
-        // galaxy
-        $galaxyFirst = new Galaxy($universeFirst, 1);
-        $galaxySecond = new Galaxy($universeFirst, 2);
-        $manager->persist($galaxyFirst);
-        $manager->persist($galaxySecond);
-
-        $manager->flush();
-
-        // player
-        $playerFirst = new Player($userFirst, $factionFirst, $universeFirst, $galaxyFirst, 1);
-        $playerSecond = new Player($userSecond, $factionFirst, $universeFirst, $galaxySecond, 1);
-        $manager->persist($playerFirst);
-        $manager->persist($playerSecond);
-
-        $manager->flush();
-
-        // player fleet
-        $playerFleetFirst = new PlayerFleet($playerFirst);
-        $playerFleetSecond = new PlayerFleet($playerSecond);
-        $manager->persist($playerFleetFirst);
-        $manager->persist($playerFleetSecond);
-
-        $manager->flush();
-        */
     }
 }
