@@ -2,14 +2,17 @@
 
 ## Install
 
-### 1. Composer
+### 1. Win (Optional)
+1. Install https://github.com/galactic-conquest/devbox.
+
+### 2. Composer
 1.  Execute following commands in main directory.
 ```
 cd /var/www/dev.galactic-conquest.com
 composer update
  ```
 
-### 2. Database
+### 3. Database
 1. Create database "gc" with "utf8_unicode_ci".
 2. Execute following commands in main directory.
 ```
