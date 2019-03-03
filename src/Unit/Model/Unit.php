@@ -6,13 +6,14 @@ namespace GC\Unit\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
+use GC\Technology\Model\Technology;
 use GC\Universe\Model\Universe;
 
 /**
  * @Table(name="unit")
  * @Entity(repositoryClass="GC\Unit\Model\UnitRepository")
  */
-final class Unit
+class Unit
 {
     /**
      * @var int
@@ -111,10 +112,18 @@ final class Unit
     /**
      * @var \GC\Universe\Model\Universe
      *
-     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="units")
+     * @ManyToOne(targetEntity="\GC\Universe\Model\Universe", inversedBy="units")
      * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
     private $universe;
+
+    /**
+     * @var \GC\Technology\Model\Technology|null
+     *
+     * @OneToOne(targetEntity="\GC\Technology\Model\Technology")
+     * @JoinColumn(name="technology_id", referencedColumnName="technology_id", nullable=true)
+     */
+    private $requiredTechnology;
 
     /**
      * @param string $name
@@ -349,5 +358,36 @@ final class Unit
     public function getUniverse(): Universe
     {
         return $this->universe;
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology|null
+     */
+    public function getRequiredTechnology(): ?Technology
+    {
+        return $this->requiredTechnology;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology|null $requiredTechnology
+     */
+    public function setRequiredTechnology(?Technology $requiredTechnology): void
+    {
+        $this->requiredTechnology = $requiredTechnology;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $targetUnit
+     * @param int $distribution
+     * @param string $attackPower
+     *
+     * @return \GC\Unit\Model\UnitCombatSetting
+     */
+    public function addUnitCombatSetting(Unit $targetUnit, int $distribution, string $attackPower): UnitCombatSetting
+    {
+        $unitCombatSetting = new UnitCombatSetting($this, $targetUnit, $distribution, $attackPower);
+        $this->unitCombatSettings->add($unitCombatSetting);
+
+        return $unitCombatSetting;
     }
 }

@@ -6,6 +6,7 @@ namespace GC\Galaxy\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
+use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
 
 /**
@@ -40,14 +41,14 @@ class Galaxy
     /**
      * @var int
      *
-     * @Column(name="metal", type="bigint", nullable=false)
+     * @Column(name="metal", type="integer", nullable=false)
      */
     private $metal;
 
     /**
      * @var int
      *
-     * @Column(name="crystal", type="bigint", nullable=false)
+     * @Column(name="crystal", type="integer", nullable=false)
      */
     private $crystal;
 
@@ -71,6 +72,13 @@ class Galaxy
      * @Column(name="extractor_points", type="integer", nullable=false)
      */
     private $extractorPoints;
+
+    /**
+     * @var int
+     *
+     * @Column(name="average_points", type="integer", nullable=false)
+     */
+    private $averagePoints;
 
     /**
      * @var int
@@ -127,6 +135,7 @@ class Galaxy
         $this->extractorPoints = 0;
         $this->rankingPosition = 0;
         $this->alliance = null;
+        $this->averagePoints = 0;
 
         $this->number = $universe->getNextFreeGalaxyNumber();
 
@@ -136,19 +145,27 @@ class Galaxy
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\GC\Player\Model\Player[]
-     */
-    public function getPlayers()
-    {
-        return $this->players;
-    }
-
-    /**
      * @return int
      */
     public function getGalaxyId(): int
     {
         return $this->galaxyId;
+    }
+
+    /**
+     * @return \GC\Player\Model\Player[]
+     */
+    public function getPlayers()
+    {
+        return $this->players->getValues();
+    }
+
+    /**
+     * @return int
+     */
+    public function getAveragePoints(): int
+    {
+        return $this->averagePoints;
     }
 
     /**
@@ -390,5 +407,51 @@ class Galaxy
         }
 
         return $freeGalaxyPosition;
+    }
+
+    /**
+     * @return void
+     */
+    public function calculateExtractorPoints(): void
+    {
+        $newExtractorPoints = 0;
+        foreach ($this->getPlayers() as $player) {
+            $newExtractorPoints += $player->getNumberOfExtractors();
+        }
+
+        $this->extractorPoints = $this->extractorPoints + $newExtractorPoints;
+    }
+
+    /**
+     * @return void
+     */
+    public function calculateAveragePoints(): void
+    {
+        $playerPoints = 0;
+        foreach ($this->getPlayers() as $player) {
+            $playerPoints += $player->getPoints();
+        }
+
+        $playerCount = \count($this->getPlayers());
+        $calculation = 0;
+        if ($playerCount > 0) {
+            $calculation = $playerPoints / $playerCount;
+        }
+
+        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);;
+    }
+
+    /**
+     * @return \GC\Player\Model\Player|null
+     */
+    public function getCommander(): ?Player
+    {
+        foreach ($this->getPlayers() as $player) {
+            if ($player->isCommander()) {
+                return $player;
+            }
+        }
+
+        return null;
     }
 }

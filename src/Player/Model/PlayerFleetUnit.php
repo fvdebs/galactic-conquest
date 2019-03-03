@@ -47,13 +47,12 @@ class PlayerFleetUnit
     /**
      * @param \GC\Player\Model\PlayerFleet $playerFleet
      * @param \GC\Unit\Model\Unit $unit
-     * @param int $quantity
      */
-    public function __construct(PlayerFleet $playerFleet, Unit $unit, int $quantity)
+    public function __construct(PlayerFleet $playerFleet, Unit $unit)
     {
         $this->playerFleet = $playerFleet;
         $this->unit = $unit;
-        $this->quantity = $quantity;
+        $this->quantity = 0;
     }
 
     /**
@@ -73,31 +72,11 @@ class PlayerFleetUnit
     }
 
     /**
-     * @param int $quantity
-     *
-     * @return void
-     */
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
      * @return \GC\Player\Model\PlayerFleet
      */
     public function getPlayerFleet(): PlayerFleet
     {
         return $this->playerFleet;
-    }
-
-    /**
-     * @param \GC\Player\Model\PlayerFleet $playerFleet
-     *
-     * @return void
-     */
-    public function setPlayerFleet(PlayerFleet $playerFleet): void
-    {
-        $this->playerFleet = $playerFleet;
     }
 
     /**
@@ -109,12 +88,22 @@ class PlayerFleetUnit
     }
 
     /**
-     * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
      *
      * @return void
      */
-    public function setUnit(Unit $unit): void
+    public function increaseQuantity(int $quantity): void
     {
-        $this->unit = $unit;
+        $this->quantity = $this->quantity + $quantity;
+    }
+
+    /**
+     * @param int $quantity
+     *
+     * @return void
+     */
+    public function decreaseQuantity(int $quantity): void
+    {
+        $this->quantity = $this->quantity - $quantity;
     }
 }

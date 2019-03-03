@@ -40,6 +40,13 @@ class PlayerUnitConstruction
     /**
      * @var int
      *
+     * @Column(name="quantity", type="integer", nullable=false)
+     */
+    private $quantity;
+
+    /**
+     * @var int
+     *
      * @Column(name="ticks_left", type="integer", nullable=false)
      */
     private $ticksLeft;
@@ -47,13 +54,14 @@ class PlayerUnitConstruction
     /**
      * @param \GC\Player\Model\Player $player
      * @param \GC\Unit\Model\Unit $unit
-     * @param int $ticksLeft
+     * @param int $quantity
      */
-    public function __construct(Player $player, Unit $unit, int $ticksLeft)
+    public function __construct(Player $player, Unit $unit, int $quantity)
     {
         $this->player = $player;
         $this->unit = $unit;
-        $this->ticksLeft = $ticksLeft;
+        $this->quantity = $quantity;
+        $this->ticksLeft = $unit->getTicksToBuild();
     }
 
     /**
@@ -83,8 +91,24 @@ class PlayerUnitConstruction
     /**
      * @return int
      */
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @return int
+     */
     public function getTicksLeft(): int
     {
         return $this->ticksLeft;
+    }
+
+    /**
+     * @return void
+     */
+    public function decreaseTicksLeft(): void
+    {
+        $this->ticksLeft = $this->ticksLeft - 1;
     }
 }

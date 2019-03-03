@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace GC\Universe\Model;
 
 use DateTime;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
+use GC\Alliance\Model\Alliance;
 use GC\Faction\Model\Faction;
 use GC\Galaxy\Model\Galaxy;
 use GC\Player\Model\Player;
@@ -62,6 +64,20 @@ class Universe
      * @Column(name="tick_interval", type="integer", nullable=false)
      */
     private $tickInterval;
+
+    /**
+     * @var DateTime|null
+     *
+     * @Column(name="last_ranking_at", type="datetime", nullable=true)
+     */
+    private $lastRankingAt;
+
+    /**
+     * @var int
+     *
+     * @Column(name="ranking_interval", type="integer", nullable=false)
+     */
+    private $rankingInterval;
 
     /**
      * @var int
@@ -262,6 +278,8 @@ class Universe
         $this->extractorPoints = 15000;
         $this->resourcePointsDivider = 10;
         $this->isActive = false;
+        $this->lastRankingAt = null;
+        $this->rankingInterval = 12;
     }
 
     /**
@@ -278,6 +296,30 @@ class Universe
     public function getLastTickAt(): ?DateTime
     {
         return $this->lastTickAt;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastRankingAt(): ?DateTime
+    {
+        return $this->lastRankingAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRankingInterval(): int
+    {
+        return $this->rankingInterval;
+    }
+
+    /**
+     * @param int $rankingInterval
+     */
+    public function setRankingInterval(int $rankingInterval): void
+    {
+        $this->rankingInterval = $rankingInterval;
     }
 
     /**
@@ -649,6 +691,14 @@ class Universe
     }
 
     /**
+     * @return \GC\Faction\Model\Faction[]
+     */
+    protected function getFactions(): array
+    {
+        return $this->factions->getValues();
+    }
+
+    /**
      * @param string $name
      * @param \GC\Faction\Model\Faction $faction
      *
@@ -663,6 +713,14 @@ class Universe
     }
 
     /**
+     * @return \GC\Unit\Model\Unit[]
+     */
+    protected function getUnits(): array
+    {
+        return $this->units->getValues();
+    }
+
+    /**
      * @param string $name
      * @param \GC\Faction\Model\Faction $faction
      *
@@ -674,6 +732,14 @@ class Universe
         $this->technologies->add($technology);
 
         return $technology;
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology[]
+     */
+    protected function getTechnologies(): array
+    {
+        return $this->technologies->getValues();
     }
 
     /**
@@ -699,6 +765,14 @@ class Universe
     }
 
     /**
+     * @return \GC\Galaxy\Model\Galaxy[]
+     */
+    protected function getGalaxies(): array
+    {
+        return $this->galaxies->getValues();
+    }
+
+    /**
      * @param \GC\User\Model\User $user
      * @param \GC\Faction\Model\Faction $faction
      * @param \GC\Galaxy\Model\Galaxy $galaxy
@@ -714,12 +788,44 @@ class Universe
     }
 
     /**
+     * @return \GC\Player\Model\Player[]
+     */
+    protected function getPlayers(): array
+    {
+        return $this->players->getValues();
+    }
+
+    /**
+     * @param string $name
+     * @param string $code
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return \GC\Alliance\Model\Alliance
+     */
+    public function createAlliance(string $name, string $code, Galaxy $galaxy): Alliance
+    {
+        $alliance = new Alliance($name, $code, $this);
+        $this->alliances->add($alliance);
+
+        $galaxy->getCommander()->grantAdmiralRole();
+
+        return $alliance;
+    }
+
+    /**
+     * @return \GC\Alliance\Model\Alliance[]
+     */
+    protected function getAlliances(): array
+    {
+        return $this->alliances->getValues();
+    }
+
+    /**
      * @return \GC\Galaxy\Model\Galaxy|null
      */
     public function getRandomPublicGalaxyWithFreeSpace(): ?Galaxy
     {
-        /** @var \GC\Galaxy\Model\Galaxy[] $galaxies */
-        $galaxies = $this->galaxies->getValues();
+        $galaxies = $this->getGalaxies();
 
         \shuffle($galaxies);
 
@@ -750,6 +856,26 @@ class Universe
     }
 
     /**
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    public function isTickCalculationNeeded(): bool
+    {
+        $lastTick = $this->lastTickAt ?? $this->ticksStartingAt;
+
+        $interval = new DateInterval('PT' . $this->tickInterval . 'M');
+        $nextTick = clone $lastTick;
+        $nextTick->add($interval);
+
+        if ($nextTick > new DateTime()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @return void
      */
     public function tick(): void
@@ -757,23 +883,32 @@ class Universe
         $this->lastTickAt = new DateTime();
         $this->tickCurrent = $this->tickCurrent + 1;
 
-        foreach ($this->players as $player) {
+        foreach ($this->getPlayers() as $player) {
+            $player->finishTechnologyConstructions();
+            $player->finishUnitConstructions();
             $player->increaseResourceIncome();
             $player->calculatePoints();
         }
+
+        foreach ($this->getGalaxies() as $galaxy) {
+            $galaxy->calculateExtractorPoints();
+            $galaxy->calculateAveragePoints();
+        }
+
+        foreach ($this->getAlliances() as $alliance) {
+            $alliance->calculateExtractorPoints();
+            $alliance->calculateAveragePoints();
+        }
+
+        $this->generatePlayerRanking();
     }
 
     /**
-     * return void
+     * @return void
      */
-    public function calculateRanking(): void
+    public function generatePlayerRanking(): void
     {
-        /** @var \GC\Player\Model\Player[] $rankedPlayers */
-        $rankedPlayers = $this->players->getValues();
-        foreach ($rankedPlayers as $player) {
-            $player->calculatePoints();
-        }
-
+        $rankedPlayers = $this->getPlayers();
         usort($rankedPlayers, function(Player $playerFirst, Player $playerSecond) {
             if ($playerFirst->getPoints() == $playerSecond->getPoints()) {
                 return 0;
@@ -788,6 +923,85 @@ class Universe
 
         foreach ($rankedPlayers as $index => $rankedPlayer) {
             $rankedPlayer->setRankingPosition(($index + 1));
+        }
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    public function isAllianceAndGalaxyRankingGenerationNeeded(): bool
+    {
+        $lastRankingAt = $this->lastRankingAt ?? $this->ticksStartingAt;
+
+        $interval = new DateInterval('PT' . $this->rankingInterval . 'H');
+        $nextRankingAt = clone $lastRankingAt;
+        $nextRankingAt->add($interval);
+
+        if ($nextRankingAt > new DateTime()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function generateAllianceAndGalaxyRanking(): void
+    {
+        $this->lastRankingAt = new DateTime();
+
+        $this->generateGalaxyRanking();
+        $this->generateAllianceRanking();
+    }
+
+    /**
+     * @return void
+     */
+    private function generateGalaxyRanking(): void
+    {
+        $rankedGalaxies = $this->getGalaxies();
+        usort($rankedGalaxies, function(Galaxy $galaxyFirst, Galaxy $galaxySecond) {
+            if ($galaxyFirst->getExtractorPoints() == $galaxySecond->getExtractorPoints()) {
+                return 0;
+            }
+
+            if ($galaxyFirst->getExtractorPoints() < $galaxySecond->getExtractorPoints()) {
+                return 1;
+            }
+
+            return -1;
+        });
+
+        foreach ($rankedGalaxies as $index => $rankedGalaxy) {
+            $rankedGalaxy->setRankingPosition(($index + 1));
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function generateAllianceRanking(): void
+    {
+        $rankedAlliances = $this->getAlliances();
+        usort($rankedAlliances, function(Alliance $allianceFirst, Alliance $allianceSecond) {
+            if ($allianceFirst->getExtractorPoints() == $allianceSecond->getExtractorPoints()) {
+                return 0;
+            }
+
+            if ($allianceFirst->getExtractorPoints() < $allianceSecond->getExtractorPoints()) {
+                return 1;
+            }
+
+            return -1;
+        });
+
+        foreach ($rankedAlliances as $index => $rankedAlliance) {
+            $rankedAlliance->setRankingPosition(($index + 1));
         }
     }
 }

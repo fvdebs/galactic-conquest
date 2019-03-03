@@ -47,13 +47,12 @@ class GalaxyTechnology
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
      * @param \GC\Technology\Model\Technology $technology
-     * @param int $ticksLeft
      */
-    public function __construct(Galaxy $galaxy, Technology $technology, int $ticksLeft)
+    public function __construct(Galaxy $galaxy, Technology $technology)
     {
         $this->galaxy = $galaxy;
         $this->technology = $technology;
-        $this->ticksLeft = $ticksLeft;
+        $this->ticksLeft = $technology->getTicksToBuild();
     }
 
     /**

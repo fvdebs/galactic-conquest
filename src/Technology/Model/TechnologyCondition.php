@@ -10,9 +10,6 @@ namespace GC\Technology\Model;
  */
 final class TechnologyCondition
 {
-    public const CONDITION_DEPENDS = 'depends';
-    public const CONDITION_OR = 'or';
-
     /**
      * @var int
      *
@@ -21,13 +18,6 @@ final class TechnologyCondition
      * @GeneratedValue(strategy="IDENTITY")
      */
     private $technologyRelationId;
-
-    /**
-     * @var string
-     *
-     * @Column(name="relation_type", type="string", length=150, nullable=false)
-     */
-    private $relationType;
 
     /**
      * @var \GC\Technology\Model\Technology
@@ -48,14 +38,11 @@ final class TechnologyCondition
     /**
      * @param \GC\Technology\Model\Technology $sourceTechnology
      * @param \GC\Technology\Model\Technology $targetTechnology
-     * @param string $relationType
-     *
      */
-    public function __construct(Technology $sourceTechnology, Technology $targetTechnology, string $relationType)
+    public function __construct(Technology $sourceTechnology, Technology $targetTechnology)
     {
         $this->sourceTechnology = $sourceTechnology;
         $this->targetTechnology = $targetTechnology;
-        $this->relationType = $relationType;
     }
 
     /**
@@ -64,24 +51,6 @@ final class TechnologyCondition
     public function getTechnologyRelationId(): int
     {
         return $this->technologyRelationId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRelationType(): string
-    {
-        return $this->relationType;
-    }
-
-    /**
-     * @param string $relationType
-     *
-     * @return void
-     */
-    public function setRelationType(string $relationType): void
-    {
-        $this->relationType = $relationType;
     }
 
     /**

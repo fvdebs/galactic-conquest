@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Player\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use GC\Unit\Model\Unit;
 
 /**
  * @Table(name="player_fleet")
@@ -202,5 +203,72 @@ class PlayerFleet
     public function setTargetPlayer(?Player $targetPlayer): void
     {
         $this->targetPlayer = $targetPlayer;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleetUnit[]
+     */
+    public function getPlayerFleetUnits(): array
+    {
+        return $this->playerFleetUnits->getValues();
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
+     *
+     * @return void
+     */
+    public function addUnits(Unit $unit, int $quantity): void
+    {
+        $playerFleetUnit = $this->getPlayerFleetUnitFor($unit);
+        if ($playerFleetUnit === null) {
+            $playerFleetUnit = $this->createPlayerFleetUnit($unit);
+        }
+
+        $playerFleetUnit->increaseQuantity($quantity);
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return \GC\Player\Model\PlayerFleetUnit|null
+     */
+    public function getPlayerFleetUnitFor(Unit $unit): ?PlayerFleetUnit
+    {
+        foreach ($this->getPlayerFleetUnits() as $playerFleetUnit) {
+            if ($playerFleetUnit->getUnit()->getUnitId() === $unit->getUnitId()) {
+                return $playerFleetUnit;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return \GC\Player\Model\PlayerFleetUnit
+     */
+    protected function createPlayerFleetUnit(Unit $unit): PlayerFleetUnit
+    {
+        $playerFleetUnit = new PlayerFleetUnit($this, $unit);
+        $this->playerFleetUnits->add($playerFleetUnit);
+
+        return $playerFleetUnit;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateUnitPoints(): int
+    {
+        $calculation = 0;
+        foreach ($this->getPlayerFleetUnits() as $playerFleetUnit) {
+            $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getMetalCost();
+            $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getCrystalCost();
+        }
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
     }
 }

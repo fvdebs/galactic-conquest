@@ -2,8 +2,9 @@
 
 ## Install
 
-### 1. Windows
-1. Install https://github.com/galactic-conquest/devbox.
+### For Windows
+Follow the instructions here\
+https://github.com/galactic-conquest/devbox.
 
 ## Commands
 Get a list of possible commands

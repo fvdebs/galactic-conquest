@@ -55,10 +55,14 @@ final class TickCommand extends Command
         $this->entityManager->getConnection()->beginTransaction();
 
         try {
-
             foreach ($this->universeRepository->findAllActive() as $universe) {
-                $universe->tick();
-                $universe->calculateRanking();
+                if ($universe->isTickCalculationNeeded() || true) {
+                    $universe->tick();
+                }
+
+                if ($universe->isAllianceAndGalaxyRankingGenerationNeeded()) {
+                    $universe->generateAllianceAndGalaxyRanking();
+                }
             }
 
             $this->entityManager->flush();

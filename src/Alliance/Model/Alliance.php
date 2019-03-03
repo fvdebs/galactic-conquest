@@ -46,14 +46,14 @@ class Alliance
     /**
      * @var int
      *
-     * @Column(name="metal", type="bigint", nullable=false)
+     * @Column(name="metal", type="integer", nullable=false)
      */
     private $metal;
 
     /**
      * @var int
      *
-     * @Column(name="crystal", type="bigint", nullable=false)
+     * @Column(name="crystal", type="integer", nullable=false)
      */
     private $crystal;
 
@@ -95,7 +95,7 @@ class Alliance
     /**
      * @var int
      *
-     * @Column(name="average_points", type="bigint", nullable=false)
+     * @Column(name="average_points", type="integer", nullable=false)
      */
     private $averagePoints;
 
@@ -375,5 +375,37 @@ class Alliance
     public function setUniverse(Universe $universe): void
     {
         $this->universe = $universe;
+    }
+
+    /**
+     * @return void
+     */
+    public function calculateExtractorPoints(): void
+    {
+        $newExtractorPoints = 0;
+        foreach ($this->getGalaxies() as $galaxy) {
+            $newExtractorPoints += $galaxy->getExtractorPoints();
+        }
+
+        $this->extractorPoints = $this->extractorPoints + $newExtractorPoints;
+    }
+
+    /**
+     * @return void
+     */
+    public function calculateAveragePoints(): void
+    {
+        $averagePoints = 0;
+        foreach ($this->getGalaxies() as $galaxy) {
+            $averagePoints += $galaxy->getAveragePoints();
+        }
+
+        $galaxyCount = \count($this->getGalaxies());
+        $calculation = 0;
+        if ($galaxyCount > 0) {
+            $calculation = $averagePoints / $galaxyCount;
+        }
+
+        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);;
     }
 }

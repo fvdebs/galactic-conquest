@@ -47,13 +47,12 @@ class PlayerTechnology
     /**
      * @param \GC\Player\Model\Player $player
      * @param \GC\Technology\Model\Technology $technology
-     * @param int $ticksLeft
      */
-    public function __construct(Player $player, Technology $technology, int $ticksLeft)
+    public function __construct(Player $player, Technology $technology)
     {
         $this->player = $player;
         $this->technology = $technology;
-        $this->ticksLeft = $ticksLeft;
+        $this->ticksLeft = $technology->getTicksToBuild();
     }
 
     /**
@@ -86,5 +85,21 @@ class PlayerTechnology
     public function getTicksLeft(): int
     {
         return $this->ticksLeft;
+    }
+
+    /**
+     * @return void
+     */
+    public function decreaseTicksLeft(): void
+    {
+        $this->ticksLeft = $this->ticksLeft - 1;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted(): bool
+    {
+        return $this->ticksLeft === 0;
     }
 }

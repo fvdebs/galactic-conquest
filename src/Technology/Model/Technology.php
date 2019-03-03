@@ -12,8 +12,17 @@ use GC\Universe\Model\Universe;
  * @Table(name="technology")
  * @Entity(repositoryClass="GC\Technology\Model\TechnologyRepository")
  */
-final class Technology
+class Technology
 {
+    public const FEATURE_ALLIANCE_FINANCE = 'alliance.finance';
+
+    public const FEATURE_GALAXY_FINANCE = 'galaxy.finance';
+    public const FEATURE_GALAXY_TACTIC = 'galaxy.tactic';
+    public const FEATURE_GALAXY_TACTIC_INCOMING = 'galaxy.tactic.incoming';
+    public const FEATURE_GALAXY_TACTIC_FLEET = 'galaxy.tactic.fleet';
+
+    public const FEATURE_PLAYER_TRADE = 'player.trade';
+
     /**
      * @var int
      *
@@ -136,7 +145,7 @@ final class Technology
         $this->description = '';
         $this->featureKey = null;
         $this->isAllianceTechnology = false;
-        $this->isPlayerTechnology = true;
+        $this->isPlayerTechnology = false;
         $this->isGalaxyTechnology = false;
         $this->metalCost = 5000;
         $this->crystalCost = 5000;
@@ -375,5 +384,18 @@ final class Technology
     public function getUniverse(): Universe
     {
         return $this->universe;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $targetTechnology
+     *
+     * @return \GC\Technology\Model\TechnologyCondition
+     */
+    public function addTechnologyCondition(Technology $targetTechnology): TechnologyCondition
+    {
+        $technologyCondition = new TechnologyCondition($this, $targetTechnology);
+        $this->technologyConditions->add($technologyCondition);
+
+        return $technologyCondition;
     }
 }

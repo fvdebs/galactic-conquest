@@ -38,8 +38,7 @@ final class UniverseServiceProvider implements ServiceProviderInterface
      */
     private function provideUniverseRoutes(Container $container): void
     {
-        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
-        {
+        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container) {
             $collection->get('/{locale}/universe/select', UniverseSelectHandler::class)->addAttribute('public', true);
 
             return $collection;
@@ -65,8 +64,7 @@ final class UniverseServiceProvider implements ServiceProviderInterface
      */
     private function provideTickCommand(Container $container): void
     {
-        $container->extend(Application::class, function(Application $application, Container $container)
-        {
+        $container->extend(Application::class, function(Application $application, Container $container) {
             $application->add(new TickCommand(
                 $container->offsetGet(UniverseRepository::class),
                 $container->offsetGet(EntityManager::class)

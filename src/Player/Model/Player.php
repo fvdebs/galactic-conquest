@@ -7,6 +7,8 @@ namespace GC\Player\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
 use GC\Galaxy\Model\Galaxy;
+use GC\Technology\Model\Technology;
+use GC\Unit\Model\Unit;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
 
@@ -35,14 +37,14 @@ class Player
     /**
      * @var int
      *
-     * @Column(name="metal", type="bigint", nullable=false)
+     * @Column(name="metal", type="integer", nullable=false)
      */
     private $metal;
 
     /**
      * @var int
      *
-     * @Column(name="crystal", type="bigint", nullable=false)
+     * @Column(name="crystal", type="integer", nullable=false)
      */
     private $crystal;
 
@@ -84,7 +86,7 @@ class Player
     /**
      * @var int
      *
-     * @Column(name="points", type="bigint", nullable=false)
+     * @Column(name="points", type="integer", nullable=false)
      */
     private $points;
 
@@ -198,6 +200,7 @@ class Player
         $this->isAdmiral = false;
         $this->isCommander = false;
 
+        $this->createPlayerFleet();
         $this->calculatePoints();
     }
 
@@ -358,6 +361,39 @@ class Player
     }
 
     /**
+     * @return \GC\Player\Model\PlayerFleet
+     */
+    public function createPlayerFleet(): PlayerFleet
+    {
+        $playerFleet = new PlayerFleet($this);
+        $this->playerFleets->add($playerFleet);
+
+        return $playerFleet;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleets(): array
+    {
+        return $this->playerFleets->getValues();
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet
+     */
+    public function getPlayerFleetHome(): PlayerFleet
+    {
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if (!$playerFleet->isDefensive() && !$playerFleet->isOffensive()) {
+                return $playerFleet;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
      */
     public function relocate(Galaxy $galaxy): void
@@ -448,6 +484,8 @@ class Player
         $this->points = 0;
         $this->points += $this->calculateResourcePoints();
         $this->points += $this->calculateExtractorPoints();
+        $this->points += $this->calculateTechnologyPoints();
+        $this->points += $this->calculateUnitPoints();
 
         return $this->points;
     }
@@ -473,6 +511,33 @@ class Player
     }
 
     /**
+     * @return int
+     */
+    protected function calculateTechnologyPoints(): int
+    {
+        $calculation = 0;
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            $calculation += $playerTechnology->getTechnology()->getCrystalCost();
+            $calculation += $playerTechnology->getTechnology()->getMetalCost();
+        }
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @return int
+     */
+    protected function calculateUnitPoints(): int
+    {
+        $calculation = 0;
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            $calculation += $playerFleet->calculateUnitPoints();
+        }
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
      * @param int $number
      *
      * @return void
@@ -480,6 +545,7 @@ class Player
     public function buildScanBlocker(int $number): void
     {
         $this->scanBlocker = $this->scanBlocker + $number;
+
         $this->decreaseMetal($this->universe->getScanBlockerMetalCost() * $number);
         $this->decreaseCrystal($this->universe->getScanBlockerCrystalCost() * $number);
     }
@@ -492,8 +558,20 @@ class Player
     public function buildScanRelays(int $number): void
     {
         $this->scanRelays = $this->scanRelays + $number;
+
         $this->decreaseMetal($this->universe->getScanRelayMetalCost() * $number);
         $this->decreaseCrystal($this->universe->getScanRelayCrystalCost() * $number);
+    }
+
+    /**
+     * @param int $metal
+     * @param int $crystal
+     *
+     * @return bool
+     */
+    protected function hasResources(int $metal, int $crystal): bool
+    {
+        return $this->metal >= $metal && $this->crystal >= $crystal;
     }
 
     /**
@@ -501,7 +579,7 @@ class Player
      *
      * @return void
      */
-    protected function increaseMetal(int $number): void
+    public function increaseMetal(int $number): void
     {
         $this->metal = $this->metal + $number;
     }
@@ -511,7 +589,7 @@ class Player
      *
      * @return void
      */
-    protected function decreaseMetal(int $number): void
+    public function decreaseMetal(int $number): void
     {
         $this->metal = $this->metal - $number;
     }
@@ -521,7 +599,7 @@ class Player
      *
      * @return void
      */
-    protected function increaseCrystal(int $number): void
+    public function increaseCrystal(int $number): void
     {
         $this->crystal = $this->crystal + $number;
     }
@@ -531,7 +609,7 @@ class Player
      *
      * @return void
      */
-    protected function decreaseCrystal(int $number): void
+    public function decreaseCrystal(int $number): void
     {
         $this->crystal = $this->crystal - $number;
     }
@@ -605,5 +683,213 @@ class Player
     public function revokeAdmiralRole(): void
     {
         $this->isAdmiral = false;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
+     *
+     * @return \GC\Player\Model\PlayerUnitConstruction
+     */
+    public function buildUnit(Unit $unit, int $quantity): PlayerUnitConstruction
+    {
+        $playerUnitConstruction = new PlayerUnitConstruction($this, $unit, $quantity);
+        $this->playerUnitConstructions->add($playerUnitConstruction);
+
+        $this->decreaseMetal($this->calculateMetalCostForUnit($unit, $quantity));
+        $this->decreaseCrystal($this->calculateCrystalCostForUnit($unit, $quantity));
+
+        return $playerUnitConstruction;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
+     *
+     * @return bool
+     */
+    public function canBuildUnit(Unit $unit, int $quantity): bool
+    {
+        if ($this->isUnitInConstruction($unit)) {
+            return false;
+        }
+
+        return $this->hasResources(
+            $this->calculateMetalCostForUnit($unit, $quantity),
+            $this->calculateCrystalCostForUnit($unit, $quantity)
+        );
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return bool
+     */
+    public function isUnitInConstruction(Unit $unit): bool
+    {
+        foreach ($this->getPlayerUnitConstructions() as $playerUnitConstruction) {
+            if ($playerUnitConstruction->getUnit()->getUnitId() === $unit->getUnitId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerUnitConstruction[]
+     */
+    public function getPlayerUnitConstructions(): array
+    {
+        return $this->playerUnitConstructions->getValues();
+    }
+
+    /**
+     * @return void
+     */
+    public function finishUnitConstructions(): void
+    {
+        foreach ($this->getPlayerUnitConstructions() as $playerUnitConstruction) {
+            if ($playerUnitConstruction->getTicksLeft() > 0) {
+                $playerUnitConstruction->decreaseTicksLeft();
+            }
+
+            if ($playerUnitConstruction->getTicksLeft() === 0) {
+                $this->getPlayerFleetHome()->addUnits(
+                    $playerUnitConstruction->getUnit(),
+                    $playerUnitConstruction->getQuantity()
+                );
+
+                $this->playerUnitConstructions->removeElement($playerUnitConstruction);
+            }
+        }
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
+     *
+     * @return int
+     */
+    protected function calculateMetalCostForUnit(Unit $unit, int $quantity): int
+    {
+        $calculation = $unit->getMetalCost() * $quantity;
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
+     *
+     * @return int
+     */
+    protected function calculateCrystalCostForUnit(Unit $unit, int $quantity): int
+    {
+        $calculation = $unit->getCrystalCost() * $quantity;
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return \GC\Player\Model\PlayerTechnology
+     */
+    public function buildTechnology(Technology $technology): PlayerTechnology
+    {
+        $playerTechnology = new PlayerTechnology($this, $technology);
+        $this->playerTechnologies->add($playerTechnology);
+
+        $this->decreaseMetal($technology->getMetalCost());
+        $this->decreaseCrystal($technology->getCrystalCost());
+
+        return $playerTechnology;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function canBuildTechnology(Technology $technology): bool
+    {
+        if ($this->hasTechnologyInConstruction($technology)) {
+            return false;
+        }
+
+        return $this->hasResources(
+            $technology->getMetalCost(),
+            $technology->getCrystalCost()
+        );
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function hasTechnology(Technology $technology): bool
+    {
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->isCompleted()
+                && $playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $featureKey
+     *
+     * @return bool
+     */
+    public function hasTechnologyWithFeatureKey(string $featureKey): bool
+    {
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->isCompleted()
+                && $playerTechnology->getTechnology()->getFeatureKey() === $featureKey) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function hasTechnologyInConstruction(Technology $technology): bool
+    {
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return void
+     */
+    public function finishTechnologyConstructions(): void
+    {
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->getTicksLeft() > 0) {
+                $playerTechnology->decreaseTicksLeft();
+            }
+        }
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerTechnology[]
+     */
+    public function getPlayerTechnologies(): array
+    {
+        return $this->playerTechnologies->getValues();
     }
 }
