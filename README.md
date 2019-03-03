@@ -2,20 +2,44 @@
 
 ## Install
 
-### 1. Win (Optional)
+### 1. Windows
 1. Install https://github.com/galactic-conquest/devbox.
 
-### 2. Composer
-1.  Execute following commands in main directory.
+## Commands
+Get a list of possible commands
 ```
-cd /var/www/dev.galactic-conquest.com
-composer update
- ```
+vendor/bin/inferno list
+```
 
-### 3. Database
-1. Create database "gc" with "utf8_unicode_ci".
-2. Execute following commands in main directory.
+ Update project dependencies.
+```
+composer update
+```
+
+Create database schema
 ```
 vendor/bin/inferno orm:schema-tool:create
+```
+
+Create test data and fixtures
+```
 vendor/bin/inferno app:doctrine:fixtures
- ```
+```
+
+Create a new handler
+```
+vendor/bin/inferno app:create:handler ModuleDir HandlerName
+```
+
+Clear cache data
+```
+vendor/bin/inferno app:cache-clear
+```
+
+## Configfiles
+```
+/config/config.php
+/config/app.php
+```
+
+

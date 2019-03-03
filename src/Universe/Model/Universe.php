@@ -185,7 +185,7 @@ class Universe
     /**
      * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
      *
-     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="universe", cascade={"persist"}, orphanRemoval=true)
      * @OrderBy({"rankingPosition" = "ASC"})
      */
     private $players;
@@ -747,6 +747,20 @@ class Universe
         }
 
         return $freeGalaxyNumber;
+    }
+
+    /**
+     * @return void
+     */
+    public function tick(): void
+    {
+        $this->lastTickAt = new DateTime();
+        $this->tickCurrent = $this->tickCurrent + 1;
+
+        foreach ($this->players as $player) {
+            $player->increaseResourceIncome();
+            $player->calculatePoints();
+        }
     }
 
     /**
