@@ -402,6 +402,12 @@ class TestDataFixture extends AbstractFixture
 
             $player->buildTechnology($techcolony);
             $player->buildTechnology($techtrade);
+
+            $galaxy->setMetal(5000000);
+            $galaxy->setCrystal(5000000);
+            $galaxy->setTaxMetal(50);
+            $galaxy->setTaxCrystal(50);
+            $galaxy->buildTechnology($techtacticfirst);
         }
 
         $universe->tick();

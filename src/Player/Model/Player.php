@@ -617,17 +617,21 @@ class Player
     /**
      * @return int
      */
-    protected function getMetalIncomePerTick(): int
+    public function calculateMetalIncomePerTick(): int
     {
-        return $this->extractorMetal * $this->universe->getExtractorMetalIncome();
+        $calculation = $this->extractorMetal * $this->universe->getExtractorMetalIncome();
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
     }
 
     /**
      * @return int
      */
-    protected function getCrystalIncomePerTick(): int
+    public function calculateCrystalIncomePerTick(): int
     {
-        return $this->extractorCrystal * $this->universe->getExtractorCrystalIncome();
+        $calculation = $this->extractorCrystal * $this->universe->getExtractorCrystalIncome();
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
     }
 
     /**
@@ -635,8 +639,8 @@ class Player
      */
     public function increaseResourceIncome(): void
     {
-        $this->increaseMetal($this->getMetalIncomePerTick());
-        $this->increaseCrystal($this->getCrystalIncomePerTick());
+        $this->increaseMetal($this->calculateMetalIncomePerTick());
+        $this->increaseCrystal($this->calculateCrystalIncomePerTick());
     }
 
     /**
@@ -708,16 +712,22 @@ class Player
      *
      * @return bool
      */
-    public function canBuildUnit(Unit $unit, int $quantity): bool
+    public function hasResourcesForUnitAndQuantity(Unit $unit, int $quantity): bool
     {
-        if ($this->isUnitInConstruction($unit)) {
-            return false;
-        }
-
         return $this->hasResources(
             $this->calculateMetalCostForUnit($unit, $quantity),
             $this->calculateCrystalCostForUnit($unit, $quantity)
         );
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return bool
+     */
+    public function hasUnitRequirementsFor(Unit $unit): bool
+    {
+        return $this->hasTechnology($unit->getRequiredTechnology());
     }
 
     /**
@@ -811,12 +821,26 @@ class Player
      *
      * @return bool
      */
-    public function canBuildTechnology(Technology $technology): bool
+    public function hasTechnology(Technology $technology): bool
     {
-        if ($this->hasTechnologyInConstruction($technology)) {
-            return false;
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->isCompleted()
+                && $playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
+
+                return true;
+            }
         }
 
+        return false;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function hasResourcesForTechnology(Technology $technology): bool
+    {
         return $this->hasResources(
             $technology->getMetalCost(),
             $technology->getCrystalCost()
@@ -828,16 +852,15 @@ class Player
      *
      * @return bool
      */
-    public function hasTechnology(Technology $technology): bool
+    public function hasTechnologyRequirementsFor(Technology $technology): bool
     {
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->isCompleted()
-                && $playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
-                return true;
+        foreach ($technology->getTechnologyConditions() as $technologyCondition) {
+            if (!$this->hasTechnology($technologyCondition->getTargetTechnology())) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -845,11 +868,12 @@ class Player
      *
      * @return bool
      */
-    public function hasTechnologyWithFeatureKey(string $featureKey): bool
+    public function hasTechnologyByFeatureKey(string $featureKey): bool
     {
         foreach ($this->getPlayerTechnologies() as $playerTechnology) {
             if ($playerTechnology->isCompleted()
                 && $playerTechnology->getTechnology()->getFeatureKey() === $featureKey) {
+
                 return true;
             }
         }
@@ -891,5 +915,58 @@ class Player
     public function getPlayerTechnologies(): array
     {
         return $this->playerTechnologies->getValues();
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerTechnology[]
+     */
+    public function getPlayerTechnologiesCompleted(): array
+    {
+        $playerTechnologies = [];
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->isCompleted()) {
+                $playerTechnologies[] = $playerTechnology;
+            }
+        }
+
+        return $playerTechnologies;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerTechnology[]
+     */
+    public function getPlayerTechnologiesInConstruction(): array
+    {
+        $playerTechnologies = [];
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->isInConstruction()) {
+                $playerTechnologies[] = $playerTechnology;
+            }
+        }
+
+        return $playerTechnologies;
+    }
+
+    /**
+     * @param string $dataJson
+     *
+     * @throws \Exception
+     *
+     * @return \GC\Player\Model\PlayerCombatReport
+     */
+    public function createPlayerCombatReport(string $dataJson): PlayerCombatReport
+    {
+        $playerCombatReport = new PlayerCombatReport($dataJson, $this);
+        $this->playerCombatReports->add($playerCombatReport);
+
+        return $playerCombatReport;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerCombatReport[]
+     */
+    public function getPlayerCombatReports(): array
+    {
+        return $this->playerCombatReports->getValues();
     }
 }

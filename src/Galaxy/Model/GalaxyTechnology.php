@@ -86,4 +86,45 @@ class GalaxyTechnology
     {
         return $this->ticksLeft;
     }
+
+
+    /**
+     * @return void
+     */
+    public function decreaseTicksLeft(): void
+    {
+        $this->ticksLeft = $this->ticksLeft - 1;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateProgress(): int
+    {
+        if ($this->isCompleted()) {
+            return 100;
+        }
+
+        $technologyBuildTicks = $this->getTechnology()->getTicksToBuild();
+
+        $calculation = $technologyBuildTicks / ($technologyBuildTicks - $this->getTicksLeft());
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInConstruction(): bool
+    {
+        return $this->ticksLeft > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted(): bool
+    {
+        return $this->ticksLeft === 0;
+    }
 }

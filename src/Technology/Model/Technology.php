@@ -398,4 +398,12 @@ class Technology
 
         return $technologyCondition;
     }
+
+    /**
+     * @return \GC\Technology\Model\TechnologyCondition[]
+     */
+    public function getTechnologyConditions(): array
+    {
+        return $this->technologyConditions->getValues();
+    }
 }

@@ -894,11 +894,12 @@ class Universe
         }
 
         foreach ($this->getGalaxies() as $galaxy) {
+            $galaxy->finishTechnologyConstructions();
             $galaxy->calculateExtractorPoints();
             $galaxy->calculateAveragePoints();
         }
 
-        foreach ($this->getAlliances() as $alliance) {
+        foreach ($this->getAlliantces() as $alliance) {
             $alliance->calculateExtractorPoints();
             $alliance->calculateAveragePoints();
         }

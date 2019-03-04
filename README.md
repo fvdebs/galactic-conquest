@@ -3,10 +3,10 @@
 ## Install
 
 ### For Windows
-Follow the instructions here\
+Follow the instructions here:\
 https://github.com/galactic-conquest/devbox.
 
-## Commands
+## App commands
 Get a list of possible commands
 ```
 vendor/bin/inferno list
@@ -37,10 +37,30 @@ Clear cache data
 vendor/bin/inferno app:cache-clear
 ```
 
+## Other commands
+
+Executes a tick.
+```
+vendor/bin/inferno app:tick:run
+```
+
+Executes a tick. Ignores universe tick interval.
+```
+vendor/bin/inferno app:tick:run --force-tick
+```
+
+Executes a tick. Ignores universe ranking interval.
+```
+vendor/bin/inferno app:tick:run --force-ranking
+```
+
+Executes a tick. Ignores tick and ranking interval.
+```
+vendor/bin/inferno app:tick:run --force-tick --force-ranking
+```
+
 ## Configfiles
 ```
 /config/config.php
 /config/app.php
 ```
-
-

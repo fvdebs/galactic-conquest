@@ -47,13 +47,12 @@ class AllianceTechnology
     /**
      * @param \GC\Technology\Model\Technology $technology
      * @param \GC\Alliance\Model\Alliance $alliance
-     * @param int $ticksLeft
      */
-    public function __construct(Technology $technology, Alliance $alliance, int $ticksLeft)
+    public function __construct(Technology $technology, Alliance $alliance)
     {
         $this->technology = $technology;
         $this->alliance = $alliance;
-        $this->ticksLeft = $ticksLeft;
+        $this->ticksLeft = $technology->getTicksToBuild();;
     }
 
     /**
@@ -86,5 +85,45 @@ class AllianceTechnology
     public function getTicksLeft(): int
     {
         return $this->ticksLeft;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateProgress(): int
+    {
+        if ($this->isCompleted()) {
+            return 100;
+        }
+
+        $technologyBuildTicks = $this->getTechnology()->getTicksToBuild();
+
+        $calculation = $technologyBuildTicks / ($technologyBuildTicks - $this->getTicksLeft());
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @return void
+     */
+    public function decreaseTicksLeft(): void
+    {
+        $this->ticksLeft = $this->ticksLeft - 1;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInConstruction(): bool
+    {
+        return $this->ticksLeft > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted(): bool
+    {
+        return $this->ticksLeft === 0;
     }
 }

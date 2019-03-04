@@ -52,17 +52,17 @@ class PlayerCombatReport
 
     /**
      * @param string $dataJson
-     * @param string $externalId
      * @param \GC\Player\Model\Player $player
      *
      * @throws \Exception
      */
-    public function __construct(string $dataJson, string $externalId, Player $player)
+    public function __construct(string $dataJson, Player $player)
     {
         $this->dataJson = $dataJson;
-        $this->externalId = $externalId;
         $this->player = $player;
         $this->createdAt = new DateTime();
+
+        $this->generateExternalId();
     }
 
     /**
@@ -103,5 +103,15 @@ class PlayerCombatReport
     public function getPlayer(): Player
     {
         return $this->player;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateExternalId(): string
+    {
+        $this->externalId = \substr(\str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 15);
+
+        return $this->externalId;
     }
 }

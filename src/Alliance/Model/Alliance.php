@@ -117,9 +117,16 @@ class Alliance
     /**
      * @var \GC\Alliance\Model\AllianceTechnology[]|\Doctrine\Common\Collections\ArrayCollection
      *
-     * @OneToMany(targetEntity="\GC\Alliance\Model\AllianceTechnology", mappedBy="technology", cascade={"all"}, orphanRemoval=true)
+     * @OneToMany(targetEntity="\GC\Alliance\Model\AllianceTechnology", mappedBy="alliance", cascade={"all"}, orphanRemoval=true)
      */
     private $allianceTechnologies;
+
+    /**
+     * @var \GC\Alliance\Model\AllianceApplication[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Alliance\Model\AllianceApplication", mappedBy="alliance", cascade={"all"}, orphanRemoval=true)
+     */
+    private $allianceApplications;
 
     /**
      * @param string $name
@@ -130,6 +137,7 @@ class Alliance
     {
         $this->galaxies = new ArrayCollection();
         $this->allianceTechnologies = new ArrayCollection();
+        $this->allianceApplications = new ArrayCollection();
 
         $this->name = $name;
         $this->code = $code;
