@@ -7,6 +7,7 @@ namespace GC\App\Middleware;
 use GC\Player\Model\Player;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
+use Inferno\Session\Bag\FlashBagInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -21,11 +22,18 @@ final class SetTwigGlobalsMiddleware implements MiddlewareInterface
     private $twig;
 
     /**
-     * @param \Twig_Environment $twig
+     * @var \Inferno\Session\Bag\FlashBagInterface
      */
-    public function __construct(Twig_Environment $twig)
+    private $flashBag;
+
+    /**
+     * @param \Twig_Environment $twig
+     * @param \Inferno\Session\Bag\FlashBagInterface $flashBag
+     */
+    public function __construct(Twig_Environment $twig, FlashBagInterface $flashBag)
     {
         $this->twig = $twig;
+        $this->flashBag = $flashBag;
     }
 
     /**
@@ -58,6 +66,8 @@ final class SetTwigGlobalsMiddleware implements MiddlewareInterface
             $this->twig->addGlobal('currentPlayerId', $player->getPlayerId());
             $this->twig->addGlobal('currentPlayer', $player);
         }
+
+        $this->twig->addGlobal('flashBag', $this->flashBag);
 
         return $handler->handle($request);
     }

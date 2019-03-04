@@ -100,7 +100,8 @@ final class AppServiceProvider implements ServiceProviderInterface
     {
         $container->offsetSet(SetTwigGlobalsMiddleware::class, function(Container $container) {
             return new SetTwigGlobalsMiddleware(
-                $container->offsetGet(\Twig_Environment::class)
+                $container->offsetGet(\Twig_Environment::class),
+                $container->offsetGet(SessionManagerInterface::class)->getFlashBag()
             );
         });
     }

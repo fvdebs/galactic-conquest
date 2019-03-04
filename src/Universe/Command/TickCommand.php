@@ -42,6 +42,9 @@ final class TickCommand extends Command
         $this->setName('app:tick:run');
         $this->setDescription('Calculates a tick.');
         $this->setHelp('This command starts a tick.');
+
+        $this->addOption('force-tick');
+        $this->addOption('force-ranking');
     }
 
     /**
@@ -56,11 +59,15 @@ final class TickCommand extends Command
 
         try {
             foreach ($this->universeRepository->findAllActive() as $universe) {
-                if ($universe->isTickCalculationNeeded() || true) {
+                if ($universe->isTickCalculationNeeded()
+                    || $input->getOption('force-tick') === true) {
+
                     $universe->tick();
                 }
 
-                if ($universe->isAllianceAndGalaxyRankingGenerationNeeded()) {
+                if ($universe->isAllianceAndGalaxyRankingGenerationNeeded()
+                    || $input->getOption('force-ranking') === true) {
+
                     $universe->generateAllianceAndGalaxyRanking();
                 }
             }

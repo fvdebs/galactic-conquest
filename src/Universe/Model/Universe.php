@@ -807,7 +807,10 @@ class Universe
         $alliance = new Alliance($name, $code, $this);
         $this->alliances->add($alliance);
 
-        $galaxy->getCommander()->grantAdmiralRole();
+        $commander = $galaxy->getCommander();
+        if ($commander !== null) {
+            $commander->grantAdmiralRole();
+        }
 
         return $alliance;
     }

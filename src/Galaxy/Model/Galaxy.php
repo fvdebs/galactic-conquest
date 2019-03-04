@@ -331,11 +331,11 @@ class Galaxy
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\GC\Galaxy\Model\GalaxyTechnology[]
+     * @return \GC\Galaxy\Model\GalaxyTechnology[]
      */
     public function getGalaxyTechnologies(): array
     {
-        return $this->galaxyTechnologies;
+        return $this->galaxyTechnologies->getValues();
     }
 
     /**
