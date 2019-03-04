@@ -899,7 +899,7 @@ class Universe
             $galaxy->calculateAveragePoints();
         }
 
-        foreach ($this->getAlliantces() as $alliance) {
+        foreach ($this->getAlliances() as $alliance) {
             $alliance->calculateExtractorPoints();
             $alliance->calculateAveragePoints();
         }
