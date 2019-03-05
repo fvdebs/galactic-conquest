@@ -129,7 +129,7 @@ class Player
     /**
      * @var \GC\Universe\Model\Universe
      *
-     * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="players")
+     * @ManyToOne(targetEntity="\GC\Universe\Model\Universe")
      * @JoinColumn(name="universe_id", referencedColumnName="universe_id", nullable=false)
      */
     private $universe;

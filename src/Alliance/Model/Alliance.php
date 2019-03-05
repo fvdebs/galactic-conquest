@@ -155,10 +155,10 @@ class Alliance
         $this->rankingPosition = 0;
         $this->averagePoints = 0;
 
+        $this->universe->addAlliance($this);
         $this->galaxies->add($galaxy);
-        if ($galaxy->getCommander() !== null) {
-            $galaxy->getCommander()->grantAdmiralRole();
-        }
+
+        $galaxy->getCommander()->grantAdmiralRole();
     }
 
     /**
@@ -711,5 +711,39 @@ class Alliance
         }
 
         return $allianceTechnologies;
+    }
+
+    /**
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return \GC\Alliance\Model\AllianceApplication
+     */
+    public function createAllianceApplicationFor(Galaxy $galaxy): AllianceApplication
+    {
+        $allianceApplication = new AllianceApplication($this, $galaxy);
+        $this->allianceApplications->add($allianceApplication);
+
+        return $allianceApplication;
+    }
+
+    /**
+     * @param \GC\Alliance\Model\AllianceApplication $allianceApplication
+     *
+     * @return void
+     */
+    public function acceptAllianceApplication(AllianceApplication $allianceApplication): void
+    {
+        $allianceApplication->getGalaxy()->setAlliance($this);
+        $this->allianceApplications->removeElement($allianceApplication);
+    }
+
+    /**
+     * @param \GC\Alliance\Model\AllianceApplication $allianceApplication
+     *
+     * @return void
+     */
+    public function denyAllianceApplication(AllianceApplication $allianceApplication): void
+    {
+        $this->allianceApplications->removeElement($allianceApplication);
     }
 }

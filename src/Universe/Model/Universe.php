@@ -205,14 +205,6 @@ class Universe
     private $isActive;
 
     /**
-     * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
-     *
-     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="universe", cascade={"persist"}, orphanRemoval=true)
-     * @OrderBy({"rankingPosition" = "ASC"})
-     */
-    private $players;
-
-    /**
      * @var \GC\Galaxy\Model\Galaxy[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Galaxy\Model\Galaxy", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
@@ -256,7 +248,6 @@ class Universe
      */
     public function __construct(string $name)
     {
-        $this->players = new ArrayCollection();
         $this->galaxies = new ArrayCollection();
         $this->alliances = new ArrayCollection();
         $this->units = new ArrayCollection();
@@ -809,24 +800,19 @@ class Universe
     }
 
     /**
-     * @param string $name
-     * @param string $code
-     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     * @param \GC\Alliance\Model\Alliance $alliance
      *
-     * @return \GC\Alliance\Model\Alliance
+     * @return void
      */
-    public function createAlliance(string $name, string $code, Galaxy $galaxy): Alliance
+    public function addAlliance(Alliance $alliance): void
     {
-        $alliance = new Alliance($name, $code, $galaxy);
         $this->alliances->add($alliance);
-
-        return $alliance;
     }
 
     /**
      * @return \GC\Alliance\Model\Alliance[]
      */
-    protected function getAlliances(): array
+    public function getAlliances(): array
     {
         return $this->alliances->getValues();
     }
@@ -912,7 +898,7 @@ class Universe
             $alliance->finishTechnologyConstructions();
             $alliance->increaseExtractorPointsPerTick();
             $alliance->increaseResourceIncomePerTick();
-            // $alliance->calculateAverageGalaxyPoints(); bug with persistence
+            $alliance->calculateAverageGalaxyPoints();
         }
 
         $this->generatePlayerRanking();

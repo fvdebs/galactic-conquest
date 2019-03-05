@@ -378,13 +378,19 @@ class TestDataFixture extends AbstractFixture
 
         // create user and public galaxy if no galaxy space is available
         $faker = Factory::create();
-        for ($i=0; $i < 5; $i++) {
+        for ($i=0; $i < 500; $i++) {
             $user = new User($faker->userName, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
             $manager->persist($user);
 
             $galaxy = $universe->getRandomPublicGalaxyWithFreeSpace();
             if ($galaxy === null) {
                 $galaxy = $universe->createPublicGalaxy();
+                $galaxy->setMetal(5000000);
+                $galaxy->setCrystal(5000000);
+                $galaxy->setTaxMetal(10);
+                $galaxy->setTaxCrystal(50);
+                $galaxy->buildTechnology($techtacticfirst);
+
                 $player = $galaxy->createPlayer($user, $human);
                 $player->grantCommanderRole();
             } else {
@@ -403,25 +409,35 @@ class TestDataFixture extends AbstractFixture
             $player->buildTechnology($techcolony);
             $player->buildTechnology($techtrade);
 
-            $galaxy->setMetal(5000000);
-            $galaxy->setCrystal(5000000);
-            $galaxy->setTaxMetal(10);
-            $galaxy->setTaxCrystal(50);
-            $galaxy->buildTechnology($techtacticfirst);
-
             $player->createPlayerCombatReport(\json_encode(['test' => 'test']));
 
             echo "current: $i {$user->getName()}\n";
         }
 
         foreach ($universe->getGalaxies() as $galaxy) {
-            $alliance = $universe->createAlliance($faker->company, $faker->companySuffix, $galaxy);
+            $alliance = $galaxy->createAlliance($faker->company, $faker->companySuffix);
             $alliance->setMetal(5000000);
             $alliance->setCrystal(5000000);
             $alliance->setTaxMetal(50);
             $alliance->setTaxCrystal(10);
             $alliance->buildTechnology($techfinancealliance);
         }
+
+        $user = new User($faker->userName, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
+        $manager->persist($user);
+
+        $galaxy = $universe->createPublicGalaxy();
+
+        $player = $galaxy->createPlayer($user, $human);
+        $player->increaseMetal(1000000000);
+        $player->increaseCrystal(1000000000);
+        $player->buildMetalExtractors(100000);
+        $player->buildCrystalExtractors(100000);
+
+        $player->grantCommanderRole();
+
+        $application = $alliance->createAllianceApplicationFor($galaxy);
+        $alliance->acceptAllianceApplication($application);
 
         $universe->generateAllianceAndGalaxyRanking();
 

@@ -401,6 +401,19 @@ class Galaxy
     }
 
     /**
+     * @param string $name
+     * @param string $code
+     *
+     * @return \GC\Alliance\Model\Alliance
+     */
+    public function createAlliance(string $name, string $code): Alliance
+    {
+        $this->alliance = new Alliance($name, $code, $this);
+
+        return $this->alliance;
+    }
+
+    /**
      * @return \GC\Player\Model\Player[]
      */
     public function getPlayers(): array
