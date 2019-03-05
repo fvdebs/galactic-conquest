@@ -45,13 +45,13 @@ class AllianceTechnology
     private $ticksLeft;
 
     /**
-     * @param \GC\Technology\Model\Technology $technology
      * @param \GC\Alliance\Model\Alliance $alliance
+     * @param \GC\Technology\Model\Technology $technology
      */
-    public function __construct(Technology $technology, Alliance $alliance)
+    public function __construct(Alliance $alliance, Technology $technology)
     {
-        $this->technology = $technology;
         $this->alliance = $alliance;
+        $this->technology = $technology;
         $this->ticksLeft = $technology->getTicksToBuild();;
     }
 

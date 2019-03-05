@@ -49,9 +49,16 @@ class PlayerFleet
     /**
      * @var int|null
      *
-     * @Column(name="ticks_left_until_turn_back", type="integer", nullable=true)
+     * @Column(name="ticks_left_until_mission_completed", type="integer", nullable=true)
      */
-    private $ticksLeftUntilTurnBack;
+    private $ticksLeftUntilMissionCompleted;
+
+    /**
+     * @var int|null
+     *
+     * @Column(name="ticks_left_until_mission_reach", type="integer", nullable=true)
+     */
+    private $ticksLeftUntilMissionReach;
 
     /**
      * @var \GC\Player\Model\Player
@@ -152,21 +159,39 @@ class PlayerFleet
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getTicksLeftUntilTurnBack(): ?int
+    public function getTicksLeftUntilMissionCompleted(): ?int
     {
-        return $this->ticksLeftUntilTurnBack;
+        return $this->ticksLeftUntilMissionCompleted;
     }
 
     /**
-     * @param int|null $ticksLeftUntilTurnBack
+     * @param int|null $ticksLeftUntilMissionCompleted
      *
      * @return void
      */
-    public function setTicksLeftUntilTurnBack(?int $ticksLeftUntilTurnBack): void
+    public function setTicksLeftUntilMissionCompleted(?int $ticksLeftUntilMissionCompleted): void
     {
-        $this->ticksLeftUntilTurnBack = $ticksLeftUntilTurnBack;
+        $this->ticksLeftUntilMissionCompleted = $ticksLeftUntilMissionCompleted;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getTicksLeftUntilMissionReach(): ?int
+    {
+        return $this->ticksLeftUntilMissionReach;
+    }
+
+    /**
+     * @param int|null $ticksLeftUntilMissionReach
+     *
+     * @return void
+     */
+    public function setTicksLeftUntilMissionReach(?int $ticksLeftUntilMissionReach): void
+    {
+        $this->ticksLeftUntilMissionReach = $ticksLeftUntilMissionReach;
     }
 
     /**

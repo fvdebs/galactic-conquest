@@ -6,9 +6,11 @@ namespace GC\Galaxy\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
+use GC\Faction\Model\Faction;
 use GC\Player\Model\Player;
 use GC\Technology\Model\Technology;
 use GC\Universe\Model\Universe;
+use GC\User\Model\User;
 
 /**
  * @Table(name="galaxy")
@@ -129,6 +131,7 @@ class Galaxy
         $this->galaxyTechnologies = new ArrayCollection();
 
         $this->universe = $universe;
+        $this->number = $universe->getNextFreeGalaxyNumber();
         $this->metal = 0;
         $this->crystal = 0;
         $this->taxCrystal = 0;
@@ -137,8 +140,6 @@ class Galaxy
         $this->rankingPosition = 0;
         $this->alliance = null;
         $this->averagePoints = 0;
-
-        $this->number = $universe->getNextFreeGalaxyNumber();
 
         if ($isPrivate) {
             $this->generateGalaxyPassword();
@@ -151,14 +152,6 @@ class Galaxy
     public function getGalaxyId(): int
     {
         return $this->galaxyId;
-    }
-
-    /**
-     * @return \GC\Player\Model\Player[]
-     */
-    public function getPlayers()
-    {
-        return $this->players->getValues();
     }
 
     /**
@@ -322,6 +315,14 @@ class Galaxy
     }
 
     /**
+     * @return bool
+     */
+    public function hasAlliance(): bool
+    {
+        return $this->alliance !== null;
+    }
+
+    /**
      * @param \GC\Alliance\Model\Alliance|null $alliance
      *
      * @return void
@@ -386,6 +387,28 @@ class Galaxy
     }
 
     /**
+     * @param \GC\User\Model\User $user
+     * @param \GC\Faction\Model\Faction $faction
+     *
+     * @return \GC\Player\Model\Player
+     */
+    public function createPlayer(User $user, Faction $faction): Player
+    {
+        $player = new Player($user, $faction, $this);
+        $this->players->add($player);
+
+        return $player;
+    }
+
+    /**
+     * @return \GC\Player\Model\Player[]
+     */
+    public function getPlayers(): array
+    {
+        return $this->players->getValues();
+    }
+
+    /**
      * @return int
      */
     public function getNextFreeGalaxyPosition(): int
@@ -405,20 +428,28 @@ class Galaxy
     /**
      * @return void
      */
-    public function calculateExtractorPoints(): void
+    public function increaseExtractorPointsPerTick(): void
+    {
+        $this->extractorPoints += $this->calculateExtractorPointsPerTick();
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateExtractorPointsPerTick(): int
     {
         $newExtractorPoints = 0;
         foreach ($this->getPlayers() as $player) {
             $newExtractorPoints += $player->getNumberOfExtractors();
         }
 
-        $this->extractorPoints = $this->extractorPoints + $newExtractorPoints;
+        return $newExtractorPoints;
     }
 
     /**
      * @return void
      */
-    public function calculateAveragePoints(): void
+    public function calculateAveragePlayerPoints(): void
     {
         $playerPoints = 0;
         foreach ($this->getPlayers() as $player) {
@@ -431,7 +462,7 @@ class Galaxy
             $calculation = $playerPoints / $playerCount;
         }
 
-        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);;
+        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
     }
 
     /**
@@ -521,6 +552,70 @@ class Galaxy
         $calculation = ($player->calculateCrystalIncomePerTick() / 100) * $this->taxCrystal;
 
         return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateMetalIncomePerTick(): int
+    {
+        $income = 0;
+        foreach ($this->getPlayers() as $player) {
+            $income += $this->calculateMetalTaxFor($player);
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateCrystalIncomePerTick(): int
+    {
+        $income = 0;
+        foreach ($this->getPlayers() as $player) {
+            $income += $this->calculateCrystalTaxFor($player);
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateMetalTaxPerTick(): int
+    {
+        if ($this->hasAlliance()) {
+            return $this->alliance->calculateMetalTaxFor($this);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateCrystalTaxPerTick(): int
+    {
+        if ($this->hasAlliance()) {
+            return $this->alliance->calculateCrystalTaxFor($this);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return void
+     */
+    public function increaseResourceIncomePerTick(): void
+    {
+        $this->increaseMetal(
+            $this->calculateMetalIncomePerTick() - $this->calculateMetalTaxPerTick()
+        );
+
+        $this->increaseCrystal(
+            $this->calculateCrystalIncomePerTick() - $this->calculateCrystalTaxPerTick()
+        );
     }
 
     /**

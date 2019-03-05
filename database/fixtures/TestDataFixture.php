@@ -311,7 +311,7 @@ class TestDataFixture extends AbstractFixture
         $unitcleptor->setExtractorStealAmount(1);
         $unitcleptor->setCrystalCost(1000);
         $unitcleptor->setMetalCost(1500);
-        $unitcleptor->setTicksToBuild(32);
+        $unitcleptor->setTicksToBuild(2);
 
         $unitcancri = $universe->createUnit('Cancri', $human);
         $unitcancri->setRequiredTechnology($techcancri);
@@ -365,30 +365,30 @@ class TestDataFixture extends AbstractFixture
 
         // create user and galaxy
         $faker = Factory::create();
-        for ($i=0; $i < 10; $i++) {
+        for ($i=0; $i < 1; $i++) {
             $user = new User($faker->userName, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
             $manager->persist($user);
 
             $galaxy = $universe->createPrivateGalaxy();
 
-            $player = $universe->createPlayer($user, $human, $galaxy);
+            $player = $galaxy->createPlayer($user, $human);
             $player->grantCommanderRole();
             $player->buildCrystalExtractors(5);
         }
 
         // create user and public galaxy if no galaxy space is available
         $faker = Factory::create();
-        for ($i=0; $i < 10; $i++) {
-            $user = new User($faker->name, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
+        for ($i=0; $i < 5; $i++) {
+            $user = new User($faker->userName, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
             $manager->persist($user);
 
             $galaxy = $universe->getRandomPublicGalaxyWithFreeSpace();
             if ($galaxy === null) {
                 $galaxy = $universe->createPublicGalaxy();
-                $player = $universe->createPlayer($user, $human, $galaxy);
+                $player = $galaxy->createPlayer($user, $human);
                 $player->grantCommanderRole();
             } else {
-                $player = $universe->createPlayer($user, $human, $galaxy);
+                $player = $galaxy->createPlayer($user, $human);
             }
 
             $player->increaseMetal(100000000);
@@ -405,12 +405,24 @@ class TestDataFixture extends AbstractFixture
 
             $galaxy->setMetal(5000000);
             $galaxy->setCrystal(5000000);
-            $galaxy->setTaxMetal(50);
+            $galaxy->setTaxMetal(10);
             $galaxy->setTaxCrystal(50);
             $galaxy->buildTechnology($techtacticfirst);
+
+            $player->createPlayerCombatReport(\json_encode(['test' => 'test']));
+
+            echo "current: $i {$user->getName()}\n";
         }
 
-        $universe->tick();
+        foreach ($universe->getGalaxies() as $galaxy) {
+            $alliance = $universe->createAlliance($faker->company, $faker->companySuffix, $galaxy);
+            $alliance->setMetal(5000000);
+            $alliance->setCrystal(5000000);
+            $alliance->setTaxMetal(50);
+            $alliance->setTaxCrystal(10);
+            $alliance->buildTechnology($techfinancealliance);
+        }
+
         $universe->generateAllianceAndGalaxyRanking();
 
         $manager->flush();

@@ -635,12 +635,33 @@ class Player
     }
 
     /**
+     * @return int
+     */
+    public function calculateMetalTaxPerTick(): int
+    {
+        return $this->galaxy->calculateMetalTaxFor($this);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateCrystalTaxPerTick(): int
+    {
+        return $this->galaxy->calculateCrystalTaxFor($this);
+    }
+
+    /**
      * @return void
      */
-    public function increaseResourceIncome(): void
+    public function increaseResourceIncomePerTick(): void
     {
-        $this->increaseMetal($this->calculateMetalIncomePerTick());
-        $this->increaseCrystal($this->calculateCrystalIncomePerTick());
+        $this->increaseMetal(
+            $this->calculateMetalIncomePerTick() - $this->calculateMetalTaxPerTick()
+        );
+
+        $this->increaseCrystal(
+            $this->calculateCrystalIncomePerTick() - $this->calculateCrystalTaxPerTick()
+        );
     }
 
     /**

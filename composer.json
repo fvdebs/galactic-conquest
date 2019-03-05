@@ -6,6 +6,7 @@
   "description": "Galactic Conquest",
   "require": {
     "php": ">=7.2",
+    "ext-json": "*",
     "fzaninotto/faker": "^1.8",
     "inferno/framework": "dev-master",
     "psr/simple-cache": "^1.0"

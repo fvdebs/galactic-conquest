@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace GC\Alliance\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use GC\Galaxy\Model\Galaxy;
+use GC\Player\Model\Player;
+use GC\Technology\Model\Technology;
 use GC\Universe\Model\Universe;
 
 /**
@@ -131,9 +134,9 @@ class Alliance
     /**
      * @param string $name
      * @param string $code
-     * @param \GC\Universe\Model\Universe $universe
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
      */
-    public function __construct(string $name, string $code, Universe $universe)
+    public function __construct(string $name, string $code, Galaxy $galaxy)
     {
         $this->galaxies = new ArrayCollection();
         $this->allianceTechnologies = new ArrayCollection();
@@ -141,7 +144,7 @@ class Alliance
 
         $this->name = $name;
         $this->code = $code;
-        $this->universe = $universe;
+        $this->universe = $galaxy->getUniverse();
         $this->description = '';
         $this->metal = 0;
         $this->crystal = 0;
@@ -151,6 +154,11 @@ class Alliance
         $this->extractorPoints = 0;
         $this->rankingPosition = 0;
         $this->averagePoints = 0;
+
+        $this->galaxies->add($galaxy);
+        if ($galaxy->getCommander() !== null) {
+            $galaxy->getCommander()->grantAdmiralRole();
+        }
     }
 
     /**
@@ -166,7 +174,7 @@ class Alliance
      */
     public function getGalaxies()
     {
-        return $this->galaxies;
+        return $this->galaxies->getValues();
     }
 
     /**
@@ -386,34 +394,322 @@ class Alliance
     }
 
     /**
-     * @return void
+     * @return \GC\Player\Model\Player[]
      */
-    public function calculateExtractorPoints(): void
+    public function getPlayers(): array
     {
-        $newExtractorPoints = 0;
-        foreach ($this->getGalaxies() as $galaxy) {
-            $newExtractorPoints += $galaxy->getExtractorPoints();
+        $players = [];
+        foreach($this->getGalaxies() as $galaxy) {
+            $players = array_merge($players, $galaxy->getPlayers());
         }
 
-        $this->extractorPoints = $this->extractorPoints + $newExtractorPoints;
+        return $players;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateExtractorPointsPerTick(): int
+    {
+        $extractorPoints = 0;
+        foreach ($this->getGalaxies() as $galaxy) {
+            $extractorPoints += $galaxy->getExtractorPoints();
+        }
+
+        return $extractorPoints;
     }
 
     /**
      * @return void
      */
-    public function calculateAveragePoints(): void
+    public function increaseExtractorPointsPerTick(): void
+    {
+        $this->extractorPoints += $this->calculateExtractorPointsPerTick();
+    }
+
+    /**
+     * @return void
+     */
+    public function calculateAverageGalaxyPoints(): void
     {
         $averagePoints = 0;
         foreach ($this->getGalaxies() as $galaxy) {
             $averagePoints += $galaxy->getAveragePoints();
         }
 
-        $galaxyCount = \count($this->getGalaxies());
-        $calculation = 0;
-        if ($galaxyCount > 0) {
-            $calculation = $averagePoints / $galaxyCount;
+        $calculation = $averagePoints / \count($this->getGalaxies());
+
+        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @return \GC\Player\Model\Player|null
+     */
+    public function getAdmiral(): ?Player
+    {
+        foreach ($this->getPlayers() as $player) {
+            if ($player->isAdmiral()) {
+                return $player;
+            }
         }
 
-        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);;
+        return null;
+    }
+
+    /**
+     * @param int $metal
+     * @param int $crystal
+     *
+     * @return bool
+     */
+    public function hasResources(int $metal, int $crystal): bool
+    {
+        return $this->metal >= $metal && $this->crystal >= $crystal;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function increaseMetal(int $number): void
+    {
+        $this->metal = $this->metal + $number;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseMetal(int $number): void
+    {
+        $this->metal = $this->metal - $number;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function increaseCrystal(int $number): void
+    {
+        $this->crystal = $this->crystal + $number;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseCrystal(int $number): void
+    {
+        $this->crystal = $this->crystal - $number;
+    }
+
+    /**
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return int
+     */
+    public function calculateMetalTaxFor(Galaxy $galaxy): int
+    {
+        $calculation = ($galaxy->calculateMetalIncomePerTick() / 100) * $this->taxMetal;
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return int
+     */
+    public function calculateCrystalTaxFor(Galaxy $galaxy): int
+    {
+        $calculation = ($galaxy->calculateCrystalIncomePerTick() / 100) * $this->taxCrystal;
+
+        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateMetalIncomePerTick(): int
+    {
+        $income = 0;
+        foreach ($this->getGalaxies() as $galaxy) {
+            $income += $this->calculateMetalTaxFor($galaxy);
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateCrystalIncomePerTick(): int
+    {
+        $income = 0;
+        foreach ($this->getGalaxies() as $galaxy) {
+            $income += $this->calculateCrystalTaxFor($galaxy);
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return void
+     */
+    public function increaseResourceIncomePerTick(): void
+    {
+        $this->increaseMetal($this->calculateMetalIncomePerTick());
+        $this->increaseCrystal($this->calculateCrystalIncomePerTick());
+    }
+
+    /**
+     * @return \GC\Alliance\Model\AllianceTechnology[]
+     */
+    public function getAllianceTechnologies(): array
+    {
+        return $this->allianceTechnologies->getValues();
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return \GC\Alliance\Model\AllianceTechnology
+     */
+    public function buildTechnology(Technology $technology): AllianceTechnology
+    {
+        $allianceTechnology = new AllianceTechnology($this, $technology);
+        $this->allianceTechnologies->add($allianceTechnology);
+
+        $this->decreaseMetal($technology->getMetalCost());
+        $this->decreaseCrystal($technology->getCrystalCost());
+
+        return $allianceTechnology;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function hasTechnology(Technology $technology): bool
+    {
+        foreach ($this->getAllianceTechnologies() as $allianceTechnology) {
+            if ($allianceTechnology->isCompleted()
+                && $allianceTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $featureKey
+     *
+     * @return bool
+     */
+    public function hasTechnologyByFeatureKey(string $featureKey): bool
+    {
+        foreach ($this->getAllianceTechnologies() as $allianceTechnology) {
+            if ($allianceTechnology->isCompleted()
+                && $allianceTechnology->getTechnology()->getFeatureKey() === $featureKey) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function hasResourcesForTechnology(Technology $technology): bool
+    {
+        return $this->hasResources(
+            $technology->getMetalCost(),
+            $technology->getCrystalCost()
+        );
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function hasTechnologyRequirementsFor(Technology $technology): bool
+    {
+        foreach ($technology->getTechnologyConditions() as $technologyCondition) {
+            if (!$this->hasTechnology($technologyCondition->getTargetTechnology())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function isTechnologyInConstruction(Technology $technology): bool
+    {
+        foreach ($this->getAllianceTechnologies() as $allianceTechnology) {
+            if ($allianceTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return void
+     */
+    public function finishTechnologyConstructions(): void
+    {
+        foreach ($this->getAllianceTechnologies() as $allianceTechnology) {
+            if ($allianceTechnology->getTicksLeft() > 0) {
+                $allianceTechnology->decreaseTicksLeft();
+            }
+        }
+    }
+
+    /**
+     * @return \GC\Galaxy\Model\GalaxyTechnology[]
+     */
+    public function getAllianceTechnologiesCompleted(): array
+    {
+        $allianceTechnologies = [];
+        foreach ($this->getAllianceTechnologies() as $allianceTechnology) {
+            if ($allianceTechnology->isCompleted()) {
+                $allianceTechnologies[] = $allianceTechnology;
+            }
+        }
+
+        return $allianceTechnologies;
+    }
+
+    /**
+     * @return \GC\Galaxy\Model\GalaxyTechnology[]
+     */
+    public function getAllianceTechnologiesInConstruction(): array
+    {
+        $allianceTechnologies = [];
+        foreach ($this->getAllianceTechnologies() as $allianceTechnologies) {
+            if ($allianceTechnologies->isInConstruction()) {
+                $allianceTechnologies[] = $allianceTechnologies;
+            }
+        }
+
+        return $allianceTechnologies;
     }
 }

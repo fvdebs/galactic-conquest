@@ -13,7 +13,6 @@ use GC\Galaxy\Model\Galaxy;
 use GC\Player\Model\Player;
 use GC\Technology\Model\Technology;
 use GC\Unit\Model\Unit;
-use GC\User\Model\User;
 
 /**
  * @Table(name="universe")
@@ -127,6 +126,13 @@ class Universe
      * @Column(name="max_public_galaxy_players", type="integer", nullable=false)
      */
     private $maxPublicGalaxyPlayers;
+
+    /**
+     * @var int
+     *
+     * @Column(name="max_alliance_galaxies", type="integer", nullable=false)
+     */
+    private $maxAllianceGalaxies;
 
     /**
      * @var int
@@ -268,6 +274,7 @@ class Universe
         $this->ticksDefenseAlliance = 14;
         $this->maxPrivateGalaxyPlayers = 8;
         $this->maxPublicGalaxyPlayers = 12;
+        $this->maxAllianceGalaxies = 3;
         $this->scanBlockerMetalCost = 5000;
         $this->scanBlockerCrystalCost = 2000;
         $this->scanRelayMetalCost = 2000;
@@ -288,6 +295,22 @@ class Universe
     public function getUniverseId(): int
     {
         return $this->universeId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxAllianceGalaxies(): int
+    {
+        return $this->maxAllianceGalaxies;
+    }
+
+    /**
+     * @param int $maxAllianceGalaxies
+     */
+    public function setMaxAllianceGalaxies(int $maxAllianceGalaxies): void
+    {
+        $this->maxAllianceGalaxies = $maxAllianceGalaxies;
     }
 
     /**
@@ -767,32 +790,22 @@ class Universe
     /**
      * @return \GC\Galaxy\Model\Galaxy[]
      */
-    protected function getGalaxies(): array
+    public function getGalaxies(): array
     {
         return $this->galaxies->getValues();
     }
 
     /**
-     * @param \GC\User\Model\User $user
-     * @param \GC\Faction\Model\Faction $faction
-     * @param \GC\Galaxy\Model\Galaxy $galaxy
-     *
-     * @return \GC\Player\Model\Player
-     */
-    public function createPlayer(User $user, Faction $faction, Galaxy $galaxy): Player
-    {
-        $player = new Player($user, $faction, $galaxy);
-        $this->players->add($player);
-
-        return $player;
-    }
-
-    /**
      * @return \GC\Player\Model\Player[]
      */
-    protected function getPlayers(): array
+    public function getPlayers(): array
     {
-        return $this->players->getValues();
+        $players = [];
+        foreach ($this->getGalaxies() as $galaxy) {
+            $players = \array_merge($players, $galaxy->getPlayers());
+        }
+
+        return $players;
     }
 
     /**
@@ -804,13 +817,8 @@ class Universe
      */
     public function createAlliance(string $name, string $code, Galaxy $galaxy): Alliance
     {
-        $alliance = new Alliance($name, $code, $this);
+        $alliance = new Alliance($name, $code, $galaxy);
         $this->alliances->add($alliance);
-
-        $commander = $galaxy->getCommander();
-        if ($commander !== null) {
-            $commander->grantAdmiralRole();
-        }
 
         return $alliance;
     }
@@ -889,19 +897,22 @@ class Universe
         foreach ($this->getPlayers() as $player) {
             $player->finishTechnologyConstructions();
             $player->finishUnitConstructions();
-            $player->increaseResourceIncome();
+            $player->increaseResourceIncomePerTick();
             $player->calculatePoints();
         }
 
         foreach ($this->getGalaxies() as $galaxy) {
             $galaxy->finishTechnologyConstructions();
-            $galaxy->calculateExtractorPoints();
-            $galaxy->calculateAveragePoints();
+            $galaxy->increaseExtractorPointsPerTick();
+            $galaxy->increaseResourceIncomePerTick();
+            $galaxy->calculateAveragePlayerPoints();
         }
 
         foreach ($this->getAlliances() as $alliance) {
-            $alliance->calculateExtractorPoints();
-            $alliance->calculateAveragePoints();
+            $alliance->finishTechnologyConstructions();
+            $alliance->increaseExtractorPointsPerTick();
+            $alliance->increaseResourceIncomePerTick();
+            // $alliance->calculateAverageGalaxyPoints(); bug with persistence
         }
 
         $this->generatePlayerRanking();
@@ -912,8 +923,8 @@ class Universe
      */
     public function generatePlayerRanking(): void
     {
-        $rankedPlayers = $this->getPlayers();
-        usort($rankedPlayers, function(Player $playerFirst, Player $playerSecond) {
+        $players = $this->getPlayers();
+        usort($players, function(Player $playerFirst, Player $playerSecond) {
             if ($playerFirst->getPoints() == $playerSecond->getPoints()) {
                 return 0;
             }
@@ -925,8 +936,8 @@ class Universe
             return -1;
         });
 
-        foreach ($rankedPlayers as $index => $rankedPlayer) {
-            $rankedPlayer->setRankingPosition(($index + 1));
+        foreach ($players as $index => $player) {
+            $player->setRankingPosition(($index + 1));
         }
     }
 
