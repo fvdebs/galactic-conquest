@@ -7,6 +7,7 @@ namespace GC\Player\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Faction\Model\Faction;
 use GC\Galaxy\Model\Galaxy;
+use GC\Scan\Model\Scan;
 use GC\Technology\Model\Technology;
 use GC\Unit\Model\Unit;
 use GC\Universe\Model\Universe;
@@ -172,6 +173,13 @@ class Player
     private $playerCombatReports;
 
     /**
+     * @var \GC\Scan\Model\Scan[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Scan\Model\Scan", mappedBy="player", cascade={"all"}, orphanRemoval=true)
+     */
+    private $scans;
+
+    /**
      * @param \GC\User\Model\User $user
      * @param \GC\Faction\Model\Faction $faction
      * @param \GC\Galaxy\Model\Galaxy $galaxy
@@ -182,6 +190,7 @@ class Player
         $this->playerTechnologies = new ArrayCollection();
         $this->playerUnitConstructions = new ArrayCollection();
         $this->playerCombatReports = new ArrayCollection();
+        $this->scans = new ArrayCollection();
 
         $this->user = $user;
         $this->faction = $faction;
@@ -989,5 +998,28 @@ class Player
     public function getPlayerCombatReports(): array
     {
         return $this->playerCombatReports->getValues();
+    }
+
+    /**
+     * @param string $dataJson
+     *
+     * @throws \Exception
+     *
+     * @return \GC\Scan\Model\Scan
+     */
+    public function createScan(string $dataJson): Scan
+    {
+        $scan = new Scan($dataJson, $this);
+        $this->scans->add($scan);
+
+        return $scan;
+    }
+
+    /**
+     * @return \GC\Scan\Model\Scan[]
+     */
+    public function getScans(): array
+    {
+        return $this->scans->getValues();
     }
 }

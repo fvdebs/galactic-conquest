@@ -58,7 +58,7 @@ final class TickCommand extends Command
         $this->entityManager->getConnection()->beginTransaction();
 
         try {
-            foreach ($this->universeRepository->findAllActive() as $universe) {
+            foreach ($this->universeRepository->findStartedAndActiveUniverses() as $universe) {
                 if ($universe->isTickCalculationNeeded()
                     || $input->getOption('force-tick') === true) {
 

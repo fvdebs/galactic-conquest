@@ -11,7 +11,7 @@ use GC\Player\Model\Player;
  * @Table(name="scan")
  * @Entity(repositoryClass="GC\Scan\Model\ScanRepository")
  */
-final class Scan
+class Scan
 {
     /**
      * @var int
@@ -37,10 +37,10 @@ final class Scan
     private $createdAt;
 
     /**
-     * @var \GC\Player\Model\Player|null
+     * @var \GC\Player\Model\Player
      *
-     * @ManyToOne(targetEntity="\GC\Player\Model\Player")
-     * @JoinColumn(name="player_id", referencedColumnName="player_id", nullable=true)
+     * @ManyToOne(targetEntity="\GC\Player\Model\Player", inversedBy="scans")
+     * @JoinColumn(name="player_id", referencedColumnName="player_id", nullable=false)
      */
     private $player;
 

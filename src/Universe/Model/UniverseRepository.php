@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Universe\Model;
 
-use Doctrine\DBAL\Types\Type;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 
 final class UniverseRepository extends EntityRepository
@@ -52,6 +52,20 @@ final class UniverseRepository extends EntityRepository
     {
         return $this->createQueryBuilder('universe')
             ->where('universe.isActive = 1')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return \GC\Universe\Model\Universe[]
+     */
+    public function findStartedAndActiveUniverses(): array
+    {
+        return $this->createQueryBuilder('universe')
+            ->where('universe.tickStartingAt IS NOT NULL')
+            ->andWhere('universe.tickStartingAt < :currentDate')
+            ->andWhere('universe.isActive = 1')
+            ->setParameter(':currentDate', new DateTime())
             ->getQuery()
             ->getResult();
     }

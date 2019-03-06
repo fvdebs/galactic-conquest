@@ -23,4 +23,38 @@ final class GalaxyRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 	}
+
+    /**
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return \GC\Galaxy\Model\Galaxy|null
+     */
+    public function findPreviousGalaxy(Galaxy $galaxy): ?Galaxy
+    {
+        return $this->createQueryBuilder('galaxy')
+            ->where('galaxy.universeId = :universeId')
+            ->andWhere('galaxy.number < :number')
+            ->setParameter(':universeId', $galaxy->getUniverse()->getUniverseId())
+            ->setParameter(':number', $galaxy->getNumber())
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return \GC\Galaxy\Model\Galaxy|null
+     */
+    public function findNextGalaxy(Galaxy $galaxy): ?Galaxy
+    {
+        return $this->createQueryBuilder('galaxy')
+            ->where('galaxy.universeId = :universeId')
+            ->andWhere('galaxy.number > :number')
+            ->setParameter(':universeId', $galaxy->getUniverse()->getUniverseId())
+            ->setParameter(':number', $galaxy->getNumber())
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
