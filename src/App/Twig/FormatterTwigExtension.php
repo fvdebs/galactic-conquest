@@ -33,6 +33,7 @@ final class FormatterTwigExtension extends AbstractExtension
             new \Twig_Filter('time', [$this, 'formatTime']),
             new \Twig_Filter('datetime', [$this, 'formatDateTime']),
             new \Twig_Filter('humandatetime', [$this, 'formatHumanDateTime']),
+            new \Twig_Filter('humanbool', [$this, 'formatHumanBool']),
             new \Twig_Filter('float', [$this, 'formatFloat']),
         ];
     }
@@ -101,23 +102,27 @@ final class FormatterTwigExtension extends AbstractExtension
     }
 
     /**
-     * @param DateTimeInterface|null $dateTime
+     * @param mixed|null $boolean
      *
      * @return string
      */
-    public function formatHumanDateTime(?DateTimeInterface $dateTime): string
+    public function formatHumanBool($boolean): string
     {
-        // method is for later purposes.
-        return $this->formatDateTime($dateTime);
+        $boolean = (bool) $boolean;
+        if ($boolean) {
+            return $this->translator->trans('app.yes');
+        }
+
+        return $this->translator->trans('app.no');
     }
 
     /**
-     * @param mixed $float
+     * @param mixed|null $float
      *
      * @return string
      */
     public function formatFloat($float): string
     {
-        return '';
+        return (string) $float;
     }
 }

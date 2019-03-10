@@ -3,8 +3,32 @@
 {% block content %}
     <section class="section">
         <div class="container">
-            <h1 class="title">{{ 'universe.my.universes' | trans }}</h1>
-Hello
+            <h1 class="title is-1">{{ universe.getName }}</h1>
+            <h2 class="subtitle">
+                {% if universe.isClosed %}
+                    <span class="tag is-light">{{ 'universe.status.closed' | trans }}</span>
+                {% endif %}
+
+                {% if universe.isActive %}
+                    <span class="tag is-light">{{ 'universe.status.active' | trans }}</span>
+                {% endif %}
+
+                {% if universe.isRegistrationAllowed %}
+                    <span class="tag is-light">{{ 'universe.status.joinable' | trans }}</span>
+                {% endif %}
+            </h2>
+            <p>
+                {{ universe.getDescription }}
+            </p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h3 class="title is-4">
+                {{ 'universe.settings' | trans }}
+            </h3>
+            {% include '@Universe/partial/universe-table-settings.twig' %}
         </div>
     </section>
 {% endblock %}

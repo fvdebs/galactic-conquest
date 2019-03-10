@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GC\User\Handler;
 
+use GC\Home\Handler\HomeHandler;
 use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,6 +23,8 @@ final class UserLogoutHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@User/userLogout.twig');
+        $this->getAttributeBag()->clear();
+
+        return $this->redirect(HomeHandler::NAME);
     }
 }

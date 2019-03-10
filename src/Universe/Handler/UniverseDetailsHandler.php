@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Universe\Handler;
 
-use GC\App\Aware\RepositoryAwareTrait;
+use GC\App\Aware\GameAwareTrait;
 use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class UniverseDetailsHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
-    use RepositoryAwareTrait;
+    use GameAwareTrait;
 
     public const NAME = 'universe.details';
 
@@ -24,6 +24,8 @@ final class UniverseDetailsHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Universe/universe-details.twig');
+        return $this->render('@Universe/universe-details.twig', [
+            'universe' => $this->getCurrentUniverse($request),
+        ]);
     }
 }
