@@ -9,7 +9,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'env' => 'dev',
-    'isDev' => false,
+    'isDev' => true,
     'isCli' => \php_sapi_name() === 'cli',
 
     /*
@@ -48,6 +48,7 @@ return [
         \Inferno\Translation\TranslationServiceProvider::class,
         \Inferno\Renderer\RendererServiceProvider::class,
         \Inferno\Predis\PredisServiceProvider::class,
+        \Inferno\Validation\ValidationServiceProvider::class,
     ],
 
     /*
@@ -57,6 +58,8 @@ return [
     */
     'middleware-runner' => \Inferno\HttpRequestHandler\Runner\Runner::class,
     'middlewares' => [
+        \Inferno\Monolog\Middleware\ExceptionLoggerMiddleware::class,
+        \TheCodingMachine\Middlewares\CsrfHeaderCheckMiddlewareFactory::createDefault(),
         \Inferno\Whoops\Middleware\WhoopsMiddleware::class,
         \Inferno\Language\Middleware\LanguageDetectorMiddleware::class,
         \Inferno\Session\Middleware\StartSessionMiddleware::class,
@@ -123,6 +126,7 @@ return [
     'translation-file-globs' => [
         '%baseDir%/data/translations/*.ini',
         '%baseDir%/src/*/Translations/*.ini',
+        '%baseDir%/vendor/inferno/*/src/Translations/*.ini',
     ],
 
     /*

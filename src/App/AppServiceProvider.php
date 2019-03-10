@@ -39,7 +39,6 @@ final class AppServiceProvider implements ServiceProviderInterface
         $this->provideSetTwigGlobalsMiddleware($pimple);
         $this->provideAuthorizationMiddleware($pimple);
         $this->provideAuthorizationUniverseMiddleware($pimple);
-
         $this->provideErrorResponseFactory($pimple);
 
         if ($pimple->offsetGet('config.isCli')) {
@@ -149,6 +148,7 @@ final class AppServiceProvider implements ServiceProviderInterface
             return new ErrorResponseFactory(
                 $catchErrors,
                 $container->offsetGet('response-factory'),
+                $container->offsetGet('uri-factory'),
                 $container->offsetGet('renderer')
             );
         });

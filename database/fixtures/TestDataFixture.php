@@ -423,7 +423,7 @@ class TestDataFixture extends AbstractFixture
             $alliance->buildTechnology($techfinancealliance);
         }
 
-        $user = new User($faker->userName, $faker->email, \password_hash('secret', PASSWORD_DEFAULT));
+        $user = new User($faker->userName, 'example@example.org', \password_hash('secret', PASSWORD_DEFAULT));
         $manager->persist($user);
 
         $galaxy = $universe->createPublicGalaxy();

@@ -1,0 +1,1 @@
+$(document).ready(function(){$.each($("body").find("#particles-js"),function(t,s){$.getScript("http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js",function(){particlesJS.load("particles-js","/assets/particles.json")})})});

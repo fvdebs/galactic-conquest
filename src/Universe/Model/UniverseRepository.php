@@ -62,8 +62,8 @@ final class UniverseRepository extends EntityRepository
     public function findStartedAndActiveUniverses(): array
     {
         return $this->createQueryBuilder('universe')
-            ->where('universe.tickStartingAt IS NOT NULL')
-            ->andWhere('universe.tickStartingAt < :currentDate')
+            ->where('universe.ticksStartingAt IS NOT NULL')
+            ->andWhere('universe.ticksStartingAt < :currentDate')
             ->andWhere('universe.isActive = 1')
             ->setParameter(':currentDate', new DateTime())
             ->getQuery()

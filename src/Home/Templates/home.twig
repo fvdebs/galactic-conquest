@@ -1,7 +1,41 @@
 {% extends "@App/layout/page-layout.twig" %}
 
 {% block content %}
-    <div class="container text-center">
-        <h1 class="pt-5">{{ 'home.welcome' | trans }}</h1>
-    </div>
+    <div id="particles-js"></div>
+    <section class="hero is-fullheight">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
+                    <article class="card is-rounded">
+                        <div class="card-content is-rounded">
+                            <h1 class="title has-text-centered">{{ 'home.login' | trans }}</h1>
+                            <form action="{{ url('user.login') }}" method="post">
+                                <div class="field">
+                                    <p class="control has-icons-left">
+                                        <input type="email" name="mail" class="input is-medium" placeholder="{{ 'home.mail' | trans }}">
+                                        <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control has-icons-left">
+                                        <input type="password" name="password" class="input is-medium" placeholder="{{ 'home.password' | trans }}">
+                                        <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control">
+                                        <button type="submit" class="button is-primary is-fullwidth">{{ 'home.login' | trans }}</button>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script src="/assets/particles.js"></script>
 {% endblock %}

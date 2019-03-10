@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Universe\Command;
 
 use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
 use Throwable;
 use GC\Universe\Model\UniverseRepository;
 use Symfony\Component\Console\Command\Command;
@@ -24,14 +25,24 @@ final class TickCommand extends Command
     private $entityManager;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \GC\Universe\Model\UniverseRepository $universeRepository
      * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(UniverseRepository $universeRepository, EntityManager $entityManager)
-    {
+    public function __construct(
+        UniverseRepository $universeRepository,
+        EntityManager $entityManager,
+        LoggerInterface $logger
+    ) {
         parent::__construct('app:tick:run');
         $this->universeRepository = $universeRepository;
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -75,9 +86,10 @@ final class TickCommand extends Command
             $this->entityManager->flush();
             $this->entityManager->commit();
 
-        } catch (Throwable $exception) {
+        } catch (Throwable $throwable) {
             $this->entityManager->rollback();
-            throw $exception;
+            $this->logger->error($throwable);
+            throw $throwable;
         }
 
         return 0;
