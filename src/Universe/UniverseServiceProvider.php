@@ -12,6 +12,7 @@ use GC\Universe\Model\UniverseRepository;
 use Inferno\Routing\Route\RouteCollection;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
 
 final class UniverseServiceProvider implements ServiceProviderInterface
@@ -67,7 +68,8 @@ final class UniverseServiceProvider implements ServiceProviderInterface
         $container->extend(Application::class, function(Application $application, Container $container) {
             $application->add(new TickCommand(
                 $container->offsetGet(UniverseRepository::class),
-                $container->offsetGet(EntityManager::class)
+                $container->offsetGet(EntityManager::class),
+                $container->offsetGet(LoggerInterface::class)
             ));
 
             return $application;
