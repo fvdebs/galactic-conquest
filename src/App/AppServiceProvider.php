@@ -13,6 +13,7 @@ use GC\App\Middleware\SetCurrentUniverseMiddleware;
 use GC\App\Middleware\SetCurrentUserMiddleware;
 use GC\App\Middleware\SetTwigGlobalsMiddleware;
 use GC\App\Middleware\AuthorizationUniverseMiddleware;
+use GC\App\Twig\FormatterTwigExtension;
 use GC\Player\Model\PlayerRepository;
 use GC\Universe\Model\UniverseRepository;
 use GC\User\Model\UserRepository;
@@ -24,6 +25,8 @@ use Inferno\Session\Manager\SessionManagerInterface;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Translation\Translator;
+use Twig_Environment;
 
 final class AppServiceProvider implements ServiceProviderInterface
 {
@@ -41,6 +44,7 @@ final class AppServiceProvider implements ServiceProviderInterface
         $this->provideAuthorizationMiddleware($pimple);
         $this->provideAuthorizationUniverseMiddleware($pimple);
         $this->provideErrorResponseFactory($pimple);
+        $this->provideFormatterTwigExtension($pimple);
 
         if ($pimple->offsetGet('config.isCli')) {
             $this->provideClearCacheCommand($pimple);
@@ -153,6 +157,24 @@ final class AppServiceProvider implements ServiceProviderInterface
                 $container->offsetGet('uri-factory'),
                 $container->offsetGet('renderer')
             );
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    protected function provideFormatterTwigExtension(Container $container): void
+    {
+        $container->extend(Twig_Environment::class, function (Twig_Environment $twig, Container $container) {
+            $twig->addExtension(
+                new FormatterTwigExtension(
+                    $container->offsetGet(Translator::class)
+                )
+            );
+
+            return $twig;
         });
     }
 

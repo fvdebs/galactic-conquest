@@ -294,7 +294,7 @@ class Universe
     public function toArray(): array
     {
         return [
-            'universe.name' => \ucfirst($this->name),
+            'universe.name' => $this->name,
             'universe.description' => $this->description,
             'universe.ticks.starting.at' => $this->ticksStartingAt,
             'universe.tick.interval' => $this->tickInterval,
@@ -775,7 +775,7 @@ class Universe
     /**
      * @return \GC\Faction\Model\Faction[]
      */
-    protected function getFactions(): array
+    public function getFactions(): array
     {
         return $this->factions->getValues();
     }

@@ -10,12 +10,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class UniverseSelectHandler implements RequestHandlerInterface
+final class UniverseDetailsHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
     use RepositoryAwareTrait;
 
-    public const NAME = 'universe.select';
+    public const NAME = 'universe.details';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -24,8 +24,6 @@ final class UniverseSelectHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Universe/universes.twig', [
-            'universes' => $this->getUniverseRepository()->findAll(),
-        ]);
+        return $this->render('@Universe/universe-detail.twig');
     }
 }

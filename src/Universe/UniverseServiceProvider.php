@@ -6,6 +6,7 @@ namespace GC\Universe;
 
 use Doctrine\ORM\EntityManager;
 use GC\Universe\Command\TickCommand;
+use GC\Universe\Handler\UniverseDetailsHandler;
 use GC\Universe\Handler\UniverseSelectHandler;
 use GC\Universe\Model\Universe;
 use GC\Universe\Model\UniverseRepository;
@@ -41,6 +42,7 @@ final class UniverseServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container) {
             $collection->get('/{locale}/universes', UniverseSelectHandler::class);
+            $collection->get('/{locale}/{universe}/details', UniverseDetailsHandler::class);
 
             return $collection;
         });

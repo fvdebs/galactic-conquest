@@ -1,0 +1,20 @@
+<div class="card">
+    <header class="card-header">
+        <p class="card-header-title">
+            {{ universe.getName() }}
+        </p>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            {{ universe.getDescription() }}
+        </div>
+    </div>
+    <footer class="card-footer">
+        <a href="{{ url('universe.details', [universe.getRouteName()]) }}" class="card-footer-item">
+            {{ 'universe.details' |trans }}
+        </a>
+        <a href="{{ url('player.overview', [universe.getRouteName()]) }}" class="card-footer-item">
+            {{ 'universe.join' |trans }}
+        </a>
+    </footer>
+</div>

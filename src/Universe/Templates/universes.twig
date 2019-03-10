@@ -3,18 +3,11 @@
 {% block content %}
     <section class="section">
         <div class="container">
-            <h1 class="title">{{ 'universes.my.universes' | trans }}</h1>
-
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <h1 class="title">{{ 'universes.select' | trans }}</h1>
+            <h1 class="title">{{ 'universe.my.universes' | trans }}</h1>
             <div class="columns is-desktop">
                 {% for universe in universes if universe.isActive() %}
                     <div class="column">
-                        {% include '@Universe/universePanel.twig' %}
+                        {% include '@Universe/universe-card.twig' %}
                     </div>
                 {% endfor %}
             </div>
