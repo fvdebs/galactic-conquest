@@ -27,11 +27,7 @@ final class UserLoginHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $validator = $this->getValidatorWith($request->getParsedBody());
-        $validator->context('mail')
-            ->isRequired()
-            ->isMail()
-            ->isLengthBetweenRule(15, 20);
-
+        $validator->context('mail')->isRequired()->isMail();
         $validator->context('password')->isRequired();
 
         if ($validator->failed()) {
