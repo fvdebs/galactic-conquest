@@ -1,7 +1,23 @@
 {% extends "@App/layout/page-layout.twig" %}
 
 {% block content %}
-    <div class="container">
-        Hello
-    </div>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">{{ 'universes.my.universes' | trans }}</h1>
+
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title">{{ 'universes.select' | trans }}</h1>
+            <div class="columns is-desktop">
+                {% for universe in universes if universe.isActive() %}
+                    <div class="column">
+                        {% include '@Universe/universePanel.twig' %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 {% endblock %}

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\App\Middleware;
 
 use GC\Universe\Model\UniverseRepository;
+use Inferno\Routing\UrlGenerator\UrlGeneratorInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -21,11 +22,18 @@ final class SetCurrentUniverseMiddleware implements MiddlewareInterface
     private $universeRepository;
 
     /**
-     * @param \GC\Universe\Model\UniverseRepository $universeRepository
+     * @var \Inferno\Routing\UrlGenerator\UrlGeneratorInterface
      */
-    public function __construct(UniverseRepository $universeRepository)
+    private $urlGenerator;
+
+    /**
+     * @param \GC\Universe\Model\UniverseRepository $universeRepository
+     * @param \Inferno\Routing\UrlGenerator\UrlGeneratorInterface $urlGenerator
+     */
+    public function __construct(UniverseRepository $universeRepository, UrlGeneratorInterface $urlGenerator)
     {
         $this->universeRepository = $universeRepository;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -45,6 +53,8 @@ final class SetCurrentUniverseMiddleware implements MiddlewareInterface
         if ($universe === null) {
             return $handler->handle($request);
         }
+
+        $this->urlGenerator->addAutoParameter('universe', $universe->getRouteName());
 
         $request = $request->withAttribute(static::REQUEST_ATTRIBUTE_CURRENT_UNIVERSE, $universe);
 

@@ -205,6 +205,13 @@ class Universe
     private $isActive;
 
     /**
+     * @var bool
+     *
+     * @Column(name="is_registration_allowed", type="boolean", nullable=false)
+     */
+    private $isRegistrationAllowed;
+
+    /**
      * @var \GC\Galaxy\Model\Galaxy[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Galaxy\Model\Galaxy", mappedBy="universe", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
@@ -278,6 +285,41 @@ class Universe
         $this->isActive = false;
         $this->lastRankingAt = null;
         $this->rankingInterval = 12;
+        $this->isRegistrationAllowed = true;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function toArray(): array
+    {
+        return [
+            'universe.name' => \ucfirst($this->name),
+            'universe.description' => $this->description,
+            'universe.ticks.starting.at' => $this->ticksStartingAt,
+            'universe.tick.interval' => $this->tickInterval,
+            'universe.tick.current' => $this->tickCurrent,
+            'universe.ticks.attack' => $this->ticksAttack,
+            'universe.ticks.defense' => $this->ticksDefense,
+            'universe.ticks.defense.allied' => $this->ticksDefenseAllied,
+            'universe.ticks.defense.alliance' => $this->ticksDefenseAlliance,
+            'universe.max.private.galaxy.players' => $this->maxPrivateGalaxyPlayers,
+            'universe.max.public.galaxy.players' => $this->maxPublicGalaxyPlayers,
+            'universe.max.alliance.galaxies' => $this->maxAllianceGalaxies,
+            'universe.scan.blocker.metal.cost' => $this->scanBlockerMetalCost,
+            'universe.scan.blocker.crystal.cost' => $this->scanBlockerCrystalCost,
+            'universe.scan.relay.metal.cost' => $this->scanRelayMetalCost,
+            'universe.scan.relay.crystal.cost' => $this->scanRelayCrystalCost,
+            'universe.extractor.metal.income' => $this->extractorMetalIncome,
+            'universe.extractor.crystal.income' => $this->extractorCrystalIncome,
+            'universe.extractor.start.cost' => $this->extractorStartCost,
+            'universe.extractor.points' => $this->extractorPoints,
+            'universe.resource.point.divider' => $this->resourcePointsDivider,
+            'universe.is.active' => $this->isActive,
+            'universe.last.ranking.at' => $this->lastRankingAt,
+            'universe.ranking.interval' => $this->rankingInterval,
+            'universe.is.registration.allowed' => $this->isRegistrationAllowed,
+        ];
     }
 
     /**
@@ -286,6 +328,24 @@ class Universe
     public function getUniverseId(): int
     {
         return $this->universeId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRegistrationAllowed(): bool
+    {
+        return $this->isRegistrationAllowed;
+    }
+
+    /**
+     * @param bool $isRegistrationAllowed
+     *
+     * @return void
+     */
+    public function setIsRegistrationAllowed(bool $isRegistrationAllowed): void
+    {
+        $this->isRegistrationAllowed = $isRegistrationAllowed;
     }
 
     /**
@@ -366,6 +426,14 @@ class Universe
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRouteName(): string
+    {
+        return \strtolower($this->name);
     }
 
     /**

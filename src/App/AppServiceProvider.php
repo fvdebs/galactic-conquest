@@ -19,6 +19,7 @@ use GC\User\Model\UserRepository;
 use Inferno\Filesystem\Native\Directory;
 use Inferno\Filesystem\Native\File;
 use Inferno\Routing\Router\RouterChain;
+use Inferno\Routing\UrlGenerator\UrlGenerator;
 use Inferno\Session\Manager\SessionManagerInterface;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -71,7 +72,8 @@ final class AppServiceProvider implements ServiceProviderInterface
     {
         $container->offsetSet(SetCurrentUniverseMiddleware::class, function(Container $container) {
             return new SetCurrentUniverseMiddleware(
-                $container->offsetGet(UniverseRepository::class)
+                $container->offsetGet(UniverseRepository::class),
+                $container->offsetGet(UrlGenerator::class)
             );
         });
     }

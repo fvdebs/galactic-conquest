@@ -48,6 +48,27 @@ final class UniverseRepository extends EntityRepository
     /**
      * @return \GC\Universe\Model\Universe[]
      */
+    public function findAllInactive(): array
+    {
+        return $this->createQueryBuilder('universe')
+            ->where('universe.isActive = 0')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return \GC\Universe\Model\Universe[]
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('universe')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return \GC\Universe\Model\Universe[]
+     */
     public function findAllActive(): array
     {
         return $this->createQueryBuilder('universe')

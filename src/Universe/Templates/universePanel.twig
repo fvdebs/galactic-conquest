@@ -1,0 +1,19 @@
+<nav class="panel">
+    <p class="panel-heading">
+        {{ universe.getName() }}
+    </p>
+    <p class="panel-tabs">
+        <a class="is-active">Settings</a>
+        <a>Factions</a>
+        <a>Technologies</a>
+        <a>Units</a>
+    </p>
+    <div class="panel-block">
+        {% include '@Universe/universeTableSettings.twig' %}
+    </div>
+    <div class="panel-block">
+        <button class="button is-link is-fullwidth">
+            Apply
+        </button>
+    </div>
+</nav>

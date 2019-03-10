@@ -95,15 +95,19 @@ final class AuthorizationMiddleware implements MiddlewareInterface
 
     /**
      * @param string $name
+     * @param int $code
+     * @param string[] $headers
      *
      * @throws \Inferno\Routing\Exception\ResourceNotFoundException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    private function createRedirect(string $name): ResponseInterface
+    private function createRedirect(string $name, int $code = 302, array $headers = []): ResponseInterface
     {
         return $this->responseFactory->createFromContent(
-            $this->router->generate($name)
+            $this->router->generate($name),
+            $code,
+            $headers
         );
     }
 }

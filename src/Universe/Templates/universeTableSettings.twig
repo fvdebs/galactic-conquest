@@ -1,0 +1,18 @@
+<table class="table is-narrow is-fullwidth">
+    <tbody>
+    {% for label, value in universe.toArray() %}
+        <tr>
+            <td>
+                {{ label | trans }}
+            </td>
+            <td>
+                {% if value.timestamp is defined %}
+                    {{ value.format('d.m.Y') }}
+                {% else %}
+                    {{ value }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
