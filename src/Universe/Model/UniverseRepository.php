@@ -48,17 +48,6 @@ final class UniverseRepository extends EntityRepository
     /**
      * @return \GC\Universe\Model\Universe[]
      */
-    public function findAllInactive(): array
-    {
-        return $this->createQueryBuilder('universe')
-            ->where('universe.isActive = 0')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @return \GC\Universe\Model\Universe[]
-     */
     public function findAll(): array
     {
         return $this->createQueryBuilder('universe')
@@ -80,12 +69,24 @@ final class UniverseRepository extends EntityRepository
     /**
      * @return \GC\Universe\Model\Universe[]
      */
+    public function findAllClosed(): array
+    {
+        return $this->createQueryBuilder('universe')
+            ->where('universe.isClosed = 1')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return \GC\Universe\Model\Universe[]
+     */
     public function findStartedAndActiveUniverses(): array
     {
         return $this->createQueryBuilder('universe')
             ->where('universe.ticksStartingAt IS NOT NULL')
             ->andWhere('universe.ticksStartingAt < :currentDate')
             ->andWhere('universe.isActive = 1')
+            ->andWhere('universe.isClosed = 0')
             ->setParameter(':currentDate', new DateTime())
             ->getQuery()
             ->getResult();

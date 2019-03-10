@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace GC\User\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use GC\Universe\Model\Universe;
+
 /**
  * @Table(name="user")
  * @Entity(repositoryClass="GC\User\Model\UserRepository")
@@ -37,12 +40,20 @@ class User
     private $password;
 
     /**
+     * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="user", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
+     */
+    private $players;
+
+    /**
      * @param string $name
      * @param string $mail
      * @param string $password
      */
 	public function __construct(string $name, string $mail, string $password)
     {
+        $this->players = new ArrayCollection();
 		$this->name = $name;
 		$this->mail = $mail;
         $this->password = $password;
@@ -55,7 +66,31 @@ class User
     {
 		return $this->userId;
 	}
-	
+
+    /**
+     * @return \GC\Player\Model\Player[]
+     */
+	public function getPlayers(): array
+    {
+	    return $this->players->getValues();
+    }
+
+    /**
+     * @param \GC\Universe\Model\Universe $universe
+     *
+     * @return bool
+     */
+    public function hasPlayerIn(Universe $universe): bool
+    {
+        foreach ($this->getPlayers() as $player) {
+            if ($player->getUniverse()->getUniverseId() === $universe->getUniverseId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 	/**
 	 * @return string
 	 */

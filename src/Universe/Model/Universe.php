@@ -207,6 +207,20 @@ class Universe
     /**
      * @var bool
      *
+     * @Column(name="is_closed", type="boolean", nullable=false)
+     */
+    private $isClosed;
+
+    /**
+     * @var DateTime
+     *
+     * @Column(name="closed_at", type="datetime", nullable=true)
+     */
+    private $closedAt;
+
+    /**
+     * @var bool
+     *
      * @Column(name="is_registration_allowed", type="boolean", nullable=false)
      */
     private $isRegistrationAllowed;
@@ -283,6 +297,8 @@ class Universe
         $this->extractorPoints = 15000;
         $this->resourcePointsDivider = 10;
         $this->isActive = false;
+        $this->isClosed = false;
+        $this->closedAt = null;
         $this->lastRankingAt = null;
         $this->rankingInterval = 12;
         $this->isRegistrationAllowed = true;
@@ -328,6 +344,42 @@ class Universe
     public function getUniverseId(): int
     {
         return $this->universeId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isClosed(): bool
+    {
+        return $this->isClosed;
+    }
+
+    /**
+     * @param bool $isClosed
+     *
+     * @return void
+     */
+    public function setIsClosed(bool $isClosed): void
+    {
+        $this->isClosed = $isClosed;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getClosedAt(): DateTime
+    {
+        return $this->closedAt;
+    }
+
+    /**
+     * @param \DateTime $closedAt
+     *
+     * @return void
+     */
+    public function setClosedAt(?DateTime $closedAt): void
+    {
+        $this->closedAt = $closedAt;
     }
 
     /**

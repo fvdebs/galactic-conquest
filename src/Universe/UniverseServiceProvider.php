@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Universe;
 
 use Doctrine\ORM\EntityManager;
+use GC\App\Middleware\AuthorizationUniverseMiddleware;
 use GC\Universe\Command\TickCommand;
 use GC\Universe\Handler\UniverseDetailsHandler;
 use GC\Universe\Handler\UniverseSelectHandler;
@@ -42,7 +43,8 @@ final class UniverseServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container) {
             $collection->get('/{locale}/universes', UniverseSelectHandler::class);
-            $collection->get('/{locale}/{universe}/details', UniverseDetailsHandler::class);
+            $collection->get('/{locale}/{universe}', UniverseDetailsHandler::class)
+                ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);
 
             return $collection;
         });

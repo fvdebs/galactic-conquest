@@ -138,7 +138,7 @@ class Player
     /**
      * @var \GC\User\Model\User
      *
-     * @ManyToOne(targetEntity="\GC\User\Model\User")
+     * @ManyToOne(targetEntity="\GC\User\Model\User", inversedBy="players")
      * @JoinColumn(name="user_id", referencedColumnName="user_id", nullable=false)
      */
     private $user;

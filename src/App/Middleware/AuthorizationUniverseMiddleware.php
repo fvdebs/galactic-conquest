@@ -18,6 +18,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class AuthorizationUniverseMiddleware implements MiddlewareInterface
 {
+    public const SKIP_UNIVERSE_AUTH = 'universe.auth.skip';
+
     /**
      * @var \Inferno\Http\Response\ResponseFactoryInterface
      */
@@ -48,7 +50,7 @@ final class AuthorizationUniverseMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (! $this->isUniverseNameSlugGiven($request)) {
+        if (! $this->isUniverseNameSlugGiven($request) || $this->isAuthorizationSkipped($request)) {
             return $handler->handle($request);
         }
 
@@ -71,6 +73,16 @@ final class AuthorizationUniverseMiddleware implements MiddlewareInterface
     private function isUniverseNameSlugGiven(ServerRequestInterface $request): bool
     {
         return $request->getAttribute('universe') !== null;
+    }
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return bool
+     */
+    private function isAuthorizationSkipped(ServerRequestInterface $request): bool
+    {
+        return $request->getAttribute(static::SKIP_UNIVERSE_AUTH) === true;
     }
 
     /**

@@ -1,0 +1,37 @@
+<div class="card">
+    <header class="card-header">
+        <p class="card-header-title">
+            {{ universe.getName }}
+        </p>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            <p>
+                {{ universe.getDescription }}
+            </p>
+            <p>
+                <i>
+                    <small>{{ 'universe.lastTickAt' |trans }} {{ universe.getLastTickAt | datetime }}</small>
+                </i>
+            </p>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <a href="{{ url('universe.details', [universe.getRouteName]) }}" class="card-footer-item">
+            <span class="icon"><i class="fas fa-microscope has-text-primary"></i></span>
+            <span>{{ 'universe.details' |trans }}</span>
+        </a>
+        {% if universe.isClosed == false %}
+            {% if currentUser.hasPlayerIn(universe) == true %}
+                {% set url = url('player.overview', [universe.getRouteName]) %}
+            {% else %}
+                {% set url = url('player.create', [universe.getRouteName]) %}
+            {% endif %}
+
+            <a href="{{ url }}" class="card-footer-item">
+                <span class="icon"><i class="fas fa-arrow-circle-right has-text-primary"></i></span>
+                <span>{{ 'universe.join' |trans }}</span>
+            </a>
+        {% endif %}
+    </footer>
+</div>

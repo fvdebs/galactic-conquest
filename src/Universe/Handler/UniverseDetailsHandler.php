@@ -24,6 +24,6 @@ final class UniverseDetailsHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Universe/universe-detail.twig');
+        return $this->render('@Universe/universe-details.twig');
     }
 }
