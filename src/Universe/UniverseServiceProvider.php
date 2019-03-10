@@ -40,7 +40,7 @@ final class UniverseServiceProvider implements ServiceProviderInterface
     private function provideUniverseRoutes(Container $container): void
     {
         $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container) {
-            $collection->get('/{locale}/universe/select', UniverseSelectHandler::class)->addAttribute('public', true);
+            $collection->get('/{locale}/universes', UniverseSelectHandler::class)->addAttribute('public', true);
 
             return $collection;
         });

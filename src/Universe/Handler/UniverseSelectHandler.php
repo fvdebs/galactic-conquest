@@ -13,7 +13,7 @@ final class UniverseSelectHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'universe.select';
+    public const NAME = 'universes';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -22,6 +22,6 @@ final class UniverseSelectHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Universe/universeSelect.twig');
+        return $this->render('@Universe/universes.twig');
     }
 }
