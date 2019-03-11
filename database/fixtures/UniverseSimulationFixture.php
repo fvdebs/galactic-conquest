@@ -165,11 +165,9 @@ class UniverseSimulationFixture extends AbstractFixture
             $universe = $this->fillUniverseWithRandomValues($universe);
             $universe = $this->createUniverseDefaults($universe);
 
-            /*
             if ($this->randomBool()) {
                 $universe = $this->createPermanentPlayersAndAssignToUniverse($universe);
             }
-            */
 
             $universe = $this->createRandomGalaxiesAndAlliances($universe, $galaxyAndAlliancesMultiplier);
 
