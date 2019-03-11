@@ -8,7 +8,7 @@ namespace GC\Technology\Model;
  * @Table(name="technology_condition")
  * @Entity
  */
-final class TechnologyCondition
+class TechnologyCondition
 {
     /**
      * @var int
