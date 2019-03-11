@@ -1,19 +1,11 @@
 <div class="card">
     <header class="card-header">
-        <p class="card-header-title">
-            {{ universe.getName }}
-        </p>
+        <p class="card-header-title">{{ universe.getName }}</p>
     </header>
     <div class="card-content">
         <div class="content">
-            <p>
-                {{ universe.getDescription }}
-            </p>
-            <p>
-                <i>
-                    <small>{{ 'universe.lastTickAt' |trans }} {{ universe.getLastTickAt | datetime }}</small>
-                </i>
-            </p>
+            <p>{{ universe.getDescription }} </p>
+            <p><i><small>{{ 'universe.lastTickAt' |trans }} {{ universe.getLastTickAt | datetime }}</small></i></p>
         </div>
     </div>
     <footer class="card-footer">
@@ -25,7 +17,7 @@
             {% if currentUser.hasPlayerIn(universe) == true %}
                 {% set url = url('player.overview', [universe.getRouteName]) %}
             {% else %}
-                {% set url = url('player.create', [universe.getRouteName]) %}
+                {% set url = url('universe.register', [universe.getRouteName]) %}
             {% endif %}
 
             <a href="{{ url }}" class="card-footer-item">

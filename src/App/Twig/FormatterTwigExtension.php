@@ -34,7 +34,7 @@ final class FormatterTwigExtension extends AbstractExtension
             new \Twig_Filter('datetime', [$this, 'formatDateTime']),
             new \Twig_Filter('humandatetime', [$this, 'formatHumanDateTime']),
             new \Twig_Filter('humanbool', [$this, 'formatHumanBool']),
-            new \Twig_Filter('float', [$this, 'formatFloat']),
+            new \Twig_Filter('number', [$this, 'formatNumber']),
         ];
     }
 
@@ -57,7 +57,7 @@ final class FormatterTwigExtension extends AbstractExtension
     private function format(?DateTimeInterface $dateTime, string $format): string
     {
         if ($dateTime === null) {
-            return '';
+            return $this->translator->trans('app.unknown');
         }
 
         return $dateTime->format($format);
@@ -117,12 +117,16 @@ final class FormatterTwigExtension extends AbstractExtension
     }
 
     /**
-     * @param mixed|null $float
+     * @param mixed|null $number
      *
      * @return string
      */
-    public function formatFloat($float): string
+    public function formatNumber($number): string
     {
-        return (string) $float;
+        if ($number === null) {
+            return '0';
+        }
+
+        return (string) \number_format($number, 0, ',', '.');
     }
 }

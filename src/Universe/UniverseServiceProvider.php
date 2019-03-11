@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManager;
 use GC\App\Middleware\AuthorizationUniverseMiddleware;
 use GC\Universe\Command\TickCommand;
 use GC\Universe\Handler\UniverseDetailsHandler;
+use GC\Universe\Handler\UniverseRegisterHandler;
+use GC\Universe\Handler\UniverseRegisterSaveHandler;
 use GC\Universe\Handler\UniverseSelectHandler;
 use GC\Universe\Model\Universe;
 use GC\Universe\Model\UniverseRepository;
@@ -44,6 +46,12 @@ final class UniverseServiceProvider implements ServiceProviderInterface
         $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container) {
             $collection->get('/{locale}/universes', UniverseSelectHandler::class);
             $collection->get('/{locale}/{universe}', UniverseDetailsHandler::class)
+                ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);
+
+            $collection->get('/{locale}/{universe}/register', UniverseRegisterHandler::class)
+                ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);
+
+            $collection->post('/{locale}/{universe}/register', UniverseRegisterSaveHandler::class)
                 ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);
 
             return $collection;

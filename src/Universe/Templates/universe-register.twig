@@ -1,0 +1,69 @@
+{% extends "@App/layout/account-layout.twig" %}
+
+{% block content %}
+    <section class="section">
+        <div class="columns is-centered">
+            <div class="column is-half">
+
+                <nav class="breadcrumb" aria-label="breadcrumbs">
+                    <ul>
+                        <li><a href="{{ url('universe.select') }}">{{ 'app.home' | trans }}</a></li>
+                        <li class="is-active"><a href="#" aria-current="page">{{ 'universe.register.for' | trans |format(universe.getName) }}</a></li>
+                    </ul>
+                </nav>
+
+                <h1 class="title is-1">{{ universe.getName }}</h1>
+                <h2 class="subtitle">{{ 'universe.register' | trans }}</h2>
+
+                <form action="{{ url('universe.register.save') }}" method="post">
+                    <div class="field">
+                        <label class="label">{{ 'universe.register.galaxy' | trans }}</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="galaxyType" value="new">
+                                {{ 'universe.register.galaxy.new' | trans }}
+                            </label><br>
+                            <label class="radio">
+                                <input type="radio" name="galaxyType" value="public">
+                                {{ 'universe.register.galaxy.random' | trans }}
+                            </label><br>
+                            <label class="radio">
+                                <input type="radio" name="galaxyType" value="private">
+                                {{ 'universe.register.galaxy.password' | trans }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">{{ 'universe.password' | trans }}</label>
+                        <div class="control">
+                            <input type="password" name="password" class="input" placeholder="{{ 'universe.password' | trans }}">
+                        </div>
+                    </div>
+
+                    <div class="notification">
+                        <h3 class="title">{{ 'universe.rules' | trans }}</h3>
+                        <p>{{ 'universe.rule.first' | trans }}</p>
+                        <p>{{ 'universe.rule.second' | trans }}</p>
+                        <p>{{ 'universe.rule.third' | trans }}</p>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="rules">
+                                {{ 'universe.rules.check' | trans }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-primary is-fullwidth">{{ 'universe.register' | trans }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -305,40 +305,6 @@ class Universe
     }
 
     /**
-     * @return string[]
-     */
-    public function toArray(): array
-    {
-        return [
-            'universe.name' => $this->name,
-            'universe.description' => $this->description,
-            'universe.ticks.starting.at' => $this->ticksStartingAt,
-            'universe.tick.interval' => $this->tickInterval,
-            'universe.tick.current' => $this->tickCurrent,
-            'universe.ticks.attack' => $this->ticksAttack,
-            'universe.ticks.defense' => $this->ticksDefense,
-            'universe.ticks.defense.allied' => $this->ticksDefenseAllied,
-            'universe.ticks.defense.alliance' => $this->ticksDefenseAlliance,
-            'universe.max.private.galaxy.players' => $this->maxPrivateGalaxyPlayers,
-            'universe.max.public.galaxy.players' => $this->maxPublicGalaxyPlayers,
-            'universe.max.alliance.galaxies' => $this->maxAllianceGalaxies,
-            'universe.scan.blocker.metal.cost' => $this->scanBlockerMetalCost,
-            'universe.scan.blocker.crystal.cost' => $this->scanBlockerCrystalCost,
-            'universe.scan.relay.metal.cost' => $this->scanRelayMetalCost,
-            'universe.scan.relay.crystal.cost' => $this->scanRelayCrystalCost,
-            'universe.extractor.metal.income' => $this->extractorMetalIncome,
-            'universe.extractor.crystal.income' => $this->extractorCrystalIncome,
-            'universe.extractor.start.cost' => $this->extractorStartCost,
-            'universe.extractor.points' => $this->extractorPoints,
-            'universe.resource.point.divider' => $this->resourcePointsDivider,
-            'universe.is.active' => $this->isActive,
-            'universe.last.ranking.at' => $this->lastRankingAt,
-            'universe.ranking.interval' => $this->rankingInterval,
-            'universe.is.registration.allowed' => $this->isRegistrationAllowed,
-        ];
-    }
-
-    /**
      * @return int
      */
     public function getUniverseId(): int

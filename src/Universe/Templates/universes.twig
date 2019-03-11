@@ -3,6 +3,13 @@
 {% block content %}
     <section class="section">
         <div class="container">
+
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li class="is-active"><a href="#" aria-current="page">{{ 'app.home' | trans }}</a></li>
+                </ul>
+            </nav>
+
             <h1 class="title is-2">{{ 'universe.welcome' | trans |format(currentUser.getName) }}</h1>
             <h2 class="subtitle">{{ 'universe.dashboard.description' | trans }}</h2>
         </div>

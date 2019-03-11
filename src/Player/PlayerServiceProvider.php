@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManager;
 use GC\Player\Handler\PlayerCombatReportExternalHandler;
 use GC\Player\Handler\PlayerCombatReportHandler;
 use GC\Player\Handler\PlayerCombatReportListHandler;
-use GC\Player\Handler\PlayerCreateHandler;
 use GC\Player\Handler\PlayerExtractorBuildHandler;
 use GC\Player\Handler\PlayerFleetBuildHandler;
 use GC\Player\Handler\PlayerFleetMissionHandler;
@@ -66,7 +65,6 @@ final class PlayerServiceProvider implements ServiceProviderInterface
             $collection->post('/{locale}/{universe}/player/extractor', PlayerExtractorBuildHandler::class);
             $collection->post('/{locale}/{universe}/player/scan-relay', PlayerScanRelayBuildHandler::class);
             $collection->post('/{locale}/{universe}/player/scan-blocker', PlayerScanBlockerBuildHandler::class);
-            $collection->post('/{locale}/{universe}/player/create', PlayerCreateHandler::class);
             $collection->post('/{locale}/{universe}/player/fleet', PlayerFleetBuildHandler::class);
             $collection->post('/{locale}/{universe}/player/fleet/mission', PlayerFleetMissionHandler::class);
 

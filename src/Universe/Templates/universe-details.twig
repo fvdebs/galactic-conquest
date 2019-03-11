@@ -3,6 +3,14 @@
 {% block content %}
     <section class="section">
         <div class="container">
+
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="{{ url('universe.select') }}">{{ 'app.home' | trans }}</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">{{ 'universe.details.of' | trans |format(universe.getName) }}</a></li>
+                </ul>
+            </nav>
+
             <h1 class="title is-1">{{ universe.getName }}</h1>
             <h2 class="subtitle">
                 {% if universe.isClosed %}
@@ -17,9 +25,7 @@
                     <span class="tag is-light">{{ 'universe.status.joinable' | trans }}</span>
                 {% endif %}
             </h2>
-            <p>
-                {{ universe.getDescription }}
-            </p>
+            <p>{{ universe.getDescription }}</p>
         </div>
     </section>
 
