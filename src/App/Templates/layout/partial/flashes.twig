@@ -1,0 +1,47 @@
+{% if flashBag.hasErrors %}
+    <article class="message is-danger">
+        <div class="message-body">
+            <ul>
+                {% for message in flashBag.getErrors %}
+                    <li>{{ message | trans }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </article>
+{% endif %}
+
+{% if flashBag.hasWarnings %}
+    <article class="message is-warning">
+        <div class="message-body">
+            <ul>
+                {% for message in flashBag.getWarnings %}
+                    <li>{{ message | trans }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </article>
+{% endif %}
+
+{% if flashBag.hasSuccesses %}
+    <article class="message is-success">
+        <div class="message-body">
+            <ul>
+                {% for message in flashBag.getSuccesses %}
+                    <li>{{ message | trans }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </article>
+{% endif %}
+
+{% if flashBag.hasInfos %}
+    <article class="message is-info">
+        <div class="message-body">
+            <ul>
+                {% for message in flashBag.getInfos %}
+                    <li>{{ message | trans }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </article>
+{% endif %}

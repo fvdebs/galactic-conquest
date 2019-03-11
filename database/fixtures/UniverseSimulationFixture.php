@@ -156,7 +156,7 @@ class UniverseSimulationFixture extends AbstractFixture
         $universes = ['Sirius', 'Eridanus', 'Starman'];
         $this->createPermanentUser('John Doe', 'example@example.org');
 
-        // create universe
+        // create universes
         $this->output();
         foreach ($universes as $index => $universeName) {
             $this->output("====================== $universeName ==========================\n");
@@ -165,9 +165,11 @@ class UniverseSimulationFixture extends AbstractFixture
             $universe = $this->fillUniverseWithRandomValues($universe);
             $universe = $this->createUniverseDefaults($universe);
 
+            /*
             if ($this->randomBool()) {
                 $universe = $this->createPermanentPlayersAndAssignToUniverse($universe);
             }
+            */
 
             $universe = $this->createRandomGalaxiesAndAlliances($universe, $galaxyAndAlliancesMultiplier);
 
@@ -707,7 +709,7 @@ class UniverseSimulationFixture extends AbstractFixture
     private function createDefaultUniverseFactions(Universe $universe): void
     {
         $this->output('Creating default factions.');
-        $this->human = $universe->createFaction('faction.human');
+        $this->human = $universe->createFaction('faction.human', true);
         $this->alien = $universe->createFaction('faction.alien');
         $this->factions = [$this->human, $this->alien];
     }

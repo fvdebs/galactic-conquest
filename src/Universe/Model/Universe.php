@@ -779,12 +779,13 @@ class Universe
 
     /**
      * @param string $name
+     * @param bool $isDefault
      *
      * @return \GC\Faction\Model\Faction
      */
-    public function createFaction(string $name): Faction
+    public function createFaction(string $name, bool $isDefault = false): Faction
     {
-        $faction = new Faction($name, $this);
+        $faction = new Faction($name, $this, $isDefault);
         $this->factions->add($faction);
 
         return $faction;
@@ -796,6 +797,20 @@ class Universe
     public function getFactions(): array
     {
         return $this->factions->getValues();
+    }
+
+    /**
+     * @return \GC\Faction\Model\Faction
+     */
+    public function getDefaultFaction(): Faction
+    {
+        foreach ($this->getFactions() as $faction) {
+            if ($faction->isDefault()) {
+                return $faction;
+            }
+        }
+
+        throw new \RuntimeException();
     }
 
     /**

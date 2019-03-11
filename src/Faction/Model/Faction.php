@@ -36,6 +36,13 @@ class Faction
     private $description;
 
     /**
+     * @var bool
+     *
+     * @Column(name="is_default", type="boolean", nullable=false)
+     */
+    private $isDefault;
+
+    /**
      * @var \GC\Universe\Model\Universe
      *
      * @ManyToOne(targetEntity="GC\Universe\Model\Universe", inversedBy="factions")
@@ -46,11 +53,13 @@ class Faction
     /**
      * @param string $name
      * @param \GC\Universe\Model\Universe $universe
+     * @param bool $isDefault
      */
-    public function __construct(string $name, Universe $universe)
+    public function __construct(string $name, Universe $universe, bool $isDefault)
     {
         $this->name = $name;
         $this->universe = $universe;
+        $this->isDefault = $isDefault;
         $this->description = '';
     }
 
@@ -104,5 +113,21 @@ class Faction
     public function getUniverse(): Universe
     {
         return $this->universe;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDefault(): bool
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * @param bool $isDefault
+     */
+    public function setIsDefault(bool $isDefault): void
+    {
+        $this->isDefault = $isDefault;
     }
 }

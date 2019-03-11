@@ -51,22 +51,22 @@ final class PlayerServiceProvider implements ServiceProviderInterface
         {
             $collection->get('/{locale}/report/{combatReportExternalId}', PlayerCombatReportExternalHandler::class)->addAttribute('public', true);
 
-            $collection->get('/{locale}/{universe}/player/overview', PlayerOverviewHandler::class);
-            $collection->get('/{locale}/{universe}/player/technology', PlayerTechnologyListHandler::class);
-            $collection->get('/{locale}/{universe}/player/unit', PlayerUnitListHandler::class);
-            $collection->get('/{locale}/{universe}/player/resources', PlayerResourcesHandler::class);
-            $collection->get('/{locale}/{universe}/player/scan', PlayerScanListHandler::class);
-            $collection->get('/{locale}/{universe}/player/fleet', PlayerFleetOverviewHandler::class);
-            $collection->get('/{locale}/{universe}/player/report/{combatReportId}', PlayerCombatReportHandler::class);
-            $collection->get('/{locale}/{universe}/player/reports', PlayerCombatReportListHandler::class);
+            $collection->get('/{locale}/{universe}/overview', PlayerOverviewHandler::class);
+            $collection->get('/{locale}/{universe}/technology', PlayerTechnologyListHandler::class);
+            $collection->get('/{locale}/{universe}/unit', PlayerUnitListHandler::class);
+            $collection->get('/{locale}/{universe}/resources', PlayerResourcesHandler::class);
+            $collection->get('/{locale}/{universe}/scan', PlayerScanListHandler::class);
+            $collection->get('/{locale}/{universe}/fleet', PlayerFleetOverviewHandler::class);
+            $collection->get('/{locale}/{universe}/report/{combatReportId}', PlayerCombatReportHandler::class);
+            $collection->get('/{locale}/{universe}/reports', PlayerCombatReportListHandler::class);
 
-            $collection->post('/{locale}/{universe}/player/technology', PlayerTechnologyBuildHandler::class);
-            $collection->post('/{locale}/{universe}/player/unit', PlayerUnitBuildHandler::class);
-            $collection->post('/{locale}/{universe}/player/extractor', PlayerExtractorBuildHandler::class);
-            $collection->post('/{locale}/{universe}/player/scan-relay', PlayerScanRelayBuildHandler::class);
-            $collection->post('/{locale}/{universe}/player/scan-blocker', PlayerScanBlockerBuildHandler::class);
-            $collection->post('/{locale}/{universe}/player/fleet', PlayerFleetBuildHandler::class);
-            $collection->post('/{locale}/{universe}/player/fleet/mission', PlayerFleetMissionHandler::class);
+            $collection->post('/{locale}/{universe}/technology', PlayerTechnologyBuildHandler::class);
+            $collection->post('/{locale}/{universe}/unit', PlayerUnitBuildHandler::class);
+            $collection->post('/{locale}/{universe}/extractor', PlayerExtractorBuildHandler::class);
+            $collection->post('/{locale}/{universe}/scan-relay', PlayerScanRelayBuildHandler::class);
+            $collection->post('/{locale}/{universe}/scan-blocker', PlayerScanBlockerBuildHandler::class);
+            $collection->post('/{locale}/{universe}/fleet', PlayerFleetBuildHandler::class);
+            $collection->post('/{locale}/{universe}/fleet/mission', PlayerFleetMissionHandler::class);
 
             return $collection;
         });

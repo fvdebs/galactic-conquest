@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Universe\Handler;
 
 use GC\App\Aware\GameAwareTrait;
+use GC\Player\Handler\PlayerOverviewHandler;
 use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,7 +29,7 @@ final class UniverseRegisterHandler implements RequestHandlerInterface
         $user = $this->getCurrentUser($request);
 
         if ($user->hasPlayerIn($universe)) {
-            return $this->redirect(UniverseSelectHandler::NAME);
+            return $this->redirect(PlayerOverviewHandler::NAME, ['universe' => $universe->getRouteName()]);
         }
 
         return $this->render('@Universe/universe-register.twig', [

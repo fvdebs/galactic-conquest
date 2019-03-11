@@ -25,6 +25,22 @@ final class GalaxyRepository extends EntityRepository
 	}
 
     /**
+     * @param string $password
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return \GC\Galaxy\Model\Galaxy|null
+     */
+    public function findByPassword(string $password): ?Galaxy
+    {
+        return $this->createQueryBuilder('galaxy')
+            ->where('galaxy.password = :password')
+            ->setParameter(':password', $password)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
      *
      * @return \GC\Galaxy\Model\Galaxy|null
