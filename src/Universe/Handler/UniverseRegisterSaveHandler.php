@@ -56,6 +56,7 @@ final class UniverseRegisterSaveHandler implements RequestHandlerInterface
 
         $galaxy = $this->createOrGetGalaxyBy($galaxyType, $universe);
         $player = $galaxy->createPlayer($user, $universe->getFactions()[0]);
+        $player->grantCommanderRole();
 
         $this->flush();
 
@@ -84,14 +85,6 @@ final class UniverseRegisterSaveHandler implements RequestHandlerInterface
      */
     private function createOrGetGalaxyBy(string $galaxyType, Universe $universe): Galaxy
     {
-        if ($galaxyType === static::GALAXY_TYPE_PRIVATE) {
-            return $universe->createPublicGalaxy();
-        }
-
-        if ($galaxyType === static::GALAXY_TYPE_PUBLIC) {
-            return $universe->getRandomPublicGalaxyWithFreeSpace();
-        }
-
         return $universe->createPublicGalaxy();
     }
 }
