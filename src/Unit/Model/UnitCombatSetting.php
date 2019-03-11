@@ -8,7 +8,7 @@ namespace GC\Unit\Model;
  * @Table(name="unit_combat_setting")
  * @Entity
  */
-final class UnitCombatSetting
+class UnitCombatSetting
 {
     /**
      * @var int
