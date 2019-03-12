@@ -37,6 +37,11 @@ Clear cache data
 vendor/bin/inferno app:cache-clear
 ```
 
+Run static code analyzer
+```
+composer analyze
+```
+
 ## Other commands
 
 Executes a tick.
