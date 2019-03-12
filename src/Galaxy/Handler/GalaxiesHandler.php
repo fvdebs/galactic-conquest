@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace GC\Alliance\Handler;
+namespace GC\Galaxy\Handler;
 
 use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class AllianceEditHandler implements RequestHandlerInterface
+final class GalaxiesHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'alliance.alliance';
+    public const NAME = 'galaxy.galaxies';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -22,6 +22,6 @@ final class AllianceEditHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Alliance/allianceEdit.twig');
+        return $this->render('@Galaxy/galaxies.twig');
     }
 }

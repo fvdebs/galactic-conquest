@@ -1,0 +1,9 @@
+#particles-js {
+    position:absolute;
+    width: 100%;
+    height: 100%;
+}
+
+[off-canvas] {
+    background-color: #ffffff; /* Basic background color, overwrite this in your own css. */
+}

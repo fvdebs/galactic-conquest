@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace GC\Alliance\Handler;
+namespace GC\Universe\Handler;
 
 use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class AllianceCreateHandler implements RequestHandlerInterface
+final class UniverseRankingHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'alliance.create';
+    public const NAME = 'universe.ranking';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -22,6 +22,6 @@ final class AllianceCreateHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Alliance/allianceCreate.twig');
+        return $this->render('@Universe/universeRanking.twig');
     }
 }

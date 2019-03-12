@@ -1,0 +1,99 @@
+<aside class="menu">
+    <p class="menu-label">{{ 'player.nav.general' | trans }}</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('player.overview') }}">
+                <i class="fas fa-user has-text-primary"></i>
+                {{ 'player.overview' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('universe.ranking') }}">
+                <i class="fas fa-medal has-text-primary"></i>
+                {{ 'player.nav.general.ranking' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('galaxy.galaxies', [currentPlayer.getGalaxy.getNumber]) }}">
+                <i class="fas fa-project-diagram has-text-primary"></i>
+                {{ 'player.nav.general.galaxies' | trans }}
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">{{ 'player.nav.alliance' | trans }}
+    </p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('alliance.alliance') }}">
+                <i class="fas fa-globe has-text-primary"></i>
+                {{ 'player.nav.alliance' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('alliance.members') }}">
+                <i class="fas fa-users has-text-primary"></i>
+                {{ 'player.nav.alliance.members' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('alliance.economy') }}">
+                <i class="fas fa-dollar-sign has-text-primary"></i>
+                {{ 'player.nav.alliance.economy' | trans }}
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">{{ 'player.nav.galaxy' | trans }}</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('galaxy.galaxy') }}">
+                <i class="fas fa-tools has-text-primary"></i>
+                {{ 'player.nav.galaxy' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('galaxy.tactic') }}">
+                <i class="fas fa-home has-text-primary"></i>
+                {{ 'player.nav.galaxy.tactic' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('galaxy.economy') }}">
+                <i class="fas fa-dollar-sign has-text-primary"></i>
+                {{ 'player.nav.galaxy.economy' | trans }}
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">{{ 'player.nav.planet' | trans }}</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('player.resources') }}">
+                <i class="fas fa-gem has-text-primary"></i>
+                {{ 'player.nav.planet.resources' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.unit.list') }}">
+                <i class="fas fa-industry  has-text-primary"></i>
+                {{ 'player.nav.planet.units' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.technology.list') }}">
+                <i class="fas fa-flask has-text-primary"></i>
+                {{ 'player.nav.planet.technology' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.scans') }}">
+                <i class="fas fa-satellite-dish has-text-primary"></i>
+                {{ 'player.nav.planet.recon' | trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.fleet.overview') }}">
+                <i class="fas fa-space-shuttle has-text-primary"></i>
+                {{ 'player.nav.planet.fleet' | trans }}
+            </a>
+        </li>
+    </ul>
+</aside>

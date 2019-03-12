@@ -1,53 +1,7 @@
 {% extends "@App/layout/page-layout.twig" %}
 
 {% block body %}
-    <nav class="navbar is-primary">
-        <div class="navbar-brand">
-            <div class="navbar-item is-bold">
-                Galactic Conquest
-            </div>
-        </div>
-        <div class="navbar-menu is-active">
-            <div class="navbar-start is-active">
-                <a class="navbar-item" href="{{ url('universe.select') }}">
-                <span class="icon">
-                    <i class="fas fa-home" aria-hidden="true"></i>
-                </span>
-                    <span>{{ 'app.home' | trans }}</span>
-                </a>
-            </div>
-            <div class="navbar-end is-active">
-                {% for player in currentUser.getPlayers() %}
-                    <a class="navbar-item is-hoverable" href="{{ url('player.overview', [ player.getUniverse.getRouteName]) }}">
-                        <span class="icon">
-                            <i class="fas fa-user-astronaut" aria-hidden="true"></i>
-                        </span>
-                        <span>{{ player.getUniverse.getName }}</span>
-                    </a>
-                {% endfor %}
-
-                <a class="navbar-item" href="{{ url('user.logout') }}">
-                    <span class="icon">
-                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                    </span>
-                    <span>{{ 'app.logout' | trans }}</span>
-                </a>
-            </div>
-        </div>
-    </nav>
-
+    {% include '@App/layout/partial/navigation-top.twig' %}
     {% block content %}{% endblock %}
-
-    <footer class="footer">
-        <div class="content has-text-centered">
-            <div class="column is-8 is-offset-2">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Accumsan lacus vel facilisis volutpat est velit egestas. Sapien eget mi proin sed. Sit amet mattis vulputate enim.
-                </p>
-            </div>
-            <p>
-                <i>Galactic Conquest 2019</i>
-            </p>
-        </div>
-    </footer>
+    {% include '@App/layout/partial/footer.twig' %}
 {% endblock %}

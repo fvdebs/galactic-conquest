@@ -13,7 +13,7 @@ final class GalaxyViewHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'galaxy.view';
+    public const NAME = 'galaxy.galaxies';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request

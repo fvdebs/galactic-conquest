@@ -1,7 +1,20 @@
 {% extends "@App/layout/game-layout.twig" %}
 
 {% block content %}
-    <div class="container">
-        Hello
-    </div>
+
+    <section class="section">
+        <div class="container">
+
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li class="is-active"><a href="#" aria-current="page">{{ 'player.overview' | trans }}</a></li>
+                </ul>
+            </nav>
+
+            <h1 class="title is-2">{{ 'player.overview' | trans |format(currentUser.getName) }}</h1>
+            <h2 class="subtitle">{{ 'universe.dashboard.description' | trans }}</h2>
+
+            {% include '@App/layout/partial/flashes.twig' %}
+        </div>
+    </section>
 {% endblock %}

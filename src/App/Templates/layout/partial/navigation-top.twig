@@ -1,0 +1,40 @@
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+
+
+        <a href="#" class="navbar-item">{{ 'app.galactic.conquest' | trans }}</a>
+
+        <a role="button" class="toggle-id-1 navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu is-active is-hidden-touch">
+        <div class="navbar-start is-active">
+            <a class="navbar-item" href="{{ url('universe.select') }}">
+                <span class="icon">
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                </span>
+                <span>{{ 'app.home' | trans }}</span>
+            </a>
+        </div>
+        <div class="navbar-end is-active">
+            {% for player in currentUser.getPlayers() %}
+                <a class="navbar-item is-hoverable" href="{{ url('player.overview', [player.getUniverse.getRouteName]) }}">
+                    <span class="icon">
+                        <i class="fas fa-user-astronaut" aria-hidden="true"></i>
+                    </span>
+                    <span>{{ player.getUniverse.getName }}</span>
+                </a>
+            {% endfor %}
+
+            <a class="navbar-item" href="{{ url('user.logout') }}">
+                <span class="icon">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                </span>
+                <span>{{ 'app.logout' | trans }}</span>
+            </a>
+        </div>
+    </div>
+</nav>

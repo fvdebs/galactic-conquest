@@ -1,9 +1,34 @@
 {% extends "@App/layout/page-layout.twig" %}
 
 {% block body %}
+    {% include '@App/layout/partial/navigation-top.twig' %}
 
-    Hello Game
+    <div off-canvas="id-1 left push">
+        <section class="section">
+        {% include '@App/layout/partial/navigation-left.twig' %}
+        </section>
+    </div>
 
-    {% block content %}{% endblock %}
+    <div canvas="container">
+        <section class="section">
+            <div class="columns">
+                <div class="column is-one-fifth is-hidden-touch ">
+                    {% include '@App/layout/partial/navigation-left.twig' %}
+                </div>
+                <div class="column is-four-fifth">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </section>
+        {% include '@App/layout/partial/footer.twig' %}
+    </div>
+{% endblock %}
 
+{% block style %}
+    <link rel="stylesheet" href="/assets/css/slidebars.min.css">
+{% endblock %}
+
+{% block script %}
+    <script src="/assets/js/slidebars.min.js"></script>
+    <script src="/assets/js/gc.js"></script>
 {% endblock %}

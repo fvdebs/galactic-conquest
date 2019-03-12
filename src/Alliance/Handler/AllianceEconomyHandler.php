@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace GC\Galaxy\Handler;
+namespace GC\Alliance\Handler;
 
 use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class GalaxyAllianceApplicationHandler implements RequestHandlerInterface
+final class AllianceEconomyHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'galaxy.alliance.application';
+    public const NAME = 'alliance.economy';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -22,6 +22,6 @@ final class GalaxyAllianceApplicationHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Galaxy/galaxyAllianceApplication.twig');
+        return $this->render('@Alliance/allianceEconomy.twig');
     }
 }

@@ -1,12 +1,12 @@
 {
   "name": "Galactic Conquest",
   "short_name": "GC",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
+  "theme_color": "#00d1b2",
+  "background_color": "#ffffff",
   "display": "fullscreen",
   "Scope": "/",
   "start_url": "/",
-  "description": "A browsergame.",
+  "description": "Galactic Conquest",
   "icons": [
     {
       "src": "assets/images/icons/icon-72x72.png",

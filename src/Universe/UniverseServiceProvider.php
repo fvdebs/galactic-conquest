@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use GC\App\Middleware\AuthorizationUniverseMiddleware;
 use GC\Universe\Command\TickCommand;
 use GC\Universe\Handler\UniverseDetailsHandler;
+use GC\Universe\Handler\UniverseRankingHandler;
 use GC\Universe\Handler\UniverseRegisterHandler;
 use GC\Universe\Handler\UniverseRegisterSaveHandler;
 use GC\Universe\Handler\UniverseSelectHandler;
@@ -44,6 +45,7 @@ final class UniverseServiceProvider implements ServiceProviderInterface
     private function provideUniverseRoutes(Container $container): void
     {
         $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container) {
+            $collection->get('/{locale}/{universe}/ranking', UniverseRankingHandler::class);
             $collection->get('/{locale}/universes', UniverseSelectHandler::class);
             $collection->get('/{locale}/{universe}', UniverseDetailsHandler::class)
                 ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);

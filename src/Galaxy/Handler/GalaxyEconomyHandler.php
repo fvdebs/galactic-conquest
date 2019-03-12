@@ -9,11 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class GalaxyOverviewHandler implements RequestHandlerInterface
+final class GalaxyEconomyHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'galaxy.overview';
+    public const NAME = 'galaxy.economy';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -22,6 +22,6 @@ final class GalaxyOverviewHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Galaxy/galaxyOverview.twig');
+        return $this->render('@Galaxy/galaxyEconomy.twig');
     }
 }
