@@ -34,7 +34,7 @@ final class UserServiceProvider implements ServiceProviderInterface
      */
     private function provideUserRoutes(Container $container): void
     {
-        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
             $collection->post('/{locale}/register', UserRegisterHandler::class)->addAttribute('public', true);
             $collection->post('/{locale}/login', UserLoginHandler::class)->addAttribute('public', true);
@@ -51,7 +51,7 @@ final class UserServiceProvider implements ServiceProviderInterface
      */
     private function provideUserRepository(Container $container): void
     {
-        $container->offsetSet(UserRepository::class, function(Container $container) {
+        $container->offsetSet(UserRepository::class, function (Container $container) {
             return $container->offsetGet(EntityManager::class)->getRepository(User::class);
         });
     }

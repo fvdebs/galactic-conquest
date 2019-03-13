@@ -12,12 +12,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Twig_Environment;
+use Twig\Environment;
 
 final class SetTwigGlobalsMiddleware implements MiddlewareInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
 
@@ -27,10 +27,10 @@ final class SetTwigGlobalsMiddleware implements MiddlewareInterface
     private $flashBag;
 
     /**
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Inferno\Session\Bag\FlashBagInterface $flashBag
      */
-    public function __construct(Twig_Environment $twig, FlashBagInterface $flashBag)
+    public function __construct(Environment $twig, FlashBagInterface $flashBag)
     {
         $this->twig = $twig;
         $this->flashBag = $flashBag;

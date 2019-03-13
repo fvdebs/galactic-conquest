@@ -78,6 +78,8 @@ final class UniverseRepository extends EntityRepository
     }
 
     /**
+     * @throws \Exception
+     *
      * @return \GC\Universe\Model\Universe[]
      */
     public function findStartedAndActiveUniverses(): array

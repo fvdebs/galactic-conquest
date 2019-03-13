@@ -7,6 +7,7 @@ namespace GC\App\Twig;
 use DateTimeInterface;
 use Symfony\Component\Translation\Translator;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 final class FormatterTwigExtension extends AbstractExtension
 {
@@ -24,17 +25,17 @@ final class FormatterTwigExtension extends AbstractExtension
     }
 
     /**
-     * @return \Twig_Filter[]
+     * @return \Twig\TwigFilter[]
      */
     public function getFilters(): array
     {
         return [
-            new \Twig_Filter('date', [$this, 'formatDate']),
-            new \Twig_Filter('time', [$this, 'formatTime']),
-            new \Twig_Filter('datetime', [$this, 'formatDateTime']),
-            new \Twig_Filter('humandatetime', [$this, 'formatHumanDateTime']),
-            new \Twig_Filter('humanbool', [$this, 'formatHumanBool']),
-            new \Twig_Filter('number', [$this, 'formatNumber']),
+            new TwigFilter('date', [$this, 'formatDate']),
+            new TwigFilter('time', [$this, 'formatTime']),
+            new TwigFilter('datetime', [$this, 'formatDateTime']),
+            new TwigFilter('humandatetime', [$this, 'formatHumanDateTime']),
+            new TwigFilter('humanbool', [$this, 'formatHumanBool']),
+            new TwigFilter('number', [$this, 'formatNumber']),
         ];
     }
 
@@ -127,6 +128,6 @@ final class FormatterTwigExtension extends AbstractExtension
             return '0';
         }
 
-        return (string) \number_format($number, 0, ',', '.');
+        return \number_format($number, 0, ',', '.');
     }
 }

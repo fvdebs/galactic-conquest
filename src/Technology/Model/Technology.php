@@ -143,7 +143,6 @@ class Technology
         $this->name = $name;
         $this->faction = $faction;
         $this->description = '';
-        $this->featureKey = null;
         $this->isAllianceTechnology = false;
         $this->isPlayerTechnology = false;
         $this->isGalaxyTechnology = false;

@@ -47,7 +47,7 @@ final class PlayerServiceProvider implements ServiceProviderInterface
      */
     private function providePlayerRoutes(Container $container): void
     {
-        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
             $collection->get('/{locale}/report/{combatReportExternalId}', PlayerCombatReportExternalHandler::class)->addAttribute('public', true);
 
@@ -79,7 +79,7 @@ final class PlayerServiceProvider implements ServiceProviderInterface
      */
     private function providePlayerRepository(Container $container): void
     {
-        $container->offsetSet(PlayerRepository::class, function(Container $container) {
+        $container->offsetSet(PlayerRepository::class, function (Container $container) {
             return $container->offsetGet(EntityManager::class)->getRepository(Player::class);
         });
     }

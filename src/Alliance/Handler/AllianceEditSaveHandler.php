@@ -18,8 +18,6 @@ final class AllianceEditSaveHandler implements RequestHandlerInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @throws \Inferno\Routing\Exception\ResourceNotFoundException
-     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface

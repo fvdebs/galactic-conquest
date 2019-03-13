@@ -1,0 +1,22 @@
+{% extends "@App/layout/game-layout.twig" %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <h3 class="title is-3">
+                {{ 'universe.ranking.alliance' | trans }}
+            </h3>
+            {% include '@Universe/partial/universe-table-ranking-alliance.twig' %}
+
+            <h3 class="title is-3">
+                {{ 'universe.ranking.galaxy' | trans }}
+            </h3>
+            {% include '@Universe/partial/universe-table-ranking-galaxy.twig' %}
+
+            <h3 class="title is-3">
+                {{ 'universe.ranking.player' | trans }}
+            </h3>
+            {% include '@Universe/partial/universe-table-ranking-player.twig' %}
+        </div>
+    </section>
+{% endblock %}

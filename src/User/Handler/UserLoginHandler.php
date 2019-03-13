@@ -22,6 +22,8 @@ final class UserLoginHandler implements RequestHandlerInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -39,7 +41,7 @@ final class UserLoginHandler implements RequestHandlerInterface
             (string) $this->getValue('password', $request)
         );
 
-        if (! $isUserVerified) {
+        if (!$isUserVerified) {
             $validator->addMessage('mail');
             $validator->addMessage('password');
         }
@@ -55,9 +57,11 @@ final class UserLoginHandler implements RequestHandlerInterface
      * @param string $mail
      * @param string $password
      *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      * @return bool
      */
-    protected function verifyUser(string $mail, string $password): bool
+    private function verifyUser(string $mail, string $password): bool
     {
         $user = $this->getUserRepository()->findByMail($mail);
         if ($user === null) {

@@ -29,7 +29,7 @@ final class ScanServiceProvider implements ServiceProviderInterface
      */
     private function provideScanRoutes(Container $container): void
     {
-        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
             $collection->get('/{locale}/{universe}/scan/{scanId}', ScanDetailHandler::class);
             $collection->get('/{locale}/{universe}/scan/{scanType}', ScanHandler::class);

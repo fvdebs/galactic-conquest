@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Player\Model;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 final class PlayerRepository extends EntityRepository
 {
@@ -41,5 +42,25 @@ final class PlayerRepository extends EntityRepository
             ->setParameter(':universeId', $universeId)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $universeId
+     * @param int $start
+     * @param int $limit
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator|\GC\Player\Model\Player[]
+     */
+    public function findAndSortByRanking(int $universeId, int $start = 0, int $limit = 50): Paginator
+    {
+        $query = $this->createQueryBuilder('player')
+            ->where('player.universe = :universeId')
+            ->orderBy('player.rankingPosition', 'ASC')
+            ->setParameter(':universeId', $universeId)
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        return new Paginator($query);
     }
 }

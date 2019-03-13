@@ -23,6 +23,8 @@ final class GalaxiesHandler implements RequestHandlerInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -33,7 +35,7 @@ final class GalaxiesHandler implements RequestHandlerInterface
         );
 
         if ($galaxy === null) {
-            return $this->redirect('galaxy.galaxies', [
+            return $this->redirect(static::NAME, [
                 'number' => $this->getCurrentPlayer($request)->getGalaxy()->getNumber()
             ]);
         }
@@ -47,6 +49,8 @@ final class GalaxiesHandler implements RequestHandlerInterface
 
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return int|null
      */
@@ -62,6 +66,8 @@ final class GalaxiesHandler implements RequestHandlerInterface
 
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return int|null
      */

@@ -18,6 +18,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class AuthorizationUniverseMiddleware implements MiddlewareInterface
 {
+    // if {universe} middleware looks for a player in this verse. if not it redirects to home.
+    // this will not happen if the attribute skip universe auth is set.
     public const SKIP_UNIVERSE_AUTH = 'universe.auth.skip';
 
     /**
@@ -50,15 +52,15 @@ final class AuthorizationUniverseMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (! $this->isUniverseNameSlugGiven($request) || $this->isAuthorizationSkipped($request)) {
+        if (!$this->isUniverseNameSlugGiven($request) || $this->isAuthorizationSkipped($request)) {
             return $handler->handle($request);
         }
 
-        if (! $this->isCurrentUserGiven($request) || ! $this->isCurrentUniverseGiven($request)) {
+        if (!$this->isCurrentUserGiven($request) || !$this->isCurrentUniverseGiven($request)) {
             return $this->createRedirect(HomeHandler::NAME);
         }
 
-        if (! $this->isCurrentPlayerGiven($request)) {
+        if (!$this->isCurrentPlayerGiven($request)) {
             return $this->createRedirect(UniverseSelectHandler::NAME);
         }
 

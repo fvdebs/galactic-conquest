@@ -109,6 +109,6 @@ class PlayerUnitConstruction
      */
     public function decreaseTicksLeft(): void
     {
-        $this->ticksLeft = $this->ticksLeft - 1;
+        --$this->ticksLeft;
     }
 }

@@ -44,9 +44,12 @@ final class UniverseServiceProvider implements ServiceProviderInterface
      */
     private function provideUniverseRoutes(Container $container): void
     {
-        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container) {
+        $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container) {
             $collection->get('/{locale}/{universe}/ranking', UniverseRankingHandler::class);
             $collection->get('/{locale}/universes', UniverseSelectHandler::class);
+
+            // if {universe} middleware looks for a player in this verse. if not it redirects to home.
+            // this will not happen if the attribute skip universe auth is set.
             $collection->get('/{locale}/{universe}', UniverseDetailsHandler::class)
                 ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);
 
@@ -67,7 +70,7 @@ final class UniverseServiceProvider implements ServiceProviderInterface
      */
     private function provideUniverseRepository(Container $container): void
     {
-        $container->offsetSet(UniverseRepository::class, function(Container $container) {
+        $container->offsetSet(UniverseRepository::class, function (Container $container) {
             return $container->offsetGet(EntityManager::class)->getRepository(Universe::class);
         });
     }
@@ -79,7 +82,7 @@ final class UniverseServiceProvider implements ServiceProviderInterface
      */
     private function provideTickCommand(Container $container): void
     {
-        $container->extend(Application::class, function(Application $application, Container $container) {
+        $container->extend(Application::class, function (Application $application, Container $container) {
             $application->add(new TickCommand(
                 $container->offsetGet(UniverseRepository::class),
                 $container->offsetGet(EntityManager::class),

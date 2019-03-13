@@ -298,8 +298,6 @@ class Universe
         $this->resourcePointsDivider = 10;
         $this->isActive = false;
         $this->isClosed = false;
-        $this->closedAt = null;
-        $this->lastRankingAt = null;
         $this->rankingInterval = 12;
         $this->isRegistrationAllowed = true;
     }
@@ -800,9 +798,9 @@ class Universe
     }
 
     /**
-     * @return \GC\Faction\Model\Faction
+     * @return \GC\Faction\Model\Faction|null
      */
-    public function getDefaultFaction(): Faction
+    public function getDefaultFaction(): ?Faction
     {
         foreach ($this->getFactions() as $faction) {
             if ($faction->isDefault()) {
@@ -810,7 +808,21 @@ class Universe
             }
         }
 
-        throw new \RuntimeException();
+        return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDefaultFaction(): bool
+    {
+        foreach ($this->getFactions() as $faction) {
+            if ($faction->isDefault()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -894,7 +906,9 @@ class Universe
     {
         $players = [];
         foreach ($this->getGalaxies() as $galaxy) {
-            $players = \array_merge($players, $galaxy->getPlayers());
+            foreach ($galaxy->getPlayers() as $player) {
+                $players[] = $player;
+            }
         }
 
         return $players;
@@ -966,20 +980,18 @@ class Universe
         $nextTick = clone $lastTick;
         $nextTick->add($interval);
 
-        if ($nextTick > new DateTime()) {
-            return false;
-        }
-
-        return true;
+        return !($nextTick > new DateTime());
     }
 
     /**
+     * @throws \Exception
+     *
      * @return void
      */
     public function tick(): void
     {
         $this->lastTickAt = new DateTime();
-        $this->tickCurrent = $this->tickCurrent + 1;
+        ++$this->tickCurrent;
 
         foreach ($this->getPlayers() as $player) {
             $player->finishTechnologyConstructions();
@@ -1011,8 +1023,8 @@ class Universe
     public function generatePlayerRanking(): void
     {
         $players = $this->getPlayers();
-        usort($players, function(Player $playerFirst, Player $playerSecond) {
-            if ($playerFirst->getPoints() == $playerSecond->getPoints()) {
+        usort($players, function (Player $playerFirst, Player $playerSecond) {
+            if ($playerFirst->getPoints() === $playerSecond->getPoints()) {
                 return 0;
             }
 
@@ -1024,7 +1036,8 @@ class Universe
         });
 
         foreach ($players as $index => $player) {
-            $player->setRankingPosition(($index + 1));
+            $rankingPosition = $index + 1;
+            $player->setRankingPosition($rankingPosition);
         }
     }
 
@@ -1041,11 +1054,7 @@ class Universe
         $nextRankingAt = clone $lastRankingAt;
         $nextRankingAt->add($interval);
 
-        if ($nextRankingAt > new DateTime()) {
-            return false;
-        }
-
-        return true;
+        return !($nextRankingAt > new DateTime());
     }
 
     /**
@@ -1067,8 +1076,8 @@ class Universe
     private function generateGalaxyRanking(): void
     {
         $rankedGalaxies = $this->getGalaxies();
-        usort($rankedGalaxies, function(Galaxy $galaxyFirst, Galaxy $galaxySecond) {
-            if ($galaxyFirst->getExtractorPoints() == $galaxySecond->getExtractorPoints()) {
+        usort($rankedGalaxies, function (Galaxy $galaxyFirst, Galaxy $galaxySecond) {
+            if ($galaxyFirst->getExtractorPoints() === $galaxySecond->getExtractorPoints()) {
                 return 0;
             }
 
@@ -1080,7 +1089,8 @@ class Universe
         });
 
         foreach ($rankedGalaxies as $index => $rankedGalaxy) {
-            $rankedGalaxy->setRankingPosition(($index + 1));
+            $rankingPosition = $index + 1;
+            $rankedGalaxy->setRankingPosition($rankingPosition);
         }
     }
 
@@ -1090,8 +1100,8 @@ class Universe
     private function generateAllianceRanking(): void
     {
         $rankedAlliances = $this->getAlliances();
-        usort($rankedAlliances, function(Alliance $allianceFirst, Alliance $allianceSecond) {
-            if ($allianceFirst->getExtractorPoints() == $allianceSecond->getExtractorPoints()) {
+        usort($rankedAlliances, function (Alliance $allianceFirst, Alliance $allianceSecond) {
+            if ($allianceFirst->getExtractorPoints() === $allianceSecond->getExtractorPoints()) {
                 return 0;
             }
 
@@ -1103,7 +1113,8 @@ class Universe
         });
 
         foreach ($rankedAlliances as $index => $rankedAlliance) {
-            $rankedAlliance->setRankingPosition(($index + 1));
+            $rankingPosition = $index + 1;
+            $rankedAlliance->setRankingPosition($rankingPosition);
         }
     }
 }

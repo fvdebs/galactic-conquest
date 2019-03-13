@@ -158,7 +158,9 @@ class Alliance
         $this->universe->addAlliance($this);
         $this->galaxies->add($galaxy);
 
-        $galaxy->getCommander()->grantAdmiralRole();
+        if ($galaxy->getCommander() !== null) {
+            $galaxy->getCommander()->grantAdmiralRole();
+        }
     }
 
     /**
@@ -400,10 +402,25 @@ class Alliance
     {
         $players = [];
         foreach($this->getGalaxies() as $galaxy) {
-            $players = array_merge($players, $galaxy->getPlayers());
+            foreach ($galaxy->getPlayers() as $player) {
+                $players[] = $player;
+            }
         }
 
         return $players;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlayerCount(): int
+    {
+        $count = 0;
+        foreach($this->getGalaxies() as $galaxy) {
+            $count += $galaxy->getPlayerCount();
+        }
+
+        return $count;
     }
 
     /**
@@ -439,7 +456,7 @@ class Alliance
 
         $calculation = $averagePoints / \count($this->getGalaxies());
 
-        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        $this->averagePoints = (int) \round($calculation);
     }
 
     /**
@@ -474,7 +491,7 @@ class Alliance
      */
     public function increaseMetal(int $number): void
     {
-        $this->metal = $this->metal + $number;
+        $this->metal += $number;
     }
 
     /**
@@ -484,7 +501,7 @@ class Alliance
      */
     public function decreaseMetal(int $number): void
     {
-        $this->metal = $this->metal - $number;
+        $this->metal -= $number;
     }
 
     /**
@@ -494,7 +511,7 @@ class Alliance
      */
     public function increaseCrystal(int $number): void
     {
-        $this->crystal = $this->crystal + $number;
+        $this->crystal += $number;
     }
 
     /**
@@ -504,7 +521,7 @@ class Alliance
      */
     public function decreaseCrystal(int $number): void
     {
-        $this->crystal = $this->crystal - $number;
+        $this->crystal -= $number;
     }
 
     /**
@@ -516,7 +533,7 @@ class Alliance
     {
         $calculation = ($galaxy->calculateMetalIncomePerTick() / 100) * $this->taxMetal;
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -528,7 +545,7 @@ class Alliance
     {
         $calculation = ($galaxy->calculateCrystalIncomePerTick() / 100) * $this->taxCrystal;
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -745,5 +762,21 @@ class Alliance
     public function denyAllianceApplication(AllianceApplication $allianceApplication): void
     {
         $this->allianceApplications->removeElement($allianceApplication);
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isMember(Player $player): bool
+    {
+        foreach ($this->getPlayers() as $member) {
+            if ($player->getPlayerId() === $member->getPlayerId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -26,7 +26,6 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Translation\Translator;
-use Twig_Environment;
 
 final class AppServiceProvider implements ServiceProviderInterface
 {
@@ -59,7 +58,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideSetCurrentUserMiddleware(Container $container): void
     {
-        $container->offsetSet(SetCurrentUserMiddleware::class, function(Container $container) {
+        $container->offsetSet(SetCurrentUserMiddleware::class, function (Container $container) {
             return new SetCurrentUserMiddleware(
                 $container->offsetGet(SessionManagerInterface::class),
                 $container->offsetGet(UserRepository::class)
@@ -74,7 +73,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideSetCurrentUniverseMiddleware(Container $container): void
     {
-        $container->offsetSet(SetCurrentUniverseMiddleware::class, function(Container $container) {
+        $container->offsetSet(SetCurrentUniverseMiddleware::class, function (Container $container) {
             return new SetCurrentUniverseMiddleware(
                 $container->offsetGet(UniverseRepository::class),
                 $container->offsetGet(UrlGenerator::class)
@@ -89,7 +88,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideSetCurrentPlayerMiddleware(Container $container): void
     {
-        $container->offsetSet(SetCurrentPlayerMiddleware::class, function(Container $container) {
+        $container->offsetSet(SetCurrentPlayerMiddleware::class, function (Container $container) {
             return new SetCurrentPlayerMiddleware(
                 $container->offsetGet(PlayerRepository::class)
             );
@@ -103,7 +102,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideSetTwigGlobalsMiddleware(Container $container): void
     {
-        $container->offsetSet(SetTwigGlobalsMiddleware::class, function(Container $container) {
+        $container->offsetSet(SetTwigGlobalsMiddleware::class, function (Container $container) {
             return new SetTwigGlobalsMiddleware(
                 $container->offsetGet(\Twig_Environment::class),
                 $container->offsetGet(SessionManagerInterface::class)->getFlashBag()
@@ -118,7 +117,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideAuthorizationMiddleware(Container $container): void
     {
-        $container->offsetSet(AuthorizationMiddleware::class, function(Container $container) {
+        $container->offsetSet(AuthorizationMiddleware::class, function (Container $container) {
             return new AuthorizationMiddleware(
                 $container->offsetGet('response-factory'),
                 $container->offsetGet(RouterChain::class)
@@ -133,7 +132,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideAuthorizationUniverseMiddleware(Container $container): void
     {
-        $container->offsetSet(AuthorizationUniverseMiddleware::class, function(Container $container) {
+        $container->offsetSet(AuthorizationUniverseMiddleware::class, function (Container $container) {
             return new AuthorizationUniverseMiddleware(
                 $container->offsetGet('response-factory'),
                 $container->offsetGet(RouterChain::class)
@@ -148,8 +147,8 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideErrorResponseFactory(Container $container): void
     {
-        $container->offsetSet('error-response-factory', function(Container $container) {
-            $catchErrors = ! $container->offsetGet('config.isDev');
+        $container->offsetSet('error-response-factory', function (Container $container) {
+            $catchErrors = !$container->offsetGet('config.isDev');
 
             return new ErrorResponseFactory(
                 $catchErrors,
@@ -165,9 +164,9 @@ final class AppServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function provideFormatterTwigExtension(Container $container): void
+    private function provideFormatterTwigExtension(Container $container): void
     {
-        $container->extend(Twig_Environment::class, function (Twig_Environment $twig, Container $container) {
+        $container->extend(\Twig_Environment::class, function (\Twig_Environment $twig, Container $container) {
             $twig->addExtension(
                 new FormatterTwigExtension(
                     $container->offsetGet(Translator::class)
@@ -185,7 +184,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideClearCacheCommand(Container $container): void
     {
-        $container->extend(Application::class, function(Application $application, Container $container) {
+        $container->extend(Application::class, function (Application $application, Container $container) {
             $cacheDirectories = (array) $container->offsetGet('app.cache-dirs');
             $cacheFiles = (array) $container->offsetGet('app.cache-files');
 
@@ -212,7 +211,7 @@ final class AppServiceProvider implements ServiceProviderInterface
      */
     private function provideCreateHandlerCommand(Container $container): void
     {
-        $container->extend(Application::class, function(Application $application, Container $container) {
+        $container->extend(Application::class, function (Application $application, Container $container) {
             $application->add(new CreateHandlerCommand(
                 $container->offsetGet('baseDir'),
                 $container->offsetGet('renderer')

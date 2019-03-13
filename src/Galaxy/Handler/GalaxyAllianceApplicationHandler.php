@@ -9,11 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class GalaxyAllianceApplicationSaveHandler implements RequestHandlerInterface
+final class GalaxyAllianceApplicationHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'galaxy.alliance.application.save';
+    public const NAME = 'galaxy.alliance.application';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -22,6 +22,6 @@ final class GalaxyAllianceApplicationSaveHandler implements RequestHandlerInterf
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Galaxy/galaxyAllianceApplicationSave.twig');
+        return $this->redirect(GalaxyHandler::NAME);
     }
 }

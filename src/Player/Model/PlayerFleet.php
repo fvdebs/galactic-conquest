@@ -15,6 +15,7 @@ class PlayerFleet
 {
     public const MISSION_TYPE_ATTACK = 'attack';
     public const MISSION_TYPE_DEFEND = 'defend';
+    public const MISSION_TYPE_RECALL = 'recall';
 
     /**
      * @var int
@@ -40,7 +41,7 @@ class PlayerFleet
     private $isDefensive;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @Column(name="mission_type", type="string", length=100, nullable=true)
      */
@@ -92,8 +93,6 @@ class PlayerFleet
         $this->player = $player;
         $this->isOffensive = false;
         $this->isDefensive = false;
-        $this->missionType = null;
-        $this->targetPlayer = null;
     }
 
     /**
@@ -294,6 +293,119 @@ class PlayerFleet
             $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getCrystalCost();
         }
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
+    }
+
+    /**
+     * @param \GC\Player\Model\PlayerFleet $playerFleet
+     * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
+     *
+     * @return void
+     */
+    public function moveFromFleet(PlayerFleet $playerFleet, Unit $unit, int $quantity): void
+    {
+    }
+
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return \GC\Player\Model\PlayerFleet
+     */
+    public function attack(Player $player): PlayerFleet
+    {
+
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $targetPlayer
+     * @param int $ticksLeftUntilMissionCompleted
+     *
+     * @return \GC\Player\Model\PlayerFleet
+     */
+    public function defend(Player $targetPlayer, int $ticksLeftUntilMissionCompleted = 20): PlayerFleet
+    {
+        $currentPlayer = $this->getPlayer();
+        $currentPlayersGalaxy = $currentPlayer->getGalaxy();
+        $currentUniverse = $currentPlayer->getUniverse();
+        $targetPlayersGalaxy = $targetPlayer->getGalaxy();
+
+        $ticksLeftUntilMissionReach = $currentUniverse->getTicksDefense();
+
+        if ($targetPlayersGalaxy->hasAlliance()
+            && $currentPlayersGalaxy->getAlliance() !== null
+            && $currentPlayersGalaxy->getAlliance()->isMember($currentPlayer)) {
+
+            $ticksLeftUntilMissionReach = $currentUniverse->getTicksDefenseAlliance();
+        }
+
+        $this->missionType = static::MISSION_TYPE_DEFEND;
+        $this->ticksLeftUntilMissionCompleted = $ticksLeftUntilMissionCompleted;
+        $this->ticksLeftUntilMissionReach = $ticksLeftUntilMissionReach;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIdling(): bool
+    {
+        return $this->missionType === null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBusy(): bool
+    {
+        return $this->missionType !== null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRecalling(): bool
+    {
+        return $this->missionType === static::MISSION_TYPE_RECALL;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttacking(): bool
+    {
+        return $this->missionType === static::MISSION_TYPE_ATTACK;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDefending(): bool
+    {
+        return $this->missionType === static::MISSION_TYPE_DEFEND;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isAttackingPlayer(Player $player): bool
+    {
+        return $this->missionType === static::MISSION_TYPE_ATTACK
+            && $this->targetPlayer->getPlayerId() === $player->getPlayerId();
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isDefendingPlayer(Player $player): bool
+    {
+        return $this->missionType === static::MISSION_TYPE_DEFEND
+            && $this->targetPlayer->getPlayerId() === $player->getPlayerId();
     }
 }

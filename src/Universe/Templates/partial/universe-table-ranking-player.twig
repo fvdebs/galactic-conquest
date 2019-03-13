@@ -1,0 +1,24 @@
+<table class="table is-narrow is-fullwidth">
+    <tbody>
+        <tr>
+            <td>{{ 'universe.ranking.player.ranking' | trans }}</td>
+            <td>{{ 'universe.ranking.player.id' | trans }} </td>
+            <td>{{ 'universe.ranking.player.name' | trans }} </td>
+            <td>{{ 'universe.ranking.player.points' | trans }} </td>
+            <td>{{ 'universe.ranking.player.alliance' | trans }} </td>
+        </tr>
+        {% for player in playerRankings %}
+            <tr>
+                <td>{{ player.getRankingPosition }}</td>
+                <td>{{ player.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}</td>
+                <td>{{ player.getUser.getName }}</td>
+                <td>{{ player.getPoints | number }}</td>
+                <td>
+                    {% if player.getGalaxy.hasAlliance %}
+                        {{ player.getGalaxy.getAlliance.getCode }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

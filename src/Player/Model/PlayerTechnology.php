@@ -100,7 +100,7 @@ class PlayerTechnology
 
         $calculation = $technologyBuildTicks / ($technologyBuildTicks - $this->getTicksLeft());
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -108,7 +108,7 @@ class PlayerTechnology
      */
     public function decreaseTicksLeft(): void
     {
-        $this->ticksLeft = $this->ticksLeft - 1;
+        --$this->ticksLeft;
     }
 
     /**

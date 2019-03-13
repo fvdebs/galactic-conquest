@@ -1,0 +1,18 @@
+<table class="table is-narrow is-fullwidth">
+    <tbody>
+        <tr>
+            <td>{{ 'universe.ranking.alliance.ranking' | trans }}</td>
+            <td>{{ 'universe.ranking.alliance.name' | trans }} </td>
+            <td>{{ 'universe.ranking.alliance.average' | trans }} </td>
+            <td>{{ 'universe.ranking.alliance.members' | trans }} </td>
+        </tr>
+        {% for alliance in allianceRankings %}
+            <tr>
+                <td>{{ alliance.getRankingPosition }}</td>
+                <td>{{ alliance.getName }}</td>
+                <td>{{ alliance.getAveragePoints | number }}</td>
+                <td>{{ alliance.getPlayerCount }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

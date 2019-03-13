@@ -108,7 +108,7 @@ class Galaxy
     /**
      * @var \GC\Player\Model\Player[]|\Doctrine\Common\Collections\ArrayCollection
      *
-     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="galaxy", cascade={"all"}, orphanRemoval=true)
+     * @OneToMany(targetEntity="\GC\Player\Model\Player", mappedBy="galaxy", fetch="EXTRA_LAZY", cascade={"all"}, orphanRemoval=true)
      * @OrderBy({"galaxyPosition" = "ASC"})
      */
     private $players;
@@ -138,7 +138,6 @@ class Galaxy
         $this->taxMetal = 0;
         $this->extractorPoints = 0;
         $this->rankingPosition = 0;
-        $this->alliance = null;
         $this->averagePoints = 0;
 
         if ($isPrivate) {
@@ -424,6 +423,14 @@ class Galaxy
     /**
      * @return int
      */
+    public function getPlayerCount(): int
+    {
+        return $this->players->count();
+    }
+
+    /**
+     * @return int
+     */
     public function getNextFreeGalaxyPosition(): int
     {
         $freeGalaxyPosition = 1;
@@ -475,7 +482,7 @@ class Galaxy
             $calculation = $playerPoints / $playerCount;
         }
 
-        $this->averagePoints = (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        $this->averagePoints = (int) \round($calculation);
     }
 
     /**
@@ -510,7 +517,7 @@ class Galaxy
      */
     public function increaseMetal(int $number): void
     {
-        $this->metal = $this->metal + $number;
+        $this->metal += $number;
     }
 
     /**
@@ -520,7 +527,7 @@ class Galaxy
      */
     public function decreaseMetal(int $number): void
     {
-        $this->metal = $this->metal - $number;
+        $this->metal -= $number;
     }
 
     /**
@@ -530,7 +537,7 @@ class Galaxy
      */
     public function increaseCrystal(int $number): void
     {
-        $this->crystal = $this->crystal + $number;
+        $this->crystal += $number;
     }
 
     /**
@@ -540,7 +547,7 @@ class Galaxy
      */
     public function decreaseCrystal(int $number): void
     {
-        $this->crystal = $this->crystal - $number;
+        $this->crystal -= $number;
     }
 
     /**
@@ -552,7 +559,7 @@ class Galaxy
     {
         $calculation = ($player->calculateMetalIncomePerTick() / 100) * $this->taxMetal;
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -564,7 +571,7 @@ class Galaxy
     {
         $calculation = ($player->calculateCrystalIncomePerTick() / 100) * $this->taxCrystal;
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**

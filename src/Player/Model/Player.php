@@ -370,39 +370,6 @@ class Player
     }
 
     /**
-     * @return \GC\Player\Model\PlayerFleet
-     */
-    public function createPlayerFleet(): PlayerFleet
-    {
-        $playerFleet = new PlayerFleet($this);
-        $this->playerFleets->add($playerFleet);
-
-        return $playerFleet;
-    }
-
-    /**
-     * @return \GC\Player\Model\PlayerFleet[]
-     */
-    public function getPlayerFleets(): array
-    {
-        return $this->playerFleets->getValues();
-    }
-
-    /**
-     * @return \GC\Player\Model\PlayerFleet
-     */
-    public function getPlayerFleetHome(): PlayerFleet
-    {
-        foreach ($this->getPlayerFleets() as $playerFleet) {
-            if (!$playerFleet->isDefensive() && !$playerFleet->isOffensive()) {
-                return $playerFleet;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
      */
     public function relocate(Galaxy $galaxy): void
@@ -426,7 +393,7 @@ class Player
      */
     public function buildMetalExtractors(int $number): void
     {
-        $this->extractorMetal = $this->extractorMetal + $number;
+        $this->extractorMetal += $number;
         $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
     }
 
@@ -437,7 +404,7 @@ class Player
      */
     public function buildCrystalExtractors(int $number): void
     {
-        $this->extractorCrystal = $this->extractorCrystal + $number;
+        $this->extractorCrystal += $number;
         $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
     }
 
@@ -459,7 +426,7 @@ class Player
         $total = 0;
         $currentCostForExtractor = $initialExtractorCost;
         for ($currentExtractors = 0; $currentExtractors < $number; $currentExtractors++) {
-            $currentCostForExtractor = $currentCostForExtractor + $resourceCostPerExtractor;
+            $currentCostForExtractor += $resourceCostPerExtractor;
             $total += $currentCostForExtractor;
         }
 
@@ -506,7 +473,7 @@ class Player
     {
         $calculation = ($this->metal + $this->crystal) / $this->universe->getResourcePointsDivider();
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -516,7 +483,7 @@ class Player
     {
         $calculation = ($this->getExtractorMetal() + $this->getExtractorCrystal()) * $this->universe->getExtractorPoints();
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -530,7 +497,7 @@ class Player
             $calculation += $playerTechnology->getTechnology()->getMetalCost();
         }
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -543,7 +510,7 @@ class Player
             $calculation += $playerFleet->calculateUnitPoints();
         }
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -553,7 +520,7 @@ class Player
      */
     public function buildScanBlocker(int $number): void
     {
-        $this->scanBlocker = $this->scanBlocker + $number;
+        $this->scanBlocker += $number;
 
         $this->decreaseMetal($this->universe->getScanBlockerMetalCost() * $number);
         $this->decreaseCrystal($this->universe->getScanBlockerCrystalCost() * $number);
@@ -566,7 +533,7 @@ class Player
      */
     public function buildScanRelays(int $number): void
     {
-        $this->scanRelays = $this->scanRelays + $number;
+        $this->scanRelays += $number;
 
         $this->decreaseMetal($this->universe->getScanRelayMetalCost() * $number);
         $this->decreaseCrystal($this->universe->getScanRelayCrystalCost() * $number);
@@ -610,7 +577,7 @@ class Player
      */
     public function increaseMetal(int $number): void
     {
-        $this->metal = $this->metal + $number;
+        $this->metal += $number;
     }
 
     /**
@@ -620,7 +587,7 @@ class Player
      */
     public function decreaseMetal(int $number): void
     {
-        $this->metal = $this->metal - $number;
+        $this->metal -= $number;
     }
 
     /**
@@ -630,7 +597,7 @@ class Player
      */
     public function increaseCrystal(int $number): void
     {
-        $this->crystal = $this->crystal + $number;
+        $this->crystal += $number;
     }
 
     /**
@@ -640,7 +607,7 @@ class Player
      */
     public function decreaseCrystal(int $number): void
     {
-        $this->crystal = $this->crystal - $number;
+        $this->crystal -= $number;
     }
 
     /**
@@ -650,7 +617,7 @@ class Player
     {
         $calculation = $this->extractorMetal * $this->universe->getExtractorMetalIncome();
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -660,7 +627,7 @@ class Player
     {
         $calculation = $this->extractorCrystal * $this->universe->getExtractorCrystalIncome();
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -834,7 +801,7 @@ class Player
     {
         $calculation = $unit->getMetalCost() * $quantity;
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -847,7 +814,7 @@ class Player
     {
         $calculation = $unit->getCrystalCost() * $quantity;
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -1041,5 +1008,93 @@ class Player
     public function getScans(): array
     {
         return $this->scans->getValues();
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet
+     */
+    public function createPlayerFleet(): PlayerFleet
+    {
+        $playerFleet = new PlayerFleet($this);
+        $this->playerFleets->add($playerFleet);
+
+        return $playerFleet;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleets(): array
+    {
+        return $this->playerFleets->getValues();
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet
+     */
+    public function getPlayerFleetHome(): PlayerFleet
+    {
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if (!$playerFleet->isDefensive() && !$playerFleet->isOffensive()) {
+                return $playerFleet;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $playerFleetId
+     *
+     * @return \GC\Player\Model\PlayerFleet|null
+     */
+    public function getFleetById(int $playerFleetId): ?PlayerFleet
+    {
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleetId === $playerFleet->getPlayerFleetId()) {
+                return $playerFleet;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isPlayerFleetAttackingPlayer(Player $player): bool
+    {
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleet->isDefensive() && $playerFleet->isDefendingPlayer($player)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleetsAtHome(): array
+    {
+        $playerFleetsAtHome = [];
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleet->isIdling()) {
+                $playerFleetsAtHome[] = $playerFleet;
+            }
+        }
+
+        return $playerFleetsAtHome;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPlayerFleetsAtHome(): bool
+    {
+        return \count($this->getPlayerFleetsAtHome()) > 0;
     }
 }

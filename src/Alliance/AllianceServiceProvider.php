@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace GC\Alliance;
 
 use GC\Alliance\Handler\AllianceApplicationApproveHandler;
-use GC\Alliance\Handler\AllianceApplicationsHandler;
-use GC\Alliance\Handler\AllianceCreateHandler;
 use GC\Alliance\Handler\AllianceCreateSaveHandler;
 use GC\Alliance\Handler\AllianceEconomyHandler;
 use GC\Alliance\Handler\AllianceEditHandler;
@@ -36,7 +34,7 @@ final class AllianceServiceProvider implements ServiceProviderInterface
      */
     private function provideAllianceRoutes(Container $container): void
     {
-        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
             $collection->get('/{locale}/{universe}/alliance', AllianceEditHandler::class);
             $collection->get('/{locale}/{universe}/alliance/members', AllianceMembersHandler::class);

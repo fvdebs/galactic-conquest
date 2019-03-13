@@ -52,7 +52,7 @@ class AllianceTechnology
     {
         $this->alliance = $alliance;
         $this->technology = $technology;
-        $this->ticksLeft = $technology->getTicksToBuild();;
+        $this->ticksLeft = $technology->getTicksToBuild();
     }
 
     /**
@@ -100,7 +100,7 @@ class AllianceTechnology
 
         $calculation = $technologyBuildTicks / ($technologyBuildTicks - $this->getTicksLeft());
 
-        return (int) \round($calculation, 0, PHP_ROUND_HALF_UP);
+        return (int) \round($calculation);
     }
 
     /**
@@ -108,7 +108,7 @@ class AllianceTechnology
      */
     public function decreaseTicksLeft(): void
     {
-        $this->ticksLeft = $this->ticksLeft - 1;
+        --$this->ticksLeft;
     }
 
     /**

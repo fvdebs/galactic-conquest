@@ -28,7 +28,7 @@ final class HomeServiceProvider implements ServiceProviderInterface
      */
     private function provideHomeRoutes(Container $container): void
     {
-        $container->extend(RouteCollection::class, function(RouteCollection $collection, Container $container)
+        $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
             $collection->get('/{locale}', HomeHandler::class)->addAttribute('public', true);
 

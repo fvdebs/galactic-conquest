@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Alliance\Model;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 final class AllianceRepository extends EntityRepository
 {
@@ -23,4 +24,24 @@ final class AllianceRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 	}
+
+    /**
+     * @param int $universeId
+     * @param int $start
+     * @param int $limit
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator|\GC\Alliance\Model\Alliance[]
+     */
+    public function findAndSortByRanking(int $universeId, int $start = 0, int $limit = 50): Paginator
+    {
+        $query = $this->createQueryBuilder('alliance')
+            ->where('alliance.universe = :universeId')
+            ->orderBy('alliance.rankingPosition', 'ASC')
+            ->setParameter(':universeId', $universeId)
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        return new Paginator($query);
+    }
 }

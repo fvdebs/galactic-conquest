@@ -94,7 +94,7 @@ class PlayerFleetUnit
      */
     public function increaseQuantity(int $quantity): void
     {
-        $this->quantity = $this->quantity + $quantity;
+        $this->quantity += $quantity;
     }
 
     /**
@@ -104,6 +104,6 @@ class PlayerFleetUnit
      */
     public function decreaseQuantity(int $quantity): void
     {
-        $this->quantity = $this->quantity - $quantity;
+        $this->quantity -= $quantity;
     }
 }

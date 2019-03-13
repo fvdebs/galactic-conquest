@@ -62,7 +62,9 @@ final class TickCommand extends Command
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @return int
+     * @throws \Throwable
+     *
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -70,15 +72,11 @@ final class TickCommand extends Command
 
         try {
             foreach ($this->universeRepository->findStartedAndActiveUniverses() as $universe) {
-                if ($universe->isTickCalculationNeeded()
-                    || $input->getOption('force-tick') === true) {
-
+                if ($universe->isTickCalculationNeeded() || $input->getOption('force-tick') === true) {
                     $universe->tick();
                 }
 
-                if ($universe->isAllianceAndGalaxyRankingGenerationNeeded()
-                    || $input->getOption('force-ranking') === true) {
-
+                if ($universe->isAllianceAndGalaxyRankingGenerationNeeded() || $input->getOption('force-ranking') === true) {
                     $universe->generateAllianceAndGalaxyRanking();
                 }
             }

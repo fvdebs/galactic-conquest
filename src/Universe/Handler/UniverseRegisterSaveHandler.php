@@ -26,17 +26,21 @@ final class UniverseRegisterSaveHandler implements RequestHandlerInterface
 
     public const NAME = 'universe.register.save';
 
-    protected const GALAXY_TYPE_NEW = 'new';
-    protected const GALAXY_TYPE_PUBLIC = 'public';
-    protected const GALAXY_TYPE_PRIVATE = 'private';
-    protected const VALID_GALAXY_TYPE_VALUES = ['new', 'public', 'private'];
-    protected const FIELD_NAME_GALAXY_TYPE = 'galaxyType';
-    protected const FIELD_NAME_PASSWORD = 'password';
-    protected const FIELD_NAME_RULES = 'rules';
+    private const GALAXY_TYPE_NEW = 'new';
+    private const GALAXY_TYPE_PUBLIC = 'public';
+    private const GALAXY_TYPE_PRIVATE = 'private';
+    private const VALID_GALAXY_TYPE_VALUES = ['new', 'public', 'private'];
+    private const FIELD_NAME_GALAXY_TYPE = 'galaxyType';
+    private const FIELD_NAME_PASSWORD = 'password';
+    private const FIELD_NAME_RULES = 'rules';
 
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -87,7 +91,7 @@ final class UniverseRegisterSaveHandler implements RequestHandlerInterface
 
         if ($player === null) {
             $this->getFlashBag()->addError('universe.register.error.unknown');
-            return $this->redirectJson(UniverseRegisterSaveHandler::NAME);
+            return $this->redirectJson(static::NAME);
         }
 
         $this->flush();
@@ -127,9 +131,7 @@ final class UniverseRegisterSaveHandler implements RequestHandlerInterface
             throw RegisterUniversePublicGalaxiesFullException::forFull();
         }
 
-        $player = $galaxy->createPlayer($user, $universe->getDefaultFaction());
-
-        return $player;
+        return $galaxy->createPlayer($user, $universe->getDefaultFaction());
     }
 
     /**
@@ -150,12 +152,10 @@ final class UniverseRegisterSaveHandler implements RequestHandlerInterface
             throw RegisterUniversePrivateGalaxyPasswordFailedException::forPassword($password);
         }
 
-        if (! $galaxy->hasSpaceForNewPlayer()) {
+        if (!$galaxy->hasSpaceForNewPlayer()) {
             throw RegisterUniversePrivateGalaxyFullException::forGalaxy($galaxy);
         }
 
-        $player = $galaxy->createPlayer($user, $universe->getDefaultFaction());
-
-        return $player;
+        return $galaxy->createPlayer($user, $universe->getDefaultFaction());
     }
 }
