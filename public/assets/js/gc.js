@@ -3,7 +3,7 @@
     var controller = new slidebars();
     controller.init();
 
-    $( '.toggle-id-1' ).on( 'click', function ( event ) {
+    $('.toggle-id-1').on( 'click', function ( event ) {
         // Stop default action and bubbling
         event.stopPropagation();
         event.preventDefault();
@@ -12,24 +12,22 @@
         controller.toggle( 'id-1' );
     } );
 
-    $( 'a[href^="#"]' ).on( 'click', function( event ) {
-        event.preventDefault();
-
-        var target = $( this ).attr( 'href' );
-
-        $( 'html, body' ).animate( {
-            scrollTop: target.offset().top
-    }, 1000 );
-    } );
-
-    $('a[href^="#"]').on('click', function(event) {
-        event.preventDefault();
-
-        var target = $( this ).attr( 'href' );
-
-        $('[canvas="container"]').animate({
-            scrollTop: target.offset().top
-        }, 1000);
+    // close all active on content click.
+    $('#sidebar-content-wrapper').on( 'click', function ( event ) {
+        if (controller.getActiveSlidebar() ) {
+            event.preventDefault();
+            event.stopPropagation();
+            controller.close();
+        }
     });
+
+    // close all active sidebars on window resize
+    window.onresize = function(event) {
+        if (controller.getActiveSlidebar() ) {
+            event.preventDefault();
+            event.stopPropagation();
+            controller.close();
+        }
+    };
 
 } ) ( jQuery );

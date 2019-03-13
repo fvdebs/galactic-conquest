@@ -25,6 +25,23 @@ final class GalaxyRepository extends EntityRepository
 	}
 
     /**
+     * @param int $number
+     * @param int $universeId
+     * @return \GC\Galaxy\Model\Galaxy|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findByNumber(int $number, int $universeId): ?Galaxy
+    {
+        return $this->createQueryBuilder('galaxy')
+            ->where('galaxy.number = :number')
+            ->andWhere('galaxy.universe = :universeId')
+            ->setParameter(':number', $number)
+            ->setParameter(':universeId', $universeId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
      * @param string $password
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -48,7 +65,7 @@ final class GalaxyRepository extends EntityRepository
     public function findPreviousGalaxy(Galaxy $galaxy): ?Galaxy
     {
         return $this->createQueryBuilder('galaxy')
-            ->where('galaxy.universeId = :universeId')
+            ->where('galaxy.universe = :universeId')
             ->andWhere('galaxy.number < :number')
             ->setParameter(':universeId', $galaxy->getUniverse()->getUniverseId())
             ->setParameter(':number', $galaxy->getNumber())
@@ -65,7 +82,7 @@ final class GalaxyRepository extends EntityRepository
     public function findNextGalaxy(Galaxy $galaxy): ?Galaxy
     {
         return $this->createQueryBuilder('galaxy')
-            ->where('galaxy.universeId = :universeId')
+            ->where('galaxy.universe = :universeId')
             ->andWhere('galaxy.number > :number')
             ->setParameter(':universeId', $galaxy->getUniverse()->getUniverseId())
             ->setParameter(':number', $galaxy->getNumber())

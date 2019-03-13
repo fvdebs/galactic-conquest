@@ -3,13 +3,13 @@
 {% block body %}
     {% include '@App/layout/partial/navigation-top.twig' %}
 
-    <div off-canvas="id-1 left push">
-        <section class="section">
-        {% include '@App/layout/partial/navigation-left.twig' %}
+    <div class="custom-duration-200" off-canvas="id-1 left push">
+        <section class="section"><br><br>
+            {% include '@App/layout/partial/navigation-left.twig' %}
         </section>
     </div>
 
-    <div canvas="container">
+    <div canvas="container" id="sidebar-content-wrapper">
         <section class="section">
             <div class="columns">
                 <div class="column is-one-fifth is-hidden-touch ">

@@ -588,6 +588,26 @@ class Player
      *
      * @return void
      */
+    public function setMetal(int $number): void
+    {
+        $this->metal = $number;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function setCrystal(int $number): void
+    {
+        $this->crystal = $number;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
     public function increaseMetal(int $number): void
     {
         $this->metal = $this->metal + $number;

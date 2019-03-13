@@ -171,12 +171,35 @@ class UniverseSimulationFixture extends AbstractFixture
 
             $universe = $this->createRandomGalaxiesAndAlliances($universe, $galaxyAndAlliancesMultiplier);
 
+            foreach ($universe->getPlayers() as $player) {
+                $this->givePlayerRandomResources($player);
+            }
+
             $this->output("Generating alliance and galaxy ranking.\n");
             $universe->generateAllianceAndGalaxyRanking();
 
             $this->output("flushing...\n");
             $manager->flush();
+
+            $this->output("calculating first tick...\n");
+            $universe->tick();
+
+            $this->output("flushing...\n");
+            $manager->flush();
         }
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return \GC\Player\Model\Player
+     */
+    private function givePlayerRandomResources(Player $player): Player
+    {
+        $player->setMetal($this->getRandomResourceValue());
+        $player->setCrystal($this->getRandomResourceValue());
+
+        return $player;
     }
 
     /**
