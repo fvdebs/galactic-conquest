@@ -37,3 +37,7 @@
 .breadcrumb.is-small {
     font-size: 0.90rem;
 }
+
+.input.galaxies {
+    max-width: 55px;
+}

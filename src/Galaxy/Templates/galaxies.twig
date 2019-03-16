@@ -4,14 +4,17 @@
     {% include "@App/layout/partial/breadcrumb.twig"
         with {
             'items': [
-                {'name': 'app.home', 'url': url('universe.select'), 'icon': 'fas fa-home has-text-primary'},
                 {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
                 {'name': 'galaxy.galaxies', 'icon': 'fas fa-project-diagram has-text-primary'},
             ]
         }
     %}
 
-    <h1 class="title is-2">{{ 'galaxy.galaxies' | trans |format(currentUser.getName) }}</h1>
+    {% include "@App/layout/partial/page-title.twig"
+        with {
+            'title': 'galaxy.galaxies' | trans |format(currentUser.getName)
+        }
+    %}
 
     <div class="columns is-centered">
         <div class="column is-half has-centered-text">
@@ -23,12 +26,12 @@
                 </p>
 
                 <p class="control">
-                    <input class="input" type="text" placeholder="" value="{{ galaxy.getNumber }}">
+                    <input class="input galaxies" type="text" placeholder="" value="{{ galaxy.getNumber }}">
                 </p>
 
                 <p class="control">
                     <button class="button">
-                        GO
+                        <span class="icon"><i class="fas fa-search"></i></span>
                     </button>
                 </p>
 
@@ -41,26 +44,38 @@
         </div>
     </div>
 
-    <table class="table is-fullwidth is-narrow is-responsive">
-        <thead>
-            <tr>
-                <th>{{ 'galaxy.galaxies.position' | trans }}</th>
-                <th>{{ 'galaxy.galaxies.rank' | trans }}</th>
-                <th>{{ 'galaxy.galaxies.username' | trans }}</th>
-                <th>{{ 'galaxy.galaxies.points' | trans }}</th>
-                <th>{{ 'galaxy.galaxies.scans' | trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for player in galaxy.getPlayers %}
-                <tr>
-                    <td>{{ galaxy.getNumber }}:{{ player.getGalaxyPosition }}</td>
-                    <td>{{ player.getRankingPosition }}</td>
-                    <td>{{ player.getUser.getName }}</td>
-                    <td>{{ player.getPoints | number }}</td>
-                    <td>S | E | G | M | N</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="table-container">
+            <table class="table is-narrow is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>{{ 'galaxy.galaxies.position' | trans }}</th>
+                        <th class="is-hidden-mobile">{{ 'galaxy.galaxies.rank' | trans }}</th>
+                        <th>{{ 'galaxy.galaxies.username' | trans }}</th>
+                        <th>{{ 'galaxy.galaxies.points' | trans }}</th>
+                        <th>{{ 'galaxy.galaxies.scans' | trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in galaxy.getPlayers %}
+                        <tr>
+                            <td>
+                                <span class="is-hidden-mobile">{{ galaxy.getNumber }}:</span>{{ player.getGalaxyPosition }}
+                            </td>
+                            <td class="is-hidden-mobile">{{ player.getRankingPosition }}</td>
+                            <td>{{ player.getUser.getName }}</td>
+                            <td>{{ player.getPoints | number }}</td>
+                            <td>
+                                <a class="button">
+                                    <span class="icon is-small has-text-primary">
+                                      <i class="fas fa-satellite-dish"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

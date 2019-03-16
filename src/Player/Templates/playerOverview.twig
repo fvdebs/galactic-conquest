@@ -4,12 +4,15 @@
     {% include "@App/layout/partial/breadcrumb.twig"
         with {
             'items': [
-                {'name': 'app.home', 'url': url('universe.select'), 'icon': 'fas fa-home has-text-primary'},
                 {'name': currentUniverse.getName, 'icon': 'fas fa-atom has-text-primary'},
             ]
         }
     %}
 
-    <h1 class="title is-2">{{ 'player.overview' | trans |format(currentUser.getName) }}</h1>
-    <h2 class="subtitle">{{ 'universe.dashboard.description' | trans }}</h2>
+    {% include "@App/layout/partial/page-title.twig"
+        with {
+            'title': 'player.overview' | trans,
+            'subtitle' : 'universe.dashboard.description' | trans,
+        }
+    %}
 {% endblock %}

@@ -1,24 +1,26 @@
-<table class="table is-narrow is-fullwidth">
-    <tbody>
-        <tr>
-            <th>{{ 'universe.ranking.player.ranking' | trans }}</th>
-            <th>{{ 'universe.ranking.player.id' | trans }} </th>
-            <th>{{ 'universe.ranking.player.name' | trans }} </th>
-            <th>{{ 'universe.ranking.player.points' | trans }} </th>
-            <th>{{ 'universe.ranking.player.alliance' | trans }} </th>
-        </tr>
-        {% for player in playerRankings %}
+<div class="table-container">
+    <table class="table is-narrow is-fullwidth">
+        <tbody>
             <tr>
-                <td>{{ player.getRankingPosition }}</td>
-                <td>{{ player.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}</td>
-                <td>{{ player.getUser.getName }}</td>
-                <td>{{ player.getPoints | number }}</td>
-                <td>
-                    {% if player.getGalaxy.hasAlliance %}
-                        {{ player.getGalaxy.getAlliance.getCode }}
-                    {% endif %}
-                </td>
+                <th>{{ 'universe.ranking.player.ranking' | trans }}</th>
+                <th>{{ 'universe.ranking.player.id' | trans }} </th>
+                <th>{{ 'universe.ranking.player.name' | trans }} </th>
+                <th>{{ 'universe.ranking.player.points' | trans }} </th>
+                <th>{{ 'universe.ranking.player.alliance' | trans }} </th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            {% for player in playerRankings %}
+                <tr>
+                    <td>{{ player.getRankingPosition }}</td>
+                    <td>{{ player.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}</td>
+                    <td>{{ player.getUser.getName }}</td>
+                    <td>{{ player.getPoints | number }}</td>
+                    <td>
+                        {% if player.getGalaxy.hasAlliance %}
+                            {{ player.getGalaxy.getAlliance.getCode }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

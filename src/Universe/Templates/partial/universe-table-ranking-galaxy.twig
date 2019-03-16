@@ -1,24 +1,26 @@
-<table class="table is-narrow is-fullwidth">
-    <tbody>
-        <tr>
-            <th>{{ 'universe.ranking.galaxy.ranking' | trans }}</th>
-            <th>{{ 'universe.ranking.galaxy.id' | trans }} </th>
-            <th>{{ 'universe.ranking.galaxy.average' | trans }} </th>
-            <th>{{ 'universe.ranking.galaxy.members' | trans }} </th>
-            <th>{{ 'universe.ranking.galaxy.alliance' | trans }} </th>
-        </tr>
-        {% for galaxy in galaxyRankings %}
+<div class="table-container">
+    <table class="table is-narrow is-fullwidth">
+        <tbody>
             <tr>
-                <td>{{ galaxy.getRankingPosition }}</td>
-                <td>{{ galaxy.getNumber }}</td>
-                <td>{{ galaxy.getAveragePoints | number }}</td>
-                <td>{{ galaxy.getPlayerCount }}</td>
-                <td>
-                    {% if galaxy.hasAlliance %}
-                        {{ galaxy.getAlliance.getCode }}
-                    {% endif %}
-                </td>
+                <th>{{ 'universe.ranking.galaxy.ranking' | trans }}</th>
+                <th>{{ 'universe.ranking.galaxy.id' | trans }} </th>
+                <th>{{ 'universe.ranking.galaxy.average' | trans }} </th>
+                <th>{{ 'universe.ranking.galaxy.members' | trans }} </th>
+                <th>{{ 'universe.ranking.galaxy.alliance' | trans }} </th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            {% for galaxy in galaxyRankings %}
+                <tr>
+                    <td>{{ galaxy.getRankingPosition }}</td>
+                    <td>{{ galaxy.getNumber }}</td>
+                    <td>{{ galaxy.getAveragePoints | number }}</td>
+                    <td>{{ galaxy.getPlayerCount }}</td>
+                    <td>
+                        {% if galaxy.hasAlliance %}
+                            {{ galaxy.getAlliance.getCode }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -3,19 +3,13 @@
     <ul class="menu-list is-hidden-tablet has-text-grey-dark">
         <li>
             <a>
-                <span class="icon"><i class="fas fa-medal has-text-primary"></i></span>
-                <span>{{ currentPlayer.getRankingPosition | number }}</span>
-            </a>
-        </li>
-        <li>
-            <a>
                 <span class="icon"><i class="fas fa-star has-text-primary"></i></span>
                 <span>{{ currentPlayer.getPoints | number }}</span>
             </a>
         </li>
         <li>
             <a>
-                <span class="icon"><i class="far fa-clock has-text-primary"></i></span>
+                <span class="icon"><i class="fas fa-bolt has-text-primary"></i></span>
                 <span>{{ currentUniverse.getNextTick | time }}</span>
             </a>
         </li>
@@ -24,7 +18,7 @@
     <ul class="menu-list">
         <li>
             <a href="{{ url('player.overview') }}">
-                <span class="icon"><i class="far fa-user has-text-primary"></i></span>
+                <span class="icon"><i class="fas fa-user has-text-primary"></i></span>
                 <span>{{ 'player.overview' | trans }}</span>
             </a>
         </li>

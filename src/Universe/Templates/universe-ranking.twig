@@ -4,27 +4,24 @@
     {% include "@App/layout/partial/breadcrumb.twig"
             with {
             'items': [
-                {'name': 'app.home', 'url': url('universe.select'), 'icon': 'fas fa-home has-text-primary'},
                 {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
                 {'name': 'universe.ranking', 'icon': 'fas fa-medal has-text-primary'},
             ]
         }
     %}
 
-    <h1 class="title is-2">{{ 'universe.ranking' | trans }}</h1>
+    {% include "@App/layout/partial/page-title.twig"
+        with {
+            'title': 'universe.ranking' | trans,
+        }
+    %}
 
-    <h5 class="title is-5">
-        {{ 'universe.ranking.alliance' | trans }}
-    </h5>
+    <h5 class="title is-5">{{ 'universe.ranking.alliance' | trans }}</h5>
     {% include '@Universe/partial/universe-table-ranking-alliance.twig' %}
 
-    <h5 class="title is-5">
-        {{ 'universe.ranking.galaxy' | trans }}
-    </h5>
+    <h5 class="title is-5">{{ 'universe.ranking.galaxy' | trans }}</h5>
     {% include '@Universe/partial/universe-table-ranking-galaxy.twig' %}
 
-    <h5 class="title is-5">
-        {{ 'universe.ranking.player' | trans }}
-    </h5>
+    <h5 class="title is-5">{{ 'universe.ranking.player' | trans }}</h5>
     {% include '@Universe/partial/universe-table-ranking-player.twig' %}
 {% endblock %}
