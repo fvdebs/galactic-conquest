@@ -33,6 +33,7 @@ final class FormatterTwigExtension extends AbstractExtension
             new TwigFilter('date', [$this, 'formatDate']),
             new TwigFilter('time', [$this, 'formatTime']),
             new TwigFilter('datetime', [$this, 'formatDateTime']),
+            new TwigFilter('countdown', [$this, 'formatCountdown']),
             new TwigFilter('humandatetime', [$this, 'formatHumanDateTime']),
             new TwigFilter('humanbool', [$this, 'formatHumanBool']),
             new TwigFilter('number', [$this, 'formatNumber']),
@@ -100,6 +101,16 @@ final class FormatterTwigExtension extends AbstractExtension
         }
 
         return $this->format($dateTime, 'l jS \of F H:i:s');
+    }
+
+    /**
+     * @param DateTimeInterface|null $dateTime
+     *
+     * @return string
+     */
+    public function formatCountdown(?DateTimeInterface $dateTime): string
+    {
+        return $this->format($dateTime, 'Y/m/d H:i:s');
     }
 
     /**

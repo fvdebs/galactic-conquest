@@ -102,6 +102,42 @@ final class GalaxyRepository extends EntityRepository
 
     /**
      * @param int $universeId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return \GC\Galaxy\Model\Galaxy|null
+     */
+    public function findHighestGalaxyNumber(int $universeId): ?Galaxy
+    {
+        return $this->createQueryBuilder('galaxy')
+            ->where('galaxy.universe = :universeId')
+            ->setParameter(':universeId', $universeId)
+            ->orderBy('galaxy.number', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $universeId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return \GC\Galaxy\Model\Galaxy|null
+     */
+    public function findLowestGalaxyNumber(int $universeId): ?Galaxy
+    {
+        return $this->createQueryBuilder('galaxy')
+            ->where('galaxy.universe = :universeId')
+            ->setParameter(':universeId', $universeId)
+            ->orderBy('galaxy.number', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $universeId
      * @param int $start
      * @param int $limit
      *

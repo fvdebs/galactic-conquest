@@ -58,6 +58,10 @@ final class GalaxiesHandler implements RequestHandlerInterface
     {
         $previousGalaxy = $this->getGalaxyRepository()->findPreviousGalaxy($galaxy);
         if ($previousGalaxy === null) {
+            $previousGalaxy = $this->getGalaxyRepository()->findLowestGalaxyNumber($galaxy->getUniverse()->getUniverseId());
+        }
+
+        if ($previousGalaxy === null) {
             return null;
         }
 
@@ -74,6 +78,10 @@ final class GalaxiesHandler implements RequestHandlerInterface
     private function getNextGalaxyNumberOf(Galaxy $galaxy): ?int
     {
         $nextGalaxy = $this->getGalaxyRepository()->findNextGalaxy($galaxy);
+        if ($nextGalaxy === null) {
+            $nextGalaxy = $this->getGalaxyRepository()->findHighestGalaxyNumber($galaxy->getUniverse()->getUniverseId());
+        }
+
         if ($nextGalaxy === null) {
             return null;
         }

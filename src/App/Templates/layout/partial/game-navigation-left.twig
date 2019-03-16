@@ -10,7 +10,7 @@
         <li>
             <a>
                 <span class="icon"><i class="fas fa-bolt has-text-primary"></i></span>
-                <span>{{ currentUniverse.getNextTick | time }}</span>
+                <span class="countdown" data-interval="{{ currentUniverse.getTickInterval }}" data-countdown="{{ currentUniverse.getNextTick | countdown }}"></span>
             </a>
         </li>
     </ul>

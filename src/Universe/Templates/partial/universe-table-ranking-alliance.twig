@@ -2,11 +2,11 @@
     <table class="table is-narrow is-fullwidth">
         <tbody>
             <tr>
-                <th>{{ 'universe.ranking.alliance.ranking' | trans }}</th>
+                <th>#</th>
                 <th>{{ 'universe.ranking.alliance.name' | trans }} </th>
                 <th>{{ 'universe.ranking.alliance.code' | trans }} </th>
                 <th>{{ 'universe.ranking.alliance.average' | trans }} </th>
-                <th>{{ 'universe.ranking.alliance.members' | trans }} </th>
+                <th class="is-hidden-mobile">{{ 'universe.ranking.alliance.members' | trans }} </th>
             </tr>
             {% for alliance in allianceRankings %}
                 <tr>
@@ -14,7 +14,7 @@
                     <td>{{ alliance.getName }}</td>
                     <td>{{ alliance.getCode }}</td>
                     <td>{{ alliance.getAveragePoints | number }}</td>
-                    <td>{{ alliance.getPlayerCount }}</td>
+                    <td class="is-hidden-mobile">{{ alliance.getPlayerCount }}</td>
                 </tr>
             {% endfor %}
         </tbody>

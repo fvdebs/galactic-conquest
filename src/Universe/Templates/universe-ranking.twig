@@ -16,12 +16,36 @@
         }
     %}
 
-    <h5 class="title is-5">{{ 'universe.ranking.alliance' | trans }}</h5>
-    {% include '@Universe/partial/universe-table-ranking-alliance.twig' %}
+    <div class="tabs is-fullwidth-mobile is-medium is-large-mobile">
+        <ul>
+            <li data-content-id="#alliance" class="is-active">
+                <a>
+                    <span class="icon"><i class="fas fa-globe has-text-primary" aria-hidden="true"></i></span>
+                    <span class="is-hidden-mobile">{{ 'universe.ranking.alliance' | trans }}</span>
+                </a>
+            </li>
+            <li data-content-id="#galaxy">
+                <a>
+                    <span class="icon"><i class="fas fa-project-diagram has-text-primary" aria-hidden="true"></i></span>
+                    <span class="is-hidden-mobile">{{ 'universe.ranking.galaxy' | trans }}</span>
+                </a>
+            </li>
+            <li data-content-id="#player">
+                <a>
+                    <span class="icon"><i class="fas fa-user has-text-primary" aria-hidden="true"></i></span>
+                    <span class="is-hidden-mobile">{{ 'universe.ranking.player' | trans }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
-    <h5 class="title is-5">{{ 'universe.ranking.galaxy' | trans }}</h5>
-    {% include '@Universe/partial/universe-table-ranking-galaxy.twig' %}
-
-    <h5 class="title is-5">{{ 'universe.ranking.player' | trans }}</h5>
-    {% include '@Universe/partial/universe-table-ranking-player.twig' %}
+    <div id="alliance">
+        {% include '@Universe/partial/universe-table-ranking-alliance.twig' %}
+    </div>
+    <div id="galaxy" class="is-hidden">
+        {% include '@Universe/partial/universe-table-ranking-galaxy.twig' %}
+    </div>
+    <div id="player" class="is-hidden">
+        {% include '@Universe/partial/universe-table-ranking-player.twig' %}
+    </div>
 {% endblock %}

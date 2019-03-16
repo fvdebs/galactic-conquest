@@ -23,7 +23,7 @@
         </p>
         <p class="navbar-item is-hidden-mobile">
             <span class="icon"><i class="fas fa-bolt"></i></span>
-            <span>{{ currentUniverse.getNextTick | time }}</span>
+            <span class="countdown" data-interval="{{ currentUniverse.getTickInterval }}" data-countdown="{{ currentUniverse.getNextTick | countdown }}"></span>
         </p>
     </div>
 

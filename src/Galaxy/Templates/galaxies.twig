@@ -12,70 +12,62 @@
 
     {% include "@App/layout/partial/page-title.twig"
         with {
-            'title': 'galaxy.galaxies' | trans |format(currentUser.getName)
+            'title': 'galaxy.galaxies' | trans
         }
     %}
 
-    <div class="columns is-centered">
-        <div class="column is-half has-centered-text">
-            <div class="field has-addons has-addons-right">
-                <p class="control">
-                    <a href="{{ url('galaxy.galaxies', [previousGalaxyNumber]) }}" class="button is-primary"{% if previousGalaxyNumber is null %} disabled{% endif %}>
-                        <span class="icon"><i class="fas fa-chevron-left"></i></span>
-                    </a>
-                </p>
-
-                <p class="control">
-                    <input class="input galaxies" type="text" placeholder="" value="{{ galaxy.getNumber }}">
-                </p>
-
-                <p class="control">
-                    <button class="button">
-                        <span class="icon"><i class="fas fa-search"></i></span>
-                    </button>
-                </p>
-
-                <p class="control">
-                    <a href="{{ url('galaxy.galaxies', [nextGalaxyNumber]) }}" class="button is-primary"{% if nextGalaxyNumber is null %} disabled{% endif %}>
-                        <span class="icon"><i class="fas fa-chevron-right"></i></span>
-                    </a>
-                </p>
-            </div>
-        </div>
+    <div class="field has-addons has-addons-right galaxies">
+        <p class="control">
+            <a href="{{ url('galaxy.galaxies', [previousGalaxyNumber]) }}" class="button is-primary"{% if previousGalaxyNumber is null %} disabled{% endif %}>
+                <span class="icon"><i class="fas fa-chevron-left"></i></span>
+            </a>
+        </p>
+        <p class="control">
+            <input id="galaxy-value" class="input galaxies" type="text" placeholder="" value="{{ galaxy.getNumber }}">
+        </p>
+        <p class="control">
+            <button id="galaxy-submit" class="button" >
+                <span class="icon"><i class="fas fa-search"></i></span>
+            </button>
+        </p>
+        <p class="control">
+            <a href="{{ url('galaxy.galaxies', [nextGalaxyNumber]) }}" class="button is-primary">
+                <span class="icon"><i class="fas fa-chevron-right"></i></span>
+            </a>
+        </p>
     </div>
 
-    <div class="container">
-        <div class="table-container">
-            <table class="table is-narrow is-fullwidth">
-                <thead>
+    <div class="table-container">
+        <table class="table is-narrow is-fullwidth">
+            <thead>
+                <tr>
+                    <th>{{ 'galaxy.galaxies.position' | trans }}</th>
+                    <th class="is-hidden-mobile">{{ 'galaxy.galaxies.rank' | trans }}</th>
+                    <th>{{ 'galaxy.galaxies.username' | trans }}</th>
+                    <th>{{ 'galaxy.galaxies.points' | trans }}</th>
+                    <th>{{ 'galaxy.galaxies.scans' | trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in galaxy.getPlayers %}
                     <tr>
-                        <th>{{ 'galaxy.galaxies.position' | trans }}</th>
-                        <th class="is-hidden-mobile">{{ 'galaxy.galaxies.rank' | trans }}</th>
-                        <th>{{ 'galaxy.galaxies.username' | trans }}</th>
-                        <th>{{ 'galaxy.galaxies.points' | trans }}</th>
-                        <th>{{ 'galaxy.galaxies.scans' | trans }}</th>
+                        <td>
+                            <span class="is-hidden-mobile">{{ galaxy.getNumber }}:</span>{{ player.getGalaxyPosition }}
+                        </td>
+                        <td class="is-hidden-mobile">{{ player.getRankingPosition }}</td>
+                        <td>{{ player.getUser.getName }}</td>
+                        <td>{{ player.getPoints | number }}</td>
+                        <td>
+                            <a class="button">
+                                <span class="icon is-small has-text-primary">
+                                  <i class="fas fa-satellite-dish"></i>
+                                </span>
+                            </a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for player in galaxy.getPlayers %}
-                        <tr>
-                            <td>
-                                <span class="is-hidden-mobile">{{ galaxy.getNumber }}:</span>{{ player.getGalaxyPosition }}
-                            </td>
-                            <td class="is-hidden-mobile">{{ player.getRankingPosition }}</td>
-                            <td>{{ player.getUser.getName }}</td>
-                            <td>{{ player.getPoints | number }}</td>
-                            <td>
-                                <a class="button">
-                                    <span class="icon is-small has-text-primary">
-                                      <i class="fas fa-satellite-dish"></i>
-                                    </span>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+
 {% endblock %}
