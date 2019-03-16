@@ -1,0 +1,14 @@
+<nav class="breadcrumb">
+    <ul>
+        {% for item in items %}
+            <li {% if item.url is not defined %}class="is-active"{% endif %}>
+                <a href="{{ item.url | default('#') }}">
+                    {% if item.icon is defined %}
+                        <span class="icon"><i class="{{ item.icon }}"></i></span>
+                    {% endif %}
+                    <span>{{ item.name | trans }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>

@@ -1,13 +1,15 @@
 {% extends "@App/layout/game-layout.twig" %}
 
 {% block content %}
-    <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="{{ url('universe.select') }}">{{ 'app.home' | trans }}</a></li>
-            <li><a href="{{ url('player.overview') }}">{{ currentUniverse.getName }}</a></li>
-            <li class="is-active"><a href="#">{{ 'galaxy.galaxies' | trans }}</a></li>
-        </ul>
-    </nav>
+    {% include "@App/layout/partial/breadcrumb.twig"
+        with {
+            'items': [
+                {'name': 'app.home', 'url': url('universe.select'), 'icon': 'fas fa-home has-text-primary'},
+                {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
+                {'name': 'galaxy.galaxies', 'icon': 'fas fa-project-diagram has-text-primary'},
+            ]
+        }
+    %}
 
     <h1 class="title is-2">{{ 'galaxy.galaxies' | trans |format(currentUser.getName) }}</h1>
 
@@ -39,8 +41,8 @@
         </div>
     </div>
 
-    <table class="table is-fullwidth is-narrow">
-        <tbody>
+    <table class="table is-fullwidth is-narrow is-responsive">
+        <thead>
             <tr>
                 <th>{{ 'galaxy.galaxies.position' | trans }}</th>
                 <th>{{ 'galaxy.galaxies.rank' | trans }}</th>
@@ -48,7 +50,8 @@
                 <th>{{ 'galaxy.galaxies.points' | trans }}</th>
                 <th>{{ 'galaxy.galaxies.scans' | trans }}</th>
             </tr>
-
+        </thead>
+        <tbody>
             {% for player in galaxy.getPlayers %}
                 <tr>
                     <td>{{ galaxy.getNumber }}:{{ player.getGalaxyPosition }}</td>

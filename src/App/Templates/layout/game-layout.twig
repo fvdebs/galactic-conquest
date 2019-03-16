@@ -1,19 +1,19 @@
 {% extends "@App/layout/page-layout.twig" %}
 
 {% block body %}
-    {% include '@App/layout/partial/navigation-top.twig' %}
+    {% include '@App/layout/partial/game-navigation-top.twig' %}
 
     <div class="custom-duration-200" off-canvas="id-1 left push">
         <section class="section"><br><br>
-            {% include '@App/layout/partial/navigation-left.twig' %}
+            {% include '@App/layout/partial/game-navigation-left.twig' %}
         </section>
     </div>
 
     <div canvas="container" id="sidebar-content-wrapper">
         <section class="section">
             <div class="columns">
-                <div class="column is-one-fifth is-hidden-touch ">
-                    {% include '@App/layout/partial/navigation-left.twig' %}
+                <div class="column is-one-fifth is-hidden-touch">
+                    {% include '@App/layout/partial/game-navigation-left.twig' %}
                 </div>
                 <div class="column is-four-fifth">
                     {% block content %}{% endblock %}

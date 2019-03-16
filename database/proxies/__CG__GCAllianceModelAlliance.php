@@ -477,6 +477,17 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
+    public function getPlayerCount(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerCount', []);
+
+        return parent::getPlayerCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function calculateExtractorPointsPerTick(): int
     {
 
@@ -769,6 +780,17 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'denyAllianceApplication', [$allianceApplication]);
 
         parent::denyAllianceApplication($allianceApplication);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isMember(\GC\Player\Model\Player $player): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isMember', [$player]);
+
+        return parent::isMember($player);
     }
 
 }

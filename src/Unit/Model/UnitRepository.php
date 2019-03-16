@@ -23,4 +23,14 @@ final class UnitRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 	}
+
+    /**
+     * @return \GC\Unit\Model\Unit[]
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('unit')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -6,6 +6,7 @@ namespace GC\Universe\Model;
 
 use DateTime;
 use DateInterval;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
 use GC\Faction\Model\Faction;
@@ -1116,5 +1117,18 @@ class Universe
             $rankingPosition = $index + 1;
             $rankedAlliance->setRankingPosition($rankingPosition);
         }
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getNextTick() : DateTimeInterface
+    {
+        $lastTick = $this->getLastTickAt() ?? $this->getTicksStartingAt();
+
+        $newDate = clone $lastTick;
+        $newDate->modify("+ {$this->getTickInterval()} minutes");
+
+        return $newDate;
     }
 }

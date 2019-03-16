@@ -1,0 +1,156 @@
+<aside class="menu">
+    <p class="menu-label is-hidden-tablet">{{ 'player.nav.stats' | trans }}</p>
+    <ul class="menu-list is-hidden-tablet has-text-grey-dark">
+        <li>
+            <a>
+                <span class="icon"><i class="fas fa-industry has-text-primary"></i></span>
+                <span>{{ currentPlayer.getMetal | number }}</span>
+            </a>
+        </li>
+        <li>
+            <a>
+                <span class="icon"><i class="fas fa-gem has-text-primary"></i></span>
+                <span>{{ currentPlayer.getCrystal | number }}</span>
+            </a>
+        </li>
+        <li>
+            <a>
+                <span class="icon"><i class="fas fa-medal has-text-primary"></i></span>
+                <span>{{ currentPlayer.getRankingPosition | number }}</span>
+            </a>
+        </li>
+        <li>
+            <a>
+                <span class="icon"><i class="fas fa-star has-text-primary"></i></span>
+                <span>{{ currentPlayer.getPoints | number }}</span>
+            </a>
+        </li>
+        <li>
+            <a>
+                <span class="icon"><i class="far fa-clock has-text-primary"></i></span>
+                <span>{{ currentUniverse.getNextTick | time }}</span>
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">{{ 'player.nav.general' | trans }}</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('player.overview') }}">
+                <span class="icon"><i class="far fa-user has-text-primary"></i></span>
+                <span>{{ 'player.overview' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('universe.ranking') }}">
+                <span class="icon"><i class="fas fa-medal has-text-primary"></i></span>
+                <span>{{ 'player.nav.general.ranking' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('galaxy.galaxies', [currentPlayer.getGalaxy.getNumber]) }}">
+                <span class="icon"><i class="fas fa-project-diagram has-text-primary"></i></span>
+                <span>{{ 'player.nav.general.galaxies' | trans }}</span>
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">{{ 'player.nav.alliance' | trans }}</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('alliance.alliance') }}">
+                <span class="icon"><i class="fas fa-globe has-text-primary"></i></span>
+                <span>{{ 'player.nav.alliance' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('alliance.members') }}">
+                <span class="icon"><i class="fas fa-users has-text-primary"></i></span>
+                <span>{{ 'player.nav.alliance.members' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('alliance.economy') }}">
+                <span class="icon"><i class="fas fa-dollar-sign has-text-primary"></i></span>
+                <span>{{ 'player.nav.alliance.economy' | trans }}</span>
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">{{ 'player.nav.galaxy' | trans }}</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('galaxy.galaxy') }}">
+                <span class="icon"><i class="fas fa-tools has-text-primary"></i></span>
+                <span>{{ 'player.nav.galaxy' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('galaxy.tactic') }}">
+                <span class="icon"><i class="fas fa-home has-text-primary"></i></span>
+                <span>{{ 'player.nav.galaxy.tactic' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('galaxy.economy') }}">
+                <span class="icon"><i class="fas fa-dollar-sign has-text-primary"></i></span>
+                <span>{{ 'player.nav.galaxy.economy' | trans }}</span>
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">{{ 'player.nav.planet' | trans }}</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url('player.resources') }}">
+                <span class="icon"><i class="fas fa-gem has-text-primary"></i></span>
+                <span>{{ 'player.nav.planet.resources' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.unit.list') }}">
+                <span class="icon"><i class="fas fa-industry  has-text-primary"></i></span>
+                <span>{{ 'player.nav.planet.units' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.technology.list') }}">
+                <span class="icon"><i class="fas fa-flask has-text-primary"></i></span>
+                <span>{{ 'player.nav.planet.technology' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.scans') }}">
+                <span class="icon"><i class="fas fa-satellite-dish has-text-primary"></i></span>
+                <span>{{ 'player.nav.planet.recon' | trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('player.fleet.overview') }}">
+                <span class="icon"><i class="fas fa-space-shuttle has-text-primary"></i></span>
+                <span>{{ 'player.nav.planet.fleet' | trans }}</span>
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label is-hidden-desktop">{{ 'player.nav.user' | trans }}</p>
+    <ul class="menu-list is-hidden-desktop">
+        <li>
+            <a href="{{ url('universe.select') }}">
+                <span class="icon"><i class="fas fa-home has-text-primary"></i></span>
+                <span>{{ 'app.home' | trans }}</span>
+            </a>
+        </li>
+        {% for player in currentUser.getPlayers() %}
+            {% if currentUniverse.getUniverseId != player.getUniverse.getUniverseId %}
+                <li>
+                    <a href="{{ url('player.overview', [player.getUniverse.getRouteName]) }}">
+                        <span class="icon"><i class="fas fa-user-astronaut has-text-primary"></i></span>
+                        <span>{{ player.getUniverse.getName }}</span>
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        <li>
+            <a href="{{ url('user.logout') }}">
+                <span class="icon"><i class="fas fa-sign-out-alt has-text-primary"></i></span>
+                <span>{{ 'app.logout' | trans }}</span>
+            </a>
+        </li>
+    </ul>
+</aside>

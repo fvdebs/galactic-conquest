@@ -510,6 +510,17 @@ class Galaxy extends \GC\Galaxy\Model\Galaxy implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function getPlayerCount(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerCount', []);
+
+        return parent::getPlayerCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getNextFreeGalaxyPosition(): int
     {
 

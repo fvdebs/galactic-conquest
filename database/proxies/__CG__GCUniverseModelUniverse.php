@@ -796,12 +796,23 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function getDefaultFaction(): \GC\Faction\Model\Faction
+    public function getDefaultFaction(): ?\GC\Faction\Model\Faction
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDefaultFaction', []);
 
         return parent::getDefaultFaction();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasDefaultFaction(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasDefaultFaction', []);
+
+        return parent::hasDefaultFaction();
     }
 
     /**
@@ -967,6 +978,17 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'generateAllianceAndGalaxyRanking', []);
 
         parent::generateAllianceAndGalaxyRanking();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNextTick(): \DateTimeInterface
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNextTick', []);
+
+        return parent::getNextTick();
     }
 
 }
