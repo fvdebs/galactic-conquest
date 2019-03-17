@@ -1097,4 +1097,14 @@ class Player
     {
         return \count($this->getPlayerFleetsAtHome()) > 0;
     }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return int
+     */
+    public function getNumberOfUnits(Unit $unit): int
+    {
+        return 0;
+    }
 }

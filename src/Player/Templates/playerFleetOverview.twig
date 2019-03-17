@@ -1,39 +1,7 @@
 {% extends "@App/layout/game-layout.twig" %}
 
 {% block content %}
-    <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="{{ url('universe.select') }}">{{ 'app.home' | trans }}</a></li>
-            <li><a href="{{ url('player.overview') }}">{{ currentUniverse.getName }}</a></li>
-            <li class="is-active"><a href="#">{{ 'unit.production' | trans }}</a></li>
-        </ul>
-    </nav>
-
-    <h1 class="title is-2">{{ 'unit.production' | trans }}</h1>
-
-    <table class="table is-narrow is-fullwidth">
-        <tbody>
-        <tr>
-            <th>{{ 'unit.classname' | trans }}</th>
-            <th>{{ 'unit.costs' | trans }}</th>
-            <th>{{ 'unit.units' | trans }}</th>
-            <th>{{ 'unit.order' | trans }}</th>
-            <th>{{ 'unit.build.time' | trans }}</th>
-            <th>{{ 'unit.progress' | trans }}</th>
-        </tr>
-        {% for unit in units %}
-            <tr>
-                <td>{{ unit.getName }}</td>
-                <td>{{ galaxy.getNumber }}</td>
-                <td>{{ galaxy.getAveragePoints | number }}</td>
-                <td>{{ galaxy.getPlayerCount }}</td>
-                <td>
-                    {% if galaxy.hasAlliance %}
-                        {{ galaxy.getAlliance.getCode }}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        Hello
+    </div>
 {% endblock %}

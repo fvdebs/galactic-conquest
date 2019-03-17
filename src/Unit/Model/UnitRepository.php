@@ -25,6 +25,23 @@ final class UnitRepository extends EntityRepository
 	}
 
     /**
+     * @param int $universeId
+     * @param int $factionId
+     *
+     * @return \GC\Unit\Model\Unit[]
+     */
+    public function findByUniverseAndFaction(int $universeId, int $factionId): array
+    {
+        return $this->createQueryBuilder('unit')
+            ->where('unit.universe = :universeId')
+            ->andWhere('unit.faction = :factionId')
+            ->setParameter(':universeId', $universeId)
+            ->setParameter(':factionId', $factionId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @return \GC\Unit\Model\Unit[]
      */
     public function findAll(): array

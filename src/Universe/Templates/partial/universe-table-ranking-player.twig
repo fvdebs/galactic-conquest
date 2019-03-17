@@ -9,7 +9,7 @@
                 <th>{{ 'universe.ranking.player.points' | trans }} </th>
             </tr>
             {% for player in playerRankings %}
-                <tr {% if player.getUser.getUserId == currentPlayer.getUser.getUserId %}class="has-text-primary"{% endif %}>
+                <tr {% if player.getUser.getUserId == currentPlayer.getUser.getUserId %}class="is-selected"{% endif %}>
                     <td>{{ player.getRankingPosition }}</td>
                     <td>{{ player.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}</td>
                     <td>{{ player.getUser.getName }}</td>

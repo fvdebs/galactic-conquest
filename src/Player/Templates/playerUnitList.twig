@@ -2,6 +2,49 @@
 
 {% block content %}
     <div class="container">
-        Hello
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
+                    {'name': 'unit.production', 'icon': 'fas fa-industry has-text-primary'},
+                ]
+            }
+        %}
+
+        <div class="table-container is-responsive">
+            <table class="table is-narrow is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>{{ 'Typ' | trans }}</th>
+                        <th>{{ 'unit.costs' | trans }}</th>
+                        <th>{{ 'unit.build.time' | trans }}</th>
+                        <th>{{ 'unit.units' | trans }}</th>
+                        <th>{{ 'unit.order' | trans }}</th>
+                        <th>{{ 'unit.progress' | trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for unit in units %}
+                    <tr>
+                        <td>{{ unit.getName }}</td>
+                        <td>
+                            <i class="fas fa-industry"></i> {{ unit.getMetalCost | number }}<br>
+                            <i class="fas fa-gem"></i> {{ unit.getCrystalCost | number }}
+                        </td>
+                        <td>
+                            {{ unit.getTicksToBuild }}
+                        </td>
+                        <td>
+                            {{ currentPlayer.getNumberOfUnits(unit) | number }}
+                        </td>
+                        <td></td>
+                        <td>
+                            Kein Autrag
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

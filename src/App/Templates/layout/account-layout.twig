@@ -3,19 +3,14 @@
 {% block body %}
     {% include '@App/layout/partial/account-navigation-top.twig' %}
 
-    <div class="custom-duration-200" off-canvas="id-1 left push">
-        <section class="section"><br><br>
-            {% include '@App/layout/partial/account-navigation-left.twig' %}
-        </section>
-    </div>
+    <section class="section custom-duration-200 has-margin" off-canvas="id-1 left push">
+        {% include '@App/layout/partial/account-navigation-left.twig' %}
+    </section>
 
-    <div canvas="container" id="sidebar-content-wrapper">
-        <section class="section">
-            {% block content %}{% endblock %}
-        </section>
-
+    <section class="section" canvas="container" id="sidebar-content-wrapper">
+        {% block content %}{% endblock %}
         {% include '@App/layout/partial/footer.twig' %}
-    </div>
+    </section>
 {% endblock %}
 
 {% block style %}
@@ -24,5 +19,5 @@
 
 {% block script %}
     <script src="/assets/js/slidebars.min.js"></script>
-    <script src="/assets/js/gc.js?2"></script>
+    <script src="/assets/js/gc.js?55"></script>
 {% endblock %}

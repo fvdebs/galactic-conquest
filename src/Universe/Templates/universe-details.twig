@@ -16,6 +16,7 @@
                 'title': universe.getName,
             }
         %}
+
         <h2 class="subtitle">
             {% if universe.isClosed %}
                 <span class="tag is-light">{{ 'universe.status.closed' | trans }}</span>
@@ -30,7 +31,10 @@
             {% endif %}
         </h2>
 
-        <p>{{ universe.getDescription }}</p><br><br>
+        <p>{{ universe.getDescription }}</p>
+    </div>
+
+    <div class="container has-margin">
         <h3 class="title is-4">{{ 'universe.settings' | trans }}</h3>
         {% include '@Universe/partial/universe-table-settings.twig' %}
     </div>

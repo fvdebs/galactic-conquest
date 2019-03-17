@@ -10,7 +10,7 @@
             </tr>
             {% for alliance in allianceRankings %}
                 {% if player.getGalaxy.hasAlliance and currentPlayer.getGalaxy.hasAlliance %}
-                    <tr {% if player.getGalaxy.getAlliance.getAllianceId == currentPlayer.getGalaxy.getAlliance.getAllianceId %}class="has-text-primary"{% endif %}>
+                    <tr {% if player.getGalaxy.getAlliance.getAllianceId == currentPlayer.getGalaxy.getAlliance.getAllianceId %}class="is-selected"{% endif %}>
                 {% else %}
                     <tr>
                 {% endif %}

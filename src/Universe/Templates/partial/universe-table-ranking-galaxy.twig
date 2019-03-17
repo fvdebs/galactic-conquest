@@ -9,7 +9,7 @@
                 <th class="is-hidden-mobile">{{ 'universe.ranking.galaxy.members' | trans }} </th>
             </tr>
             {% for galaxy in galaxyRankings %}
-                <tr {% if player.getGalaxy.getGalaxyId == currentPlayer.getGalaxy.getGalaxyId %}class="has-text-primary"{% endif %}>
+                <tr {% if player.getGalaxy.getGalaxyId == currentPlayer.getGalaxy.getGalaxyId %}class="is-selected"{% endif %}>
                     <td>{{ galaxy.getRankingPosition }}</td>
                     <td>{{ galaxy.getNumber }}</td>
                     <td>
