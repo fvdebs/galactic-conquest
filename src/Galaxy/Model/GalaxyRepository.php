@@ -147,6 +147,8 @@ final class GalaxyRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('galaxy')
             ->where('galaxy.universe = :universeId')
+            ->andWhere('galaxy.rankingPosition IS NOT NULL')
+            ->andWhere('galaxy.rankingPosition != 0')
             ->orderBy('galaxy.rankingPosition', 'ASC')
             ->setParameter(':universeId', $universeId)
             ->setFirstResult($start)

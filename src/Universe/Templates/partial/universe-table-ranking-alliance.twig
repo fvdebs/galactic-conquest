@@ -9,7 +9,11 @@
                 <th class="is-hidden-mobile">{{ 'universe.ranking.alliance.members' | trans }} </th>
             </tr>
             {% for alliance in allianceRankings %}
-                <tr>
+                {% if player.getGalaxy.hasAlliance and currentPlayer.getGalaxy.hasAlliance %}
+                    <tr {% if player.getGalaxy.getAlliance.getAllianceId == currentPlayer.getGalaxy.getAlliance.getAllianceId %}class="has-text-primary"{% endif %}>
+                {% else %}
+                    <tr>
+                {% endif %}
                     <td>{{ alliance.getRankingPosition }}</td>
                     <td>{{ alliance.getName }}</td>
                     <td>{{ alliance.getCode }}</td>

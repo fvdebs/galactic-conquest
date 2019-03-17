@@ -1,38 +1,45 @@
-<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-
-
-        <a href="#" class="navbar-item">{{ 'app.galactic.conquest' | trans }}</a>
-
-        <a role="button" class="toggle-id-1 navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
+<nav class="navbar is-primary" role="navigation">
+    <div class="navbar-brand left-burger">
+        <a class="navbar-item navbar-burger burger toggle-id-1 is-hidden-desktop" role="button">
+            <span></span>
+            <span></span>
+            <span></span>
         </a>
+        <p class="navbar-item">
+            <img src="/assets/images/logo/atomic_white_small.png" alt="{{ 'app.galactic.conquest' | trans }}" >
+        </p>
+        <p class="navbar-item">
+            <span>{{ currentUser.getName }}</span>
+        </p>
     </div>
-    <div class="navbar-menu is-active is-hidden-touch">
-        <div class="navbar-start is-active">
-            <a class="navbar-item" href="{{ url('universe.select') }}">
-                <span class="icon">
-                    <i class="fas fa-home" aria-hidden="true"></i>
-                </span>
-                <span>{{ 'app.home' | trans }}</span>
+
+    <div class="navbar-menu is-hidden-mobile">
+        <div class="navbar-end">
+            <a class="navbar-item" href="{{ url('universe.select', {'locale': 'de'}) }}">
+                <figure class="image">
+                    <img class="is-rounded" src="/assets/images/flags/de-DE.png" alt="{{ 'app.de-DE' | trans }}" >
+                </figure>
             </a>
-        </div>
-        <div class="navbar-end is-active">
+            <a class="navbar-item" href="{{ url('universe.select', {'locale': 'en'}) }}">
+                <figure class="image">
+                    <img class="is-rounded" src="/assets/images/flags/en_EN.png" alt="{{ 'app.en_EN' | trans }}" >
+                </figure>
+            </a>
             {% for player in currentUser.getPlayers() %}
-                <a class="navbar-item is-hoverable" href="{{ url('player.overview', [player.getUniverse.getRouteName]) }}">
-                    <span class="icon">
-                        <i class="fas fa-user-astronaut" aria-hidden="true"></i>
-                    </span>
-                    <span>{{ player.getUniverse.getName }}</span>
-                </a>
+                {% if currentUniverse.getUniverseId != player.getUniverse.getUniverseId %}
+                    <a class="navbar-item is-hoverable" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
+                        <span class="icon"><i class="fas fa-atom"></i></span>
+                        <span>{{ player.getUniverse.getName }}</span>
+                    </a>
+                {% endif %}
             {% endfor %}
 
+            <a class="navbar-item is-hoverable" href="{{ url('universe.select') }}">
+                <span class="icon"><i class="fas fa-home"></i></span>
+                <span>{{ 'app.home' | trans }}</span>
+            </a>
             <a class="navbar-item" href="{{ url('user.logout') }}">
-                <span class="icon">
-                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                </span>
+                <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
                 <span>{{ 'app.logout' | trans }}</span>
             </a>
         </div>

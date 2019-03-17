@@ -1,19 +1,24 @@
 {% extends "@App/layout/account-layout.twig" %}
 
 {% block content %}
-    <section class="section">
+    <div class="container">
         <div class="columns is-centered">
             <div class="column is-half">
+                {% include "@App/layout/partial/breadcrumb.twig"
+                    with {
+                        'items': [
+                            {'name': 'app.home', 'url': url('universe.select'), 'icon': 'fas fa-home has-text-primary'},
+                            {'name': 'universe.register.for' | trans | format(universe.getName), 'icon': 'fas fa-atom has-text-primary'},
+                        ]
+                    }
+                %}
 
-                <nav class="breadcrumb" aria-label="breadcrumbs">
-                    <ul>
-                        <li><a href="{{ url('universe.select') }}">{{ 'app.home' | trans }}</a></li>
-                        <li class="is-active"><a href="#" aria-current="page">{{ 'universe.register.for' | trans |format(universe.getName) }}</a></li>
-                    </ul>
-                </nav>
-
-                <h1 class="title is-1">{{ universe.getName }}</h1>
-                <h2 class="subtitle">{{ 'universe.register' | trans }}</h2>
+                {% include "@App/layout/partial/page-title.twig"
+                        with {
+                        'title': universe.getName,
+                        'subtitle': 'universe.register' | trans,
+                    }
+                %}
 
                 <form action="{{ url('universe.register.save') }}" method="post">
                     <div class="field">
@@ -65,5 +70,5 @@
                 </form>
             </div>
         </div>
-    </section>
+    </div>
 {% endblock %}

@@ -1,100 +1,102 @@
-<table class="table is-narrow is-fullwidth">
-    <tbody>
-        <tr>
-            <td>{{ 'universe.ticks.starting.at' | trans }}</td>
-            <td>{{ universe.getTicksStartingAt | datetime }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.tick.current' | trans }}</td>
-            <td>{{ universe.getTickCurrent | number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.tick.interval' | trans }}</td>
-            <td>{{ universe.getTickInterval }}min </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.last.ranking.at' | trans }}</td>
-            <td>{{ universe.getLastRankingAt | datetime }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.ranking.interval' | trans }}</td>
-            <td>{{ universe.getRankingInterval }}h </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.is.closed' | trans }}</td>
-            <td>{{ universe.isClosed | humanbool }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.is.active' | trans }}</td>
-            <td>{{ universe.isActive | humanbool }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.is.registration.allowed' | trans }}</td>
-            <td>{{ universe.isRegistrationAllowed | humanbool }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.max.private.galaxy.players' | trans }}</td>
-            <td>{{ universe.getMaxPrivateGalaxyPlayers }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.max.public.galaxy.players' | trans }}</td>
-            <td>{{ universe.getMaxPublicGalaxyPlayers }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.max.alliance.galaxies' | trans }}</td>
-            <td>{{ universe.getMaxAllianceGalaxies }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.extractor.metal.income' | trans }}</td>
-            <td>{{ universe.getExtractorMetalIncome | number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.extractor.crystal.income' | trans }}</td>
-            <td>{{ universe.getExtractorCrystalIncome | number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.extractor.start.cost' | trans }}</td>
-            <td>{{ universe.getExtractorStartCost | number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.extractor.points' | trans }}</td>
-            <td>{{ universe.getExtractorPoints | number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.resource.point.divider' | trans }}</td>
-            <td>{{ universe.getResourcePointsDivider }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.ticks.attack' | trans }}</td>
-            <td>{{ universe.getTicksAttack }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.ticks.defense' | trans }}</td>
-            <td>{{ universe.getTicksDefense }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.ticks.defense.allied' | trans }}</td>
-            <td>{{ universe.getTicksDefenseAllied }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.ticks.defense.alliance' | trans }}</td>
-            <td>{{ universe.getTicksDefenseAlliance }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.scan.blocker.metal.cost' | trans }}</td>
-            <td>{{ universe.getScanBlockerMetalCost | number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.scan.blocker.crystal.cost' | trans }}</td>
-            <td>{{ universe.getScanBlockerCrystalCost| number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.scan.relay.metal.cost' | trans }}</td>
-            <td>{{ universe.getScanRelayMetalCost | number }} </td>
-        </tr>
-        <tr>
-            <td>{{ 'universe.scan.relay.crystal.cost' | trans }}</td>
-            <td>{{ universe.getScanRelayCrystalCost | number }} </td>
-        </tr>
-    </tbody>
-</table>
+<div class="table-container">
+    <table class="table is-narrow is-fullwidth">
+        <tbody>
+            <tr>
+                <td>{{ 'universe.ticks.starting.at' | trans }}</td>
+                <td>{{ universe.getTicksStartingAt | datetime }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.tick.current' | trans }}</td>
+                <td>{{ universe.getTickCurrent | number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.tick.interval' | trans }}</td>
+                <td>{{ universe.getTickInterval }}min </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.last.ranking.at' | trans }}</td>
+                <td>{{ universe.getLastRankingAt | datetime }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.ranking.interval' | trans }}</td>
+                <td>{{ universe.getRankingInterval }}h </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.is.closed' | trans }}</td>
+                <td>{{ universe.isClosed | humanbool }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.is.active' | trans }}</td>
+                <td>{{ universe.isActive | humanbool }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.is.registration.allowed' | trans }}</td>
+                <td>{{ universe.isRegistrationAllowed | humanbool }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.max.private.galaxy.players' | trans }}</td>
+                <td>{{ universe.getMaxPrivateGalaxyPlayers }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.max.public.galaxy.players' | trans }}</td>
+                <td>{{ universe.getMaxPublicGalaxyPlayers }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.max.alliance.galaxies' | trans }}</td>
+                <td>{{ universe.getMaxAllianceGalaxies }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.extractor.metal.income' | trans }}</td>
+                <td>{{ universe.getExtractorMetalIncome | number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.extractor.crystal.income' | trans }}</td>
+                <td>{{ universe.getExtractorCrystalIncome | number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.extractor.start.cost' | trans }}</td>
+                <td>{{ universe.getExtractorStartCost | number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.extractor.points' | trans }}</td>
+                <td>{{ universe.getExtractorPoints | number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.resource.point.divider' | trans }}</td>
+                <td>{{ universe.getResourcePointsDivider }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.ticks.attack' | trans }}</td>
+                <td>{{ universe.getTicksAttack }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.ticks.defense' | trans }}</td>
+                <td>{{ universe.getTicksDefense }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.ticks.defense.allied' | trans }}</td>
+                <td>{{ universe.getTicksDefenseAllied }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.ticks.defense.alliance' | trans }}</td>
+                <td>{{ universe.getTicksDefenseAlliance }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.scan.blocker.metal.cost' | trans }}</td>
+                <td>{{ universe.getScanBlockerMetalCost | number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.scan.blocker.crystal.cost' | trans }}</td>
+                <td>{{ universe.getScanBlockerCrystalCost| number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.scan.relay.metal.cost' | trans }}</td>
+                <td>{{ universe.getScanRelayMetalCost | number }} </td>
+            </tr>
+            <tr>
+                <td>{{ 'universe.scan.relay.crystal.cost' | trans }}</td>
+                <td>{{ universe.getScanRelayCrystalCost | number }} </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -30,7 +30,7 @@ final class UniverseSelectHandler implements RequestHandlerInterface
         $user = $this->getCurrentUser($request);
         $universes = $this->getUniverseRepository()->findAll();
 
-        return $this->render('@Universe/universes.twig', [
+        return $this->render('@Universe/universe-select.twig', [
             'playableUniverses' => $this->filterPlayableUniverses($user, $universes),
             'joinableUniverses' => $this->filterJoinableUniverses($user, $universes),
             'closedUniverses' => $this->getUniverseRepository()->findAllClosed(),

@@ -30,18 +30,20 @@
     <div class="navbar-menu is-hidden-mobile">
         <div class="navbar-end">
             {% for player in currentUser.getPlayers() %}
-                <a class="navbar-item is-hoverable" href="{{ url('player.overview', [player.getUniverse.getRouteName]) }}">
-                    <span class="icon"><i class="fas fa-user-astronaut" aria-hidden="true"></i></span>
-                    <span>{{ player.getUniverse.getName }}</span>
-                </a>
+                {% if currentUniverse.getUniverseId != player.getUniverse.getUniverseId %}
+                    <a class="navbar-item is-hoverable" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
+                        <span class="icon"><i class="fas fa-atom"></i></span>
+                        <span>{{ player.getUniverse.getName }}</span>
+                    </a>
+                {% endif %}
             {% endfor %}
 
             <a class="navbar-item is-hoverable" href="{{ url('universe.select') }}">
-                <span class="icon"><i class="fas fa-atom" aria-hidden="true"></i></span>
+                <span class="icon"><i class="fas fa-home"></i></span>
                 <span>{{ 'app.home' | trans }}</span>
             </a>
             <a class="navbar-item" href="{{ url('user.logout') }}">
-                <span class="icon"><i class="fas fa-sign-out-alt" aria-hidden="true"></i></span>
+                <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
                 <span>{{ 'app.logout' | trans }}</span>
             </a>
         </div>

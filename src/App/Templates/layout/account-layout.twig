@@ -2,6 +2,27 @@
 
 {% block body %}
     {% include '@App/layout/partial/account-navigation-top.twig' %}
-    {% block content %}{% endblock %}
-    {% include '@App/layout/partial/footer.twig' %}
+
+    <div class="custom-duration-200" off-canvas="id-1 left push">
+        <section class="section"><br><br>
+            {% include '@App/layout/partial/account-navigation-left.twig' %}
+        </section>
+    </div>
+
+    <div canvas="container" id="sidebar-content-wrapper">
+        <section class="section">
+            {% block content %}{% endblock %}
+        </section>
+
+        {% include '@App/layout/partial/footer.twig' %}
+    </div>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="/assets/css/slidebars.min.css">
+{% endblock %}
+
+{% block script %}
+    <script src="/assets/js/slidebars.min.js"></script>
+    <script src="/assets/js/gc.js?2"></script>
 {% endblock %}

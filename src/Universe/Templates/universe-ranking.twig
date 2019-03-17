@@ -10,29 +10,26 @@
         }
     %}
 
-    {% include "@App/layout/partial/page-title.twig"
-        with {
-            'title': 'universe.ranking' | trans,
-        }
-    %}
-
-    <div class="tabs is-fullwidth-mobile is-medium is-large-mobile">
+    <div class="tabs is-fullwidth-mobile is-medium">
         <ul>
-            <li data-content-id="#alliance" class="is-active">
+            <li data-content-id="#alliance" class="is-active has-justified-content-mobile">
                 <a>
-                    <span class="icon"><i class="fas fa-globe has-text-primary" aria-hidden="true"></i></span>
+                    <span class="icon is-hidden-mobile"><i class="fas fa-globe has-text-primary"></i></span>
+                    <i class="fas fa-globe has-text-primary is-hidden-tablet"></i>
                     <span class="is-hidden-mobile">{{ 'universe.ranking.alliance' | trans }}</span>
                 </a>
             </li>
-            <li data-content-id="#galaxy">
+            <li data-content-id="#galaxy" class="has-justified-content-mobile">
                 <a>
-                    <span class="icon"><i class="fas fa-project-diagram has-text-primary" aria-hidden="true"></i></span>
+                    <span class="icon is-hidden-mobile"><i class="fas fa-project-diagram has-text-primary"></i></span>
+                    <i class="fas fa-project-diagram has-text-primary is-hidden-tablet"></i>
                     <span class="is-hidden-mobile">{{ 'universe.ranking.galaxy' | trans }}</span>
                 </a>
             </li>
-            <li data-content-id="#player">
+            <li data-content-id="#player" class="has-justified-content-mobile">
                 <a>
-                    <span class="icon"><i class="fas fa-user has-text-primary" aria-hidden="true"></i></span>
+                    <span class="icon is-hidden-mobile"><i class="fas fa-user has-text-primary" aria-hidden="true"></i></span>
+                    <i class="fas fa-user has-text-primary is-hidden-tablet"></i>
                     <span class="is-hidden-mobile">{{ 'universe.ranking.player' | trans }}</span>
                 </a>
             </li>

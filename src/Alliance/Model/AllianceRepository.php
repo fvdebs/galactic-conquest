@@ -36,6 +36,8 @@ final class AllianceRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('alliance')
             ->where('alliance.universe = :universeId')
+            ->andWhere('alliance.rankingPosition IS NOT NULL')
+            ->andWhere('alliance.rankingPosition != 0')
             ->orderBy('alliance.rankingPosition', 'ASC')
             ->setParameter(':universeId', $universeId)
             ->setFirstResult($start)

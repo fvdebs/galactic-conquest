@@ -47,6 +47,11 @@
         font-size: 1.5rem;
     }
 }
+@media screen and (max-width: 768px), print {
+    .has-justified-content-mobile {
+        justify-content: center;
+    }
+}
 
 /** Navbar */
 .navbar-brand.left-burger .navbar-burger {

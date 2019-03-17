@@ -55,6 +55,8 @@ final class PlayerRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('player')
             ->where('player.universe = :universeId')
+            ->andWhere('player.rankingPosition IS NOT NULL')
+            ->andWhere('player.rankingPosition != 0')
             ->orderBy('player.rankingPosition', 'ASC')
             ->setParameter(':universeId', $universeId)
             ->setFirstResult($start)

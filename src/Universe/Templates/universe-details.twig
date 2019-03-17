@@ -1,40 +1,37 @@
 {% extends "@App/layout/account-layout.twig" %}
 
 {% block content %}
-    <section class="section">
-        <div class="container">
+    <div class="container">
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': 'app.home', 'url': url('universe.select'), 'icon': 'fas fa-home has-text-primary'},
+                    {'name': universe.getName, 'icon': 'fas fa-atom has-text-primary'},
+                ]
+            }
+        %}
 
-            <nav class="breadcrumb" aria-label="breadcrumbs">
-                <ul>
-                    <li><a href="{{ url('universe.select') }}">{{ 'app.home' | trans }}</a></li>
-                    <li class="is-active"><a href="#" aria-current="page">{{ 'universe.details.of' | trans |format(universe.getName) }}</a></li>
-                </ul>
-            </nav>
+        {% include "@App/layout/partial/page-title.twig"
+            with {
+                'title': universe.getName,
+            }
+        %}
+        <h2 class="subtitle">
+            {% if universe.isClosed %}
+                <span class="tag is-light">{{ 'universe.status.closed' | trans }}</span>
+            {% endif %}
 
-            <h1 class="title is-1">{{ universe.getName }}</h1>
-            <h2 class="subtitle">
-                {% if universe.isClosed %}
-                    <span class="tag is-light">{{ 'universe.status.closed' | trans }}</span>
-                {% endif %}
+            {% if universe.isActive %}
+                <span class="tag is-light">{{ 'universe.status.active' | trans }}</span>
+            {% endif %}
 
-                {% if universe.isActive %}
-                    <span class="tag is-light">{{ 'universe.status.active' | trans }}</span>
-                {% endif %}
+            {% if universe.isRegistrationAllowed %}
+                <span class="tag is-light">{{ 'universe.status.joinable' | trans }}</span>
+            {% endif %}
+        </h2>
 
-                {% if universe.isRegistrationAllowed %}
-                    <span class="tag is-light">{{ 'universe.status.joinable' | trans }}</span>
-                {% endif %}
-            </h2>
-            <p>{{ universe.getDescription }}</p>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <h3 class="title is-4">
-                {{ 'universe.settings' | trans }}
-            </h3>
-            {% include '@Universe/partial/universe-table-settings.twig' %}
-        </div>
-    </section>
+        <p>{{ universe.getDescription }}</p><br><br>
+        <h3 class="title is-4">{{ 'universe.settings' | trans }}</h3>
+        {% include '@Universe/partial/universe-table-settings.twig' %}
+    </div>
 {% endblock %}

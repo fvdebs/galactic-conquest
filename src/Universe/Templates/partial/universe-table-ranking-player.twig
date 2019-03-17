@@ -2,23 +2,25 @@
     <table class="table is-narrow is-fullwidth">
         <tbody>
             <tr>
-                <th>{{ 'universe.ranking.player.ranking' | trans }}</th>
+                <th>#</th>
                 <th>{{ 'universe.ranking.player.id' | trans }} </th>
                 <th>{{ 'universe.ranking.player.name' | trans }} </th>
-                <th>{{ 'universe.ranking.player.points' | trans }} </th>
                 <th>{{ 'universe.ranking.player.alliance' | trans }} </th>
+                <th>{{ 'universe.ranking.player.points' | trans }} </th>
             </tr>
             {% for player in playerRankings %}
-                <tr>
+                <tr {% if player.getUser.getUserId == currentPlayer.getUser.getUserId %}class="has-text-primary"{% endif %}>
                     <td>{{ player.getRankingPosition }}</td>
                     <td>{{ player.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}</td>
                     <td>{{ player.getUser.getName }}</td>
-                    <td>{{ player.getPoints | number }}</td>
                     <td>
                         {% if player.getGalaxy.hasAlliance %}
                             {{ player.getGalaxy.getAlliance.getCode }}
+                        {% else %}
+                            -
                         {% endif %}
                     </td>
+                    <td>{{ player.getPoints | number }}</td>
                 </tr>
             {% endfor %}
         </tbody>

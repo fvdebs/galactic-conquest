@@ -10,12 +10,6 @@
         }
     %}
 
-    {% include "@App/layout/partial/page-title.twig"
-        with {
-            'title': 'galaxy.galaxies' | trans
-        }
-    %}
-
     <div class="field has-addons has-addons-right galaxies">
         <p class="control">
             <a href="{{ url('galaxy.galaxies', [previousGalaxyNumber]) }}" class="button is-primary"{% if previousGalaxyNumber is null %} disabled{% endif %}>

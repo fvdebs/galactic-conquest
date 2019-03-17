@@ -3,6 +3,12 @@
     <ul class="menu-list is-hidden-tablet has-text-grey-dark">
         <li>
             <a>
+                <span class="icon"><i class="fas fa-medal has-text-primary"></i></span>
+                <span>{{ currentPlayer.getRankingPosition | number }}</span>
+            </a>
+        </li>
+        <li>
+            <a>
                 <span class="icon"><i class="fas fa-star has-text-primary"></i></span>
                 <span>{{ currentPlayer.getPoints | number }}</span>
             </a>
@@ -121,8 +127,8 @@
         {% for player in currentUser.getPlayers() %}
             {% if currentUniverse.getUniverseId != player.getUniverse.getUniverseId %}
                 <li>
-                    <a href="{{ url('player.overview', [player.getUniverse.getRouteName]) }}">
-                        <span class="icon"><i class="fas fa-user-astronaut has-text-primary"></i></span>
+                    <a href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
+                        <span class="icon"><i class="fas fa-atom has-text-primary"></i></span>
                         <span>{{ player.getUniverse.getName }}</span>
                     </a>
                 </li>
