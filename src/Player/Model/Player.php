@@ -763,6 +763,43 @@ class Player
     }
 
     /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return int
+     */
+    public function getUnitConstructionProgress(Unit $unit): int
+    {
+        foreach ($this->getPlayerUnitConstructions() as $playerUnitConstruction) {
+            if ($playerUnitConstruction->getUnit()->getUnitId() === $unit->getUnitId()) {
+                return $playerUnitConstruction->calculateProgress();
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return int
+     */
+    public function calculateMaxUnits(Unit $unit): int
+    {
+        $maxUnitsMetal = floor($this->getMetal() / $unit->getMetalCost());
+        $maxUnitsCrystal = floor($this->getCrystal() / $unit->getCrystalCost());
+
+        if ($maxUnitsMetal <= $maxUnitsCrystal){
+            return (int) \floor($maxUnitsMetal);
+        }
+
+        if ($maxUnitsCrystal <= $maxUnitsMetal){
+            return (int) \floor($maxUnitsCrystal);
+        }
+
+        return 0;
+    }
+
+    /**
      * @return \GC\Player\Model\PlayerUnitConstruction[]
      */
     public function getPlayerUnitConstructions(): array

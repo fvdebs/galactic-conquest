@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="{{ locale }}">
+{% set version = '?5562314168' %}
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="This is yet another browser game.">
+        <meta name="description" content="{{ 'app.page-title' | trans }}">
         <meta name="keywords" content="Browser game,galaxy,galactic,game,space">
-        <title>{% block title %}Galactic Conquest{% endblock %}</title>
+        <title>{% block title %}{{ 'app.page-title' | trans }}{% endblock %}</title>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="/manifest.json{{ version }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+        <link rel="stylesheet" href="/assets/css/slidebars.min.css{{ version }}">
+        <link rel="stylesheet" href="/assets/css/gc.css{{ version }}">
         {% block style %}{% endblock %}
-        <link rel="stylesheet" href="/assets/css/gc.css?55">
     </head>
     <body>
         {% block body %}{% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/assets/js/slidebars.min.js{{ version }}"></script>
+        <script src="/assets/js/gc.js{{ version }}"></script>
+        <script src="/assets/js/form.min.js{{ version }}"></script>
         {% block script %}{% endblock %}
-        <script src="/assets/js/form.min.js"></script>
     </body>
 </html>

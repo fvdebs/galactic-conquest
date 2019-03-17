@@ -11,40 +11,18 @@
             }
         %}
 
-        <div class="table-container is-responsive">
-            <table class="table is-narrow is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>{{ 'Typ' | trans }}</th>
-                        <th>{{ 'unit.costs' | trans }}</th>
-                        <th>{{ 'unit.build.time' | trans }}</th>
-                        <th>{{ 'unit.units' | trans }}</th>
-                        <th>{{ 'unit.order' | trans }}</th>
-                        <th>{{ 'unit.progress' | trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for unit in units %}
-                    <tr>
-                        <td>{{ unit.getName }}</td>
-                        <td>
-                            <i class="fas fa-industry"></i> {{ unit.getMetalCost | number }}<br>
-                            <i class="fas fa-gem"></i> {{ unit.getCrystalCost | number }}
-                        </td>
-                        <td>
-                            {{ unit.getTicksToBuild }}
-                        </td>
-                        <td>
-                            {{ currentPlayer.getNumberOfUnits(unit) | number }}
-                        </td>
-                        <td></td>
-                        <td>
-                            Kein Autrag
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <h2 class="title is-5 has-margin has-text-centered">{{ 'unit.shipyard' | trans }}</h2>
+        {% include "@Player/partial/form-unit-build.twig"
+            with {
+                'units': flyableBuildableUnits,
+            }
+        %}
+
+        <h2 class="title is-5 has-margin has-text-centered">{{ 'unit.defense' | trans }}</h2>
+        {% include "@Player/partial/form-unit-build.twig"
+            with {
+                'units': stationaryBuildableUnits,
+            }
+        %}
     </div>
 {% endblock %}

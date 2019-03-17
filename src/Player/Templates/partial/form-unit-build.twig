@@ -1,0 +1,56 @@
+<div class="table-container is-responsive">
+    <table class="table is-narrow is-fullwidth">
+        <thead>
+            <tr>
+                <th>{{ 'unit.typ' | trans }}</th>
+                <th>{{ 'unit.costs' | trans }}</th>
+                <th class="has-text-centered">
+                    <span class="icon has-text-primary"><i class="fas fa-clock"></i></span>
+                </th>
+                <th class="has-text-centered">
+                    <span class="icon has-text-primary"><i class="fab fa-fort-awesome"></i></span>
+                </th>
+                <th class="has-text-centered">{{ 'unit.order' | trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in units %}
+                <tr>
+                    <td>
+                        {{ unit.getName | trans }}
+                    </td>
+                    <td nowrap>
+                        <span class="icon"><i class="fas fa-industry  has-text-primary"></i></span>
+                        <span>{{ unit.getMetalCost | number }}</span><br>
+                        <span class="icon"><i class="fas fa-gem  has-text-primary"></i></span>
+                        <span>{{ unit.getCrystalCost | number }}</span>
+                    </td>
+                    <td class="has-text-centered">
+                        {{ unit.getTicksToBuild }}
+                    </td>
+                    <td class="has-text-centered">
+                        {{ currentPlayer.getNumberOfUnits(unit) | number }}
+                    </td>
+                    <td class="has-text-centered">
+                        {% if currentPlayer.isUnitInConstruction(unit) %}
+                            <progress class="progress is-primary" value="{{ currentPlayer.getUnitConstructionProgress(unit) }}" max="100">
+                                {{ currentPlayer.getUnitConstructionProgress(unit) }}%
+                            </progress>
+                        {% else %}
+                            <div class="field has-addons has-addons-right has-justified-content-center">
+                                <p class="control">
+                                    <input name="unit[{{ unit.getUnitId }}]" data-identifier="{{ unit.getUnitId }}" value="{{ currentPlayer.calculateMaxUnits(unit) }}" class="input build-value has-length-small" type="text" placeholder="{{ 'unit.production' | trans }}">
+                                </p>
+                                <p class="control">
+                                    <a class="button is-primary build-submit" data-action="{{ url('player.unit.build') }}">
+                                        <span class="icon"><i class="fas fa-cogs"></i></span>
+                                    </a>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

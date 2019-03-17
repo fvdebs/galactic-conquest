@@ -74,14 +74,12 @@ footer.footer {
     margin-right: 0;
 }
 
-/*************************
-* GC
-**************************/
-
-.input.galaxies {
+/** Form */
+.input.has-length-small {
     max-width: 65px;
 }
 
-.field.has-addons.has-addons-right.galaxies {
+.field.has-addons.has-addons-right.has-justified-content-center {
     justify-content: center;
 }
+
