@@ -765,17 +765,16 @@ class Player
     /**
      * @param \GC\Unit\Model\Unit $unit
      *
-     * @return int
+     * @return \GC\Player\Model\PlayerUnitConstruction|null
      */
-    public function getUnitConstructionProgress(Unit $unit): int
+    public function getPlayerUnitConstructionOf(Unit $unit): ?PlayerUnitConstruction
     {
         foreach ($this->getPlayerUnitConstructions() as $playerUnitConstruction) {
             if ($playerUnitConstruction->getUnit()->getUnitId() === $unit->getUnitId()) {
-                return $playerUnitConstruction->calculateProgress();
+                return $playerUnitConstruction;
             }
         }
-
-        return 0;
+        return null;
     }
 
     /**
@@ -785,8 +784,8 @@ class Player
      */
     public function calculateMaxUnits(Unit $unit): int
     {
-        $maxUnitsMetal = floor($this->getMetal() / $unit->getMetalCost());
-        $maxUnitsCrystal = floor($this->getCrystal() / $unit->getCrystalCost());
+        $maxUnitsMetal = \floor($this->getMetal() / $unit->getMetalCost());
+        $maxUnitsCrystal = \floor($this->getCrystal() / $unit->getCrystalCost());
 
         if ($maxUnitsMetal <= $maxUnitsCrystal){
             return (int) \floor($maxUnitsMetal);
@@ -1140,8 +1139,13 @@ class Player
      *
      * @return int
      */
-    public function getNumberOfUnits(Unit $unit): int
+    public function getQuantityOf(Unit $unit): int
     {
-        return 0;
+        $quantity = 0;
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            $quantity += $playerFleet->getQuantityOf($unit);
+        }
+
+        return $quantity;
     }
 }

@@ -272,6 +272,21 @@ class PlayerFleet
     /**
      * @param \GC\Unit\Model\Unit $unit
      *
+     * @return int
+     */
+    public function getQuantityOf(Unit $unit): int
+    {
+        $playerFleetUnit = $this->getPlayerFleetUnitFor($unit);
+        if ($playerFleetUnit === null) {
+            return 0;
+        }
+
+        return $playerFleetUnit->getQuantity();
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
      * @return \GC\Player\Model\PlayerFleetUnit
      */
     protected function createPlayerFleetUnit(Unit $unit): PlayerFleetUnit
@@ -294,28 +309,6 @@ class PlayerFleet
         }
 
         return (int) \round($calculation);
-    }
-
-    /**
-     * @param \GC\Player\Model\PlayerFleet $playerFleet
-     * @param \GC\Unit\Model\Unit $unit
-     * @param int $quantity
-     *
-     * @return void
-     */
-    public function moveFromFleet(PlayerFleet $playerFleet, Unit $unit, int $quantity): void
-    {
-    }
-
-
-    /**
-     * @param \GC\Player\Model\Player $player
-     *
-     * @return \GC\Player\Model\PlayerFleet
-     */
-    public function attack(Player $player): PlayerFleet
-    {
-
     }
 
     /**

@@ -45,6 +45,10 @@ final class PlayerUnitBuildHandler implements RequestHandlerInterface
             $validator->addMessage(static::FIELD_NAME_UNIT_ID);
         }
 
+        if ($quantity <= 0) {
+            $validator->addMessage(static::FIELD_NAME_UNIT_ID);
+        }
+
         if (!$player->hasUnitRequirementsFor($unit)) {
             $validator->addMessage(static::FIELD_NAME_UNIT_ID);
         }

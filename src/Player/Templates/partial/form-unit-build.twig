@@ -1,20 +1,21 @@
-<div class="table-container is-responsive">
-    <table class="table is-narrow is-fullwidth">
+<div class="table-container">
+    <table class="table is-narrow is-fullwidth has-valigned-cells">
         <thead>
             <tr>
                 <th>{{ 'unit.typ' | trans }}</th>
                 <th>{{ 'unit.costs' | trans }}</th>
                 <th class="has-text-centered">
-                    <span class="icon has-text-primary"><i class="fas fa-clock"></i></span>
+                    <span class="icon has-text-primary"><i class="fab fa-fort-awesome"></i></span>
                 </th>
                 <th class="has-text-centered">
-                    <span class="icon has-text-primary"><i class="fab fa-fort-awesome"></i></span>
+                    <span class="icon has-text-primary"><i class="fas fa-clock"></i></span>
                 </th>
                 <th class="has-text-centered">{{ 'unit.order' | trans }}</th>
             </tr>
         </thead>
         <tbody>
             {% for unit in units %}
+                {% set isUnitInProduction = currentPlayer.isUnitInConstruction(unit) %}
                 <tr>
                     <td>
                         {{ unit.getName | trans }}
@@ -26,18 +27,23 @@
                         <span>{{ unit.getCrystalCost | number }}</span>
                     </td>
                     <td class="has-text-centered">
-                        {{ unit.getTicksToBuild }}
+                        {{ currentPlayer.getQuantityOf(unit) | number }}
                     </td>
                     <td class="has-text-centered">
-                        {{ currentPlayer.getNumberOfUnits(unit) | number }}
-                    </td>
-                    <td class="has-text-centered">
-                        {% if currentPlayer.isUnitInConstruction(unit) %}
-                            <progress class="progress is-primary" value="{{ currentPlayer.getUnitConstructionProgress(unit) }}" max="100">
-                                {{ currentPlayer.getUnitConstructionProgress(unit) }}%
-                            </progress>
+                        {% if isUnitInProduction %}
+                            {{ currentPlayer.getPlayerUnitConstructionOf(unit).getTicksLeft }} ({{ unit.getTicksToBuild }})
                         {% else %}
-                            <div class="field has-addons has-addons-right has-justified-content-center">
+                            {{ unit.getTicksToBuild }}
+                        {% endif %}
+                    </td>
+                    <td class="has-text-centered">
+                        {% if isUnitInProduction %}
+                            {% set progress = currentPlayer.getPlayerUnitConstructionOf(unit).calculateProgress() %}
+                            <div class="progress-container" data-text="{{ progress }}% ({{ currentPlayer.getPlayerUnitConstructionOf(unit).getQuantity }})">
+                                <progress class="progress is-primary" value="{{ progress }}" max="100"></progress>
+                            </div>
+                        {% else %}
+                            <div class="field has-addons has-addons-right">
                                 <p class="control">
                                     <input name="unit[{{ unit.getUnitId }}]" data-identifier="{{ unit.getUnitId }}" value="{{ currentPlayer.calculateMaxUnits(unit) }}" class="input build-value has-length-small" type="text" placeholder="{{ 'unit.production' | trans }}">
                                 </p>

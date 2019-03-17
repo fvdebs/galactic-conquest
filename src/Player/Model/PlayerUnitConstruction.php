@@ -117,7 +117,7 @@ class PlayerUnitConstruction
      */
     public function calculateProgress(): int
     {
-        $tickToBuild = ($this->getUnit()->getTicksToBuild() / 100) * $this->getTicksLeft();
+        $tickToBuild = ($this->getUnit()->getTicksToBuild() - $this->getTicksLeft()) / $this->getUnit()->getTicksToBuild();
 
         return (int) \round($tickToBuild * 100);
     }

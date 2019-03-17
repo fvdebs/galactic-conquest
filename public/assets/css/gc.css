@@ -83,3 +83,27 @@ footer.footer {
     justify-content: center;
 }
 
+/** centered table columsn */
+.table.has-valigned-cells td {
+    vertical-align: middle;
+}
+
+/**
+** Progress bar
+ */
+
+.progress-container:before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    color: #fff;
+    line-height: 1rem;
+    font-size: small;
+}
+
+.progress-container {
+    position: relative;
+    text-align: center;
+}
