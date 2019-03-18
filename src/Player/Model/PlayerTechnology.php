@@ -96,11 +96,9 @@ class PlayerTechnology
             return 100;
         }
 
-        $technologyBuildTicks = $this->getTechnology()->getTicksToBuild();
+        $tickToBuild = ($this->getTechnology()->getTicksToBuild() - $this->getTicksLeft()) / $this->getTechnology()->getTicksToBuild();
 
-        $calculation = $technologyBuildTicks / ($technologyBuildTicks - $this->getTicksLeft());
-
-        return (int) \round($calculation);
+        return (int) \round($tickToBuild * 100);
     }
 
     /**

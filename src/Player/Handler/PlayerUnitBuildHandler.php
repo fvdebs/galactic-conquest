@@ -40,6 +40,10 @@ final class PlayerUnitBuildHandler implements RequestHandlerInterface
             $validator->addMessage(static::FIELD_NAME_UNIT_ID);
         }
 
+        if ($validator->failed()) {
+            return $this->failedValidation($validator);
+        }
+
         $player = $this->getCurrentPlayer($request);
         if ($player->isUnitInConstruction($unit)) {
             $validator->addMessage(static::FIELD_NAME_UNIT_ID);

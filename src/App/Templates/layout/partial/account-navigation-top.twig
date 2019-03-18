@@ -26,12 +26,10 @@
                 </figure>
             </a>
             {% for player in currentUser.getPlayers() %}
-                {% if currentUniverse.getUniverseId != player.getUniverse.getUniverseId %}
-                    <a class="navbar-item is-hoverable" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
-                        <span class="icon"><i class="fas fa-atom"></i></span>
-                        <span>{{ player.getUniverse.getName }}</span>
-                    </a>
-                {% endif %}
+                <a class="navbar-item is-hoverable" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
+                    <span class="icon"><i class="fas fa-atom"></i></span>
+                    <span>{{ player.getUniverse.getName }}</span>
+                </a>
             {% endfor %}
 
             <a class="navbar-item is-hoverable" href="{{ url('universe.select') }}">

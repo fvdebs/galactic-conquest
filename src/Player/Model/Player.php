@@ -937,17 +937,32 @@ class Player
     /**
      * @param \GC\Technology\Model\Technology $technology
      *
+     * @return \GC\Player\Model\PlayerTechnology
+     */
+    public function getPlayerTechnologyInConstruction(Technology $technology): ?PlayerTechnology
+    {
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
+                return $playerTechnology;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
      * @return bool
      */
     public function hasTechnologyInConstruction(Technology $technology): bool
     {
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
-                return true;
-            }
+        $playerTechnology = $this->getPlayerTechnologyInConstruction($technology);
+        if ($playerTechnology === null) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**

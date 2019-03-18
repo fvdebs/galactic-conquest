@@ -18,9 +18,27 @@ final class TechnologyRepository extends EntityRepository
 	public function findById(int $technologyId): ?Technology
     {
         return $this->createQueryBuilder('technology')
-		    ->where('technology.technology = :technologyId')
+		    ->where('technology.technologyId = :technologyId')
             ->setParameter(':technologyId', $technologyId)
             ->getQuery()
             ->getOneOrNullResult();
 	}
+
+    /**
+     * @param int $universeId
+     * @param int $factionId
+     *
+     * @return \GC\Unit\Model\Unit[]
+     */
+    public function findPlayerTechnologiesByUniverseAndFaction(int $universeId, int $factionId): array
+    {
+        return $this->createQueryBuilder('technology')
+            ->where('technology.universe = :universeId')
+            ->andWhere('technology.faction = :factionId')
+            ->andWhere('technology.isPlayerTechnology = 1')
+            ->setParameter(':universeId', $universeId)
+            ->setParameter(':factionId', $factionId)
+            ->getQuery()
+            ->getResult();
+    }
 }

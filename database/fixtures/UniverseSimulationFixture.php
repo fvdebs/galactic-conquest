@@ -152,8 +152,9 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->manager = $manager;
 
         // config
-        $galaxyAndAlliancesMultiplier = 50;
+        $galaxyAndAlliancesMultiplier = 100;
         $universes = ['Sirius', 'Eridanus', 'Starman'];
+        $universesPermanentPlayersAppliedTo = ['Sirius', 'Eridanus'];
         $this->createPermanentUser('John Doe', 'example@example.org');
 
         // create universes
@@ -165,11 +166,12 @@ class UniverseSimulationFixture extends AbstractFixture
             $universe = $this->fillUniverseWithRandomValues($universe);
             $universe = $this->createUniverseDefaults($universe);
 
-            if ($this->randomBool()) {
-                $universe = $this->createPermanentPlayersAndAssignToUniverse($universe);
-            }
-
             $universe = $this->createRandomGalaxiesAndAlliances($universe, $galaxyAndAlliancesMultiplier);
+
+            if (\in_array($universeName, $universesPermanentPlayersAppliedTo)) {
+                $universe = $this->createPermanentPlayersAndAssignToUniverse($universe);
+                $universe->setTickInterval(5);
+            }
 
             foreach ($universe->getPlayers() as $player) {
                 $this->givePlayerRandomResources($player);
@@ -179,13 +181,13 @@ class UniverseSimulationFixture extends AbstractFixture
             $universe->generateAllianceAndGalaxyRanking();
 
             $this->output("flushing...\n");
-            $manager->flush();
+            $this->manager->flush();
 
             $this->output("calculating first tick...\n");
             $universe->tick();
 
             $this->output("flushing...\n");
-            $manager->flush();
+            $this->manager->flush();
         }
     }
 
@@ -225,30 +227,32 @@ class UniverseSimulationFixture extends AbstractFixture
     private function createRandomGalaxiesAndAlliances(Universe $universe, int $galaxyAndAlliancesMultiplier): Universe
     {
         for ($i = 0; $i < $galaxyAndAlliancesMultiplier; $i++) {
-            switch (\rand(1, 4)) {
+            switch (\random_int(1, 6)) {
                 case 1:
+                case 2:
+                case 3:
                     $this->createPrivateGalaxiesInAlliance(
                         $universe,
                         1,
                         $this->getRandomAllianceGalaxyValue($universe),
                         $this->getRandomPrivateGalaxyPlayerValue($universe)
                     );
-                break;
-                case 2:
+                    break;
+                case 4:
                     $this->createPrivateGalaxies(
                         $universe,
                         $this->getRandomNumberOfGalaxyCreationPerIteration(),
                         $this->getRandomPrivateGalaxyPlayerValue($universe)
                     );
-                break;
-                case 3:
-                case 4:
+                    break;
+                case 5:
+                case 6:
                     $this->createPublicGalaxies(
                         $universe,
                         $this->getRandomNumberOfGalaxyCreationPerIteration(),
                         $this->getRandomPublicGalaxyPlayerValue($universe)
                     );
-                break;
+                    break;
             }
         }
 
@@ -292,7 +296,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomPrivateGalaxyPlayerValue(Universe $universe): int
     {
-        return \rand(4, $universe->getMaxPrivateGalaxyPlayers());
+        return \random_int(4, $universe->getMaxPrivateGalaxyPlayers());
     }
 
     /**
@@ -302,7 +306,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomAllianceGalaxyValue(Universe $universe): int
     {
-        return \rand(1, $universe->getMaxAllianceGalaxies());
+        return \random_int(1, $universe->getMaxAllianceGalaxies());
     }
 
     /**
@@ -312,7 +316,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomPublicGalaxyPlayerValue(Universe $universe): int
     {
-        return \rand(5, $universe->getMaxPublicGalaxyPlayers());
+        return \random_int(5, $universe->getMaxPublicGalaxyPlayers());
     }
 
     /**
@@ -320,7 +324,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomExtractorValue(): int
     {
-        return \rand(1, 500);
+        return \random_int(50, 500);
     }
 
     /**
@@ -328,7 +332,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomNumberOfGalaxyCreationPerIteration(): int
     {
-        return \rand(1, 4);
+        return \random_int(1, 4);
     }
 
     /**
@@ -336,7 +340,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomResourceValue(): int
     {
-        return \rand(5000000, 50000000);
+        return \random_int(5000000, 50000000);
     }
 
     /**
@@ -344,7 +348,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomResourceProductionValue(): int
     {
-        return \rand(1000, 10000);
+        return \random_int(1000, 10000);
     }
 
     /**
@@ -352,15 +356,23 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomTicksValue(): int
     {
-        return \rand(2, 10);
+        return \random_int(2, 10);
     }
 
     /**
      * @return int
      */
-    private function getRandomCostValue(): int
+    private function getRandomTechnologyCostValue(): int
     {
-        return \rand(500, 2000000);
+        return \random_int(500, 2000000);
+    }
+
+    /**
+     * @return int
+     */
+    private function getRandomUnitCostValue(): int
+    {
+        return (int) \round(\random_int(10000, 250000), -4);
     }
 
     /**
@@ -368,7 +380,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomTaxValue(): int
     {
-        return \rand(0, 50);
+        return \random_int(0, 50);
     }
 
     /**
@@ -472,15 +484,15 @@ class UniverseSimulationFixture extends AbstractFixture
     private function fillUniverseWithRandomValues(Universe $universe): Universe
     {
         $universe->setDescription('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis.');
-        $universe->setExtractorCrystalIncome(\rand(20, 100));
-        $universe->setExtractorMetalIncome(\rand(20, 100));
-        $universe->setMaxAllianceGalaxies(\rand(2, 6));
-        $universe->setMaxPrivateGalaxyPlayers(\rand(5, 12));
-        $universe->setMaxPublicGalaxyPlayers($universe->getMaxPrivateGalaxyPlayers() + \rand(3, 5));
-        $universe->setScanBlockerMetalCost($this->getRandomCostValue());
-        $universe->setScanBlockerCrystalCost($this->getRandomCostValue());
-        $universe->setScanRelayMetalCost($this->getRandomCostValue());
-        $universe->setScanRelayCrystalCost($this->getRandomCostValue());
+        $universe->setExtractorCrystalIncome(\random_int(20, 100));
+        $universe->setExtractorMetalIncome(\random_int(20, 100));
+        $universe->setMaxAllianceGalaxies(\random_int(2, 6));
+        $universe->setMaxPrivateGalaxyPlayers(\random_int(5, 12));
+        $universe->setMaxPublicGalaxyPlayers($universe->getMaxPrivateGalaxyPlayers() + \random_int(3, 5));
+        $universe->setScanBlockerMetalCost($this->getRandomUnitCostValue());
+        $universe->setScanBlockerCrystalCost($this->getRandomUnitCostValue());
+        $universe->setScanRelayMetalCost($this->getRandomUnitCostValue());
+        $universe->setScanRelayCrystalCost($this->getRandomUnitCostValue());
         $universe->setRankingInterval($this->randomValueFrom([6, 12, 24]));
         $universe->setTickInterval($this->randomValueFrom([5, 10, 15]));
         $universe->setTicksStartingAt(new DateTime());
@@ -513,7 +525,7 @@ class UniverseSimulationFixture extends AbstractFixture
      *
      * @return \GC\Galaxy\Model\Galaxy
      */
-    private function createPrivateGalaxy(Universe $universe, int $numberOfPlayers)
+    private function createPrivateGalaxy(Universe $universe, int $numberOfPlayers): Galaxy
     {
         $galaxy = $universe->createPrivateGalaxy();
         $galaxy = $this->fillGalaxyWithPlayers($galaxy, $numberOfPlayers);
@@ -642,7 +654,7 @@ class UniverseSimulationFixture extends AbstractFixture
     private function fillGalaxyWithPlayers(Galaxy $galaxy, int $numberOfPlayers): Galaxy
     {
         for ($i = 0; $i < $numberOfPlayers; $i++) {
-            $this->createUserPlayer($galaxy, ($i === 0));
+            $this->createUserPlayer($galaxy, $i === 0);
         }
 
         return $galaxy;
@@ -678,9 +690,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createPlayer(User $user, Galaxy $galaxy, Faction $faction): Player
     {
-        $player = $galaxy->createPlayer($user, $faction);
-
-        return $player;
+        return $galaxy->createPlayer($user, $faction);
     }
 
     /**
@@ -700,26 +710,79 @@ class UniverseSimulationFixture extends AbstractFixture
         }
 
         // add some technologies to player
-        $randomPlayerTechnologies = $this->playerTechnologies;
-        \shuffle($randomPlayerTechnologies);
-        foreach($randomPlayerTechnologies as $randomPlayerTechnology) {
-            $player->buildTechnology($randomPlayerTechnology);
-            if ($this->randomBool()) {
-                break;
-            }
-        }
+        $randomPlayerTechnologies = $this->getRandomPlayerTechnologies();
+        $this->buildPlayerTechnologies($player, $randomPlayerTechnologies);
 
         // add some units to player
-        $randomUnits = $this->units;
-        \shuffle($randomUnits);
-        foreach($randomUnits as $randomUnit) {
-            $player->buildUnit($randomUnit, \rand(1, 500));
-            if ($this->randomBool()) {
-                break;
-            }
-        }
+        $randomUnits = $this->getRandomUnits();
+        $this->buildUnits($player, $randomUnits);
 
         return $player;
+    }
+
+    /**
+     * @return \GC\Unit\Model\Unit[]
+     */
+    private function getRandomUnits(): array
+    {
+        $randomKeys = \array_rand($this->units, \random_int(3, \count($this->units)));
+
+        $randoms = [];
+        foreach ($randomKeys as $randomKey) {
+            $randoms[] = $this->units[$randomKey];
+        }
+
+        return $randoms;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    private function getRandomUnitQuantity(): int
+    {
+        return \random_int(1, 500);
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     * @param \GC\Unit\Model\Unit[] $units
+     *
+     * @return void
+     */
+    private function buildUnits(Player $player, array $units = []): void
+    {
+        foreach($units as $unit) {
+            $player->buildUnit($unit, $this->getRandomUnitQuantity());
+        }
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology[]
+     */
+    private function getRandomPlayerTechnologies(): array
+    {
+        $randomKeys =  \array_rand($this->playerTechnologies, \random_int(5, \count($this->playerTechnologies)));
+
+        $randoms = [];
+        foreach ($randomKeys as $randomKey) {
+            $randoms[] = $this->playerTechnologies[$randomKey];
+        }
+
+        return $randoms;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     * @param \GC\Technology\Model\Technology[] $technologies
+     *
+     * @return void
+     */
+    private function buildPlayerTechnologies(Player $player, array $technologies = []): void
+    {
+        foreach($technologies as $technology) {
+            $player->buildTechnology($technology);
+        }
     }
 
     /**
@@ -876,8 +939,8 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function fillTechnologyWithRandomValues(Technology $technology): Technology
     {
-        $technology->setMetalCost($this->getRandomCostValue());
-        $technology->setCrystalCost($this->getRandomCostValue());
+        $technology->setMetalCost($this->getRandomTechnologyCostValue());
+        $technology->setCrystalCost($this->getRandomTechnologyCostValue());
         $technology->setTicksToBuild($this->getRandomTicksValue());
 
         return $technology;
@@ -955,8 +1018,8 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function fillUnitWithRandomValues(Unit $unit): Unit
     {
-        $unit->setMetalCost($this->getRandomCostValue());
-        $unit->setCrystalCost($this->getRandomCostValue());
+        $unit->setMetalCost($this->getRandomUnitCostValue());
+        $unit->setCrystalCost($this->getRandomUnitCostValue());
         $unit->setTicksToBuild($this->getRandomTicksValue());
 
         return $unit;

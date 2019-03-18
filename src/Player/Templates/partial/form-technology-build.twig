@@ -1,0 +1,57 @@
+<div class="table-container">
+    <table class="table is-narrow is-fullwidth has-valigned-cells">
+        <thead>
+            <tr>
+                <th>{{ 'technology.name' | trans }}</th>
+                <th>{{ 'technology.costs' | trans }}</th>
+                <th class="has-text-centered">
+                    <span class="icon has-text-primary"><i class="fas fa-clock"></i></span>
+                </th>
+                <th class="has-text-centered">{{ 'unit.order' | trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for technology in technologies %}
+                {% set isTechnologyInConstruction = currentPlayer.hasTechnologyInConstruction(technology) %}
+                <tr>
+                    <td>
+                        {{ technology.getName | trans }}
+                    </td>
+                    <td nowrap>
+                        <span class="icon"><i class="fas fa-industry  has-text-primary"></i></span>
+                        <span>{{ technology.getMetalCost | number }}</span><br>
+                        <span class="icon"><i class="fas fa-gem  has-text-primary"></i></span>
+                        <span>{{ technology.getCrystalCost | number }}</span>
+                    </td>
+                    <td class="has-text-centered">
+                        {% if isTechnologyInConstruction %}
+                            {{ currentPlayer.getPlayerTechnologyInConstruction(technology).getTicksLeft }} ({{ technology.getTicksToBuild }})
+                        {% else %}
+                            {{ technology.getTicksToBuild }}
+                        {% endif %}
+                    </td>
+                    <td class="has-text-centered">
+                        {% if isTechnologyInConstruction %}
+                            {% set progress = currentPlayer.getPlayerTechnologyInConstruction(technology).calculateProgress() %}
+                            <div class="progress-container" data-text="{{ progress }}%">
+                                <progress class="progress is-primary" value="{{ progress }}" max="100"></progress>
+                            </div>
+                        {% else %}
+                            <div class="field has-addons has-addons-right">
+                                <p class="control">
+                                    <input name="technology[{{ technology.getTechnologyId }}]" data-identifier="{{ technology.getTechnologyId }}" value="1" class="input build-value" type="hidden">
+                                </p>
+                                <p class="control">
+                                    <a class="button is-primary build-submit" data-action="{{ url('player.technology.build') }}">
+                                        <span class="icon"><i class="fas fa-cogs"></i></span>
+                                        <span>{{ 'technology.build' | trans }}</span>
+                                    </a>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

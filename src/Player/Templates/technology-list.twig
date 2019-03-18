@@ -1,0 +1,21 @@
+{% extends "@App/layout/game-layout.twig" %}
+
+{% block content %}
+    <div class="container">
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
+                    {'name': 'technology.technology', 'icon': 'fas fa-flask has-text-primary'},
+                ]
+            }
+        %}
+
+        {% include "@Player/partial/form-technology-build.twig"
+            with {
+                'buildableTechnologies': buildableTechnologies,
+                'completedTechnologies': completedTechnologies,
+            }
+        %}
+    </div>
+{% endblock %}
