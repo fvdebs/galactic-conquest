@@ -1,12 +1,35 @@
 <footer class="footer">
-    <div class="content has-text-centered">
-        <div class="column is-8 is-offset-2">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Accumsan lacus vel facilisis volutpat est velit egestas. Sapien eget mi proin sed. Sit amet mattis vulputate enim.
-            </p>
+    <div class="container">
+        <div class="columns has-text-centered-mobile">
+            <div class="column is-7">
+                <h6 class="title is-6 has-text-primary">{{ 'app.galactic.conquest' | trans }}</h6>
+                <p>{{ 'app.footer.teaser' | trans | raw }}</p>
+            </div>
+            <div class="column is-2">
+                <div>
+                    <h6 class="title is-6 has-text-primary">{{ 'app.footer.imprint' | trans }}</h6>
+                    {{ 'app.footer.address' | trans | raw }}
+                </div>
+            </div>
+            <div class="column is-3">
+                <div>
+                    <h6 class="title is-6 has-text-primary">{{ 'app.footer.contact' | trans }}</h6>
+                    <span>d&#101;v&#64;galacti&#99;-conquest&#46;com</span> <br><br>
+                </div>
+
+                <div>
+                    <a href="{{ url('universe.select', {'locale': 'de'}) }}">
+                        <img class="is-rounded" src="/assets/images/flags/de-DE.png" alt="{{ 'app.de-DE' | trans }}" width="25">
+                    </a>
+                    <a href="{{ url('universe.select', {'locale': 'en'}) }}">
+                        <img class ="is-rounded" src="/assets/images/flags/en_EN.png" alt="{{ 'app.en_EN' | trans }}" width="25">
+                    </a>
+                </div>
+            </div>
         </div>
-        <p>
-            <i>{{ 'app.galactic.conquest' | trans }} 2019</i>
-        </p>
+        <div class="has-text-centered">
+            <span>{{ 'app.footer.made.with' | trans }}</span><br>
+            <span class="icon"><i class="fa fa-heart has-text-primary"></i></span>
+        </div>
     </div>
 </footer>
