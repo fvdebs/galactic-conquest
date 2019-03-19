@@ -781,7 +781,7 @@ class UniverseSimulationFixture extends AbstractFixture
     private function buildPlayerTechnologies(Player $player, array $technologies = []): void
     {
         foreach($technologies as $technology) {
-            $player->buildTechnology($technology);
+            $player->createPlayerTechnology($technology);
         }
     }
 
