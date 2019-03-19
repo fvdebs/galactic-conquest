@@ -166,10 +166,9 @@
                 return;
             }
 
+            let indicator = button;
             if (typeof button.data('submit-value') !== "undefined") {
-                let indicator = $('body').find(button.data('submit-value'));
-            } else {
-                let indicator = button;
+                indicator = $('body').find(button.data('submit-value'));
             }
 
             if (!indicator.hasClass('is-danger')) {
