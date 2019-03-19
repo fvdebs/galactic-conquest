@@ -21,7 +21,7 @@
                         {{ unit.getName | trans }}
                     </td>
                     <td nowrap>
-                        <span class="icon"><i class="fas fa-industry  has-text-primary"></i></span>
+                        <span class="icon"><i class="fas fa-hammer has-text-primary"></i></span>
                         <span>{{ unit.getMetalCost | number }}</span><br>
                         <span class="icon"><i class="fas fa-gem  has-text-primary"></i></span>
                         <span>{{ unit.getCrystalCost | number }}</span>
@@ -29,7 +29,7 @@
                     <td class="has-text-centered">
                         {{ currentPlayer.getQuantityOf(unit) | number }}
                     </td>
-                    <td class="has-text-centered">
+                    <td class="has-text-centered" nowrap>
                         {% if isUnitInProduction %}
                             {{ currentPlayer.getPlayerUnitConstructionOf(unit).getTicksLeft }} ({{ unit.getTicksToBuild }})
                         {% else %}
@@ -45,10 +45,10 @@
                         {% else %}
                             <div class="field has-addons has-addons-right">
                                 <p class="control">
-                                    <input name="unit[{{ unit.getUnitId }}]" data-identifier="{{ unit.getUnitId }}" value="{{ currentPlayer.calculateMaxUnits(unit) }}" class="input build-value has-length-small" type="text" placeholder="{{ 'unit.production' | trans }}">
+                                    <input id="qty_{{ unit.getUnitId }}" value="{{ currentPlayer.calculateMaxUnits(unit) }}" class="input has-length-small" type="text" placeholder="{{ 'unit.production' | trans }}">
                                 </p>
                                 <p class="control">
-                                    <a class="button is-primary build-submit" data-action="{{ url('player.unit.build') }}">
+                                    <a class="button is-primary single-submit" data-identifier="{{ unit.getUnitId }}" data-action="{{ url('player.unit.build') }}" data-submit-value="#qty_{{ unit.getUnitId }}">
                                         <span class="icon"><i class="fas fa-cogs"></i></span>
                                     </a>
                                 </p>

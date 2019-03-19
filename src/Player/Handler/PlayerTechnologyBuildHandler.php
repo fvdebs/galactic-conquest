@@ -18,7 +18,7 @@ final class PlayerTechnologyBuildHandler implements RequestHandlerInterface
     use GameAwareTrait;
 
     public const NAME = 'player.technology.build';
-    private const FIELD_NAME_TECHNOLOGY_ID = 'value';
+    private const FIELD_NAME_TECHNOLOGY_ID = 'identifier';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -42,7 +42,11 @@ final class PlayerTechnologyBuildHandler implements RequestHandlerInterface
         }
 
         $player = $this->getCurrentPlayer($request);
-        if ($player->hasTechnology($technology)) {
+        if ($player->isPlayerTechnologyInConstruction($technology)) {
+            $validator->addMessage(static::FIELD_NAME_TECHNOLOGY_ID);
+        }
+
+        if ($player->isPlayerTechnologyCompleted($technology)) {
             $validator->addMessage(static::FIELD_NAME_TECHNOLOGY_ID);
         }
 
@@ -58,7 +62,7 @@ final class PlayerTechnologyBuildHandler implements RequestHandlerInterface
             return $this->failedValidation($validator);
         }
 
-        $player->buildTechnology($technology);
+        $player->createPlayerTechnology($technology);
         $this->flush();
 
         return $this->redirectJson(

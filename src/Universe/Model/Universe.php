@@ -995,7 +995,7 @@ class Universe
         ++$this->tickCurrent;
 
         foreach ($this->getPlayers() as $player) {
-            $player->finishTechnologyConstructions();
+            $player->finishPlayerTechnologyConstructions();
             $player->finishUnitConstructions();
             $player->increaseResourceIncomePerTick();
             $player->calculatePoints();

@@ -744,7 +744,12 @@ class Player
      */
     public function hasUnitRequirementsFor(Unit $unit): bool
     {
-        return $this->hasTechnology($unit->getRequiredTechnology());
+        $requiredTechnology = $unit->getRequiredTechnology();
+        if ($requiredTechnology === null) {
+            return true;
+        }
+
+        return $this->isPlayerTechnologyCompleted($requiredTechnology);
     }
 
     /**
@@ -835,9 +840,7 @@ class Player
      */
     protected function calculateMetalCostForUnit(Unit $unit, int $quantity): int
     {
-        $calculation = $unit->getMetalCost() * $quantity;
-
-        return (int) \round($calculation);
+        return (int) \round($unit->getMetalCost() * $quantity);
     }
 
     /**
@@ -848,9 +851,7 @@ class Player
      */
     protected function calculateCrystalCostForUnit(Unit $unit, int $quantity): int
     {
-        $calculation = $unit->getCrystalCost() * $quantity;
-
-        return (int) \round($calculation);
+        return (int) \round($unit->getCrystalCost() * $quantity);
     }
 
     /**
@@ -858,7 +859,7 @@ class Player
      *
      * @return \GC\Player\Model\PlayerTechnology
      */
-    public function buildTechnology(Technology $technology): PlayerTechnology
+    public function createPlayerTechnology(Technology $technology): PlayerTechnology
     {
         $playerTechnology = new PlayerTechnology($this, $technology);
         $this->playerTechnologies->add($playerTechnology);
@@ -870,16 +871,126 @@ class Player
     }
 
     /**
+     * @return \GC\Player\Model\PlayerTechnology[]
+     */
+    public function getPlayerTechnologies(): array
+    {
+        return $this->playerTechnologies->getValues();
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return \GC\Player\Model\PlayerTechnology|null
+     */
+    public function getPlayerTechnologyByTechnology(Technology $technology): ?PlayerTechnology
+    {
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
+                return $playerTechnology;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerTechnology[]
+     */
+    public function getPlayerTechnologiesInConstruction(): array
+    {
+        $playerTechnologies = [];
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->isInConstruction()) {
+                $playerTechnologies[] = $playerTechnology;
+            }
+        }
+
+        return $playerTechnologies;
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology[]
+     */
+    public function getTechnologiesInConstruction(): array
+    {
+        $technologies = [];
+
+        foreach ($this->getPlayerTechnologiesInConstruction() as $playerTechnology) {
+            $technologies[] = $playerTechnology->getTechnology();
+        }
+
+        return $technologies;
+    }
+
+    /**
      * @param \GC\Technology\Model\Technology $technology
      *
      * @return bool
      */
-    public function hasTechnology(Technology $technology): bool
+    public function isPlayerTechnologyInConstruction(Technology $technology): bool
+    {
+        $playerTechnology = $this->getPlayerTechnologyByTechnology($technology);
+        if ($playerTechnology === null) {
+            return false;
+        }
+
+        return $playerTechnology->isInConstruction();
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerTechnology[]
+     */
+    public function getPlayerTechnologiesCompleted(): array
+    {
+        $playerTechnologies = [];
+        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
+            if ($playerTechnology->isCompleted()) {
+                $playerTechnologies[] = $playerTechnology;
+            }
+        }
+
+        return $playerTechnologies;
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology[]
+     */
+    public function getTechnologiesCompleted(): array
+    {
+        $technologies = [];
+
+        foreach ($this->getPlayerTechnologiesCompleted() as $playerTechnology) {
+            $technologies[] = $playerTechnology->getTechnology();
+        }
+
+        return $technologies;
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology $technology
+     *
+     * @return bool
+     */
+    public function isPlayerTechnologyCompleted(Technology $technology): bool
+    {
+        $playerTechnology = $this->getPlayerTechnologyByTechnology($technology);
+        if ($playerTechnology === null) {
+            return false;
+        }
+
+        return $playerTechnology->isCompleted();
+    }
+
+    /**
+     * @param string $featureKey
+     *
+     * @return bool
+     */
+    public function hasTechnologyByFeatureKey(string $featureKey): bool
     {
         foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->isCompleted()
-                && $playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
-
+            if ($playerTechnology->isCompleted() && $playerTechnology->getTechnology()->getFeatureKey() === $featureKey) {
                 return true;
             }
         }
@@ -908,7 +1019,7 @@ class Player
     public function hasTechnologyRequirementsFor(Technology $technology): bool
     {
         foreach ($technology->getTechnologyConditions() as $technologyCondition) {
-            if (!$this->hasTechnology($technologyCondition->getTargetTechnology())) {
+            if (!$this->isPlayerTechnologyCompleted($technologyCondition->getTargetTechnology())) {
                 return false;
             }
         }
@@ -917,102 +1028,13 @@ class Player
     }
 
     /**
-     * @param string $featureKey
-     *
-     * @return bool
-     */
-    public function hasTechnologyByFeatureKey(string $featureKey): bool
-    {
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->isCompleted()
-                && $playerTechnology->getTechnology()->getFeatureKey() === $featureKey) {
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param \GC\Technology\Model\Technology $technology
-     *
-     * @return \GC\Player\Model\PlayerTechnology
-     */
-    public function getPlayerTechnologyInConstruction(Technology $technology): ?PlayerTechnology
-    {
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->getTechnology()->getTechnologyId() === $technology->getTechnologyId()) {
-                return $playerTechnology;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param \GC\Technology\Model\Technology $technology
-     *
-     * @return bool
-     */
-    public function hasTechnologyInConstruction(Technology $technology): bool
-    {
-        $playerTechnology = $this->getPlayerTechnologyInConstruction($technology);
-        if ($playerTechnology === null) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * @return void
      */
-    public function finishTechnologyConstructions(): void
+    public function finishPlayerTechnologyConstructions(): void
     {
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->getTicksLeft() > 0) {
-                $playerTechnology->decreaseTicksLeft();
-            }
+        foreach ($this->getPlayerTechnologiesInConstruction() as $playerTechnology) {
+            $playerTechnology->decreaseTicksLeft();
         }
-    }
-
-    /**
-     * @return \GC\Player\Model\PlayerTechnology[]
-     */
-    public function getPlayerTechnologies(): array
-    {
-        return $this->playerTechnologies->getValues();
-    }
-
-    /**
-     * @return \GC\Player\Model\PlayerTechnology[]
-     */
-    public function getPlayerTechnologiesCompleted(): array
-    {
-        $playerTechnologies = [];
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->isCompleted()) {
-                $playerTechnologies[] = $playerTechnology;
-            }
-        }
-
-        return $playerTechnologies;
-    }
-
-    /**
-     * @return \GC\Player\Model\PlayerTechnology[]
-     */
-    public function getPlayerTechnologiesInConstruction(): array
-    {
-        $playerTechnologies = [];
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            if ($playerTechnology->isInConstruction()) {
-                $playerTechnologies[] = $playerTechnology;
-            }
-        }
-
-        return $playerTechnologies;
     }
 
     /**

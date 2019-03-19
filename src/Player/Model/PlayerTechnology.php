@@ -114,7 +114,7 @@ class PlayerTechnology
      */
     public function isInConstruction(): bool
     {
-        return $this->ticksLeft > 0;
+        return !$this->isCompleted();
     }
 
     /**

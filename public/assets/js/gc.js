@@ -141,23 +141,24 @@
         countDownToTime($(this), $(this).data('countdown'), $(this).data('interval'));
     });
 
-
     /***************************************
      * Build Forms
      ****************************************/
-    $('.build-submit').on('click', function (event)
-    {
+
+    $('.single-submit').on('click', function (event) {
         event.preventDefault();
         event.stopPropagation();
 
         let button = $(this);
-        let action = button.data('action');
-        let field = button.parents('.field');
-        let valueInput = field.find('.build-value');
-        let value = valueInput.val();
-        let identifier = valueInput.data('identifier');
-
         button.addClass('is-loading');
+
+        let action = button.data('action');
+        let identifier = button.data('identifier');
+        let value = 0;
+
+        if (typeof button.data('submit-value') !== "undefined") {
+            value = $('body').find(button.data('submit-value')).val();
+        }
 
         $.post(action, { identifier: identifier, value: value }, function (result) {
             if (result.isSuccess === true) {
@@ -165,8 +166,14 @@
                 return;
             }
 
-            if (!valueInput.hasClass('is-danger')) {
-                valueInput.addClass('is-danger');
+            if (typeof button.data('submit-value') !== "undefined") {
+                let indicator = $('body').find(button.data('submit-value'));
+            } else {
+                let indicator = button;
+            }
+
+            if (!indicator.hasClass('is-danger')) {
+                indicator.addClass('is-danger');
             }
 
             button.removeClass('is-loading');

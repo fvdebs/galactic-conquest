@@ -7,6 +7,7 @@ namespace GC\Player\Handler;
 use GC\App\Aware\GameAwareTrait;
 use GC\App\Aware\RepositoryAwareTrait;
 use GC\Player\Model\Player;
+use GC\Technology\Model\Technology;
 use Inferno\Inferno\Aware\HandlerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,11 +35,43 @@ final class PlayerTechnologyListHandler implements RequestHandlerInterface
             $currentPlayer->getFaction()->getFactionId()
         );
 
-        $buildableTechnologies = $this->filterTechnologies($currentPlayer, $technologies);
+        $buildableTechnologies = $this->sortTechnologiesByName(
+            $this->filterBuildableTechnologies($currentPlayer, $technologies)
+        );
+
+        $completedTechnologies = $this->sortTechnologiesByName(
+            $currentPlayer->getTechnologiesCompleted()
+        );
+
+        $inConstructionTechnologies = $this->sortTechnologiesByName(
+            $currentPlayer->getTechnologiesInConstruction()
+        );
 
         return $this->render('@Player/technology-list.twig', [
-            'technologies' => $buildableTechnologies,
+            'technologies' => \array_merge($buildableTechnologies, $inConstructionTechnologies, $completedTechnologies),
         ]);
+    }
+
+    /**
+     * @param \GC\Technology\Model\Technology[] $technologies
+     *
+     * @return \GC\Technology\Model\Technology[]
+     */
+    private function sortTechnologiesByName(array $technologies): array
+     {
+        usort($technologies, function (Technology $technologyFirst, Technology $technologySecond) {
+            if ($technologyFirst->getName() === $technologySecond->getName()) {
+                return 0;
+            }
+
+            if ($technologyFirst->getName() < $technologySecond->getName()) {
+                return 1;
+            }
+
+            return -1;
+        });
+
+        return $technologies;
     }
 
     /**
@@ -47,30 +80,19 @@ final class PlayerTechnologyListHandler implements RequestHandlerInterface
      *
      * @return \GC\Technology\Model\Technology[]
      */
-    private function filterTechnologies(Player $currentPlayer, array $technologies): array
+    private function filterBuildableTechnologies(Player $currentPlayer, array $technologies): array
     {
         $buildable = [];
+
         foreach ($technologies as $technology) {
-            if ($currentPlayer->hasTechnology($technology) || $currentPlayer->hasTechnologyRequirementsFor($technology)) {
+            if (!$currentPlayer->isPlayerTechnologyCompleted($technology)
+                && !$currentPlayer->isPlayerTechnologyInConstruction($technology)
+                && $currentPlayer->hasTechnologyRequirementsFor($technology)
+            ) {
                 $buildable[] = $technology;
             }
         }
 
         return $buildable;
-    }
-
-    /**
-     * @param \GC\Player\Model\Player $currentPlayer
-     *
-     * @return \GC\Technology\Model\Technology[]
-     */
-    private function filterCompletedTechnologies(Player $currentPlayer): array
-    {
-        $completed = [];
-        foreach ($currentPlayer->getPlayerTechnologiesCompleted() as $playerTechnology) {
-            $completed[] = $playerTechnology->getTechnology();
-        }
-
-        return $completed;
     }
 }
