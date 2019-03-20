@@ -405,4 +405,20 @@ class Technology
     {
         return $this->technologyConditions->getValues();
     }
+
+    /**
+     * @return int
+     */
+    public function calculateMetalIncomePerDay(): int
+    {
+        return $this->universe->calculateTicksPerDay() * $this->getMetalProduction();
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateCrystalIncomePerDay(): int
+    {
+        return $this->universe->calculateTicksPerDay() * $this->getCrystalProduction();
+    }
 }

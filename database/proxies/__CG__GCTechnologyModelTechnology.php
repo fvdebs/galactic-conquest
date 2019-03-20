@@ -485,4 +485,26 @@ class Technology extends \GC\Technology\Model\Technology implements \Doctrine\OR
         return parent::getTechnologyConditions();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateMetalIncomePerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateMetalIncomePerDay', []);
+
+        return parent::calculateMetalIncomePerDay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateCrystalIncomePerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateCrystalIncomePerDay', []);
+
+        return parent::calculateCrystalIncomePerDay();
+    }
+
 }

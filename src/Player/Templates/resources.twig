@@ -1,0 +1,209 @@
+{% extends "@App/layout/game-layout.twig" %}
+
+{% block content %}
+    <div class="container">
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
+                    {'name': 'resources.resources', 'icon': 'fas fa-gem has-text-primary'},
+                ]
+            }
+        %}
+
+        {% include '@App/layout/partial/flashes.twig' %}
+    </div>
+
+    <div class="container has-margin">
+        <div class="columns">
+            <div class="column">
+                <div class="table-container">
+                    <table class="table is-narrow is-fullwidth has-valigned-cells">
+                        <thead>
+                            <tr>
+                                <th class="has-text-primary" nowrap>
+                                    <span class="icon"><i class="fas fa-hammer"></i></span>
+                                    <span>{{ 'resources.metal' | trans }}</span>
+                                 </th>
+                                <th nowrap>{{ 'resources.perTick' | trans }}</th>
+                                <th nowrap>{{ 'resources.perDay' | trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for technology in technologiesWithMetalIncome %}
+                                <tr>
+                                    <td>{{ technology.getName | trans }}</td>
+                                    <td>{{ technology.getMetalProduction | number }}</td>
+                                    <td>{{ technology.calculateMetalIncomePerDay | number }}</td>
+                                </tr>
+                            {% endfor %}
+                            {% if technologiesWithMetalIncome | length > 0 %}
+                                <tr class="is-italic">
+                                    <td>{{ 'resources.subtotal' | trans }}</td>
+                                    <td>{{ technologiesTotalMetalIncomePerTick | number }}</td>
+                                    <td>{{ technologiesTotalMetalIncomePerDay | number }}</td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <td nowrap>
+                                    {{ 'resources.extractors' | trans }} {{ currentPlayer.getExtractorMetal }}
+                                    <span class="has-text-success">(*{{ currentUniverse.getExtractorMetalIncome }})</span>
+                                </td>
+                                <td>{{ extractorMetalIncomePerTick | number }}</td>
+                                <td>{{ extractorMetalIncomePerDay | number }}</td>
+                            </tr>
+                            {% if technologiesWithMetalIncome | length > 0 %}
+                                <tr class="is-italic">
+                                    <td>{{ 'resources.subtotal' | trans }}</td>
+                                    <td>{{ subTotalMetalTechnologiesAndExtractorPerTick | number }}</td>
+                                    <td>{{ subTotalMetalTechnologiesAndExtractorPerDay | number }}</td>
+                                </tr>
+                            {% endif %}
+                            <tr class="has-text-danger">
+                                <td>{{ 'resources.galaxy.tax' | trans }} {{ currentPlayer.getGalaxy.getTaxMetal | number }}%</td>
+                                <td>-{{ galaxyMetalTaxPerTick | number }}</td>
+                                <td>-{{ galaxyMetalTaxPerDay | number }}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>{{ 'resources.total' | trans }}</td>
+                                <td>{{ totalMetalPerTick | number }}</td>
+                                <td>{{ totalMetalPerDay | number }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="column">
+                <div class="table-container">
+                    <table class="table is-narrow is-fullwidth has-valigned-cells">
+                        <thead>
+                            <tr>
+                                <th class="has-text-primary" nowrap>
+                                    <span class="icon"><i class="fas fa-gem"></i></span>
+                                    <span>{{ 'resources.crystal' | trans }}</span>
+                                </th>
+                                <th nowrap>{{ 'resources.perTick' | trans }}</th>
+                                <th nowrap>{{ 'resources.perDay' | trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for technology in technologiesWithCrystalIncome %}
+                                <tr>
+                                    <td>{{ technology.getName | trans }}</td>
+                                    <td>{{ technology.getCrystalProduction | number }}</td>
+                                    <td>{{ technology.calculateCrystalIncomePerDay | number }}</td>
+                                </tr>
+                            {% endfor %}
+                            {% if technologiesWithCrystalIncome | length > 0 %}
+                                <tr class="is-italic">
+                                    <td>{{ 'resources.subtotal' | trans }}</td>
+                                    <td>{{ technologiesTotalCrystalIncomePerTick | number }}</td>
+                                    <td>{{ technologiesTotalCrystalIncomePerDay | number }}</td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <td nowrap>
+                                    {{ 'resources.extractors' | trans }} {{ currentPlayer.getExtractorCrystal }}
+                                    <span class="has-text-success">(*{{ currentUniverse.getExtractorCrystalIncome }})</span>
+                                </td>
+                                <td>{{ extractorCrystalIncomePerTick | number }}</td>
+                                <td>{{ extractorCrystalIncomePerDay | number }}</td>
+                            </tr>
+                            {% if technologiesWithCrystalIncome | length > 0 %}
+                                <tr class="is-italic">
+                                    <td>{{ 'resources.subtotal' | trans }}</td>
+                                    <td>{{ subTotalCrystalTechnologiesAndExtractorPerTick | number }}</td>
+                                    <td>{{ subTotalCrystalTechnologiesAndExtractorPerDay | number }}</td>
+                                </tr>
+                            {% endif %}
+                            <tr class="has-text-danger">
+                                <td>{{ 'resources.galaxy.tax' | trans }} {{ currentPlayer.getGalaxy.getTaxCrystal | number }}%</td>
+                                <td>-{{ galaxyCrystalTaxPerTick | number }}</td>
+                                <td>-{{ galaxyCrystalTaxPerDay | number }}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>{{ 'resources.total' | trans }}</td>
+                                <td>{{ totalCrystalPerTick | number }}</td>
+                                <td>{{ totalCrystalPerDay | number }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container ">
+        <div class="columns">
+            <div class="column">
+                <div class="table-container">
+                    <table class="table is-narrow is-fullwidth has-valigned-cells">
+                        <thead>
+                            <tr>
+                                <th colspan="2" class="has-text-primary" nowrap>
+                                    <span class="icon"><i class="fas fa-atom"></i></span>
+                                    <span>{{ 'resources.extractors' | trans }}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ 'resources.extractors.metal' | trans }}</td>
+                                <td>{{currentPlayer.getExtractorMetal | number }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'resources.extractors.crystal' | trans }}</td>
+                                <td>{{currentPlayer.getExtractorCrystal | number }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'resources.total' | trans }}</td>
+                                <td>{{currentPlayer.getNumberOfExtractors | number }}</td>
+                            </tr>
+                            <tr class="is-italic">
+                                <td colspan="2">{{ 'resources.extractor.cost.next' | trans |  format(metalCostForNextExtractor | number) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="column">
+                <form action="{{ url('player.extractor.build') }}" method="post">
+                    <div class="field">
+                        <label class="label">
+                            {{ 'resources.type' | trans }}
+                        </label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="type" value="metal">
+                                {{ 'resources.metal' | trans }}
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="type" value="crystal">
+                                {{ 'resources.crystal' | trans }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">{{ 'resources.number' | trans }}</label>
+                        <div class="control">
+                            <input type="number" name="number" class="input" value="{{ maxExtractorsToBuild }}" placeholder="{{ 'resources.number' | trans }}">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-primary is-fullwidth">
+                                {{ 'resources.extractor.build' | trans }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

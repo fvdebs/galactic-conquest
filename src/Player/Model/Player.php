@@ -393,8 +393,8 @@ class Player
      */
     public function buildMetalExtractors(int $number): void
     {
-        $this->extractorMetal += $number;
         $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
+        $this->extractorMetal += $number;
     }
 
     /**
@@ -404,8 +404,16 @@ class Player
      */
     public function buildCrystalExtractors(int $number): void
     {
-        $this->extractorCrystal += $number;
         $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
+        $this->extractorCrystal += $number;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateMetalCostForNextExtractor(): int
+    {
+        return $this->calculateMetalCostForExtractors(1, $this->getNumberOfExtractors());
     }
 
     /**
@@ -417,20 +425,14 @@ class Player
     public function calculateMetalCostForExtractors(int $number, int $startExtractors): int
     {
         $resourceCostPerExtractor = $this->universe->getExtractorStartCost();
+        $metalCost = $startExtractors * $resourceCostPerExtractor;
 
-        $initialExtractorCost = $resourceCostPerExtractor;
-        for ($currentExtractors = 0; $currentExtractors < $startExtractors; $currentExtractors++) {
-            $initialExtractorCost = $resourceCostPerExtractor * $currentExtractors;
+        while ($number > 0) {
+            $metalCost += $resourceCostPerExtractor;
+            $number--;
         }
 
-        $total = 0;
-        $currentCostForExtractor = $initialExtractorCost;
-        for ($currentExtractors = 0; $currentExtractors < $number; $currentExtractors++) {
-            $currentCostForExtractor += $resourceCostPerExtractor;
-            $total += $currentCostForExtractor;
-        }
-
-        return $total;
+        return $metalCost;
     }
 
     /**
@@ -633,6 +635,22 @@ class Player
     /**
      * @return int
      */
+    public function calculateMetalIncomePerDay(): int
+    {
+        return $this->universe->calculateTicksPerDay() * $this->calculateMetalIncomePerTick();
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateCrystalIncomePerDay(): int
+    {
+        return $this->universe->calculateTicksPerDay() * $this->calculateCrystalIncomePerTick();
+    }
+
+    /**
+     * @return int
+     */
     public function calculateMetalTaxPerTick(): int
     {
         return $this->galaxy->calculateMetalTaxFor($this);
@@ -641,9 +659,25 @@ class Player
     /**
      * @return int
      */
+    public function calculateMetalTaxPerDay(): int
+    {
+        return $this->galaxy->calculateMetalTaxFor($this) * $this->universe->calculateTicksPerDay();
+    }
+
+    /**
+     * @return int
+     */
     public function calculateCrystalTaxPerTick(): int
     {
         return $this->galaxy->calculateCrystalTaxFor($this);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateCrystalTaxPerDay(): int
+    {
+        return $this->galaxy->calculateCrystalTaxFor($this) * $this->universe->calculateTicksPerDay();
     }
 
     /**
@@ -962,6 +996,106 @@ class Player
 
         foreach ($this->getPlayerTechnologiesCompleted() as $playerTechnology) {
             $technologies[] = $playerTechnology->getTechnology();
+        }
+
+        return $technologies;
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology[]
+     */
+    public function getTechnologiesCompletedWithCrystalIncome(): array
+    {
+        $technologies = [];
+
+        foreach ($this->getTechnologiesCompleted() as $technology) {
+            if ($technology->getCrystalProduction() > 0) {
+                $technologies[] = $technology;
+            }
+        }
+
+        return $technologies;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalCrystalIncomeFromTechnologiesPerTick(): int
+    {
+        $income = 0;
+        foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
+            $income += $technology->getCrystalProduction();
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalCrystalIncomeFromTechnologiesPerDay(): int
+    {
+        $income = 0;
+        foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
+            $income += $technology->calculateCrystalIncomePerDay();
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology[]
+     */
+    public function getTechnologiesCompletedWithMetalIncome(): array
+    {
+        $technologies = [];
+
+        foreach ($this->getTechnologiesCompleted() as $technology) {
+            if ($technology->getMetalProduction() > 0) {
+                $technologies[] = $technology;
+            }
+        }
+
+        return $technologies;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalMetalIncomeFromTechnologiesPerTick(): int
+    {
+        $income = 0;
+        foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
+            $income += $technology->getMetalProduction();
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalMetalIncomeFromTechnologiesPerDay(): int
+    {
+        $income = 0;
+        foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
+            $income += $technology->calculateMetalIncomePerDay();
+        }
+
+        return $income;
+    }
+
+    /**
+     * @return \GC\Technology\Model\Technology[]
+     */
+    public function getTechnologiesCompletedWithIncome(): array
+    {
+        $technologies = [];
+
+        foreach ($this->getTechnologiesCompleted() as $technology) {
+            if ($technology->getMetalProduction() > 0 || $technology->getCrystalProduction() > 0) {
+                $technologies[] = $technology;
+            }
         }
 
         return $technologies;

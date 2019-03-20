@@ -928,6 +928,17 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
+    public function calculateTicksPerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateTicksPerDay', []);
+
+        return parent::calculateTicksPerDay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isTickCalculationNeeded(): bool
     {
 

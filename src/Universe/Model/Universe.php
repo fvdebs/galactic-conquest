@@ -969,6 +969,14 @@ class Universe
     }
 
     /**
+     * @return int
+     */
+    public function calculateTicksPerDay(): int
+    {
+        return (int) \floor(1440 / $this->getTickInterval());
+    }
+
+    /**
      * @throws \Exception
      *
      * @return bool
