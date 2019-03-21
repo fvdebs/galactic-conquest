@@ -1,0 +1,22 @@
+<div class="table-container">
+    <table class="table is-bordered is-narrow is-fullwidth has-valigned-cells">
+        <thead>
+            <tr>
+                <th>{{ 'galaxy.tactic.military.unit.name' | trans }}</th>
+                <th>{{ 'galaxy.tactic.military.unit.quantity' | trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in units %}
+                <tr>
+                    <td>
+                        {{ unit.getName }}
+                    </td>
+                    <td>
+                        {{ player.getUnitQuantityOf(unit) | number }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

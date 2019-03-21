@@ -41,8 +41,7 @@ final class PlayerExtractorBuildHandler implements RequestHandlerInterface
 
         $validator->context(static::FIELD_NAME_EXTRACTOR_NUMBER)
             ->isRequired()
-            ->isInt()
-            ->isLessThan(($currentPlayer->calculateMaxExtractorConstruction() + 1));
+            ->isLessThan($currentPlayer->calculateMaxExtractorConstruction() + 1);
 
         if ($validator->failed()) {
             return $this->failedValidation($validator);

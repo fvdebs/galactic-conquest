@@ -1,0 +1,37 @@
+{% extends "@App/layout/game-layout.twig" %}
+
+{% block content %}
+    <div class="container">
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
+                    {'name': 'galaxy.tactic', 'url': url('galaxy.tactic'), 'icon': 'fas fa-home has-text-primary'},
+                    {'name': 'galaxy.tactic.military', 'icon': 'fas fa-fighter-jet has-text-primary'},
+                ]
+            }
+        %}
+
+        <h3 class="title is-size-3">
+          ({{ player.getGalaxy.getGalaxyId }}:{{ player.getGalaxyPosition }}) {{ player.getUser.getName }}
+        </h3>
+    </div>
+
+    <div class="container has-margin">
+        {% include "@Galaxy/partial/galaxy-table-tactic-military.twig"
+            with {
+                'player': player
+                'units': movableUnits,
+            }
+        %}
+    </div>
+
+    <div class="container has-margin">
+        {% include "@Galaxy/partial/galaxy-table-tactic-military.twig"
+            with {
+                'player': player
+                'units': stationaryUnits,
+            }
+        %}
+    </div>
+{% endblock %}

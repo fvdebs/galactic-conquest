@@ -12,8 +12,6 @@ final class PlayerRepository extends EntityRepository
     /**
      * @param int $playerId
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return \GC\Player\Model\Player|null
      */
 	public function findById(int $playerId): ?Player
@@ -29,8 +27,6 @@ final class PlayerRepository extends EntityRepository
      * @param int $userId
      * @param int $universeId
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return \GC\Player\Model\Player|null
      */
     public function findByUserIdAndUniverseId(int $userId, int $universeId): ?Player
@@ -39,6 +35,26 @@ final class PlayerRepository extends EntityRepository
             ->where('player.user = :userId')
             ->andWhere('player.universe = :universeId')
             ->setParameter(':userId', $userId)
+            ->setParameter(':universeId', $universeId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $galaxyId
+     * @param int $galaxyPosition
+     * @param int $universeId
+     *
+     * @return \GC\Player\Model\Player|null
+     */
+    public function findByPositionAndUniverseId(int $galaxyId, int $galaxyPosition, int $universeId): ?Player
+    {
+        return $this->createQueryBuilder('player')
+            ->where('player.galaxy = :galaxyId')
+            ->andWhere('player.galaxyPosition = :galaxyPosition')
+            ->andWhere('player.universe = :universeId')
+            ->setParameter(':galaxyId', $galaxyId)
+            ->setParameter(':galaxyPosition', $galaxyPosition)
             ->setParameter(':universeId', $universeId)
             ->getQuery()
             ->getOneOrNullResult();

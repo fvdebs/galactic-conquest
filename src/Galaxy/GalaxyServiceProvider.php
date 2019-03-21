@@ -6,10 +6,9 @@ namespace GC\Galaxy;
 
 use GC\Galaxy\Handler\GalaxiesHandler;
 use GC\Galaxy\Handler\GalaxyAllianceApplicationHandler;
-use GC\Galaxy\Handler\GalaxyEconomyHandler;
-use GC\Galaxy\Handler\GalaxyHandler;
-use GC\Galaxy\Handler\GalaxyMemberDetailHandler;
+use GC\Galaxy\Handler\GalaxySettingsHandler;
 use GC\Galaxy\Handler\GalaxyTacticHandler;
+use GC\Galaxy\Handler\GalaxyTacticMilitaryHandler;
 use GC\Galaxy\Handler\GalaxyTechnologyBuildHandler;
 use Inferno\Routing\Route\RouteCollection;
 use Pimple\Container;
@@ -36,11 +35,10 @@ final class GalaxyServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
-            $collection->get('/{locale}/{universe}/galaxy', GalaxyHandler::class);
-            $collection->get('/{locale}/{universe}/galaxy/tactic', GalaxyTacticHandler::class);
-            $collection->get('/{locale}/{universe}/galaxy/economy', GalaxyEconomyHandler::class);
             $collection->get('/{locale}/{universe}/galaxy/{number}', GalaxiesHandler::class);
-            $collection->get('/{locale}/{universe}/galaxy/{number}/{position}', GalaxyMemberDetailHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/tactic', GalaxyTacticHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/military/{position}', GalaxyTacticMilitaryHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy', GalaxySettingsHandler::class);
 
             $collection->post('/{locale}/{universe}/galaxy/technology', GalaxyTechnologyBuildHandler::class);
             $collection->post('/{locale}/{universe}/galaxy/application', GalaxyAllianceApplicationHandler::class);

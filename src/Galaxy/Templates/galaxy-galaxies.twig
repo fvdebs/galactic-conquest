@@ -13,12 +13,12 @@
 
         <div class="field has-addons has-addons-right has-justified-content-center">
             <p class="control">
-                <a href="{{ url('galaxy.galaxies', [previousGalaxyNumber]) }}" class="button is-primary"{% if previousGalaxyNumber is null %} disabled{% endif %}>
+                <a href="{{ url('galaxy.galaxies', [previousGalaxyNumber]) }}" class="button is-primary">
                     <span class="icon"><i class="fas fa-chevron-left"></i></span>
                 </a>
             </p>
             <p class="control">
-                <input id="galaxy-value" class="input has-length-small" type="text" placeholder="" value="{{ galaxy.getNumber }}">
+                <input id="galaxy-value" class="input has-length-small" type="text" placeholder="{{ currentPlayer.getGalaxy.getNumber }}" value="{{ galaxy.getNumber }}">
             </p>
             <p class="control">
                 <button id="galaxy-submit" class="button" >

@@ -42,6 +42,42 @@ final class UnitRepository extends EntityRepository
     }
 
     /**
+     * @param int $universeId
+     * @param int $factionId
+     *
+     * @return \GC\Unit\Model\Unit[]
+     */
+    public function findMovableByUniverseAndFaction(int $universeId, int $factionId): array
+    {
+        return $this->createQueryBuilder('unit')
+            ->where('unit.universe = :universeId')
+            ->andWhere('unit.faction = :factionId')
+            ->andWhere('unit.isStationary = 0')
+            ->setParameter(':universeId', $universeId)
+            ->setParameter(':factionId', $factionId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param int $universeId
+     * @param int $factionId
+     *
+     * @return \GC\Unit\Model\Unit[]
+     */
+    public function findStationaryByUniverseAndFaction(int $universeId, int $factionId): array
+    {
+        return $this->createQueryBuilder('unit')
+            ->where('unit.universe = :universeId')
+            ->andWhere('unit.faction = :factionId')
+            ->andWhere('unit.isStationary = 1')
+            ->setParameter(':universeId', $universeId)
+            ->setParameter(':factionId', $factionId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @return \GC\Unit\Model\Unit[]
      */
     public function findAll(): array

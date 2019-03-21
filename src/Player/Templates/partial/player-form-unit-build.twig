@@ -27,7 +27,7 @@
                         <span>{{ unit.getCrystalCost | number }}</span>
                     </td>
                     <td class="has-text-centered">
-                        {{ currentPlayer.getQuantityOf(unit) | number }}
+                        {{ currentPlayer.getUnitQuantityOf(unit) | number }}
                     </td>
                     <td class="has-text-centered" nowrap>
                         {% if isUnitInProduction %}

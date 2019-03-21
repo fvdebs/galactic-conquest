@@ -447,6 +447,7 @@ class Player
         $numberOfExtractors = $this->getNumberOfExtractors();
 
         $numberOfPossibleExtractors = 0;
+
         while ($metal >= $numberOfExtractors * $extractorCost) {
             $metal -= $numberOfExtractors * $extractorCost;
             $numberOfExtractors++;
@@ -496,6 +497,7 @@ class Player
     protected function calculateTechnologyPoints(): int
     {
         $calculation = 0;
+
         foreach ($this->getPlayerTechnologies() as $playerTechnology) {
             $calculation += $playerTechnology->getTechnology()->getCrystalCost();
             $calculation += $playerTechnology->getTechnology()->getMetalCost();
@@ -510,6 +512,7 @@ class Player
     protected function calculateUnitPoints(): int
     {
         $calculation = 0;
+
         foreach ($this->getPlayerFleets() as $playerFleet) {
             $calculation += $playerFleet->calculateUnitPoints();
         }
@@ -800,6 +803,7 @@ class Player
                 return true;
             }
         }
+
         return false;
     }
 
@@ -815,6 +819,7 @@ class Player
                 return $playerUnitConstruction;
             }
         }
+
         return null;
     }
 
@@ -936,6 +941,7 @@ class Player
     public function getPlayerTechnologiesInConstruction(): array
     {
         $playerTechnologies = [];
+
         foreach ($this->getPlayerTechnologies() as $playerTechnology) {
             if ($playerTechnology->isInConstruction()) {
                 $playerTechnologies[] = $playerTechnology;
@@ -967,6 +973,7 @@ class Player
     public function isPlayerTechnologyInConstruction(Technology $technology): bool
     {
         $playerTechnology = $this->getPlayerTechnologyByTechnology($technology);
+
         if ($playerTechnology === null) {
             return false;
         }
@@ -980,6 +987,7 @@ class Player
     public function getPlayerTechnologiesCompleted(): array
     {
         $playerTechnologies = [];
+
         foreach ($this->getPlayerTechnologies() as $playerTechnology) {
             if ($playerTechnology->isCompleted()) {
                 $playerTechnologies[] = $playerTechnology;
@@ -1025,6 +1033,7 @@ class Player
     public function getTotalCrystalIncomeFromTechnologiesPerTick(): int
     {
         $income = 0;
+
         foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
             $income += $technology->getCrystalProduction();
         }
@@ -1038,6 +1047,7 @@ class Player
     public function getTotalCrystalIncomeFromTechnologiesPerDay(): int
     {
         $income = 0;
+
         foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
             $income += $technology->calculateCrystalIncomePerDay();
         }
@@ -1067,6 +1077,7 @@ class Player
     public function getTotalMetalIncomeFromTechnologiesPerTick(): int
     {
         $income = 0;
+
         foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
             $income += $technology->getMetalProduction();
         }
@@ -1080,6 +1091,7 @@ class Player
     public function getTotalMetalIncomeFromTechnologiesPerDay(): int
     {
         $income = 0;
+
         foreach ($this->getTechnologiesCompletedWithMetalIncome() as $technology) {
             $income += $technology->calculateMetalIncomePerDay();
         }
@@ -1111,6 +1123,7 @@ class Player
     public function isPlayerTechnologyCompleted(Technology $technology): bool
     {
         $playerTechnology = $this->getPlayerTechnologyByTechnology($technology);
+
         if ($playerTechnology === null) {
             return false;
         }
@@ -1239,11 +1252,76 @@ class Player
     }
 
     /**
+     * @return \GC\Player\Model\PlayerFleetUnit[]
+     */
+    public function getPlayerFleetsUnits(): array
+    {
+        $playerFleetsUnits = [];
+
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            foreach ($playerFleet->getPlayerFleetUnits() as $playerFleetUnit) {
+                $playerFleetsUnits[] = $playerFleetUnit;
+            }
+        }
+
+        return $playerFleetsUnits;
+    }
+
+    /**
+     * @param \GC\Unit\Model\Unit $unit
+     *
+     * @return int
+     */
+    public function getUnitQuantityOf(Unit $unit): int
+    {
+        $quantity = 0;
+
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            $quantity += $playerFleet->getQuantityOf($unit);
+        }
+
+        return $quantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnitsOffensiveQuantity(): int
+    {
+        $quantity = 0;
+
+        foreach ($this->getPlayerFleetsUnits() as $playerFleetUnit) {
+            if (!$playerFleetUnit->getUnit()->isStationary()) {
+                $quantity += $playerFleetUnit->getQuantity();
+            }
+        }
+
+        return $quantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnitsDefensiveQuantity(): int
+    {
+        $quantity = 0;
+
+        foreach ($this->getPlayerFleetsUnits() as $playerFleetUnit) {
+            if ($playerFleetUnit->getUnit()->isStationary()) {
+                $quantity += $playerFleetUnit->getQuantity();
+            }
+        }
+
+        return $quantity;
+    }
+
+    /**
      * @return \GC\Player\Model\PlayerFleet[]
      */
     public function getPlayerFleetsAttackingOrRecalling(): array
     {
         $playerFleets = [];
+
         foreach ($this->getPlayerFleets() as $playerFleet) {
             if ($playerFleet->isAttacking() || $playerFleet->isRecalling()) {
                 $playerFleets[] = $playerFleet;
@@ -1259,6 +1337,7 @@ class Player
     public function getPlayerFleetsDefendingOrRecalling(): array
     {
         $playerFleets = [];
+
         foreach ($this->getPlayerFleets() as $playerFleet) {
             if ($playerFleet->isDefending() || $playerFleet->isRecalling()) {
                 $playerFleets[] = $playerFleet;
@@ -1336,6 +1415,7 @@ class Player
     public function getPlayerFleetsAtHome(): array
     {
         $playerFleetsAtHome = [];
+
         foreach ($this->getPlayerFleets() as $playerFleet) {
             if ($playerFleet->isIdling()) {
                 $playerFleetsAtHome[] = $playerFleet;
@@ -1351,20 +1431,5 @@ class Player
     public function hasPlayerFleetsAtHome(): bool
     {
         return \count($this->getPlayerFleetsAtHome()) > 0;
-    }
-
-    /**
-     * @param \GC\Unit\Model\Unit $unit
-     *
-     * @return int
-     */
-    public function getQuantityOf(Unit $unit): int
-    {
-        $quantity = 0;
-        foreach ($this->getPlayerFleets() as $playerFleet) {
-            $quantity += $playerFleet->getQuantityOf($unit);
-        }
-
-        return $quantity;
     }
 }
