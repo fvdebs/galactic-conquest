@@ -425,10 +425,12 @@ class Player
     public function calculateMetalCostForExtractors(int $number, int $startExtractors): int
     {
         $resourceCostPerExtractor = $this->universe->getExtractorStartCost();
-        $metalCost = $startExtractors * $resourceCostPerExtractor;
+        $metalCostForNextExtractor = $startExtractors * $resourceCostPerExtractor;
+        $metalCost = 0;
 
         while ($number > 0) {
-            $metalCost += $resourceCostPerExtractor;
+            $metalCost += $metalCostForNextExtractor;
+            $metalCostForNextExtractor += $resourceCostPerExtractor;
             $number--;
         }
 
@@ -1234,6 +1236,52 @@ class Player
     public function getPlayerFleets(): array
     {
         return $this->playerFleets->getValues();
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleetsAttackingOrRecalling(): array
+    {
+        $playerFleets = [];
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleet->isAttacking() || $playerFleet->isRecalling()) {
+                $playerFleets[] = $playerFleet;
+            }
+        }
+
+        return $playerFleets;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleetsDefendingOrRecalling(): array
+    {
+        $playerFleets = [];
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleet->isDefending() || $playerFleet->isRecalling()) {
+                $playerFleets[] = $playerFleet;
+            }
+        }
+
+        return $playerFleets;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleetsWhichAreAttackingThisPlayer(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleetsWhichAreDefendingThisPlayer(): array
+    {
+        return [];
     }
 
     /**

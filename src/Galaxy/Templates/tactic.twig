@@ -1,0 +1,22 @@
+{% extends "@App/layout/game-layout.twig" %}
+
+{% block content %}
+    <div class="container">
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
+                    {'name': 'galaxy.tactic', 'icon': 'fas fa-home has-text-primary'},
+                ]
+            }
+        %}
+    </div>
+
+    <div class="container has-margin">
+        {% include "@Galaxy/partial/tactic-table.twig"%}
+    </div>
+
+    <div class="container has-margin">
+        {% include "@Galaxy/partial/tactic-statistic-table.twig"%}
+    </div>
+{% endblock %}

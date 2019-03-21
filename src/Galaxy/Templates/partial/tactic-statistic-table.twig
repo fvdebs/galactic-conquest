@@ -1,0 +1,62 @@
+<div class="table-container">
+    <table class="table is-bordered is-narrow is-fullwidth has-valigned-cells">
+        <thead>
+            <tr>
+                <th>{{ 'galaxy.sector' | trans }}</th>
+                <th>{{ 'galaxy.commander' | trans }}</th>
+                <th>{{ 'galaxy.points' | trans }}</th>
+                <th>{{ 'galaxy.fleet.count' | trans }}</th>
+                <th>{{ 'galaxy.defense.count' | trans }}</th>
+                <th>{{ 'galaxy.extractors' | trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in currentPlayer.getGalaxy.getPlayers %}
+                <tr>
+                    <td {% if player.isCommander %}class="has-text-primary"{% endif %}>
+                        {{ currentPlayer.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}
+                    </td>
+                    <td {% if player.isCommander %}class="has-text-primary"{% endif %}>
+                        {{ player.getUser.getName }}
+                    </td>
+                    <td>
+                        {{ player.getPoints | number }}
+                    </td>
+                    <td>
+                        0
+                    </td>
+                    <td>
+                        0
+                    </td>
+                    <td>
+                        {{ player.getExtractorMetal }} / {{ player.getExtractorCrystal }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">{{ 'galaxy.total' | trans }}</td>
+                <td></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0 / 0</td>
+            </tr>
+            <tr>
+                <td colspan="2">{{ 'galaxy.average' | trans }}</td>
+                <td>
+                    {{ currentPlayer.getGalaxy.getAveragePoints | number }}
+                </td>
+                <td>
+                    0
+                </td>
+                <td>
+                    0
+                </td>
+                <td>
+                    0 / 0
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

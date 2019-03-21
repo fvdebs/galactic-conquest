@@ -1,0 +1,90 @@
+<div class="table-container">
+    <table class="table is-bordered is-narrow is-fullwidth has-valigned-cells">
+        <thead>
+            <tr>
+                <th>{{ 'galaxy.sector' | trans }}</th>
+                <th>{{ 'galaxy.commander' | trans }}</th>
+                <th>{{ 'galaxy.attacking' | trans }}</th>
+                <th>{{ 'galaxy.eta' | trans }}</th>
+                <th>{{ 'galaxy.defends' | trans }}</th>
+                <th>{{ 'galaxy.eta' | trans }}</th>
+                <th>{{ 'galaxy.attacked.by' | trans }}</th>
+                <th>{{ 'galaxy.eta' | trans }}</th>
+                <th>{{ 'galaxy.defended.by' | trans }}</th>
+                <th>{{ 'galaxy.eta' | trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in currentPlayer.getGalaxy.getPlayers %}
+                <tr>
+                    <td {% if player.isCommander %}class="has-text-primary"{% endif %}>
+                        {{ currentPlayer.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}
+                    </td>
+                    <td {% if player.isCommander %}class="has-text-primary"{% endif %}>
+                        {{ player.getUser.getName }}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsAttackingOrRecalling %}
+                            {% if playerFleet.isRecalling %}
+                                <span>{{ 'galaxy.recalling' | trans }}</span>
+                            {% endif %}
+                            <span>
+                                {{ playerFleet.getTargetPlayer.getGalaxy.getNumber }}:{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
+                                {{ playerFleet.getTargetPlayer.getUser.getName }}
+                            </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsAttackingOrRecalling %}
+                            {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsDefendingOrRecalling %}
+                            {% if playerFleet.isRecalling %}
+                                <span>{{ 'galaxy.recalling' | trans }}</span>
+                            {% endif %}
+                            <span>
+                                {{ playerFleet.getTargetPlayer.getGalaxy.getNumber }}:{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
+                                {{ playerFleet.getTargetPlayer.getUser.getName }}
+                            </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsDefendingOrRecalling %}
+                            {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsWhichAreAttackingThisPlayer %}
+                            <span>
+                                {{ playerFleet.getPlayer.getGalaxy.getNumber }}:{{ playerFleet.getPlayer.getGalaxyPosition }}
+                                {{ playerFleet.getPlayer.getUser.getName }}
+                            </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsWhichAreAttackingThisPlayer %}
+                            {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsWhichAreDefendingThisPlayer %}
+                            <span>
+                                {{ playerFleet.getPlayer.getGalaxy.getNumber }}:{{ playerFleet.getPlayer.getGalaxyPosition }}
+                                {{ playerFleet.getPlayer.getUser.getName }}
+                            </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for playerFleet in player.getPlayerFleetsWhichAreDefendingThisPlayer %}
+                            <span>
+                                {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                            </span>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
