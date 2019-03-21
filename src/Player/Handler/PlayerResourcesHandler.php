@@ -55,7 +55,7 @@ final class PlayerResourcesHandler implements RequestHandlerInterface
         $metalCostForNextExtractor = $currentPlayer->calculateMetalCostForNextExtractor();
         $maxExtractorsToBuild = $currentPlayer->calculateMaxExtractorConstruction();
 
-        return $this->render('@Player/resources.twig', [
+        return $this->render('@Player/player-resources.twig', [
             'extractorMetalIncomePerTick' => $extractorMetalIncomePerTick,
             'extractorMetalIncomePerDay' => $extractorMetalIncomePerDay,
             'technologiesWithMetalIncome' => $technologiesWithMetalIncome,

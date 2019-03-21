@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Galaxy;
 
-use GC\Galaxy\Handler\GalaxiesHandler;
+use GC\Galaxy\Handler\GalaxyGalaxiesHandler;
 use GC\Galaxy\Handler\GalaxyAllianceApplicationHandler;
 use GC\Galaxy\Handler\GalaxySettingsHandler;
 use GC\Galaxy\Handler\GalaxyTacticHandler;
@@ -35,10 +35,10 @@ final class GalaxyServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
-            $collection->get('/{locale}/{universe}/galaxy/{number}', GalaxiesHandler::class);
             $collection->get('/{locale}/{universe}/galaxy/tactic', GalaxyTacticHandler::class);
-            $collection->get('/{locale}/{universe}/galaxy/military/{position}', GalaxyTacticMilitaryHandler::class);
             $collection->get('/{locale}/{universe}/galaxy', GalaxySettingsHandler::class);
+            $collection->get('/{locale}/{universe}/galaxy/{number}', GalaxyGalaxiesHandler::class)->addPattern('number', '\d+');
+            $collection->get('/{locale}/{universe}/galaxy/military/{galaxyPosition}', GalaxyTacticMilitaryHandler::class)->addPattern('galaxyPosition', '\d+');
 
             $collection->post('/{locale}/{universe}/galaxy/technology', GalaxyTechnologyBuildHandler::class);
             $collection->post('/{locale}/{universe}/galaxy/application', GalaxyAllianceApplicationHandler::class);

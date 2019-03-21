@@ -22,6 +22,6 @@ final class GalaxyTacticHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Galaxy/tactic.twig');
+        return $this->render('@Galaxy/galaxy-tactic.twig');
     }
 }

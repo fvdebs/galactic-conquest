@@ -434,6 +434,7 @@ class Galaxy
     public function getNextFreeGalaxyPosition(): int
     {
         $freeGalaxyPosition = 1;
+
         foreach ($this->players as $index => $galaxyPlayer) {
             if ($galaxyPlayer->getGalaxyPosition() > $freeGalaxyPosition) {
                 return $freeGalaxyPosition;
@@ -450,39 +451,145 @@ class Galaxy
      */
     public function increaseExtractorPointsPerTick(): void
     {
-        $this->extractorPoints += $this->calculateExtractorPointsPerTick();
+        $this->extractorPoints += $this->calculateAverageExtractors();
     }
 
     /**
      * @return int
      */
-    public function calculateExtractorPointsPerTick(): int
+    public function calculateAveragePlayerPoints(): int
     {
-        $newExtractorPoints = 0;
-        foreach ($this->getPlayers() as $player) {
-            $newExtractorPoints += $player->getNumberOfExtractors();
-        }
+        $calculation = $this->calculateTotalPlayerPoints() / \count($this->getPlayers());
 
-        return $newExtractorPoints;
+        $this->averagePoints = (int) \round($calculation);
+
+        return $this->averagePoints;
     }
 
     /**
-     * @return void
+     * @return int
      */
-    public function calculateAveragePlayerPoints(): void
+    public function calculateTotalPlayerPoints(): int
     {
         $playerPoints = 0;
+
         foreach ($this->getPlayers() as $player) {
             $playerPoints += $player->getPoints();
         }
 
-        $playerCount = \count($this->getPlayers());
-        $calculation = 0;
-        if ($playerCount > 0) {
-            $calculation = $playerPoints / $playerCount;
+        return $playerPoints;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateAverageExtractors(): int
+    {
+        $extractors = 0;
+
+        foreach ($this->getPlayers() as $player) {
+            $extractors += $player->getNumberOfExtractors();
         }
 
-        $this->averagePoints = (int) \round($calculation);
+        $calculation = $extractors / \count($this->getPlayers());
+
+        return (int) \round($calculation);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateAverageMetalExtractors(): int
+    {
+        $calculation = $this->calculateTotalMetalExtractors() / \count($this->getPlayers());
+
+        return (int) \round($calculation);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateTotalMetalExtractors(): int
+    {
+        $extractors = 0;
+
+        foreach ($this->getPlayers() as $player) {
+            $extractors += $player->getExtractorMetal();
+        }
+
+        return $extractors;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateAverageCrystalExtractors(): int
+    {
+        $calculation = $this->calculateTotalCrystalExtractors() / \count($this->getPlayers());
+
+        return (int) \round($calculation);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateTotalCrystalExtractors(): int
+    {
+        $extractors = 0;
+
+        foreach ($this->getPlayers() as $player) {
+            $extractors += $player->getExtractorCrystal();
+        }
+
+        return $extractors;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateUnitsMovableAverageQuantity(): int
+    {
+        $calculation = $this->calculateUnitsMovableTotalQuantity() / \count($this->getPlayers());
+
+        return (int) \round($calculation);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateUnitsMovableTotalQuantity(): int
+    {
+        $quantity = 0;
+
+        foreach ($this->getPlayers() as $player) {
+            $quantity += $player->getExtractorCrystal();
+        }
+
+        return $quantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateUnitsStationaryAverageQuantity(): int
+    {
+        $calculation = $this->calculateUnitsStationaryTotalQuantity() / \count($this->getPlayers());
+
+        return (int) \round($calculation);
+    }
+
+    /**
+     * @return int
+     */
+    public function calculateUnitsStationaryTotalQuantity(): int
+    {
+        $quantity = 0;
+
+        foreach ($this->getPlayers() as $player) {
+            $quantity += $player->getUnitsStationaryQuantity();
+        }
+
+        return $quantity;
     }
 
     /**

@@ -1,5 +1,5 @@
 <div class="table-container">
-    <table class="table is-bordered is-narrow is-fullwidth has-valigned-cells">
+    <table class="table is-narrow is-fullwidth has-valigned-cells">
         <thead>
             <tr>
                 <th>{{ 'galaxy.tactic.military.unit.name' | trans }}</th>
@@ -7,13 +7,13 @@
             </tr>
         </thead>
         <tbody>
-            {% for unit in units %}
+            {% for playerFleetUnit in player.getPlayerFleetStationary.getPlayerFleetUnits %}
                 <tr>
                     <td>
-                        {{ unit.getName }}
+                        {{ playerFleetUnit.getUnit.getName | trans }}
                     </td>
                     <td>
-                        {{ player.getUnitQuantityOf(unit) | number }}
+                        {{ playerFleetUnit.getQuantity | number }}
                     </td>
                 </tr>
             {% endfor %}

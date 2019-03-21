@@ -23,13 +23,17 @@
                         {{ player.getPoints | number }}
                     </td>
                     <td>
-                        0
+                        <a href="{{ url('galaxy.tactic.military', [player.getGalaxyPosition]) }}">
+                            {{ player.getUnitsMovableQuantity | number }}
+                        </a>
                     </td>
                     <td>
-                        0
+                        <a href="{{ url('galaxy.tactic.military', [player.getGalaxyPosition]) }}">
+                            {{ player.getUnitsStationaryQuantity | number }}
+                        </a>
                     </td>
                     <td>
-                        {{ player.getExtractorMetal }} / {{ player.getExtractorCrystal }}
+                        {{ player.getExtractorMetal | number }} / {{ player.getExtractorCrystal | number }}
                     </td>
                 </tr>
             {% endfor %}
@@ -37,10 +41,16 @@
         <tfoot>
             <tr>
                 <td colspan="2">{{ 'galaxy.total' | trans }}</td>
-                <td></td>
-                <td>0</td>
-                <td>0</td>
-                <td>0 / 0</td>
+                <td>{{ currentPlayer.getGalaxy.calculateTotalPlayerPoints | number }}</td>
+                <td>
+                    {{ currentPlayer.getGalaxy.calculateUnitsMovableTotalQuantity | number }}
+                </td>
+                <td>
+                    {{ currentPlayer.getGalaxy.calculateUnitsStationaryTotalQuantity | number }}
+                </td>
+                <td>
+                    {{ currentPlayer.getGalaxy.calculateTotalMetalExtractors | number }} / {{ currentPlayer.getGalaxy.calculateTotalCrystalExtractors | number }}
+                </td>
             </tr>
             <tr>
                 <td colspan="2">{{ 'galaxy.average' | trans }}</td>
@@ -48,13 +58,13 @@
                     {{ currentPlayer.getGalaxy.getAveragePoints | number }}
                 </td>
                 <td>
-                    0
+                    {{ currentPlayer.getGalaxy.calculateUnitsMovableAverageQuantity | number }}
                 </td>
                 <td>
-                    0
+                    {{ currentPlayer.getGalaxy.calculateUnitsStationaryAverageQuantity | number }}
                 </td>
                 <td>
-                    0 / 0
+                    {{ currentPlayer.getGalaxy.calculateAverageMetalExtractors | number }} / {{ currentPlayer.getGalaxy.calculateAverageCrystalExtractors | number }}
                 </td>
             </tr>
         </tfoot>

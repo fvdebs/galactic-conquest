@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class GalaxiesHandler implements RequestHandlerInterface
+final class GalaxyGalaxiesHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
     use GameAwareTrait;
@@ -22,8 +22,6 @@ final class GalaxiesHandler implements RequestHandlerInterface
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -40,7 +38,7 @@ final class GalaxiesHandler implements RequestHandlerInterface
             ]);
         }
 
-        return $this->render('@Galaxy/galaxies.twig', [
+        return $this->render('@Galaxy/galaxy-galaxies.twig', [
             'galaxy' => $galaxy,
             'previousGalaxyNumber' => $this->getPreviousGalaxyNumberOf($galaxy),
             'nextGalaxyNumber' => $this->getNextGalaxyNumberOf($galaxy),
@@ -49,8 +47,6 @@ final class GalaxiesHandler implements RequestHandlerInterface
 
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return int|null
      */
@@ -70,8 +66,6 @@ final class GalaxiesHandler implements RequestHandlerInterface
 
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return int|null
      */

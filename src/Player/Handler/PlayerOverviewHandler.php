@@ -22,6 +22,6 @@ final class PlayerOverviewHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->render('@Player/playerOverview.twig');
+        return $this->render('@Player/player-overview.twig');
     }
 }

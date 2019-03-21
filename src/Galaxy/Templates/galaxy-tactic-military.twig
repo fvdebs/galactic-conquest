@@ -11,27 +11,29 @@
                 ]
             }
         %}
-
-        <h3 class="title is-size-3">
-          ({{ player.getGalaxy.getGalaxyId }}:{{ player.getGalaxyPosition }}) {{ player.getUser.getName }}
-        </h3>
     </div>
 
     <div class="container has-margin">
-        {% include "@Galaxy/partial/galaxy-table-tactic-military.twig"
+        <h5 class="title is-size-5 has-text-centered">
+            {{ player.getUser.getName }} ({{ player.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }})
+        </h5>
+
+        {# include "@Galaxy/partial/galaxy-table-tactic-fleet-movable.twig"
             with {
-                'player': player
-                'units': movableUnits,
+                'player': player,
             }
-        %}
+        #}
     </div>
 
     <div class="container has-margin">
-        {% include "@Galaxy/partial/galaxy-table-tactic-military.twig"
+        <h5 class="title is-size-5 has-text-centered">
+            {{ 'galaxy.tactic.military.stationary' | trans }}
+        </h5>
+
+        {# include "@Galaxy/partial/galaxy-table-tactic-fleet-stationary.twig"
             with {
-                'player': player
-                'units': stationaryUnits,
+                'player': player,
             }
-        %}
+        #}
     </div>
 {% endblock %}

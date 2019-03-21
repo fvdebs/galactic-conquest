@@ -38,7 +38,7 @@ final class PlayerUnitListHandler implements RequestHandlerInterface
         $flyableBuildableUnits = $this->filterFlyableUnits($buildableUnits);
         $stationaryBuildableUnits = $this->filterStationaryUnits($buildableUnits);
 
-        return $this->render('@Player/unit-list.twig', [
+        return $this->render('@Player/player-unit-list.twig', [
             'flyableBuildableUnits' => $flyableBuildableUnits,
             'stationaryBuildableUnits' => $stationaryBuildableUnits,
         ]);

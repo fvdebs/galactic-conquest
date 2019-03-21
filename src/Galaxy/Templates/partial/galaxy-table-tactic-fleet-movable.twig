@@ -1,0 +1,25 @@
+<div class="table-container">
+    <table class="table is-narrow is-fullwidth has-valigned-cells">
+        <thead>
+            <tr>
+                <th>{{ 'galaxy.tactic.military.unit.name' | trans }}</th>
+                <th>{{ 'galaxy.tactic.military.fleet.orbit' | trans }}</th>
+                {% for key,playerFleet in player.getPlayerFleetsMovable %}
+                    <th>{{ 'galaxy.tactic.military.unit.fleet' | trans | format(key + 1) }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in units %}
+                <tr>
+                    <td>
+                        {{ unit.getName | trans }}
+                    </td>
+                    <td>
+                        {{ player.getUnitQuantityOf(unit) | number }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

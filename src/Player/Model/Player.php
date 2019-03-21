@@ -209,7 +209,12 @@ class Player
         $this->isAdmiral = false;
         $this->isCommander = false;
 
-        $this->createPlayerFleet();
+        $playerFleetOrbit = $this->createPlayerFleet();
+        $playerFleetOrbit->setIsOrbit(true);
+
+        $playerFleetStationary = $this->createPlayerFleet();
+        $playerFleetStationary->setIsStationary(true);
+
         $this->calculatePoints();
     }
 
@@ -863,7 +868,13 @@ class Player
             }
 
             if ($playerUnitConstruction->getTicksLeft() === 0) {
-                $this->getPlayerFleetHome()->addUnits(
+                if ($playerUnitConstruction->getUnit()->isStationary()) {
+                    $playerFleet = $this->getPlayerFleetStationary();
+                } else {
+                    $playerFleet = $this->getPlayerFleetOrbit();
+                }
+
+                $playerFleet->addUnits(
                     $playerUnitConstruction->getUnit(),
                     $playerUnitConstruction->getQuantity()
                 );
@@ -1252,19 +1263,65 @@ class Player
     }
 
     /**
-     * @return \GC\Player\Model\PlayerFleetUnit[]
+     * @return \GC\Player\Model\PlayerFleet|null
      */
-    public function getPlayerFleetsUnits(): array
+    public function getPlayerFleetOrbit(): ?PlayerFleet
     {
-        $playerFleetsUnits = [];
-
         foreach ($this->getPlayerFleets() as $playerFleet) {
-            foreach ($playerFleet->getPlayerFleetUnits() as $playerFleetUnit) {
-                $playerFleetsUnits[] = $playerFleetUnit;
+            if ($playerFleet->isOrbit()) {
+                return $playerFleet;
             }
         }
 
-        return $playerFleetsUnits;
+        return null;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet|null
+     */
+    public function getPlayerFleetStationary(): PlayerFleet
+    {
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleet->isStationary()) {
+                return $playerFleet;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleetsMovable(): array
+    {
+        $playerFleets = [];
+
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleet->isMovable()) {
+                $playerFleets[] =  $playerFleet;
+            }
+        }
+
+        return $playerFleets;
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getPlayerFleetsOrbitAndMovable(): array
+    {
+        $playerFleets = [];
+
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleet->isMovable()) {
+                $playerFleets[] =  $playerFleet;
+            }
+        }
+
+        \array_unshift($playerFleets, $this->getPlayerFleetOrbit());
+
+        return $playerFleets;
     }
 
     /**
@@ -1272,12 +1329,12 @@ class Player
      *
      * @return int
      */
-    public function getUnitQuantityOf(Unit $unit): int
+    public function getPlayerFleetsUnitQuantityOf(Unit $unit): int
     {
         $quantity = 0;
 
         foreach ($this->getPlayerFleets() as $playerFleet) {
-            $quantity += $playerFleet->getQuantityOf($unit);
+            $quantity += $playerFleet->getUnitQuantityOf($unit);
         }
 
         return $quantity;
@@ -1286,12 +1343,12 @@ class Player
     /**
      * @return int
      */
-    public function getUnitsOffensiveQuantity(): int
+    public function getUnitsMovableQuantity(): int
     {
         $quantity = 0;
 
-        foreach ($this->getPlayerFleetsUnits() as $playerFleetUnit) {
-            if (!$playerFleetUnit->getUnit()->isStationary()) {
+        foreach ($this->getPlayerFleetsOrbitAndMovable() as $playerFleet) {
+            foreach ($playerFleet->getPlayerFleetUnits() as $playerFleetUnit) {
                 $quantity += $playerFleetUnit->getQuantity();
             }
         }
@@ -1302,14 +1359,12 @@ class Player
     /**
      * @return int
      */
-    public function getUnitsDefensiveQuantity(): int
+    public function getUnitsStationaryQuantity(): int
     {
         $quantity = 0;
 
-        foreach ($this->getPlayerFleetsUnits() as $playerFleetUnit) {
-            if ($playerFleetUnit->getUnit()->isStationary()) {
-                $quantity += $playerFleetUnit->getQuantity();
-            }
+        foreach ($this->getPlayerFleetStationary()->getPlayerFleetUnits() as $playerFleetUnit) {
+            $quantity += $playerFleetUnit->getQuantity();
         }
 
         return $quantity;
@@ -1322,7 +1377,7 @@ class Player
     {
         $playerFleets = [];
 
-        foreach ($this->getPlayerFleets() as $playerFleet) {
+        foreach ($this->getPlayerFleetsMovable() as $playerFleet) {
             if ($playerFleet->isAttacking() || $playerFleet->isRecalling()) {
                 $playerFleets[] = $playerFleet;
             }
@@ -1338,7 +1393,7 @@ class Player
     {
         $playerFleets = [];
 
-        foreach ($this->getPlayerFleets() as $playerFleet) {
+        foreach ($this->getPlayerFleetsMovable() as $playerFleet) {
             if ($playerFleet->isDefending() || $playerFleet->isRecalling()) {
                 $playerFleets[] = $playerFleet;
             }
@@ -1361,75 +1416,5 @@ class Player
     public function getPlayerFleetsWhichAreDefendingThisPlayer(): array
     {
         return [];
-    }
-
-    /**
-     * @return \GC\Player\Model\PlayerFleet
-     */
-    public function getPlayerFleetHome(): PlayerFleet
-    {
-        foreach ($this->getPlayerFleets() as $playerFleet) {
-            if (!$playerFleet->isDefensive() && !$playerFleet->isOffensive()) {
-                return $playerFleet;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param int $playerFleetId
-     *
-     * @return \GC\Player\Model\PlayerFleet|null
-     */
-    public function getFleetById(int $playerFleetId): ?PlayerFleet
-    {
-        foreach ($this->getPlayerFleets() as $playerFleet) {
-            if ($playerFleetId === $playerFleet->getPlayerFleetId()) {
-                return $playerFleet;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param \GC\Player\Model\Player $player
-     *
-     * @return bool
-     */
-    public function isPlayerFleetAttackingPlayer(Player $player): bool
-    {
-        foreach ($this->getPlayerFleets() as $playerFleet) {
-            if ($playerFleet->isDefensive() && $playerFleet->isDefendingPlayer($player)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return \GC\Player\Model\PlayerFleet[]
-     */
-    public function getPlayerFleetsAtHome(): array
-    {
-        $playerFleetsAtHome = [];
-
-        foreach ($this->getPlayerFleets() as $playerFleet) {
-            if ($playerFleet->isIdling()) {
-                $playerFleetsAtHome[] = $playerFleet;
-            }
-        }
-
-        return $playerFleetsAtHome;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasPlayerFleetsAtHome(): bool
-    {
-        return \count($this->getPlayerFleetsAtHome()) > 0;
     }
 }

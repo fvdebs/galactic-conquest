@@ -543,23 +543,122 @@ class Galaxy extends \GC\Galaxy\Model\Galaxy implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function calculateExtractorPointsPerTick(): int
+    public function calculateAveragePlayerPoints(): int
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateExtractorPointsPerTick', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateAveragePlayerPoints', []);
 
-        return parent::calculateExtractorPointsPerTick();
+        return parent::calculateAveragePlayerPoints();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function calculateAveragePlayerPoints(): void
+    public function calculateTotalPlayerPoints(): int
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateAveragePlayerPoints', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateTotalPlayerPoints', []);
 
-        parent::calculateAveragePlayerPoints();
+        return parent::calculateTotalPlayerPoints();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateAverageExtractors(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateAverageExtractors', []);
+
+        return parent::calculateAverageExtractors();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateAverageMetalExtractors(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateAverageMetalExtractors', []);
+
+        return parent::calculateAverageMetalExtractors();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateTotalMetalExtractors(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateTotalMetalExtractors', []);
+
+        return parent::calculateTotalMetalExtractors();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateAverageCrystalExtractors(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateAverageCrystalExtractors', []);
+
+        return parent::calculateAverageCrystalExtractors();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateTotalCrystalExtractors(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateTotalCrystalExtractors', []);
+
+        return parent::calculateTotalCrystalExtractors();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateUnitsMovableAverageQuantity(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateUnitsMovableAverageQuantity', []);
+
+        return parent::calculateUnitsMovableAverageQuantity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateUnitsMovableTotalQuantity(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateUnitsMovableTotalQuantity', []);
+
+        return parent::calculateUnitsMovableTotalQuantity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateUnitsStationaryAverageQuantity(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateUnitsStationaryAverageQuantity', []);
+
+        return parent::calculateUnitsStationaryAverageQuantity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateUnitsStationaryTotalQuantity(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateUnitsStationaryTotalQuantity', []);
+
+        return parent::calculateUnitsStationaryTotalQuantity();
     }
 
     /**

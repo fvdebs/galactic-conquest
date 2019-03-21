@@ -12,8 +12,6 @@ final class GalaxyRepository extends EntityRepository
     /**
      * @param int $galaxyId
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return \GC\Galaxy\Model\Galaxy|null
      */
 	public function findById(int $galaxyId): ?Galaxy
@@ -28,8 +26,6 @@ final class GalaxyRepository extends EntityRepository
     /**
      * @param int $number
      * @param int $universeId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\Galaxy\Model\Galaxy|null
      */
@@ -47,8 +43,6 @@ final class GalaxyRepository extends EntityRepository
     /**
      * @param string $password
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return \GC\Galaxy\Model\Galaxy|null
      */
     public function findByPassword(string $password): ?Galaxy
@@ -62,8 +56,6 @@ final class GalaxyRepository extends EntityRepository
 
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\Galaxy\Model\Galaxy|null
      */
@@ -83,8 +75,6 @@ final class GalaxyRepository extends EntityRepository
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return \GC\Galaxy\Model\Galaxy|null
      */
     public function findNextGalaxy(Galaxy $galaxy): ?Galaxy
@@ -103,8 +93,6 @@ final class GalaxyRepository extends EntityRepository
     /**
      * @param int $universeId
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return \GC\Galaxy\Model\Galaxy|null
      */
     public function findHighestGalaxyNumber(int $universeId): ?Galaxy
@@ -120,8 +108,6 @@ final class GalaxyRepository extends EntityRepository
 
     /**
      * @param int $universeId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return \GC\Galaxy\Model\Galaxy|null
      */

@@ -47,7 +47,7 @@ final class PlayerTechnologyListHandler implements RequestHandlerInterface
             $currentPlayer->getTechnologiesInConstruction()
         );
 
-        return $this->render('@Player/technology-list.twig', [
+        return $this->render('@Player/player-technology-list.twig', [
             'technologies' => \array_merge($buildableTechnologies, $inConstructionTechnologies, $completedTechnologies),
         ]);
     }

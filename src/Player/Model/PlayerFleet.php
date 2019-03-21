@@ -29,6 +29,13 @@ class PlayerFleet
     /**
      * @var bool
      *
+     * @Column(name="is_orbit", type="boolean", nullable=false)
+     */
+    private $isOrbit;
+
+    /**
+     * @var bool
+     *
      * @Column(name="is_offensive", type="boolean", nullable=false)
      */
     private $isOffensive;
@@ -39,6 +46,20 @@ class PlayerFleet
      * @Column(name="is_defensive", type="boolean", nullable=false)
      */
     private $isDefensive;
+
+    /**
+     * @var bool
+     *
+     * @Column(name="is_stationary", type="boolean", nullable=false)
+     */
+    private $isStationary;
+
+    /**
+     * @var bool
+     *
+     * @Column(name="is_movable", type="boolean", nullable=false)
+     */
+    private $isMovable;
 
     /**
      * @var string
@@ -93,6 +114,9 @@ class PlayerFleet
         $this->player = $player;
         $this->isOffensive = false;
         $this->isDefensive = false;
+        $this->isOrbit = false;
+        $this->isStationary = false;
+        $this->isMovable = false;
     }
 
     /**
@@ -101,6 +125,40 @@ class PlayerFleet
     public function getPlayerFleetId(): int
     {
         return $this->playerFleetId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOrbit(): bool
+    {
+        return $this->isOrbit;
+    }
+
+    /**
+     * @param bool $isOrbit
+     *
+     * @return void
+     */
+    public function setIsOrbit(bool $isOrbit): void
+    {
+        $this->isOrbit = $isOrbit;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStationary(): bool
+    {
+        return $this->isStationary;
+    }
+
+    /**
+     * @param bool $isStationary
+     */
+    public function setIsStationary(bool $isStationary): void
+    {
+        $this->isStationary = $isStationary;
     }
 
     /**
@@ -137,6 +195,22 @@ class PlayerFleet
     public function setIsDefensive(bool $isDefensive): void
     {
         $this->isDefensive = $isDefensive;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMovable(): bool
+    {
+        return $this->isMovable;
+    }
+
+    /**
+     * @param bool $isMovable
+     */
+    public function setIsMovable(bool $isMovable): void
+    {
+        $this->isMovable = $isMovable;
     }
 
     /**
@@ -274,7 +348,7 @@ class PlayerFleet
      *
      * @return int
      */
-    public function getQuantityOf(Unit $unit): int
+    public function getUnitQuantityOf(Unit $unit): int
     {
         $playerFleetUnit = $this->getPlayerFleetUnitFor($unit);
         if ($playerFleetUnit === null) {
@@ -303,57 +377,13 @@ class PlayerFleet
     public function calculateUnitPoints(): int
     {
         $calculation = 0;
+
         foreach ($this->getPlayerFleetUnits() as $playerFleetUnit) {
             $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getMetalCost();
             $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getCrystalCost();
         }
 
         return (int) \round($calculation);
-    }
-
-    /**
-     * @param \GC\Player\Model\Player $targetPlayer
-     * @param int $ticksLeftUntilMissionCompleted
-     *
-     * @return \GC\Player\Model\PlayerFleet
-     */
-    public function defend(Player $targetPlayer, int $ticksLeftUntilMissionCompleted = 20): PlayerFleet
-    {
-        $currentPlayer = $this->getPlayer();
-        $currentPlayersGalaxy = $currentPlayer->getGalaxy();
-        $currentUniverse = $currentPlayer->getUniverse();
-        $targetPlayersGalaxy = $targetPlayer->getGalaxy();
-
-        $ticksLeftUntilMissionReach = $currentUniverse->getTicksDefense();
-
-        if ($targetPlayersGalaxy->hasAlliance()
-            && $currentPlayersGalaxy->getAlliance() !== null
-            && $currentPlayersGalaxy->getAlliance()->isMember($currentPlayer)) {
-
-            $ticksLeftUntilMissionReach = $currentUniverse->getTicksDefenseAlliance();
-        }
-
-        $this->missionType = static::MISSION_TYPE_DEFEND;
-        $this->ticksLeftUntilMissionCompleted = $ticksLeftUntilMissionCompleted;
-        $this->ticksLeftUntilMissionReach = $ticksLeftUntilMissionReach;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isIdling(): bool
-    {
-        return $this->missionType === null;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBusy(): bool
-    {
-        return $this->missionType !== null;
     }
 
     /**
@@ -378,27 +408,5 @@ class PlayerFleet
     public function isDefending(): bool
     {
         return $this->missionType === static::MISSION_TYPE_DEFEND;
-    }
-
-    /**
-     * @param \GC\Player\Model\Player $player
-     *
-     * @return bool
-     */
-    public function isAttackingPlayer(Player $player): bool
-    {
-        return $this->missionType === static::MISSION_TYPE_ATTACK
-            && $this->targetPlayer->getPlayerId() === $player->getPlayerId();
-    }
-
-    /**
-     * @param \GC\Player\Model\Player $player
-     *
-     * @return bool
-     */
-    public function isDefendingPlayer(Player $player): bool
-    {
-        return $this->missionType === static::MISSION_TYPE_DEFEND
-            && $this->targetPlayer->getPlayerId() === $player->getPlayerId();
     }
 }

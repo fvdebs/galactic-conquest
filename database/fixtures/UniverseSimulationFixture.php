@@ -717,6 +717,16 @@ class UniverseSimulationFixture extends AbstractFixture
         $randomUnits = $this->getRandomUnits();
         $this->buildUnits($player, $randomUnits);
 
+        // add movable fleets
+        $firstFleet = $player->createPlayerFleet();
+        $firstFleet->setIsMovable(true);
+        $firstFleet->setIsDefensive(true);
+        $firstFleet->setIsOffensive(true);
+
+        $secondFleet = $player->createPlayerFleet();
+        $secondFleet->setIsMovable(true);
+        $secondFleet->setIsOffensive(true);
+
         return $player;
     }
 

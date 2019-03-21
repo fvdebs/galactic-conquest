@@ -32,7 +32,7 @@ final class GalaxyTacticMilitaryHandler implements RequestHandlerInterface
 
         $player = $this->getPlayerRepository()->findByPositionAndUniverseId(
             $currentPlayer->getGalaxy()->getGalaxyId(),
-            $request->getAttribute(static::ATTRIBUTE_GALAXY_POSITION),
+            (int) $request->getAttribute(static::ATTRIBUTE_GALAXY_POSITION),
             $currentPlayer->getUniverse()->getUniverseId()
         );
 

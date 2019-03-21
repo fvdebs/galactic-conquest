@@ -1,0 +1,15 @@
+{% extends "@App/layout/game-layout.twig" %}
+
+{% block content %}
+    <div class="container">
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': currentUniverse.getName, 'icon': 'fas fa-atom has-text-primary'},
+                ]
+            }
+        %}
+
+       <p>Hello {# currentPlayer.getPlayerId #}</p>
+    </div>
+{% endblock %}

@@ -22,6 +22,6 @@ final class GalaxyAllianceApplicationHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->redirect(GalaxyHandler::NAME);
+        return $this->redirect(GalaxySettingsHandler::NAME);
     }
 }
