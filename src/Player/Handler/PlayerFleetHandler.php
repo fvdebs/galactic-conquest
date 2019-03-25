@@ -11,13 +11,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class PlayerFleetOverviewHandler implements RequestHandlerInterface
+final class PlayerFleetHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
     use RepositoryAwareTrait;
     use GameAwareTrait;
 
-    public const NAME = 'player.fleet.overview';
+    public const NAME = 'player.fleet';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -26,10 +26,15 @@ final class PlayerFleetOverviewHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $currentPlayer = $this->getCurrentPlayer($request);
 
+        $movableUnits = $this->getUnitRepository()->findMovableByUniverseAndFaction(
+            $currentPlayer->getUniverse()->getUniverseId(),
+            $currentPlayer->getFaction()->getFactionId()
+        );
 
-        return $this->render('@Player/playerFleetOverview.twig', [
-            'units' => $this->getUnitRepository()->findAll(),
+        return $this->render('@Player/player-fleet.twig', [
+            'movableUnits' => $movableUnits,
         ]);
     }
 }

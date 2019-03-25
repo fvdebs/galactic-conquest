@@ -9,9 +9,9 @@ use GC\Player\Handler\PlayerCombatReportExternalHandler;
 use GC\Player\Handler\PlayerCombatReportHandler;
 use GC\Player\Handler\PlayerCombatReportListHandler;
 use GC\Player\Handler\PlayerExtractorBuildHandler;
-use GC\Player\Handler\PlayerFleetBuildHandler;
+use GC\Player\Handler\PlayerFleetResortHandler;
 use GC\Player\Handler\PlayerFleetMissionHandler;
-use GC\Player\Handler\PlayerFleetOverviewHandler;
+use GC\Player\Handler\PlayerFleetHandler;
 use GC\Player\Handler\PlayerOverviewHandler;
 use GC\Player\Handler\PlayerResourcesHandler;
 use GC\Player\Handler\PlayerScanBlockerBuildHandler;
@@ -55,8 +55,8 @@ final class PlayerServiceProvider implements ServiceProviderInterface
             $collection->get('/{locale}/{universe}/technology', PlayerTechnologyListHandler::class);
             $collection->get('/{locale}/{universe}/unit', PlayerUnitListHandler::class);
             $collection->get('/{locale}/{universe}/resources', PlayerResourcesHandler::class);
+            $collection->get('/{locale}/{universe}/fleet', PlayerFleetHandler::class);
             $collection->get('/{locale}/{universe}/scan', PlayerScanListHandler::class);
-            $collection->get('/{locale}/{universe}/fleet', PlayerFleetOverviewHandler::class);
             $collection->get('/{locale}/{universe}/report/{combatReportId}', PlayerCombatReportHandler::class);
             $collection->get('/{locale}/{universe}/reports', PlayerCombatReportListHandler::class);
 
@@ -65,7 +65,7 @@ final class PlayerServiceProvider implements ServiceProviderInterface
             $collection->post('/{locale}/{universe}/extractor', PlayerExtractorBuildHandler::class);
             $collection->post('/{locale}/{universe}/scan-relay', PlayerScanRelayBuildHandler::class);
             $collection->post('/{locale}/{universe}/scan-blocker', PlayerScanBlockerBuildHandler::class);
-            $collection->post('/{locale}/{universe}/fleet', PlayerFleetBuildHandler::class);
+            $collection->post('/{locale}/{universe}/fleet/resort', PlayerFleetResortHandler::class);
             $collection->post('/{locale}/{universe}/fleet/mission', PlayerFleetMissionHandler::class);
 
             return $collection;

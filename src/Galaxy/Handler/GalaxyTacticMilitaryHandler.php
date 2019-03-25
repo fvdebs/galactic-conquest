@@ -37,7 +37,7 @@ final class GalaxyTacticMilitaryHandler implements RequestHandlerInterface
         );
 
         if ($player === null
-//            || !$player->getGalaxy()->hasTechnologyByFeatureKey(Technology::FEATURE_GALAXY_TACTIC_FLEET)
+           // || !$player->getGalaxy()->hasTechnologyByFeatureKey(Technology::FEATURE_GALAXY_TACTIC_FLEET)
             || $player->getGalaxy()->getGalaxyId() !== $currentPlayer->getGalaxy()->getGalaxyId()
             || $player->getUniverse()->getUniverseId() !== $currentPlayer->getUniverse()->getUniverseId()
         ) {

@@ -2,13 +2,13 @@
     <table class="table is-narrow is-fullwidth has-valigned-cells">
         <thead>
             <tr>
-                <th>{{ 'galaxy.tactic.military.unit.name' | trans }}</th>
+                <th>{{ 'player.fleet.unit.name' | trans }}</th>
                 {% for key,playerFleet in playerFleetsOrbitAndMovable %}
                     <th>
                         {% if playerFleet.isOrbit %}
-                            {{ 'galaxy.tactic.military.fleet.orbit' | trans }}
+                            {{ 'player.fleet.orbit' | trans }}
                         {% else %}
-                            {{ 'galaxy.tactic.military.unit.fleet' | trans | format(key) }}
+                            {{ 'player.fleet' | trans | format(key) }}
                         {% endif %}
                     </th>
                 {% endfor %}

@@ -7,13 +7,13 @@
             </tr>
         </thead>
         <tbody>
-            {% for playerFleetUnit in player.getPlayerFleetStationary.getPlayerFleetUnits %}
+            {% for unit in stationaryUnits %}
                 <tr>
                     <td>
-                        {{ playerFleetUnit.getUnit.getName | trans }}
+                        {{ unit.getName | trans }}
                     </td>
                     <td>
-                        {{ playerFleetUnit.getQuantity | number }}
+                        {{ playerFleetStationary.getUnitQuantityOf(unit) | number }}
                     </td>
                 </tr>
             {% endfor %}

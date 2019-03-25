@@ -18,11 +18,12 @@
             {{ player.getUser.getName }} ({{ player.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }})
         </h5>
 
-        {# include "@Galaxy/partial/galaxy-table-tactic-fleet-movable.twig"
+        {% include "@Galaxy/partial/galaxy-table-tactic-fleet-movable.twig"
             with {
-                'player': player,
+                'movableUnits' : movableUnits,
+                'playerFleetsOrbitAndMovable' : player.getPlayerFleetsOrbitAndMovable,
             }
-        #}
+        %}
     </div>
 
     <div class="container has-margin">
@@ -30,10 +31,11 @@
             {{ 'galaxy.tactic.military.stationary' | trans }}
         </h5>
 
-        {# include "@Galaxy/partial/galaxy-table-tactic-fleet-stationary.twig"
+        {% include "@Galaxy/partial/galaxy-table-tactic-fleet-stationary.twig"
             with {
-                'player': player,
+                'stationaryUnits' : stationaryUnits,
+                'playerFleetStationary' : player.getPlayerFleetStationary,
             }
-        #}
+        %}
     </div>
 {% endblock %}

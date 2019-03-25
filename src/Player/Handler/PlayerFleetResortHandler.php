@@ -9,11 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class PlayerFleetBuildHandler implements RequestHandlerInterface
+final class PlayerFleetResortHandler implements RequestHandlerInterface
 {
     use HandlerAwareTrait;
 
-    public const NAME = 'player.fleet.build';
+    public const NAME = 'player.fleet.resort';
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request

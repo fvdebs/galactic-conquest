@@ -1,0 +1,38 @@
+{% extends "@App/layout/game-layout.twig" %}
+
+{% block content %}
+    <div class="container">
+        {% include "@App/layout/partial/breadcrumb.twig"
+            with {
+                'items': [
+                    {'name': currentUniverse.getName, 'url': url('player.overview'), 'icon': 'fas fa-atom has-text-primary'},
+                    {'name': 'player.nav.planet.fleet', 'icon': 'fas fa-space-shuttle has-text-primary'},
+                ]
+            }
+        %}
+    </div>
+
+    <div class="container has-margin">
+        {% include "@Player/partial/player-table-fleet-movable.twig"
+            with {
+                'movableUnits' : movableUnits,
+                'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,
+            }
+        %}
+
+        {% include "@Player/partial/player-form-fleet-movable.twig"
+            with {
+                'movableUnits' : movableUnits,
+                'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,
+            }
+        %}
+    </div>
+
+    <div class="container has-margin">
+        {% include "@Player/partial/player-form-fleet-mission.twig"
+            with {
+                'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,
+            }
+        %}
+    </div>
+{% endblock %}
