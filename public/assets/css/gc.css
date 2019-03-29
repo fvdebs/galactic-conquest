@@ -37,6 +37,8 @@
     display: none;
 }
 
+/** tabs */
+
 @media screen and (max-width: 768px), print {
     .tabs.is-fullwidth-mobile li {
         display: flex;
@@ -47,12 +49,6 @@
 @media screen and (max-width: 768px), print {
     .tabs.is-large-mobile {
         font-size: 1.5rem;
-    }
-}
-
-@media screen and (max-width: 768px), print {
-    .has-justified-content-mobile {
-        justify-content: center;
     }
 }
 
@@ -77,15 +73,37 @@ footer.footer {
 /** Form */
 .input.has-length-small {
     max-width: 65px;
+    min-width: 65px;
+}
+
+.input.has-length-medium {
+    max-width: 100px;
+    min-width: 65px;
+}
+
+.field-label.is-narrow {
+    flex-grow: 0;
+}
+
+/** Typo */
+
+.has-no-wrap {
+    white-space: nowrap;
 }
 
 .field.has-addons.has-addons-right.has-justified-content-center {
     justify-content: center;
 }
 
+/** Table */
+
 /** centered table columsn */
 .table.has-valigned-cells td {
     vertical-align: middle;
+}
+
+.has-min-width-150 {
+    min-width: 150px;
 }
 
 /**

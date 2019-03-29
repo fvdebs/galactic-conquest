@@ -64,10 +64,10 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
     }
 
     /**
@@ -191,6 +191,50 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function isOrbit(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isOrbit', []);
+
+        return parent::isOrbit();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsOrbit(bool $isOrbit): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsOrbit', [$isOrbit]);
+
+        parent::setIsOrbit($isOrbit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isStationary(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isStationary', []);
+
+        return parent::isStationary();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsStationary(bool $isStationary): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsStationary', [$isStationary]);
+
+        parent::setIsStationary($isStationary);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isOffensive(): bool
     {
 
@@ -230,6 +274,28 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsDefensive', [$isDefensive]);
 
         parent::setIsDefensive($isDefensive);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isMovable(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isMovable', []);
+
+        return parent::isMovable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsMovable(bool $isMovable): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsMovable', [$isMovable]);
+
+        parent::setIsMovable($isMovable);
     }
 
     /**
@@ -356,23 +422,56 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function addUnits(\GC\Unit\Model\Unit $unit, int $quantity): void
+    public function increaseUnitQuantity(\GC\Unit\Model\Unit $unit, int $quantity): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addUnits', [$unit, $quantity]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'increaseUnitQuantity', [$unit, $quantity]);
 
-        parent::addUnits($unit, $quantity);
+        parent::increaseUnitQuantity($unit, $quantity);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPlayerFleetUnitFor(\GC\Unit\Model\Unit $unit): ?\GC\Player\Model\PlayerFleetUnit
+    public function decreaseUnitQuantity(\GC\Unit\Model\Unit $unit, int $quantity): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetUnitFor', [$unit]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'decreaseUnitQuantity', [$unit, $quantity]);
 
-        return parent::getPlayerFleetUnitFor($unit);
+        parent::decreaseUnitQuantity($unit, $quantity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetUnitByUnitId(int $unitId): ?\GC\Player\Model\PlayerFleetUnit
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetUnitByUnitId', [$unitId]);
+
+        return parent::getPlayerFleetUnitByUnitId($unitId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function moveUnitTo(\GC\Player\Model\PlayerFleet $playerFleet, int $unitId, int $quantity): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'moveUnitTo', [$playerFleet, $unitId, $quantity]);
+
+        parent::moveUnitTo($playerFleet, $unitId, $quantity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUnitQuantityOf(\GC\Unit\Model\Unit $unit): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUnitQuantityOf', [$unit]);
+
+        return parent::getUnitQuantityOf($unit);
     }
 
     /**
@@ -384,6 +483,50 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateUnitPoints', []);
 
         return parent::calculateUnitPoints();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isBusy(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isBusy', []);
+
+        return parent::isBusy();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isRecalling(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isRecalling', []);
+
+        return parent::isRecalling();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isAttacking(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isAttacking', []);
+
+        return parent::isAttacking();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isDefending(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isDefending', []);
+
+        return parent::isDefending();
     }
 
 }

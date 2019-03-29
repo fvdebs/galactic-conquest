@@ -1,63 +1,59 @@
-<div class="columns is-centered">
-    <div class="column is-narrow">
-        <div class="table-container">
-            <form action="{{ url('player.fleet.resort') }}" method="post">
-                <table class="table is-narrow has-valigned-cells">
-                    <thead>
-                        <tr>
-                            <th>{{ 'player.fleet.unit.name' | trans }}</th>
-                            <th>{{ 'player.fleet.quantity' | trans }}</th>
-                            <th>{{ 'player.fleet.from' | trans }}</th>
-                            <th>{{ 'player.fleet.to' | trans }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for unit in movableUnits %}
-                            <tr>
-                                <td>
-                                    {{ unit.getName | trans }}
-                                </td>
-                                <td>
-                                    <input name="quantity[{{ unit.getUnitId }}]" class="input" type="number" value="0" placeholder="0">
-                                </td>
-                                <td>
-                                    <div class="select">
-                                        <select name="from[{{ unit.getUnitId }}]">
-                                            {% for key,playerFleet in playerFleetsOrbitAndMovable %}
-                                                <option value="{{ playerFleet.getPlayerFleetId }}">
-                                                    {% if playerFleet.isOrbit %}
-                                                        {{ 'player.fleet.orbit' | trans }}
-                                                    {% else %}
-                                                        {{ 'player.fleet' | trans | format(key) }}
-                                                    {% endif %}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="select">
-                                        <select name="to[{{ unit.getUnitId }}]">
-                                            {% for key,playerFleet in playerFleetsOrbitAndMovable %}
-                                                <option value="{{ playerFleet.getPlayerFleetId }}">
-                                                    {% if playerFleet.isOrbit %}
-                                                        {{ 'player.fleet.orbit' | trans }}
-                                                    {% else %}
-                                                        {{ 'player.fleet' | trans | format(key) }}
-                                                    {% endif %}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <button type="submit" class="button is-primary is-fullwidth">
-                    {{ 'player.fleet.transfer' | trans | format(key) }}
-                </button>
-            </form>
-        </div>
-    </div>
+<div class="table-container">
+    <form action="{{ url('player.fleet.resort') }}" method="post">
+        <table class="table has-valigned-cells">
+            <thead>
+                <tr>
+                    <th>{{ 'player.fleet.unit.name' | trans }}</th>
+                    <th>{{ 'player.fleet.quantity' | trans }}</th>
+                    <th>{{ 'player.fleet.from' | trans }}</th>
+                    <th>{{ 'player.fleet.to' | trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for unit in movableUnits %}
+                    <tr>
+                        <td>
+                            {{ unit.getName | trans }}
+                        </td>
+                        <td>
+                            <input name="quantity[{{ unit.getUnitId }}]" class="input has-length-small" type="text" placeholder="0">
+                        </td>
+                        <td>
+                            <div class="select">
+                                <select name="from[{{ unit.getUnitId }}]">
+                                    {% for key,playerFleet in playerFleetsOrbitAndMovable %}
+                                        <option value="{{ playerFleet.getPlayerFleetId }}"{% if playerFleet.isBusy %} disabled{% endif %}>
+                                            {% if playerFleet.isOrbit %}
+                                                {{ 'player.fleet.orbit' | trans }}
+                                            {% else %}
+                                                {{ 'player.fleet' | trans | format(key) }}
+                                            {% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select">
+                                <select name="to[{{ unit.getUnitId }}]">
+                                    {% for key,playerFleet in playerFleetsOrbitAndMovable %}
+                                        <option value="{{ playerFleet.getPlayerFleetId }}"{% if playerFleet.isBusy %} disabled{% endif %}>
+                                            {% if playerFleet.isOrbit %}
+                                                {{ 'player.fleet.orbit' | trans }}
+                                            {% else %}
+                                                {{ 'player.fleet' | trans | format(key) }}
+                                            {% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="button is-primary is-fullwidth">
+            {{ 'player.fleet.transfer' | trans | format(key) }}
+        </button>
+    </form>
 </div>

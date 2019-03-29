@@ -243,4 +243,15 @@ class PlayerUnitConstruction extends \GC\Player\Model\PlayerUnitConstruction imp
         parent::decreaseTicksLeft();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateProgress(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateProgress', []);
+
+        return parent::calculateProgress();
+    }
+
 }

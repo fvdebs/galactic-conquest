@@ -13,22 +13,30 @@
     </div>
 
     <div class="container has-margin">
-        {% include "@Player/partial/player-table-fleet-movable.twig"
-            with {
-                'movableUnits' : movableUnits,
-                'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,
-            }
-        %}
-
-        {% include "@Player/partial/player-form-fleet-movable.twig"
-            with {
-                'movableUnits' : movableUnits,
-                'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,
-            }
-        %}
+        <div class="columns">
+            <div class="column">
+                {% include "@Player/partial/player-table-fleet-movable.twig"
+                    with {
+                        'movableUnits' : movableUnits,
+                        'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,
+                    }
+                %}
+            </div>
+            <div class="column">
+                {% include "@Player/partial/player-form-fleet-movable.twig"
+                    with {
+                        'movableUnits' : movableUnits,
+                        'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,
+                    }
+                %}
+            </div>
+        </div>
     </div>
 
+    <hr>
+
     <div class="container has-margin">
+        <h2 class="title is-size-4 has-text-grey">Mission</h2>
         {% include "@Player/partial/player-form-fleet-mission.twig"
             with {
                 'playerFleetsOrbitAndMovable' : currentPlayer.getPlayerFleetsOrbitAndMovable,

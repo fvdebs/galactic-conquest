@@ -317,9 +317,9 @@ class PlayerFleet
      *
      * @return void
      */
-    public function addUnits(Unit $unit, int $quantity): void
+    public function increaseUnitQuantity(Unit $unit, int $quantity): void
     {
-        $playerFleetUnit = $this->getPlayerFleetUnitFor($unit);
+        $playerFleetUnit = $this->getPlayerFleetUnitByUnitId($unit->getUnitId());
         if ($playerFleetUnit === null) {
             $playerFleetUnit = $this->createPlayerFleetUnit($unit);
         }
@@ -329,18 +329,73 @@ class PlayerFleet
 
     /**
      * @param \GC\Unit\Model\Unit $unit
+     * @param int $quantity
+     *
+     * @return void
+     */
+    public function decreaseUnitQuantity(Unit $unit, int $quantity): void
+    {
+        $playerFleetUnit = $this->getPlayerFleetUnitByUnitId($unit->getUnitId());
+        if ($playerFleetUnit === null) {
+            return;
+        }
+
+        $playerFleetUnit->decreaseQuantity($quantity);
+    }
+
+    /**
+     * @param int $unitId
      *
      * @return \GC\Player\Model\PlayerFleetUnit|null
      */
-    public function getPlayerFleetUnitFor(Unit $unit): ?PlayerFleetUnit
+    public function getPlayerFleetUnitByUnitId(int $unitId): ?PlayerFleetUnit
     {
         foreach ($this->getPlayerFleetUnits() as $playerFleetUnit) {
-            if ($playerFleetUnit->getUnit()->getUnitId() === $unit->getUnitId()) {
+            if ($playerFleetUnit->getUnit()->getUnitId() === $unitId) {
                 return $playerFleetUnit;
             }
         }
 
         return null;
+    }
+
+    /**
+     * @param \GC\Player\Model\PlayerFleet $playerFleet
+     * @param int $unitId
+     * @param int $quantity
+     *
+     * @return void
+     */
+    public function moveUnitTo(PlayerFleet $playerFleet, int $unitId, int $quantity): void
+    {
+        $playerFleetUnitFrom = $this->getPlayerFleetUnitByUnitId($unitId);
+
+        if ($playerFleetUnitFrom === null) {
+            return;
+        }
+
+        if ($quantity > $playerFleetUnitFrom->getQuantity()) {
+            $quantity = $playerFleetUnitFrom->getQuantity();
+        }
+
+        if ($quantity <= 0) {
+            return;
+        }
+
+        $playerFleetUnitFrom->decreaseQuantity($quantity);
+        $playerFleet->increaseUnitQuantity($playerFleetUnitFrom->getUnit(), $quantity);
+
+        if ($playerFleetUnitFrom->getQuantity() === 0) {
+            $this->removePlayerFleetUnit($playerFleetUnitFrom);
+        }
+    }
+
+    /**
+     * @param \GC\Player\Model\PlayerFleetUnit $playerFleetUnit
+     */
+    protected function removePlayerFleetUnit(PlayerFleetUnit $playerFleetUnit): void
+    {
+        $this->playerFleetUnits->removeElement($playerFleetUnit);
     }
 
     /**
@@ -350,7 +405,7 @@ class PlayerFleet
      */
     public function getUnitQuantityOf(Unit $unit): int
     {
-        $playerFleetUnit = $this->getPlayerFleetUnitFor($unit);
+        $playerFleetUnit = $this->getPlayerFleetUnitByUnitId($unit->getUnitId());
         if ($playerFleetUnit === null) {
             return 0;
         }
@@ -384,6 +439,14 @@ class PlayerFleet
         }
 
         return (int) \round($calculation);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBusy(): bool
+    {
+        return $this->missionType !== null;
     }
 
     /**

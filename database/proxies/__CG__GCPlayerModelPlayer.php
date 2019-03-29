@@ -389,39 +389,6 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function createPlayerFleet(): \GC\Player\Model\PlayerFleet
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'createPlayerFleet', []);
-
-        return parent::createPlayerFleet();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPlayerFleets(): array
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleets', []);
-
-        return parent::getPlayerFleets();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPlayerFleetHome(): \GC\Player\Model\PlayerFleet
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetHome', []);
-
-        return parent::getPlayerFleetHome();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function relocate(\GC\Galaxy\Model\Galaxy $galaxy): void
     {
 
@@ -461,6 +428,17 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'buildCrystalExtractors', [$number]);
 
         parent::buildCrystalExtractors($number);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateMetalCostForNextExtractor(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateMetalCostForNextExtractor', []);
+
+        return parent::calculateMetalCostForNextExtractor();
     }
 
     /**
@@ -516,6 +494,28 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'buildScanRelays', [$number]);
 
         parent::buildScanRelays($number);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMetal(int $number): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMetal', [$number]);
+
+        parent::setMetal($number);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCrystal(int $number): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCrystal', [$number]);
+
+        parent::setCrystal($number);
     }
 
     /**
@@ -587,6 +587,28 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function calculateMetalIncomePerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateMetalIncomePerDay', []);
+
+        return parent::calculateMetalIncomePerDay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateCrystalIncomePerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateCrystalIncomePerDay', []);
+
+        return parent::calculateCrystalIncomePerDay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function calculateMetalTaxPerTick(): int
     {
 
@@ -598,12 +620,34 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function calculateMetalTaxPerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateMetalTaxPerDay', []);
+
+        return parent::calculateMetalTaxPerDay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function calculateCrystalTaxPerTick(): int
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateCrystalTaxPerTick', []);
 
         return parent::calculateCrystalTaxPerTick();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateCrystalTaxPerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateCrystalTaxPerDay', []);
+
+        return parent::calculateCrystalTaxPerDay();
     }
 
     /**
@@ -708,6 +752,28 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function getPlayerUnitConstructionOf(\GC\Unit\Model\Unit $unit): ?\GC\Player\Model\PlayerUnitConstruction
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerUnitConstructionOf', [$unit]);
+
+        return parent::getPlayerUnitConstructionOf($unit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateMaxUnits(\GC\Unit\Model\Unit $unit): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateMaxUnits', [$unit]);
+
+        return parent::calculateMaxUnits($unit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getPlayerUnitConstructions(): array
     {
 
@@ -730,23 +796,188 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function buildTechnology(\GC\Technology\Model\Technology $technology): \GC\Player\Model\PlayerTechnology
+    public function createPlayerTechnology(\GC\Technology\Model\Technology $technology): \GC\Player\Model\PlayerTechnology
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'buildTechnology', [$technology]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'createPlayerTechnology', [$technology]);
 
-        return parent::buildTechnology($technology);
+        return parent::createPlayerTechnology($technology);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function hasTechnology(\GC\Technology\Model\Technology $technology): bool
+    public function getPlayerTechnologies(): array
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasTechnology', [$technology]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerTechnologies', []);
 
-        return parent::hasTechnology($technology);
+        return parent::getPlayerTechnologies();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerTechnologyByTechnology(\GC\Technology\Model\Technology $technology): ?\GC\Player\Model\PlayerTechnology
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerTechnologyByTechnology', [$technology]);
+
+        return parent::getPlayerTechnologyByTechnology($technology);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerTechnologiesInConstruction(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerTechnologiesInConstruction', []);
+
+        return parent::getPlayerTechnologiesInConstruction();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTechnologiesInConstruction(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTechnologiesInConstruction', []);
+
+        return parent::getTechnologiesInConstruction();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isPlayerTechnologyInConstruction(\GC\Technology\Model\Technology $technology): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isPlayerTechnologyInConstruction', [$technology]);
+
+        return parent::isPlayerTechnologyInConstruction($technology);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerTechnologiesCompleted(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerTechnologiesCompleted', []);
+
+        return parent::getPlayerTechnologiesCompleted();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTechnologiesCompleted(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTechnologiesCompleted', []);
+
+        return parent::getTechnologiesCompleted();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTechnologiesCompletedWithCrystalIncome(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTechnologiesCompletedWithCrystalIncome', []);
+
+        return parent::getTechnologiesCompletedWithCrystalIncome();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTotalCrystalIncomeFromTechnologiesPerTick(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTotalCrystalIncomeFromTechnologiesPerTick', []);
+
+        return parent::getTotalCrystalIncomeFromTechnologiesPerTick();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTotalCrystalIncomeFromTechnologiesPerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTotalCrystalIncomeFromTechnologiesPerDay', []);
+
+        return parent::getTotalCrystalIncomeFromTechnologiesPerDay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTechnologiesCompletedWithMetalIncome(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTechnologiesCompletedWithMetalIncome', []);
+
+        return parent::getTechnologiesCompletedWithMetalIncome();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTotalMetalIncomeFromTechnologiesPerTick(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTotalMetalIncomeFromTechnologiesPerTick', []);
+
+        return parent::getTotalMetalIncomeFromTechnologiesPerTick();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTotalMetalIncomeFromTechnologiesPerDay(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTotalMetalIncomeFromTechnologiesPerDay', []);
+
+        return parent::getTotalMetalIncomeFromTechnologiesPerDay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTechnologiesCompletedWithIncome(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTechnologiesCompletedWithIncome', []);
+
+        return parent::getTechnologiesCompletedWithIncome();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isPlayerTechnologyCompleted(\GC\Technology\Model\Technology $technology): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isPlayerTechnologyCompleted', [$technology]);
+
+        return parent::isPlayerTechnologyCompleted($technology);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasTechnologyByFeatureKey(string $featureKey): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasTechnologyByFeatureKey', [$featureKey]);
+
+        return parent::hasTechnologyByFeatureKey($featureKey);
     }
 
     /**
@@ -774,67 +1005,12 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function hasTechnologyByFeatureKey(string $featureKey): bool
+    public function finishPlayerTechnologyConstructions(): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasTechnologyByFeatureKey', [$featureKey]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'finishPlayerTechnologyConstructions', []);
 
-        return parent::hasTechnologyByFeatureKey($featureKey);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function hasTechnologyInConstruction(\GC\Technology\Model\Technology $technology): bool
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasTechnologyInConstruction', [$technology]);
-
-        return parent::hasTechnologyInConstruction($technology);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function finishTechnologyConstructions(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'finishTechnologyConstructions', []);
-
-        parent::finishTechnologyConstructions();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPlayerTechnologies(): array
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerTechnologies', []);
-
-        return parent::getPlayerTechnologies();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPlayerTechnologiesCompleted(): array
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerTechnologiesCompleted', []);
-
-        return parent::getPlayerTechnologiesCompleted();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPlayerTechnologiesInConstruction(): array
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerTechnologiesInConstruction', []);
-
-        return parent::getPlayerTechnologiesInConstruction();
+        parent::finishPlayerTechnologyConstructions();
     }
 
     /**
@@ -879,6 +1055,171 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScans', []);
 
         return parent::getScans();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createPlayerFleet(): \GC\Player\Model\PlayerFleet
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'createPlayerFleet', []);
+
+        return parent::createPlayerFleet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleets(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleets', []);
+
+        return parent::getPlayerFleets();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetById(int $playerFleetId): ?\GC\Player\Model\PlayerFleet
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetById', [$playerFleetId]);
+
+        return parent::getPlayerFleetById($playerFleetId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetOrbit(): ?\GC\Player\Model\PlayerFleet
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetOrbit', []);
+
+        return parent::getPlayerFleetOrbit();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetStationary(): \GC\Player\Model\PlayerFleet
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetStationary', []);
+
+        return parent::getPlayerFleetStationary();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetsMovable(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsMovable', []);
+
+        return parent::getPlayerFleetsMovable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetsOrbitAndMovable(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsOrbitAndMovable', []);
+
+        return parent::getPlayerFleetsOrbitAndMovable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetsUnitQuantityOf(\GC\Unit\Model\Unit $unit): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsUnitQuantityOf', [$unit]);
+
+        return parent::getPlayerFleetsUnitQuantityOf($unit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUnitsMovableQuantity(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUnitsMovableQuantity', []);
+
+        return parent::getUnitsMovableQuantity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUnitsStationaryQuantity(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUnitsStationaryQuantity', []);
+
+        return parent::getUnitsStationaryQuantity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetsAttackingOrRecalling(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsAttackingOrRecalling', []);
+
+        return parent::getPlayerFleetsAttackingOrRecalling();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetsDefendingOrRecalling(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsDefendingOrRecalling', []);
+
+        return parent::getPlayerFleetsDefendingOrRecalling();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetsWhichAreAttackingThisPlayer(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsWhichAreAttackingThisPlayer', []);
+
+        return parent::getPlayerFleetsWhichAreAttackingThisPlayer();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerFleetsWhichAreDefendingThisPlayer(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsWhichAreDefendingThisPlayer', []);
+
+        return parent::getPlayerFleetsWhichAreDefendingThisPlayer();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function moveUnits(array $quantityArray, array $playerFleetFromArray, array $playerFleetToArray): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'moveUnits', [$quantityArray, $playerFleetFromArray, $playerFleetToArray]);
+
+        parent::moveUnits($quantityArray, $playerFleetFromArray, $playerFleetToArray);
     }
 
 }

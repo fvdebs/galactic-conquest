@@ -874,7 +874,7 @@ class Player
                     $playerFleet = $this->getPlayerFleetOrbit();
                 }
 
-                $playerFleet->addUnits(
+                $playerFleet->increaseUnitQuantity(
                     $playerUnitConstruction->getUnit(),
                     $playerUnitConstruction->getQuantity()
                 );
@@ -1263,6 +1263,22 @@ class Player
     }
 
     /**
+     * @param int $playerFleetId
+     *
+     * @return \GC\Player\Model\PlayerFleet|null
+     */
+    public function getPlayerFleetById(int $playerFleetId): ?PlayerFleet
+    {
+        foreach ($this->getPlayerFleets() as $playerFleet) {
+            if ($playerFleetId === $playerFleet->getPlayerFleetId()) {
+                return $playerFleet;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return \GC\Player\Model\PlayerFleet|null
      */
     public function getPlayerFleetOrbit(): ?PlayerFleet
@@ -1315,7 +1331,7 @@ class Player
 
         foreach ($this->getPlayerFleets() as $playerFleet) {
             if ($playerFleet->isMovable()) {
-                $playerFleets[] =  $playerFleet;
+                $playerFleets[] = $playerFleet;
             }
         }
 
@@ -1416,5 +1432,44 @@ class Player
     public function getPlayerFleetsWhichAreDefendingThisPlayer(): array
     {
         return [];
+    }
+
+    /**
+     * @param int[] $quantityArray
+     * @param int[] $playerFleetFromArray
+     * @param int[] $playerFleetToArray
+     *
+     * @return void
+     */
+    public function moveUnits(array $quantityArray, array $playerFleetFromArray, array $playerFleetToArray): void
+    {
+        foreach ($quantityArray as $unitId => $quantity) {
+            if (!\array_key_exists($unitId, $playerFleetFromArray)
+                || !\array_key_exists($unitId, $playerFleetToArray)
+                || !\is_numeric($quantity)
+                || empty($quantity)) {
+
+                continue;
+            }
+
+            $playerFleetFromId = (int) $playerFleetFromArray[$unitId];
+            $playerFleetToId = (int) $playerFleetToArray[$unitId];
+
+            if ($playerFleetFromId === $playerFleetToId) {
+                continue;
+            }
+
+            $playerFleetFrom = $this->getPlayerFleetById($playerFleetFromId);
+            $playerFleetTo = $this->getPlayerFleetById($playerFleetToId);
+
+            if ($playerFleetFrom === null
+                || $playerFleetTo === null
+                || $playerFleetFrom->isBusy()
+                || $playerFleetTo->isBusy()) {
+                continue;
+            }
+
+            $playerFleetFrom->moveUnitTo($playerFleetTo, (int) $unitId, (int) $quantity);
+        }
     }
 }
