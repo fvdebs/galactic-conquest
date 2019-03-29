@@ -562,7 +562,7 @@ class Galaxy
         $quantity = 0;
 
         foreach ($this->getPlayers() as $player) {
-            $quantity += $player->getExtractorCrystal();
+            $quantity += $player->getUnitsMovableQuantity();
         }
 
         return $quantity;

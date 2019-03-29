@@ -1,66 +1,42 @@
-<form action="{{ url('player.fleet.mission') }}" method="post" class="has-margin">
-    <div class="field is-horizontal">
-        <div class="field-label is-narrow has-no-wrap">
-            <label class="label">Flotte 1</label>
-        </div>
-        <div class="field-body">
-            <div class="field is-narrow">
-                <p class="control has-no-wrap">
-                    <input type="text" name="galaxy" class="input has-length-small">
-                    <span class="is-size-5">:</span>
-                    <input type="text" name="galaxyPosition" class="input has-length-small">
-                </p>
-            </div>
-            <div class="field is-narrow">
-                <p class="control">
-                    <div class="select is-fullwidth">
-                        <select name="mission">
-                            <option value="offensive">Angreifen</option>
-                            <option value="defensive">Verteidigen</option>
-                        </select>
+{% for key,playerFleet in playerFleetsMovable %}
+    {% if playerFleet.isIdling %}
+        <form action="{{ url('player.fleet.mission') }}" method="post" class="has-margin">
+            <input type="hidden" name="fleetId" value="{{ playerFleet.getPlayerFleetId }}">
+            <div class="field is-horizontal">
+                <div class="field-label is-narrow has-no-wrap">
+                    <label class="label">
+                        {{ 'player.fleet' | trans | format(key) }}
+                    </label>
+                </div>
+                <div class="field-body">
+                    <div class="field is-narrow">
+                        <p class="control has-no-wrap">
+                            <input type="text" name="galaxyNumber" class="input has-length-small">
+                            <span class="is-size-5">:</span>
+                            <input type="text" name="galaxyPosition" class="input has-length-small">
+                            <div class="select is-fullwidth">
+                                <select name="mission">
+                                    {% if playerFleet.isOffensive %}
+                                        <option value="offensive">{{ 'player.fleet.attack' | trans }}</option>
+                                    {% endif %}
+                                    {% if playerFleet.isDefensive %}
+                                        <option value="defensive">{{ 'player.fleet.defend' | trans }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </p>
                     </div>
-                </p>
-            </div>
-            <div class="field is-narrow">
-                <div class="control">
-                    <button type="submit" class="button is-primary is-fullwidth">
-                        Send
-                    </button>
+                    <div class="field is-narrow">
+                        <div class="control">
+                            <button type="submit" class="button is-primary is-fullwidth">
+                                {{ 'player.fleet.send' | trans }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</form>
-<form action="{{ url('player.fleet.mission') }}" method="post" class="has-margin">
-    <div class="field is-horizontal">
-        <div class="field-label is-narrow has-no-wrap">
-            <label class="label">Flotte 1</label>
-        </div>
-        <div class="field-body">
-            <div class="field is-narrow">
-                <p class="control has-no-wrap">
-                    <input type="text" name="galaxy" class="input has-length-small">
-                    <span class="is-size-5">:</span>
-                    <input type="text" name="galaxyPosition" class="input has-length-small">
-                </p>
-            </div>
-            <div class="field is-narrow">
-                <p class="control">
-                <div class="select is-fullwidth">
-                    <select name="mission">
-                        <option value="offensive">Angreifen</option>
-                        <option value="defensive">Verteidigen</option>
-                    </select>
-                </div>
-                </p>
-            </div>
-            <div class="field is-narrow">
-                <div class="control">
-                    <button type="submit" class="button is-primary is-fullwidth">
-                        Send
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+        </form>
+    {% else %}
+        Recall
+    {% endif %}
+{% endfor %}

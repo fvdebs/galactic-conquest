@@ -152,7 +152,7 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->manager = $manager;
 
         // config
-        $galaxyAndAlliancesMultiplier = 100;
+        $galaxyAndAlliancesMultiplier = 10;
         $universes = ['Sirius', 'Eridanus', 'Starman'];
         $universesPermanentPlayersAppliedTo = ['Sirius', 'Eridanus'];
         $this->createPermanentUser('John Doe', 'example@example.org');

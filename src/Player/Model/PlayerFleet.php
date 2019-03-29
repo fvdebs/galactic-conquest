@@ -444,6 +444,182 @@ class PlayerFleet
     /**
      * @return bool
      */
+    public function hasEnoughCarrierSpaceToStart(): bool
+    {
+        $carrierSpace = 0;
+        $carrierSpaceConsumption = 0;
+
+        foreach ($this->getPlayerFleetUnits() AS $playerFleetUnit) {
+            $carrierSpace += $playerFleetUnit->getUnit()->getCarrierSpace();
+            $carrierSpaceConsumption += $playerFleetUnit->getUnit()->getCarrierSpaceConsumption();
+        }
+
+        return $carrierSpace >= $carrierSpaceConsumption;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $targetPlayer
+     * @param int $missionReachTicks
+     * @param int $missionTicks
+     * @param string $missionType
+     *
+     * @return void
+     */
+    protected function sendToMission(Player $targetPlayer, int $missionReachTicks, int $missionTicks, string $missionType): void
+    {
+        if ($this->isBusy()) {
+            return;
+        }
+
+        $this->ticksLeftUntilMissionReach = $missionReachTicks;
+        $this->ticksLeftUntilMissionCompleted = $missionTicks;
+        $this->missionType = $missionType;
+        $this->targetPlayer = $targetPlayer;
+        $targetPlayer->addTargetPlayerFleet($this);
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $targetPlayer
+     * @param int $missionTicks
+     *
+     * @return void
+     */
+    public function attack(Player $targetPlayer, int $missionTicks): void
+    {
+        $missionReachTicks = $this->getAttackMissionReachTicksFor($targetPlayer);
+
+        $this->sendToMission($targetPlayer, $missionReachTicks, $missionTicks, static::MISSION_TYPE_ATTACK);
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $targetPlayer
+     *
+     * @return int
+     */
+    protected function getAttackMissionReachTicksFor(Player $targetPlayer): int
+    {
+        return $targetPlayer->getUniverse()->getTicksAttack();
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $targetPlayer
+     * @param int $missionTicks
+     *
+     * @return void
+     */
+    public function defend(Player $targetPlayer, int $missionTicks): void
+    {
+        $missionReachTicks = $this->getDefendMissionReachTicksFor($targetPlayer);
+
+        $this->sendToMission($targetPlayer, $missionReachTicks, $missionTicks, static::MISSION_TYPE_DEFEND);
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $targetPlayer
+     *
+     * @return int
+     */
+    protected function getDefendMissionReachTicksFor(Player $targetPlayer): int
+    {
+        if ($this->getPlayer()->isAlliedWith($targetPlayer)) {
+            return $this->getPlayer()->getUniverse()->getTicksDefenseAllied();
+        }
+
+        if ($this->getPlayer()->isInSameAllianceAs($targetPlayer)) {
+            return $this->getPlayer()->getUniverse()->getTicksDefenseAlliance();
+        }
+
+        return $this->getPlayer()->getUniverse()->getTicksDefense();
+    }
+
+    /**
+     * @return void
+     */
+    public function recall(): void
+    {
+        if ($this->isRecalling() || $this->isIdling()) {
+            return;
+        }
+
+        $originalMissionTicks = $this->getAttackMissionReachTicksFor($this->getTargetPlayer());
+        if ($this->isDefending()) {
+            $originalMissionTicks = $this->getDefendMissionReachTicksFor($this->getTargetPlayer());
+        }
+
+        $recallTicksLeft = $originalMissionTicks - $this->getTicksLeftUntilMissionReach();
+
+        $this->ticksLeftUntilMissionReach = $recallTicksLeft;
+        $this->ticksLeftUntilMissionCompleted = 0;
+        $this->missionType = static::MISSION_TYPE_RECALL;
+    }
+
+    /**
+     * @return void
+     */
+    public function decreaseTicksLeft(): void
+    {
+        if ($this->isIdling()) {
+            return;
+        }
+
+        if ($this->ticksLeftUntilMissionReach > 0) {
+            --$this->ticksLeftUntilMissionReach;
+            return;
+        }
+
+        if ($this->ticksLeftUntilMissionCompleted > 0) {
+            --$this->ticksLeftUntilMissionCompleted;
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function clearOrRecall(): void
+    {
+        if ($this->isIdling()) {
+            return;
+        }
+
+        if ($this->ticksLeftUntilMissionReach !== 0 || $this->ticksLeftUntilMissionCompleted !== 0) {
+            return;
+        }
+
+        if ($this->isRecalling()) {
+            $this->clear();
+            return;
+        }
+
+        $this->recall();
+    }
+
+    /**
+     * @return void
+     */
+    protected function clear(): void
+    {
+        if ($this->isIdling()) {
+            return;
+        }
+
+        $this->missionType = null;
+        $this->ticksLeftUntilMissionReach = 0;
+        $this->ticksLeftUntilMissionCompleted = 0;
+        $this->targetPlayer->removeTargetPlayerFleet($this);
+        $this->targetPlayer = null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIdling(): bool
+    {
+        return $this->missionType === null;
+    }
+
+    /**
+     * @return bool
+     */
     public function isBusy(): bool
     {
         return $this->missionType !== null;
@@ -455,6 +631,28 @@ class PlayerFleet
     public function isRecalling(): bool
     {
         return $this->missionType === static::MISSION_TYPE_RECALL;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isTarget(Player $player): bool
+    {
+        if ($this->hasTarget()) {
+            return $this->targetPlayer->getPlayerId() === $player->getPlayerId();
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTarget(): bool
+    {
+        return $this->targetPlayer !== null;
     }
 
     /**

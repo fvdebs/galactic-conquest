@@ -32,9 +32,18 @@ final class PlayerFleetResortHandler implements RequestHandlerInterface
     {
         $currentPlayer = $this->getCurrentPlayer($request);
 
-        $quantityArray = $this->getValue(static::FIELD_QUANTITY, $request);
-        $playerFleetFromArray = $this->getValue(static::FIELD_PLAYER_FLEET_FROM, $request);
-        $playerFleetToArray = $this->getValue(static::FIELD_PLAYER_FLEET_TO, $request);
+        $validator = $this-$this->getValidatorWith($request->getParsedBody());
+        $validator->context(static::FIELD_QUANTITY)->isRequired()->isArray();
+        $validator->context(static::FIELD_PLAYER_FLEET_FROM)->isRequired()->isArray();
+        $validator->context(static::FIELD_PLAYER_FLEET_TO)->isRequired()->isArray();
+
+        if ($validator->failed()) {
+            return $this->redirectJson(PlayerFleetHandler::NAME);
+        }
+
+        $quantityArray = (array) $this->getValue(static::FIELD_QUANTITY, $request);
+        $playerFleetFromArray = (array) $this->getValue(static::FIELD_PLAYER_FLEET_FROM, $request);
+        $playerFleetToArray = (array) $this->getValue(static::FIELD_PLAYER_FLEET_TO, $request);
 
         $currentPlayer->moveUnits($quantityArray, $playerFleetFromArray, $playerFleetToArray);
 

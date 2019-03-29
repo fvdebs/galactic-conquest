@@ -993,6 +993,15 @@ class Universe
     }
 
     /**
+     *
+     * @return array
+     */
+    protected function createCombatTransfers(): array
+    {
+        return [];
+    }
+
+    /**
      * @throws \Exception
      *
      * @return void
@@ -1003,10 +1012,21 @@ class Universe
         ++$this->tickCurrent;
 
         foreach ($this->getPlayers() as $player) {
+            $player->increaseResourceIncomePerTick();
             $player->finishPlayerTechnologyConstructions();
             $player->finishUnitConstructions();
-            $player->increaseResourceIncomePerTick();
+            $player->movePlayerFleetsForward();
+        }
+
+        foreach ($this->createCombatTransfers() as $combat) {
+            // $combatReport = $combatService->calculate($combat)
+            // combatReport Add
+        }
+
+        foreach ($this->getPlayers() as $player) {
+            $player->clearOrRecallPlayerFleets();
             $player->calculatePoints();
+
         }
 
         foreach ($this->getGalaxies() as $galaxy) {
@@ -1033,15 +1053,7 @@ class Universe
     {
         $players = $this->getPlayers();
         usort($players, function (Player $playerFirst, Player $playerSecond) {
-            if ($playerFirst->getPoints() === $playerSecond->getPoints()) {
-                return 0;
-            }
-
-            if ($playerFirst->getPoints() < $playerSecond->getPoints()) {
-                return 1;
-            }
-
-            return -1;
+            return $playerFirst->getPoints() <=> $playerSecond->getPoints();
         });
 
         foreach ($players as $index => $player) {
@@ -1086,15 +1098,7 @@ class Universe
     {
         $rankedGalaxies = $this->getGalaxies();
         usort($rankedGalaxies, function (Galaxy $galaxyFirst, Galaxy $galaxySecond) {
-            if ($galaxyFirst->getExtractorPoints() === $galaxySecond->getExtractorPoints()) {
-                return 0;
-            }
-
-            if ($galaxyFirst->getExtractorPoints() < $galaxySecond->getExtractorPoints()) {
-                return 1;
-            }
-
-            return -1;
+            return $galaxyFirst->getExtractorPoints() <=> $galaxySecond->getExtractorPoints();
         });
 
         foreach ($rankedGalaxies as $index => $rankedGalaxy) {
@@ -1110,15 +1114,7 @@ class Universe
     {
         $rankedAlliances = $this->getAlliances();
         usort($rankedAlliances, function (Alliance $allianceFirst, Alliance $allianceSecond) {
-            if ($allianceFirst->getExtractorPoints() === $allianceSecond->getExtractorPoints()) {
-                return 0;
-            }
-
-            if ($allianceFirst->getExtractorPoints() < $allianceSecond->getExtractorPoints()) {
-                return 1;
-            }
-
-            return -1;
+            return $allianceFirst->getExtractorPoints() <=> $allianceSecond->getExtractorPoints();
         });
 
         foreach ($rankedAlliances as $index => $rankedAlliance) {
@@ -1130,7 +1126,7 @@ class Universe
     /**
      * @return DateTimeInterface
      */
-    public function getNextTick() : DateTimeInterface
+    public function getNextTick(): DateTimeInterface
     {
         $lastTick = $this->getLastTickAt() ?? $this->getTicksStartingAt();
 

@@ -151,6 +151,13 @@ class Player
     private $playerFleets;
 
     /**
+     * @var \GC\Player\Model\PlayerFleet[]|\Doctrine\Common\Collections\ArrayCollection
+     *
+     * @OneToMany(targetEntity="\GC\Player\Model\PlayerFleet", mappedBy="targetPlayer", cascade={"all"}, orphanRemoval=true)
+     */
+    private $targetPlayerFleets;
+
+    /**
      * @var \GC\Player\Model\PlayerTechnology[]|\Doctrine\Common\Collections\ArrayCollection
      *
      * @OneToMany(targetEntity="\GC\Player\Model\PlayerTechnology", mappedBy="player", cascade={"all"}, orphanRemoval=true)
@@ -187,6 +194,7 @@ class Player
     public function __construct(User $user, Faction $faction, Galaxy $galaxy)
     {
         $this->playerFleets = new ArrayCollection();
+        $this->targetPlayerFleets = new ArrayCollection();
         $this->playerTechnologies = new ArrayCollection();
         $this->playerUnitConstructions = new ArrayCollection();
         $this->playerCombatReports = new ArrayCollection();
@@ -751,6 +759,34 @@ class Player
     }
 
     /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isAlliedWith(Player $player): bool
+    {
+        return false;
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isInSameAllianceAs(Player $player): bool
+    {
+        $currentPlayersAlliance = $this->getGalaxy()->getAlliance();
+        $playersAlliance = $player->getGalaxy()->getAlliance();
+
+        if ($currentPlayersAlliance === null || $playersAlliance === null) {
+            return false;
+        }
+
+        return $currentPlayersAlliance->getAllianceId() === $playersAlliance->getAllianceId();
+    }
+
+
+    /**
      * @param \GC\Unit\Model\Unit $unit
      * @param int $quantity
      *
@@ -1244,6 +1280,48 @@ class Player
     }
 
     /**
+     * @return \GC\Player\Model\PlayerFleet[]
+     */
+    public function getTargetPlayerFleets(): array
+    {
+        return $this->targetPlayerFleets->getValues();
+    }
+
+    /**
+     * @param \GC\Player\Model\PlayerFleet $playerFleet
+     *
+     * @return void
+     */
+    public function addTargetPlayerFleet(PlayerFleet $playerFleet): void
+    {
+        if (!$this->hasTargetPlayerFleet($playerFleet)) {
+            $this->targetPlayerFleets->add($playerFleet);
+        }
+    }
+
+    /**
+     * @param \GC\Player\Model\PlayerFleet $playerFleet
+     *
+     * @return void
+     */
+    public function removeTargetPlayerFleet(PlayerFleet $playerFleet): void
+    {
+        if ($this->hasTargetPlayerFleet($playerFleet)) {
+            $this->targetPlayerFleets->removeElement($playerFleet);
+        }
+    }
+
+    /**
+     * @param \GC\Player\Model\PlayerFleet $playerFleet
+     *
+     * @return bool
+     */
+    public function hasTargetPlayerFleet(PlayerFleet $playerFleet): bool
+    {
+        return $this->targetPlayerFleets->contains($playerFleet);
+    }
+
+    /**
      * @return \GC\Player\Model\PlayerFleet
      */
     public function createPlayerFleet(): PlayerFleet
@@ -1423,7 +1501,15 @@ class Player
      */
     public function getPlayerFleetsWhichAreAttackingThisPlayer(): array
     {
-        return [];
+        $targetPlayerFleets = [];
+
+        foreach ($this->getTargetPlayerFleets() as $targetPlayerFleet) {
+            if ($targetPlayerFleet->isAttacking()) {
+                $targetPlayerFleets[] = $targetPlayerFleet;
+            }
+        }
+
+        return $targetPlayerFleets;
     }
 
     /**
@@ -1431,7 +1517,15 @@ class Player
      */
     public function getPlayerFleetsWhichAreDefendingThisPlayer(): array
     {
-        return [];
+        $targetPlayerFleets = [];
+
+        foreach ($this->getTargetPlayerFleets() as $targetPlayerFleet) {
+            if ($targetPlayerFleet->isDefending()) {
+                $targetPlayerFleets[] = $targetPlayerFleet;
+            }
+        }
+
+        return $targetPlayerFleets;
     }
 
     /**
@@ -1470,6 +1564,44 @@ class Player
             }
 
             $playerFleetFrom->moveUnitTo($playerFleetTo, (int) $unitId, (int) $quantity);
+        }
+    }
+
+    /**
+     * @param \GC\Player\Model\Player $targetPlayer
+     *
+     * @return bool
+     */
+    public function isAttackingAndIsTarget(Player $targetPlayer): bool
+    {
+        foreach ($this->getPlayerFleetsMovable() as $playerFleet) {
+            if ($playerFleet->isAttacking() && $playerFleet->isTarget($targetPlayer)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @return void
+     */
+    public function movePlayerFleetsForward(): void
+    {
+        foreach ($this->getPlayerFleetsMovable() as $movablePlayerFleet) {
+            $movablePlayerFleet->decreaseTicksLeft();
+        }
+    }
+
+    /**
+     *
+     * @return void
+     */
+    public function clearOrRecallPlayerFleets(): void
+    {
+        foreach ($this->getPlayerFleetsMovable() as $movablePlayerFleet) {
+            $movablePlayerFleet->clearOrRecall();
         }
     }
 }
