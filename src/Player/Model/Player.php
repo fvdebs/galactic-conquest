@@ -785,6 +785,15 @@ class Player
         return $currentPlayersAlliance->getAllianceId() === $playersAlliance->getAllianceId();
     }
 
+    /**
+     * @param \GC\Player\Model\Player $player
+     *
+     * @return bool
+     */
+    public function isInSameGalaxyAs(Player $player): bool
+    {
+        return $player->getGalaxy()->getGalaxyId() === $this->getGalaxy()->getGalaxyId();
+    }
 
     /**
      * @param \GC\Unit\Model\Unit $unit

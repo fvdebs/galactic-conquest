@@ -36,7 +36,7 @@
                     </td>
                     <td>
                         {% for playerFleet in player.getPlayerFleetsAttackingOrRecalling %}
-                            {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                            {{ playerFleet.getTicksLeftUntilMissionReach }}
                         {% endfor %}
                     </td>
                     <td>
@@ -52,7 +52,7 @@
                     </td>
                     <td>
                         {% for playerFleet in player.getPlayerFleetsDefendingOrRecalling %}
-                            {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                            {{ playerFleet.getTicksLeftUntilMissionReach }}
                         {% endfor %}
                     </td>
                     <td>
@@ -65,7 +65,7 @@
                     </td>
                     <td>
                         {% for playerFleet in player.getPlayerFleetsWhichAreAttackingThisPlayer %}
-                            {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                            {{ playerFleet.getTicksLeftUntilMissionReach }}
                         {% endfor %}
                     </td>
                     <td>
@@ -79,7 +79,7 @@
                     <td>
                         {% for playerFleet in player.getPlayerFleetsWhichAreDefendingThisPlayer %}
                             <span>
-                                {{ playerFleet.getTicksLeftUntilMissionCompleted }}
+                                {{ playerFleet.getTicksLeftUntilMissionReach }}
                             </span>
                         {% endfor %}
                     </td>

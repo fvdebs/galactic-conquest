@@ -488,6 +488,83 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function hasEnoughCarrierSpaceToStart(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasEnoughCarrierSpaceToStart', []);
+
+        return parent::hasEnoughCarrierSpaceToStart();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function attack(\GC\Player\Model\Player $targetPlayer, int $missionTicks): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'attack', [$targetPlayer, $missionTicks]);
+
+        parent::attack($targetPlayer, $missionTicks);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function defend(\GC\Player\Model\Player $targetPlayer, int $missionTicks): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'defend', [$targetPlayer, $missionTicks]);
+
+        parent::defend($targetPlayer, $missionTicks);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function recall(): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'recall', []);
+
+        parent::recall();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function decreaseTicksLeft(): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'decreaseTicksLeft', []);
+
+        parent::decreaseTicksLeft();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function clearOrRecall(): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'clearOrRecall', []);
+
+        parent::clearOrRecall();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isIdling(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isIdling', []);
+
+        return parent::isIdling();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isBusy(): bool
     {
 
@@ -505,6 +582,28 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'isRecalling', []);
 
         return parent::isRecalling();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isTarget(\GC\Player\Model\Player $player): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isTarget', [$player]);
+
+        return parent::isTarget($player);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasTarget(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasTarget', []);
+
+        return parent::hasTarget();
     }
 
     /**

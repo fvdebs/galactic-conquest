@@ -32,7 +32,7 @@ final class PlayerFleetResortHandler implements RequestHandlerInterface
     {
         $currentPlayer = $this->getCurrentPlayer($request);
 
-        $validator = $this-$this->getValidatorWith($request->getParsedBody());
+        $validator = $this->getValidatorWith($request->getParsedBody());
         $validator->context(static::FIELD_QUANTITY)->isRequired()->isArray();
         $validator->context(static::FIELD_PLAYER_FLEET_FROM)->isRequired()->isArray();
         $validator->context(static::FIELD_PLAYER_FLEET_TO)->isRequired()->isArray();

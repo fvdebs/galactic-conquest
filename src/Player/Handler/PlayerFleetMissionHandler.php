@@ -37,7 +37,7 @@ final class PlayerFleetMissionHandler implements RequestHandlerInterface
         $currentPlayer = $this->getCurrentPlayer($request);
         $currentUniverseId = $currentPlayer->getUniverse()->getUniverseId();
 
-        $validator = $this-$this->getValidatorWith($request->getParsedBody());
+        $validator = $this->getValidatorWith($request->getParsedBody());
         $validator->context(static::FIELD_FLEET_ID)->isRequired()->isInt();
         $validator->context(static::FIELD_GALAXY_NUMBER)->isRequired()->isInt();
         $validator->context(static::FIELD_GALAXY_POSITION)->isRequired()->isInt();
@@ -66,10 +66,25 @@ final class PlayerFleetMissionHandler implements RequestHandlerInterface
             return $this->failedValidation($validator);
         }
 
+        if ($mission !== static::FIELD_MISSION_VALUE_DEFENSIVE && $currentPlayer->isInSameAllianceAs($targetPlayer)) {
+            $validator->addMessage(static::FIELD_MISSION, 'player.fleet.same.alliance');
+            return $this->failedValidation($validator);
+        }
+
+        if ($mission !== static::FIELD_MISSION_VALUE_DEFENSIVE && $currentPlayer->isInSameGalaxyAs($targetPlayer)) {
+            $validator->addMessage(static::FIELD_MISSION, 'player.fleet.same.galaxy');
+            return $this->failedValidation($validator);
+        }
+
         $playerFleet = $currentPlayer->getPlayerFleetById($fleetId);
 
         if ($playerFleet === null) {
             return $this->redirectJson(PlayerFleetHandler::NAME);
+        }
+
+        if ($playerFleet->getUnitQuantity() === 0) {
+            $validator->addMessage(static::FIELD_MISSION, 'player.fleet.empty');
+            return $this->failedValidation($validator);
         }
 
         if (!$playerFleet->hasEnoughCarrierSpaceToStart()) {
@@ -87,6 +102,8 @@ final class PlayerFleetMissionHandler implements RequestHandlerInterface
         } else if ($mission === static::FIELD_MISSION_VALUE_DEFENSIVE) {
             $playerFleet->defend($targetPlayer, 2);
         }
+
+        $this->flush();
 
         return $this->redirectJson(PlayerFleetHandler::NAME);
     }

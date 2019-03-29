@@ -64,10 +64,10 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanBlocker', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'allianceScanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanBlocker', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'allianceScanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'targetPlayerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanBlocker', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'allianceScanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scanBlocker', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'allianceScanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'targetPlayerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
     }
 
     /**
@@ -708,6 +708,39 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function isAlliedWith(\GC\Player\Model\Player $player): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isAlliedWith', [$player]);
+
+        return parent::isAlliedWith($player);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isInSameAllianceAs(\GC\Player\Model\Player $player): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isInSameAllianceAs', [$player]);
+
+        return parent::isInSameAllianceAs($player);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isInSameGalaxyAs(\GC\Player\Model\Player $player): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isInSameGalaxyAs', [$player]);
+
+        return parent::isInSameGalaxyAs($player);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function buildUnit(\GC\Unit\Model\Unit $unit, int $quantity): \GC\Player\Model\PlayerUnitConstruction
     {
 
@@ -1060,6 +1093,50 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function getTargetPlayerFleets(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTargetPlayerFleets', []);
+
+        return parent::getTargetPlayerFleets();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTargetPlayerFleet(\GC\Player\Model\PlayerFleet $playerFleet): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addTargetPlayerFleet', [$playerFleet]);
+
+        parent::addTargetPlayerFleet($playerFleet);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeTargetPlayerFleet(\GC\Player\Model\PlayerFleet $playerFleet): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeTargetPlayerFleet', [$playerFleet]);
+
+        parent::removeTargetPlayerFleet($playerFleet);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasTargetPlayerFleet(\GC\Player\Model\PlayerFleet $playerFleet): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasTargetPlayerFleet', [$playerFleet]);
+
+        return parent::hasTargetPlayerFleet($playerFleet);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function createPlayerFleet(): \GC\Player\Model\PlayerFleet
     {
 
@@ -1220,6 +1297,39 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'moveUnits', [$quantityArray, $playerFleetFromArray, $playerFleetToArray]);
 
         parent::moveUnits($quantityArray, $playerFleetFromArray, $playerFleetToArray);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isAttackingAndIsTarget(\GC\Player\Model\Player $targetPlayer): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isAttackingAndIsTarget', [$targetPlayer]);
+
+        return parent::isAttackingAndIsTarget($targetPlayer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function movePlayerFleetsForward(): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'movePlayerFleetsForward', []);
+
+        parent::movePlayerFleetsForward();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function clearOrRecallPlayerFleets(): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'clearOrRecallPlayerFleets', []);
+
+        parent::clearOrRecallPlayerFleets();
     }
 
 }

@@ -399,6 +399,20 @@ class PlayerFleet
     }
 
     /**
+     * @return int
+     */
+    public function getUnitQuantity(): int
+    {
+        $quantity = 0;
+
+        foreach ($this->getPlayerFleetUnits() as $playerFleetUnit) {
+            $quantity += $playerFleetUnit->getQuantity();
+        }
+
+        return $quantity;
+    }
+
+    /**
      * @param \GC\Unit\Model\Unit $unit
      *
      * @return int
@@ -578,6 +592,11 @@ class PlayerFleet
     public function clearOrRecall(): void
     {
         if ($this->isIdling()) {
+            return;
+        }
+
+        if ($this->getUnitQuantity() === 0) {
+            $this->clear();
             return;
         }
 
