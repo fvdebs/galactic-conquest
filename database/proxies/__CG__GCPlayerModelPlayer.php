@@ -1247,23 +1247,23 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function getPlayerFleetsAttackingOrRecalling(): array
+    public function getPlayerFleetsAttackingOriginalOrRecalling(): array
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsAttackingOrRecalling', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsAttackingOriginalOrRecalling', []);
 
-        return parent::getPlayerFleetsAttackingOrRecalling();
+        return parent::getPlayerFleetsAttackingOriginalOrRecalling();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPlayerFleetsDefendingOrRecalling(): array
+    public function getPlayerFleetsDefendingOriginalOrRecalling(): array
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsDefendingOrRecalling', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetsDefendingOriginalOrRecalling', []);
 
-        return parent::getPlayerFleetsDefendingOrRecalling();
+        return parent::getPlayerFleetsDefendingOriginalOrRecalling();
     }
 
     /**

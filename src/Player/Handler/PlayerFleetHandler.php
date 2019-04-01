@@ -35,6 +35,9 @@ final class PlayerFleetHandler implements RequestHandlerInterface
 
         return $this->render('@Player/player-fleet.twig', [
             'movableUnits' => $movableUnits,
+            'universeInterval' => $currentPlayer->getUniverse()->getTickInterval(),
+            'maxTicksMissionOffensive' => $currentPlayer->getUniverse()->getMaxTicksMissionOffensive(),
+            'maxTicksMissionDefensive' => $currentPlayer->getUniverse()->getMaxTicksMissionDefensive(),
         ]);
     }
 }

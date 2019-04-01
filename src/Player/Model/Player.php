@@ -1476,12 +1476,12 @@ class Player
     /**
      * @return \GC\Player\Model\PlayerFleet[]
      */
-    public function getPlayerFleetsAttackingOrRecalling(): array
+    public function getPlayerFleetsAttackingOriginalOrRecalling(): array
     {
         $playerFleets = [];
 
         foreach ($this->getPlayerFleetsMovable() as $playerFleet) {
-            if ($playerFleet->isAttacking() || $playerFleet->isRecalling()) {
+            if ($playerFleet->isAttackingOriginal()) {
                 $playerFleets[] = $playerFleet;
             }
         }
@@ -1492,12 +1492,12 @@ class Player
     /**
      * @return \GC\Player\Model\PlayerFleet[]
      */
-    public function getPlayerFleetsDefendingOrRecalling(): array
+    public function getPlayerFleetsDefendingOriginalOrRecalling(): array
     {
         $playerFleets = [];
 
         foreach ($this->getPlayerFleetsMovable() as $playerFleet) {
-            if ($playerFleet->isDefending() || $playerFleet->isRecalling()) {
+            if ($playerFleet->isDefendingOriginal()) {
                 $playerFleets[] = $playerFleet;
             }
         }
@@ -1547,6 +1547,7 @@ class Player
     public function moveUnits(array $quantityArray, array $playerFleetFromArray, array $playerFleetToArray): void
     {
         foreach ($quantityArray as $unitId => $quantity) {
+            $quantity = \trim($quantity);
             if (!\array_key_exists($unitId, $playerFleetFromArray)
                 || !\array_key_exists($unitId, $playerFleetToArray)
                 || !\is_numeric($quantity)

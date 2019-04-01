@@ -64,10 +64,10 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionTypeOriginal', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionTypeOriginal', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
     }
 
     /**
@@ -323,6 +323,28 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function getMissionTypeOriginal(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMissionTypeOriginal', []);
+
+        return parent::getMissionTypeOriginal();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMissionTypeOriginal(string $missionTypeOriginal): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMissionTypeOriginal', [$missionTypeOriginal]);
+
+        parent::setMissionTypeOriginal($missionTypeOriginal);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getTicksLeftUntilMissionCompleted(): ?int
     {
 
@@ -461,6 +483,17 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'moveUnitTo', [$playerFleet, $unitId, $quantity]);
 
         parent::moveUnitTo($playerFleet, $unitId, $quantity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUnitQuantity(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUnitQuantity', []);
+
+        return parent::getUnitQuantity();
     }
 
     /**
@@ -620,12 +653,34 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function isAttackingOriginal(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isAttackingOriginal', []);
+
+        return parent::isAttackingOriginal();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isDefending(): bool
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'isDefending', []);
 
         return parent::isDefending();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isDefendingOriginal(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isDefendingOriginal', []);
+
+        return parent::isDefendingOriginal();
     }
 
 }

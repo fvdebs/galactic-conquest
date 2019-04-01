@@ -117,6 +117,20 @@ class Universe
     /**
      * @var int
      *
+     * @Column(name="max_ticks_mission_offensive", type="integer", nullable=false)
+     */
+    private $maxTicksMissionOffensive;
+
+    /**
+     * @var int
+     *
+     * @Column(name="max_ticks_mission_defensive", type="integer", nullable=false)
+     */
+    private $maxTicksMissionDefensive;
+
+    /**
+     * @var int
+     *
      * @Column(name="max_private_glaxy_players", type="integer", nullable=false)
      */
     private $maxPrivateGalaxyPlayers;
@@ -285,6 +299,8 @@ class Universe
         $this->ticksDefense = 20;
         $this->ticksDefenseAllied = 16;
         $this->ticksDefenseAlliance = 14;
+        $this->maxTicksMissionOffensive = 5;
+        $this->maxTicksMissionDefensive = 20;
         $this->maxPrivateGalaxyPlayers = 8;
         $this->maxPublicGalaxyPlayers = 12;
         $this->maxAllianceGalaxies = 3;
@@ -683,6 +699,42 @@ class Universe
     /**
      * @return int
      */
+    public function getMaxTicksMissionOffensive(): int
+    {
+        return $this->maxTicksMissionOffensive;
+    }
+
+    /**
+     * @param int $maxTicksMissionOffensive
+     *
+     * @return void
+     */
+    public function setMaxTicksMissionOffensive(int $maxTicksMissionOffensive): void
+    {
+        $this->maxTicksMissionOffensive = $maxTicksMissionOffensive;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxTicksMissionDefensive(): int
+    {
+        return $this->maxTicksMissionDefensive;
+    }
+
+    /**
+     * @param int $maxTicksMissionDefensive
+     *
+     * @return void
+     */
+    public function setMaxTicksMissionDefensive(int $maxTicksMissionDefensive): void
+    {
+        $this->maxTicksMissionDefensive = $maxTicksMissionDefensive;
+    }
+
+    /**
+     * @return int
+     */
     public function getMaxPrivateGalaxyPlayers(): int
     {
         return $this->maxPrivateGalaxyPlayers;
@@ -1011,7 +1063,11 @@ class Universe
         $this->lastTickAt = new DateTime();
         ++$this->tickCurrent;
 
-        foreach ($this->getPlayers() as $player) {
+        $players = $this->getPlayers();
+        $galaxies = $this->getGalaxies();
+        $alliances = $this->getAlliances();
+
+        foreach ($players as $player) {
             $player->increaseResourceIncomePerTick();
             $player->finishPlayerTechnologyConstructions();
             $player->finishUnitConstructions();
@@ -1023,20 +1079,20 @@ class Universe
             // combatReport Add
         }
 
-        foreach ($this->getPlayers() as $player) {
+        foreach ($players as $player) {
             $player->clearOrRecallPlayerFleets();
             $player->calculatePoints();
 
         }
 
-        foreach ($this->getGalaxies() as $galaxy) {
+        foreach ($galaxies as $galaxy) {
             $galaxy->finishTechnologyConstructions();
             $galaxy->increaseExtractorPointsPerTick();
             $galaxy->increaseResourceIncomePerTick();
             $galaxy->calculateAveragePlayerPoints();
         }
 
-        foreach ($this->getAlliances() as $alliance) {
+        foreach ($alliances as $alliance) {
             $alliance->finishTechnologyConstructions();
             $alliance->increaseExtractorPointsPerTick();
             $alliance->increaseResourceIncomePerTick();
@@ -1056,6 +1112,7 @@ class Universe
             return $playerFirst->getPoints() <=> $playerSecond->getPoints();
         });
 
+        $players = \array_reverse($players);
         foreach ($players as $index => $player) {
             $rankingPosition = $index + 1;
             $player->setRankingPosition($rankingPosition);
@@ -1101,6 +1158,7 @@ class Universe
             return $galaxyFirst->getExtractorPoints() <=> $galaxySecond->getExtractorPoints();
         });
 
+        $rankedGalaxies = \array_reverse($rankedGalaxies);
         foreach ($rankedGalaxies as $index => $rankedGalaxy) {
             $rankingPosition = $index + 1;
             $rankedGalaxy->setRankingPosition($rankingPosition);
@@ -1117,6 +1175,7 @@ class Universe
             return $allianceFirst->getExtractorPoints() <=> $allianceSecond->getExtractorPoints();
         });
 
+        $rankedAlliances = \array_reverse($rankedAlliances);
         foreach ($rankedAlliances as $index => $rankedAlliance) {
             $rankingPosition = $index + 1;
             $rankedAlliance->setRankingPosition($rankingPosition);

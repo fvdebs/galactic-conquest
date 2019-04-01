@@ -1,10 +1,10 @@
 <div class="table-container">
-    <table class="table is-fullwidth has-valigned-cells">
+    <table class="table is-fullwidth has-valigned-cells fleet-units">
         <thead>
             <tr>
-                <th>{{ 'player.fleet.unit.name' | trans }}</th>
+                <th nowrap>{{ 'player.fleet.unit.name' | trans }}</th>
                 {% for key,playerFleet in playerFleetsOrbitAndMovable %}
-                    <th>
+                    <th nowrap>
                         {% if playerFleet.isOrbit %}
                             {{ 'player.fleet.orbit' | trans }}
                         {% else %}

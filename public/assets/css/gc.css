@@ -95,6 +95,10 @@ footer.footer {
     justify-content: center;
 }
 
+.has-text-valigned {
+    vertical-align: middle;
+}
+
 /** Table */
 
 /** centered table columsn */
@@ -124,4 +128,12 @@ footer.footer {
 .progress-container {
     position: relative;
     text-align: center;
+}
+
+/*************************
+* Custom
+**************************/
+
+table.fleet-units td {
+    height: 53px;
 }

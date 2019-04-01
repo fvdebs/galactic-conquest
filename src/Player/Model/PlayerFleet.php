@@ -69,6 +69,13 @@ class PlayerFleet
     private $missionType;
 
     /**
+     * @var string
+     *
+     * @Column(name="mission_type_original", type="string", length=100, nullable=true)
+     */
+    private $missionTypeOriginal;
+
+    /**
      * @var int|null
      *
      * @Column(name="ticks_left_until_mission_completed", type="integer", nullable=true)
@@ -229,6 +236,24 @@ class PlayerFleet
     public function setMissionType(?string $missionType): void
     {
         $this->missionType = $missionType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMissionTypeOriginal(): string
+    {
+        return $this->missionTypeOriginal;
+    }
+
+    /**
+     * @param string $missionTypeOriginal
+     *
+     * @return void
+     */
+    public function setMissionTypeOriginal(string $missionTypeOriginal): void
+    {
+        $this->missionTypeOriginal = $missionTypeOriginal;
     }
 
     /**
@@ -488,6 +513,7 @@ class PlayerFleet
         $this->ticksLeftUntilMissionReach = $missionReachTicks;
         $this->ticksLeftUntilMissionCompleted = $missionTicks;
         $this->missionType = $missionType;
+        $this->missionTypeOriginal = $missionType;
         $this->targetPlayer = $targetPlayer;
         $targetPlayer->addTargetPlayerFleet($this);
     }
@@ -622,9 +648,9 @@ class PlayerFleet
         }
 
         $this->missionType = null;
+        $this->missionTypeOriginal = null;
         $this->ticksLeftUntilMissionReach = 0;
         $this->ticksLeftUntilMissionCompleted = 0;
-        $this->targetPlayer->removeTargetPlayerFleet($this);
         $this->targetPlayer = null;
     }
 
@@ -685,8 +711,24 @@ class PlayerFleet
     /**
      * @return bool
      */
+    public function isAttackingOriginal(): bool
+    {
+        return $this->missionTypeOriginal === static::MISSION_TYPE_ATTACK;
+    }
+
+    /**
+     * @return bool
+     */
     public function isDefending(): bool
     {
         return $this->missionType === static::MISSION_TYPE_DEFEND;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDefendingOriginal(): bool
+    {
+        return $this->missionTypeOriginal === static::MISSION_TYPE_DEFEND;
     }
 }

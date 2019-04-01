@@ -9,6 +9,7 @@ use GC\Player\Handler\PlayerCombatReportExternalHandler;
 use GC\Player\Handler\PlayerCombatReportHandler;
 use GC\Player\Handler\PlayerCombatReportListHandler;
 use GC\Player\Handler\PlayerExtractorBuildHandler;
+use GC\Player\Handler\PlayerFleetMissionRecallHandler;
 use GC\Player\Handler\PlayerFleetResortHandler;
 use GC\Player\Handler\PlayerFleetMissionHandler;
 use GC\Player\Handler\PlayerFleetHandler;
@@ -67,6 +68,7 @@ final class PlayerServiceProvider implements ServiceProviderInterface
             $collection->post('/{locale}/{universe}/scan-blocker', PlayerScanBlockerBuildHandler::class);
             $collection->post('/{locale}/{universe}/fleet/resort', PlayerFleetResortHandler::class);
             $collection->post('/{locale}/{universe}/fleet/mission', PlayerFleetMissionHandler::class);
+            $collection->post('/{locale}/{universe}/fleet/mission/recall', PlayerFleetMissionRecallHandler::class);
 
             return $collection;
         });

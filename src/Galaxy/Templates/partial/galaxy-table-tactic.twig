@@ -17,70 +17,82 @@
         <tbody>
             {% for player in currentPlayer.getGalaxy.getPlayers %}
                 <tr>
-                    <td {% if player.isCommander %}class="has-text-primary"{% endif %}>
+                    <td {% if player.isCommander %}class="has-text-primary"{% endif %} nowrap>
                         {{ currentPlayer.getGalaxy.getNumber }}:{{ player.getGalaxyPosition }}
                     </td>
-                    <td {% if player.isCommander %}class="has-text-primary"{% endif %}>
+                    <td {% if player.isCommander %}class="has-text-primary"{% endif %} nowrap>
                         {{ player.getUser.getName }}
                     </td>
                     <td>
-                        {% for playerFleet in player.getPlayerFleetsAttackingOrRecalling %}
-                            {% if playerFleet.isRecalling %}
-                                <span>{{ 'galaxy.recalling' | trans }}</span>
-                            {% endif %}
-                            <span>
-                                {{ playerFleet.getTargetPlayer.getGalaxy.getNumber }}:{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
-                                {{ playerFleet.getTargetPlayer.getUser.getName }}
-                            </span>
+                        {% for playerFleet in player.getPlayerFleetsAttackingOriginalOrRecalling %}
+                            <span class="has-no-wrap">
+                                {% if playerFleet.isRecalling %}
+                                    ({{ 'galaxy.recalling' | trans }})
+                                {% endif %}
+
+                                <a href="{{ url('galaxy.galaxies',[playerFleet.getTargetPlayer.getGalaxy.getNumber]) }}">
+                                    {{  playerFleet.getTargetPlayer.getGalaxy.getNumber }}
+                                    :{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
+                                    {{ playerFleet.getTargetPlayer.getUser.getName }}
+                                </a>
+                            </span><br>
                         {% endfor %}
                     </td>
                     <td>
-                        {% for playerFleet in player.getPlayerFleetsAttackingOrRecalling %}
-                            {{ playerFleet.getTicksLeftUntilMissionReach }}
+                        {% for playerFleet in player.getPlayerFleetsAttackingOriginalOrRecalling %}
+                            <span class="has-no-wrap">{{ playerFleet.getTicksLeftUntilMissionReach }}</span><br>
                         {% endfor %}
                     </td>
                     <td>
-                        {% for playerFleet in player.getPlayerFleetsDefendingOrRecalling %}
-                            {% if playerFleet.isRecalling %}
-                                <span>{{ 'galaxy.recalling' | trans }}</span>
-                            {% endif %}
-                            <span>
-                                {{ playerFleet.getTargetPlayer.getGalaxy.getNumber }}:{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
-                                {{ playerFleet.getTargetPlayer.getUser.getName }}
-                            </span>
+                        {% for playerFleet in player.getPlayerFleetsDefendingOriginalOrRecalling %}
+                            <span class="has-no-wrap">
+                                {% if playerFleet.isRecalling %}
+                                    ({{ 'galaxy.recalling' | trans }})
+                                {% endif %}
+
+                                <a href="{{ url('galaxy.galaxies',[playerFleet.getTargetPlayer.getGalaxy.getNumber]) }}">
+                                    {{  playerFleet.getTargetPlayer.getGalaxy.getNumber }}
+                                    :{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
+                                    {{ playerFleet.getTargetPlayer.getUser.getName }}
+                                </a>
+                            </span><br>
                         {% endfor %}
                     </td>
                     <td>
-                        {% for playerFleet in player.getPlayerFleetsDefendingOrRecalling %}
-                            {{ playerFleet.getTicksLeftUntilMissionReach }}
+                        {% for playerFleet in player.getPlayerFleetsDefendingOriginalOrRecalling %}
+                            <span class="has-no-wrap">{{ playerFleet.getTicksLeftUntilMissionReach }}</span><br>
                         {% endfor %}
                     </td>
                     <td>
                         {% for playerFleet in player.getPlayerFleetsWhichAreAttackingThisPlayer %}
-                            <span>
-                                {{ playerFleet.getPlayer.getGalaxy.getNumber }}:{{ playerFleet.getPlayer.getGalaxyPosition }}
-                                {{ playerFleet.getPlayer.getUser.getName }}
-                            </span>
+                            <span class="has-no-wrap">
+                                <a href="{{ url('galaxy.galaxies',[playerFleet.getTargetPlayer.getGalaxy.getNumber]) }}">
+                                    {{  playerFleet.getTargetPlayer.getGalaxy.getNumber }}
+                                    :{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
+                                    {{ playerFleet.getTargetPlayer.getUser.getName }}
+                                </a>
+                            </span><br>
                         {% endfor %}
                     </td>
                     <td>
                         {% for playerFleet in player.getPlayerFleetsWhichAreAttackingThisPlayer %}
-                            {{ playerFleet.getTicksLeftUntilMissionReach }}
+                            <span class="has-no-wrap">{{ playerFleet.getTicksLeftUntilMissionReach }}</span><br>
                         {% endfor %}
                     </td>
                     <td>
                         {% for playerFleet in player.getPlayerFleetsWhichAreDefendingThisPlayer %}
-                            <span>
-                                {{ playerFleet.getPlayer.getGalaxy.getNumber }}:{{ playerFleet.getPlayer.getGalaxyPosition }}
-                                {{ playerFleet.getPlayer.getUser.getName }}
-                            </span>
+                            <span class="has-no-wrap">
+                                <a href="{{ url('galaxy.galaxies',[playerFleet.getTargetPlayer.getGalaxy.getNumber]) }}">
+                                    {{  playerFleet.getTargetPlayer.getGalaxy.getNumber }}
+                                    :{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
+                                    {{ playerFleet.getTargetPlayer.getUser.getName }}
+                                </a>
+                            </span><br>
                         {% endfor %}
                     </td>
                     <td>
                         {% for playerFleet in player.getPlayerFleetsWhichAreDefendingThisPlayer %}
-                            <span>
-                                {{ playerFleet.getTicksLeftUntilMissionReach }}
-                            </span>
+                            <span class="has-no-wrap">{{ playerFleet.getTicksLeftUntilMissionReach }}</span><br>
                         {% endfor %}
                     </td>
                 </tr>

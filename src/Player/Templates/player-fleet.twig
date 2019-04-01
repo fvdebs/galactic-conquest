@@ -33,13 +33,14 @@
         </div>
     </div>
 
-    <hr>
-
     <div class="container has-margin">
         <h2 class="title is-size-4 has-text-grey">Mission</h2>
         {% include "@Player/partial/player-form-fleet-mission.twig"
             with {
                 'playerFleetsMovable' : currentPlayer.getPlayerFleetsMovable,
+                'universeInterval' : universeInterval,
+                'maxTicksMissionOffensive' : maxTicksMissionOffensive,
+                'maxTicksMissionDefensive' : maxTicksMissionDefensive,
             }
         %}
     </div>

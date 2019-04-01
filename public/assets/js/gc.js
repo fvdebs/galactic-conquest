@@ -38,6 +38,7 @@
      * Bulma
      ***************************************/
 
+    // tabs
     $('body').find('.tabs li a').on('click', function(event)
     {
         event.preventDefault();
@@ -142,6 +143,54 @@
     });
 
     /***************************************
+     * Resort Fleet
+     ****************************************/
+
+    $('#fleet-from-all').on('change', function (event) {
+        let fleetId = $(this).find('option:selected').data('fleet-id');
+        $.each($(this).parents('form').find('.fleet-from'), function() {
+            $(this).find('option[data-fleet-id="' + fleetId + '"]').prop('selected', true);
+        });
+    });
+
+    $('#fleet-to-all').on('change', function (event) {
+        let fleetId = $(this).find('option:selected').data('fleet-id');
+        $.each($(this).parents('form').find('.fleet-to'), function() {
+            $(this).find('option[data-fleet-id="' + fleetId + '"]').prop('selected', true);
+        });
+    });
+
+    $('#fleet-unit-quantity-all').on('click', function (event) {
+        $.each($(this).parents('form').find('.fleet-from'), function() {
+            let quantity = $(this).find('option:selected').data('max-quantity');
+            $(this).parents('tr').find('.fleet-unit-quantity').val(quantity);
+        });
+    });
+
+    /***************************************
+     * Mission
+     ****************************************/
+
+    function setMissionTicks(missionField)
+    {
+        let missionTicks = missionField.find('option:selected').data('max-ticks-mission');
+        let missionTicksField = missionField.parents('form').find('.missionTicksField');
+
+        missionTicksField.empty();
+        for (let i = 1; i <= missionTicks; i++) {
+            missionTicksField.append('<option value="' + i + '">' + i + '</option>');
+        }
+    }
+
+    $.each($('select.missionField'), function()
+    {
+        setMissionTicks($(this));
+        $(this).on('change', function (event) {
+            setMissionTicks($(this));
+        });
+    });
+
+    /***************************************
      * Build Forms
      ****************************************/
 
@@ -178,5 +227,4 @@
             button.removeClass('is-loading');
         }, 'json');
     });
-
 })(jQuery);

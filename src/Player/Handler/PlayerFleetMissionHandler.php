@@ -22,6 +22,7 @@ final class PlayerFleetMissionHandler implements RequestHandlerInterface
     private const FIELD_FLEET_ID = 'fleetId';
     private const FIELD_GALAXY_NUMBER = 'galaxyNumber';
     private const FIELD_GALAXY_POSITION = 'galaxyPosition';
+    private const FIELD_MISSION_TICKS = 'missionTicks';
     private const FIELD_MISSION = 'mission';
     private const FIELD_MISSION_VALUES = ['offensive', 'defensive'];
     private const FIELD_MISSION_VALUE_OFFENSIVE = 'offensive';
@@ -35,13 +36,15 @@ final class PlayerFleetMissionHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $currentPlayer = $this->getCurrentPlayer($request);
-        $currentUniverseId = $currentPlayer->getUniverse()->getUniverseId();
+        $currentUniverse = $currentPlayer->getUniverse();
+        $currentUniverseId = $currentUniverse->getUniverseId();
 
         $validator = $this->getValidatorWith($request->getParsedBody());
         $validator->context(static::FIELD_FLEET_ID)->isRequired()->isInt();
         $validator->context(static::FIELD_GALAXY_NUMBER)->isRequired()->isInt();
         $validator->context(static::FIELD_GALAXY_POSITION)->isRequired()->isInt();
         $validator->context(static::FIELD_MISSION)->isRequired()->isIn(static::FIELD_MISSION_VALUES);
+        $validator->context(static::FIELD_MISSION_TICKS)->isRequired()->isInt();
 
         if ($validator->failed()) {
             return $this->failedValidation($validator);
@@ -51,6 +54,7 @@ final class PlayerFleetMissionHandler implements RequestHandlerInterface
         $galaxyNumber = (int) $this->getValue(static::FIELD_GALAXY_NUMBER, $request);
         $galaxyPosition = (int) $this->getValue(static::FIELD_GALAXY_POSITION, $request);
         $mission = $this->getValue(static::FIELD_MISSION, $request);
+        $missionTicks = (int) $this->getValue(static::FIELD_MISSION_TICKS, $request);
 
         $galaxy = $this->getGalaxyRepository()->findByNumber($galaxyNumber, $currentUniverseId);
 
@@ -92,15 +96,35 @@ final class PlayerFleetMissionHandler implements RequestHandlerInterface
             return $this->failedValidation($validator);
         }
 
+        if ($currentPlayer->getPlayerId() === $targetPlayer->getPlayerId()) {
+            $validator->addMessage(static::FIELD_GALAXY_NUMBER);
+            return $this->failedValidation($validator);
+        }
+
+        if ($mission === static::FIELD_MISSION_VALUE_DEFENSIVE && ($missionTicks < 1 || $missionTicks > $currentUniverse->getMaxTicksMissionDefensive())) {
+            $validator->addMessage(static::FIELD_MISSION_TICKS);
+            return $this->failedValidation($validator);
+        }
+
+        if ($mission === static::FIELD_MISSION_VALUE_DEFENSIVE && ($missionTicks < 1 || $missionTicks > $currentUniverse->getMaxTicksMissionDefensive())) {
+            $validator->addMessage(static::FIELD_MISSION_TICKS);
+            return $this->failedValidation($validator);
+        }
+
+        if ($mission === static::FIELD_MISSION_VALUE_OFFENSIVE && ($missionTicks < 1 || $missionTicks > $currentUniverse->getMaxTicksMissionOffensive())) {
+            $validator->addMessage(static::FIELD_MISSION_TICKS);
+            return $this->failedValidation($validator);
+        }
+
         if ($mission === static::FIELD_MISSION_VALUE_DEFENSIVE && $currentPlayer->isAttackingAndIsTarget($targetPlayer)) {
             $validator->addMessage(static::FIELD_MISSION, 'player.fleet.can.not.attack.cause.defending');
             return $this->failedValidation($validator);
         }
 
         if ($mission === static::FIELD_MISSION_VALUE_OFFENSIVE) {
-            $playerFleet->attack($targetPlayer, 2);
+            $playerFleet->attack($targetPlayer, $missionTicks);
         } else if ($mission === static::FIELD_MISSION_VALUE_DEFENSIVE) {
-            $playerFleet->defend($targetPlayer, 2);
+            $playerFleet->defend($targetPlayer, $missionTicks);
         }
 
         $this->flush();

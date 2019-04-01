@@ -16,13 +16,17 @@
                             {{ unit.getName | trans }}
                         </td>
                         <td>
-                            <input name="quantity[{{ unit.getUnitId }}]" class="input has-length-small" type="text" placeholder="0">
+                            <input name="quantity[{{ unit.getUnitId }}]" class="input has-length-small fleet-unit-quantity" type="text" placeholder="0">
                         </td>
                         <td>
                             <div class="select">
-                                <select name="from[{{ unit.getUnitId }}]">
+                                <select name="from[{{ unit.getUnitId }}]" class="fleet-from">
                                     {% for key,playerFleet in playerFleetsOrbitAndMovable %}
-                                        <option value="{{ playerFleet.getPlayerFleetId }}"{% if playerFleet.isBusy %} disabled{% endif %}>
+                                        <option value="{{ playerFleet.getPlayerFleetId }}"
+                                                data-fleet-id="{{ playerFleet.getPlayerFleetId }}"
+                                                data-max-quantity="{{ playerFleet.getUnitQuantityOf(unit) }}"
+                                                {% if playerFleet.isBusy %} disabled{% endif %}>
+
                                             {% if playerFleet.isOrbit %}
                                                 {{ 'player.fleet.orbit' | trans }}
                                             {% else %}
@@ -35,9 +39,11 @@
                         </td>
                         <td>
                             <div class="select">
-                                <select name="to[{{ unit.getUnitId }}]">
+                                <select name="to[{{ unit.getUnitId }}]" class="fleet-to">
                                     {% for key,playerFleet in playerFleetsOrbitAndMovable %}
-                                        <option value="{{ playerFleet.getPlayerFleetId }}"{% if playerFleet.isBusy %} disabled{% endif %}>
+                                        <option value="{{ playerFleet.getPlayerFleetId }}"
+                                                data-fleet-id="{{ playerFleet.getPlayerFleetId }}"
+                                                {% if playerFleet.isBusy %} disabled{% endif %}>
                                             {% if playerFleet.isOrbit %}
                                                 {{ 'player.fleet.orbit' | trans }}
                                             {% else %}
@@ -51,6 +57,50 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td>
+                         <span class="button is-primary" id="fleet-unit-quantity-all">
+                            {{ 'player.fleet.all' | trans }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="fleet-from-all">
+                                {% for key,playerFleet in playerFleetsOrbitAndMovable %}
+                                    <option value="{{ playerFleet.getPlayerFleetId }}"
+                                            data-fleet-id="{{ playerFleet.getPlayerFleetId }}"
+                                            {% if playerFleet.isBusy %} disabled{% endif %}>
+                                        {% if playerFleet.isOrbit %}
+                                            {{ 'player.fleet.orbit' | trans }}
+                                        {% else %}
+                                            {{ 'player.fleet' | trans | format(key) }}
+                                        {% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="fleet-to-all">
+                                {% for key,playerFleet in playerFleetsOrbitAndMovable %}
+                                    <option value="{{ playerFleet.getPlayerFleetId }}"
+                                            data-fleet-id="{{ playerFleet.getPlayerFleetId }}"
+                                            {% if playerFleet.isBusy %} disabled{% endif %}>
+                                        {% if playerFleet.isOrbit %}
+                                            {{ 'player.fleet.orbit' | trans }}
+                                        {% else %}
+                                            {{ 'player.fleet' | trans | format(key) }}
+                                        {% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
         <button type="submit" class="button is-primary is-fullwidth">
             {{ 'player.fleet.transfer' | trans | format(key) }}

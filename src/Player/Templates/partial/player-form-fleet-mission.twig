@@ -1,42 +1,79 @@
 {% for key,playerFleet in playerFleetsMovable %}
-    {% if playerFleet.isIdling %}
-        <form action="{{ url('player.fleet.mission') }}" method="post" class="has-margin">
-            <input type="hidden" name="fleetId" value="{{ playerFleet.getPlayerFleetId }}">
-            <div class="field is-horizontal">
-                <div class="field-label is-narrow has-no-wrap">
-                    <label class="label">
-                        {{ 'player.fleet' | trans | format(key) }}
-                    </label>
-                </div>
-                <div class="field-body">
-                    <div class="field is-narrow">
-                        <p class="control has-no-wrap">
-                            <input type="text" name="galaxyNumber" class="input has-length-small">
-                            <span class="is-size-5">:</span>
-                            <input type="text" name="galaxyPosition" class="input has-length-small">
-                            <div class="select is-fullwidth">
-                                <select name="mission">
-                                    {% if playerFleet.isOffensive %}
-                                        <option value="offensive">{{ 'player.fleet.attack' | trans }}</option>
-                                    {% endif %}
-                                    {% if playerFleet.isDefensive %}
-                                        <option value="defensive">{{ 'player.fleet.defend' | trans }}</option>
-                                    {% endif %}
-                                </select>
+    <div class="box">
+        <h2 class="title is-size-5">
+            {{ 'player.fleet' | trans | format(key + 1) }}
+        </h2>
+        {% if playerFleet.isIdling %}
+            <form action="{{ url('player.fleet.mission') }}" method="post">
+                <input type="hidden" name="fleetId" value="{{ playerFleet.getPlayerFleetId }}">
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <p class="control has-no-wrap">
+                                <input type="text" name="galaxyNumber" class="input has-length-small">
+                                <span class="is-size-5">:</span>
+                                <input type="text" name="galaxyPosition" class="input has-length-small">
+                                <span class="select">
+                                    <select name="missionTicks" class="missionTicksField" data-universe-interval="{{ universeInterval }}"></select>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field is-narrow">
+                            <p class="control has-no-wrap">
+                                <span class="select is-fullwidth">
+                                    <select name="mission" class="missionField">
+                                        {% if playerFleet.isOffensive %}
+                                            <option value="offensive" data-max-ticks-mission="{{ maxTicksMissionOffensive }}">{{ 'player.fleet.attack' | trans }}</option>
+                                        {% endif %}
+                                        {% if playerFleet.isDefensive %}
+                                            <option value="defensive" data-max-ticks-mission="{{ maxTicksMissionDefensive }}">{{ 'player.fleet.defend' | trans }}</option>
+                                        {% endif %}
+                                    </select>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <button type="submit" class="button is-primary is-fullwidth">
+                                    {{ 'player.fleet.send' | trans }}
+                                </button>
                             </div>
-                        </p>
-                    </div>
-                    <div class="field is-narrow">
-                        <div class="control">
-                            <button type="submit" class="button is-primary is-fullwidth">
-                                {{ 'player.fleet.send' | trans }}
-                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    {% else %}
-        Recall
-    {% endif %}
+            </form>
+        {% else %}
+            <p>
+                {% if playerFleet.isAttacking %}
+                    {{ 'player.fleet.mission.attacking' | trans }}
+                {% elseif  playerFleet.isDefending %}
+                    {{ 'player.fleet.mission.defending' | trans }}
+                {% else %}
+                    {{ 'player.fleet.mission.recalling' | trans }}
+                {% endif %}
+            </p>
+            <p>
+                <span class="has-no-wrap">
+                    {{  currentPlayer.getGalaxy.getNumber }}
+                    :{{ currentPlayer.getGalaxyPosition }}
+                    {{ currentPlayer.getUser.getName }}
+                    -->
+                    {{  playerFleet.getTargetPlayer.getGalaxy.getNumber }}
+                    :{{ playerFleet.getTargetPlayer.getGalaxyPosition }}
+                    {{ playerFleet.getTargetPlayer.getUser.getName }}
+                </span>
+                <span>
+                    {{ 'player.fleet.eta' | trans }}
+                    {{ playerFleet.getTicksLeftUntilMissionReach }}
+                </span>
+            </p><br>
+
+            {% if playerFleet.isRecalling == false %}
+                <a class="button is-primary single-submit" data-identifier="{{ playerFleet.getPlayerFleetId }}" data-action="{{ url('player.fleet.mission.recall') }}">
+                    <span class="icon"><i class="fas fa-undo-alt"></i></span>
+                    <span>{{ 'player.fleet.mission.recall' | trans }}</span>
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endfor %}
