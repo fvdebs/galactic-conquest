@@ -1,0 +1,36 @@
+
+{% if currentPlayer.hasPlayerFleetsWhichAreAttackingThisPlayer %}
+    <article class="message is-danger">
+        <div class="message-body">
+            <ul>
+                {% for playerFleet in currentPlayer.getPlayerFleetsWhichAreAttackingThisPlayer %}
+                    <li class="has-no-wrap">
+                        Angriffsflug
+                        {{  playerFleet.getPlayer.getGalaxy.getNumber }}
+                        :{{ playerFleet.getPlayer.getGalaxyPosition }}
+                        {{ playerFleet.getPlayer.getUser.getName }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </article>
+{% endif %}
+
+{% if currentPlayer.hasPlayerFleetsWhichAreDefendingThisPlayer %}
+    <article class="message is-success">
+        <div class="message-body">
+            <ul>
+                {% for playerFleet in currentPlayer.getPlayerFleetsWhichAreDefendingThisPlayer %}
+                    <li class="has-no-wrap">
+                        Angriffsflug
+                        {{  playerFleet.getPlayer.getGalaxy.getNumber }}
+                        :{{ playerFleet.getPlayer.getGalaxyPosition }}
+                        {{ playerFleet.getPlayer.getUser.getName }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </article>
+{% endif %}
+
+

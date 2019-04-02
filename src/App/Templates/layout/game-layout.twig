@@ -13,6 +13,9 @@
                 {% include '@App/layout/partial/game-navigation-left.twig' %}
             </div>
             <div class="column is-four-fifth">
+
+                {% include '@Player/partial/player-callout-fleet-incoming.twig' %}
+
                 {% block content %}{% endblock %}
             </div>
         </div>

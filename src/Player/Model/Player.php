@@ -1522,6 +1522,20 @@ class Player
     }
 
     /**
+     * @return bool
+     */
+    public function hasPlayerFleetsWhichAreAttackingThisPlayer(): bool
+    {
+        foreach ($this->getTargetPlayerFleets() as $targetPlayerFleet) {
+            if ($targetPlayerFleet->isAttacking()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return \GC\Player\Model\PlayerFleet[]
      */
     public function getPlayerFleetsWhichAreDefendingThisPlayer(): array
@@ -1535,6 +1549,20 @@ class Player
         }
 
         return $targetPlayerFleets;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPlayerFleetsWhichAreDefendingThisPlayer(): bool
+    {
+        foreach ($this->getTargetPlayerFleets() as $targetPlayerFleet) {
+            if ($targetPlayerFleet->isDefending()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
