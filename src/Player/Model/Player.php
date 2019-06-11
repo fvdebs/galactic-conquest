@@ -13,6 +13,13 @@ use GC\Unit\Model\Unit;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
 
+use function array_key_exists;
+use function array_unshift;
+use function floor;
+use function is_numeric;
+use function round;
+use function trim;
+
 /**
  * @Table(name="player")
  * @Entity(repositoryClass="GC\Player\Model\PlayerRepository")
@@ -491,7 +498,7 @@ class Player
     {
         $calculation = ($this->metal + $this->crystal) / $this->universe->getResourcePointsDivider();
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -501,7 +508,7 @@ class Player
     {
         $calculation = ($this->getExtractorMetal() + $this->getExtractorCrystal()) * $this->universe->getExtractorPoints();
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -516,7 +523,7 @@ class Player
             $calculation += $playerTechnology->getTechnology()->getMetalCost();
         }
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -530,7 +537,7 @@ class Player
             $calculation += $playerFleet->calculateUnitPoints();
         }
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -637,7 +644,7 @@ class Player
     {
         $calculation = $this->extractorMetal * $this->universe->getExtractorMetalIncome();
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -647,7 +654,7 @@ class Player
     {
         $calculation = $this->extractorCrystal * $this->universe->getExtractorCrystalIncome();
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -880,15 +887,15 @@ class Player
      */
     public function calculateMaxUnits(Unit $unit): int
     {
-        $maxUnitsMetal = \floor($this->getMetal() / $unit->getMetalCost());
-        $maxUnitsCrystal = \floor($this->getCrystal() / $unit->getCrystalCost());
+        $maxUnitsMetal = floor($this->getMetal() / $unit->getMetalCost());
+        $maxUnitsCrystal = floor($this->getCrystal() / $unit->getCrystalCost());
 
         if ($maxUnitsMetal <= $maxUnitsCrystal){
-            return (int) \floor($maxUnitsMetal);
+            return (int) floor($maxUnitsMetal);
         }
 
         if ($maxUnitsCrystal <= $maxUnitsMetal){
-            return (int) \floor($maxUnitsCrystal);
+            return (int) floor($maxUnitsCrystal);
         }
 
         return 0;
@@ -937,7 +944,7 @@ class Player
      */
     protected function calculateMetalCostForUnit(Unit $unit, int $quantity): int
     {
-        return (int) \round($unit->getMetalCost() * $quantity);
+        return (int) round($unit->getMetalCost() * $quantity);
     }
 
     /**
@@ -948,7 +955,7 @@ class Player
      */
     protected function calculateCrystalCostForUnit(Unit $unit, int $quantity): int
     {
-        return (int) \round($unit->getCrystalCost() * $quantity);
+        return (int) round($unit->getCrystalCost() * $quantity);
     }
 
     /**
@@ -1422,7 +1429,7 @@ class Player
             }
         }
 
-        \array_unshift($playerFleets, $this->getPlayerFleetOrbit());
+        array_unshift($playerFleets, $this->getPlayerFleetOrbit());
 
         return $playerFleets;
     }
@@ -1575,10 +1582,10 @@ class Player
     public function moveUnits(array $quantityArray, array $playerFleetFromArray, array $playerFleetToArray): void
     {
         foreach ($quantityArray as $unitId => $quantity) {
-            $quantity = \trim($quantity);
-            if (!\array_key_exists($unitId, $playerFleetFromArray)
-                || !\array_key_exists($unitId, $playerFleetToArray)
-                || !\is_numeric($quantity)
+            $quantity = trim($quantity);
+            if (!array_key_exists($unitId, $playerFleetFromArray)
+                || !array_key_exists($unitId, $playerFleetToArray)
+                || !is_numeric($quantity)
                 || empty($quantity)) {
 
                 continue;
