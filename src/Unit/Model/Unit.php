@@ -15,6 +15,10 @@ use GC\Universe\Model\Universe;
  */
 class Unit
 {
+    public const GROUP_SCAN = 'SCAN';
+    public const GROUP_DEFENSE = 'DEFENSE';
+    public const GROUP_OFFENSIVE = 'OFFENSIVE';
+
     /**
      * @var int
      *
@@ -30,6 +34,13 @@ class Unit
      * @Column(name="name", type="string", length=150, nullable=false)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @Column(name="group", type="string", length=150, nullable=false)
+     */
+    private $group;
 
     /**
      * @var string
@@ -86,6 +97,13 @@ class Unit
      * @Column(name="extractor_steal_amount", type="integer", nullable=false)
      */
     private $extractorStealAmount;
+    /**
+     * @var \GC\Faction\Model\Faction
+     *
+     * @ManyToOne(targetEntity="\GC\Faction\Model\Faction")
+     * @JoinColumn(name="faction_id", referencedColumnName="faction_id", nullable=false)
+     */
+    private $faction;
 
     /**
      * @var int
@@ -95,12 +113,18 @@ class Unit
     private $extractorGuardAmount;
 
     /**
-     * @var \GC\Faction\Model\Faction
+     * @var int
      *
-     * @ManyToOne(targetEntity="\GC\Faction\Model\Faction")
-     * @JoinColumn(name="faction_id", referencedColumnName="faction_id", nullable=false)
+     * @Column(name="scan_relais_factor", type="integer", nullable=false)
      */
-    private $faction;
+    private $scanRelaisFactor;
+
+    /**
+     * @var int
+     *
+     * @Column(name="scan_blocker_factor", type="integer", nullable=false)
+     */
+    private $scanBlockerFactor;
 
     /**
      * @var \GC\Unit\Model\UnitCombatSetting[]|\Doctrine\Common\Collections\ArrayCollection
@@ -128,8 +152,9 @@ class Unit
     /**
      * @param string $name
      * @param \GC\Faction\Model\Faction $faction
+     * @param string $group
      */
-    public function __construct(string $name, Faction $faction)
+    public function __construct(string $name, Faction $faction, string $group)
     {
         $this->unitCombatSettings = new ArrayCollection();
         $this->universe = $faction->getUniverse();
@@ -143,6 +168,9 @@ class Unit
         $this->carrierSpaceConsumption = 0;
         $this->extractorGuardAmount = 0;
         $this->extractorStealAmount = 0;
+        $this->group = $group;
+        $this->scanRelaisFactor = 0;
+        $this->scanBlockerFactor = 0;
         $this->faction = $faction;
     }
 
@@ -170,6 +198,24 @@ class Unit
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroup(): string
+    {
+        return $this->group;
+    }
+
+    /**
+     * @param string $group
+     *
+     * @return void
+     */
+    public function setGroup(string $group): void
+    {
+        $this->group = $group;
     }
 
     /**
@@ -332,6 +378,42 @@ class Unit
     public function setExtractorGuardAmount(int $extractorGuardAmount): void
     {
         $this->extractorGuardAmount = $extractorGuardAmount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScanRelaisFactor(): int
+    {
+        return $this->scanRelaisFactor;
+    }
+
+    /**
+     * @param int $scanRelaisFactor
+     *
+     * @return void
+     */
+    public function setScanRelaisFactor(int $scanRelaisFactor): void
+    {
+        $this->scanRelaisFactor = $scanRelaisFactor;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScanBlockerFactor(): int
+    {
+        return $this->scanBlockerFactor;
+    }
+
+    /**
+     * @param int $scanBlockerFactor
+     *
+     * @return void
+     */
+    public function setScanBlockerFactor(int $scanBlockerFactor): void
+    {
+        $this->scanBlockerFactor = $scanBlockerFactor;
     }
 
     /**

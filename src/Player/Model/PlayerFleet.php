@@ -7,6 +7,9 @@ namespace GC\Player\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use GC\Unit\Model\Unit;
 
+use function count;
+use function round;
+
 /**
  * @Table(name="player_fleet")
  * @Entity
@@ -25,6 +28,13 @@ class PlayerFleet
      * @GeneratedValue(strategy="IDENTITY")
      */
     private $playerFleetId;
+
+    /**
+     * @var integer
+     *
+     * @Column(name="number", type="integer", nullable=false)
+     */
+    private $number;
 
     /**
      * @var bool
@@ -119,11 +129,11 @@ class PlayerFleet
     {
         $this->playerFleetUnits = new ArrayCollection();
         $this->player = $player;
+        $this->isMovable = false;
         $this->isOffensive = false;
         $this->isDefensive = false;
         $this->isOrbit = false;
         $this->isStationary = false;
-        $this->isMovable = false;
     }
 
     /**
@@ -132,6 +142,14 @@ class PlayerFleet
     public function getPlayerFleetId(): int
     {
         return $this->playerFleetId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber(): int
+    {
+        return $this->number;
     }
 
     /**
@@ -477,7 +495,7 @@ class PlayerFleet
             $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getCrystalCost();
         }
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**

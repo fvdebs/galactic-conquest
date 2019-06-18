@@ -224,11 +224,11 @@ class Player
         $this->isAdmiral = false;
         $this->isCommander = false;
 
-        $playerFleetOrbit = $this->createPlayerFleet();
-        $playerFleetOrbit->setIsOrbit(true);
-
         $playerFleetStationary = $this->createPlayerFleet();
         $playerFleetStationary->setIsStationary(true);
+
+        $playerFleetOrbit = $this->createPlayerFleet();
+        $playerFleetOrbit->setIsOrbit(true);
 
         $this->calculatePoints();
     }
@@ -538,32 +538,6 @@ class Player
         }
 
         return (int) round($calculation);
-    }
-
-    /**
-     * @param int $number
-     *
-     * @return void
-     */
-    public function buildScanBlocker(int $number): void
-    {
-        $this->scanBlocker += $number;
-
-        $this->decreaseMetal($this->universe->getScanBlockerMetalCost() * $number);
-        $this->decreaseCrystal($this->universe->getScanBlockerCrystalCost() * $number);
-    }
-
-    /**
-     * @param int $number
-     *
-     * @return void
-     */
-    public function buildScanRelays(int $number): void
-    {
-        $this->scanRelays += $number;
-
-        $this->decreaseMetal($this->universe->getScanRelayMetalCost() * $number);
-        $this->decreaseCrystal($this->universe->getScanRelayCrystalCost() * $number);
     }
 
     /**

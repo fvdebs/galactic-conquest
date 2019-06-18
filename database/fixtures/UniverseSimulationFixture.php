@@ -115,6 +115,16 @@ class UniverseSimulationFixture extends AbstractFixture
     private $techCancri;
 
     /**
+     * @var \GC\Technology\Model\Technology
+     */
+    private $techScanBlocker;
+
+    /**
+     * @var \GC\Technology\Model\Technology
+     */
+    private $techScanRelais;
+
+    /**
      * @var \GC\Unit\Model\Unit[]
      */
     private $units = [];
@@ -489,10 +499,6 @@ class UniverseSimulationFixture extends AbstractFixture
         $universe->setMaxAllianceGalaxies(\random_int(2, 6));
         $universe->setMaxPrivateGalaxyPlayers(\random_int(5, 12));
         $universe->setMaxPublicGalaxyPlayers($universe->getMaxPrivateGalaxyPlayers() + \random_int(3, 5));
-        $universe->setScanBlockerMetalCost($this->getRandomUnitCostValue());
-        $universe->setScanBlockerCrystalCost($this->getRandomUnitCostValue());
-        $universe->setScanRelayMetalCost($this->getRandomUnitCostValue());
-        $universe->setScanRelayCrystalCost($this->getRandomUnitCostValue());
         $universe->setRankingInterval($this->randomValueFrom([6, 12, 24]));
         $universe->setTickInterval($this->randomValueFrom([5, 10, 15]));
         $universe->setTicksStartingAt(new DateTime());
@@ -838,11 +844,13 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->techZenit = $this->createPlayerHumanTechnology($universe, 'technology.zenit');
         $this->techCleptor = $this->createPlayerHumanTechnology($universe, 'technology.cleptor');
         $this->techCancri = $this->createPlayerHumanTechnology($universe, 'technology.cancri');
+        $this->techScanRelais = $this->createPlayerHumanTechnology($universe, 'technology.scan.relais');
+        $this->techScanBlocker = $this->createPlayerHumanTechnology($universe, 'technology.scan.blocker');
 
         $this->playerTechnologies = [
             $colony, $drive, $trade, $this->techRubium, $this->techPulsar, $this->techCoon, $this->techCoon, $this->techCenturion,
             $this->techHorus, $this->techLeo, $this->techAquilae, $this->techFornax, $this->techDraco, $this->techGoron,
-            $this->techPentalin, $this->techZenit, $this->techCleptor, $this->techCancri,
+            $this->techPentalin, $this->techZenit, $this->techCleptor, $this->techCancri, $this->techScanRelais, $this->techScanBlocker
         ];
 
         // tech conditions
@@ -876,6 +884,8 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->techCleptor->addTechnologyCondition($drive);
         $this->techCancri->addTechnologyCondition($colony);
         $this->techCancri->addTechnologyCondition($drive);
+        $this->techScanRelais->addTechnologyCondition($colony);
+        $this->techScanBlocker->addTechnologyCondition($colony);
     }
 
     /**
@@ -1000,7 +1010,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createHumanUnitStationary(Universe $universe, string $name): Unit
     {
-        $unit = $universe->createUnit($name, $this->human);
+        $unit = $universe->createUnit($name, $this->human, UNIT::GROUP_DEFENSE);
         $unit->setIsStationary(true);
         $unit = $this->fillUnitWithRandomValues($unit);
 
@@ -1015,7 +1025,22 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createHumanUnit(Universe $universe, string $name): Unit
     {
-        $unit = $universe->createUnit($name, $this->human);
+        $unit = $universe->createUnit($name, $this->human, UNIT::GROUP_OFFENSIVE);
+        $unit = $this->fillUnitWithRandomValues($unit);
+
+        return $unit;
+    }
+
+    /**
+     * @param \GC\Universe\Model\Universe $universe
+     * @param string $name
+     *
+     * @return \GC\Unit\Model\Unit
+     */
+    private function createHumanUnitScan(Universe $universe, string $name): Unit
+    {
+        $unit = $universe->createUnit($name, $this->human, UNIT::GROUP_SCAN);
+        $unit->setIsStationary(true);
         $unit = $this->fillUnitWithRandomValues($unit);
 
         return $unit;
@@ -1090,6 +1115,14 @@ class UniverseSimulationFixture extends AbstractFixture
         $canri = $this->createHumanUnit($universe, 'unit.cancri');
         $canri->setRequiredTechnology($this->techCancri);
         $canri->setExtractorGuardAmount(1);
+
+        $scanBlocker = $this->createHumanUnitScan($universe, 'unit.scan.blocker');
+        $canri->setRequiredTechnology($this->techScanBlocker);
+        $scanBlocker->setScanBlockerFactor(1);
+
+        $scanRelais = $this->createHumanUnitScan($universe, 'unit.scan.relais');
+        $canri->setRequiredTechnology($this->techScanRelais);
+        $scanRelais->setScanRelaisFactor(1);
 
         // unit combat settings
         $horus->addUnitCombatSetting($draco, 40, '0.0114');

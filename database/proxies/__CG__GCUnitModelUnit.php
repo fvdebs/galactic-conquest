@@ -64,10 +64,10 @@ class Unit extends \GC\Unit\Model\Unit implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'group', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanRelaisFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanBlockerFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'group', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanRelaisFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanBlockerFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
     }
 
     /**
@@ -208,6 +208,28 @@ class Unit extends \GC\Unit\Model\Unit implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setName', [$name]);
 
         parent::setName($name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGroup(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGroup', []);
+
+        return parent::getGroup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setGroup(string $group): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGroup', [$group]);
+
+        parent::setGroup($group);
     }
 
     /**
@@ -406,6 +428,50 @@ class Unit extends \GC\Unit\Model\Unit implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setExtractorGuardAmount', [$extractorGuardAmount]);
 
         parent::setExtractorGuardAmount($extractorGuardAmount);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getScanRelaisFactor(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScanRelaisFactor', []);
+
+        return parent::getScanRelaisFactor();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setScanRelaisFactor(int $scanRelaisFactor): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setScanRelaisFactor', [$scanRelaisFactor]);
+
+        parent::setScanRelaisFactor($scanRelaisFactor);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getScanBlockerFactor(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScanBlockerFactor', []);
+
+        return parent::getScanBlockerFactor();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setScanBlockerFactor(int $scanBlockerFactor): void
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setScanBlockerFactor', [$scanBlockerFactor]);
+
+        parent::setScanBlockerFactor($scanBlockerFactor);
     }
 
     /**

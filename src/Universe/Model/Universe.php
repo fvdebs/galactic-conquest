@@ -15,6 +15,11 @@ use GC\Player\Model\Player;
 use GC\Technology\Model\Technology;
 use GC\Unit\Model\Unit;
 
+use function array_reverse;
+use function floor;
+use function shuffle;
+use function strtolower;
+
 /**
  * @Table(name="universe")
  * @Entity(repositoryClass="GC\Universe\Model\UniverseRepository")
@@ -152,34 +157,6 @@ class Universe
     /**
      * @var int
      *
-     * @Column(name="scan_blocker_metal_cost", type="integer", nullable=false)
-     */
-    private $scanBlockerMetalCost;
-
-    /**
-     * @var int
-     *
-     * @Column(name="scan_blocker_crystal_cost", type="integer", nullable=false)
-     */
-    private $scanBlockerCrystalCost;
-
-    /**
-     * @var int
-     *
-     * @Column(name="scan_relay_metal_cost", type="integer", nullable=false)
-     */
-    private $scanRelayMetalCost;
-
-    /**
-     * @var int
-     *
-     * @Column(name="scan_relay_crystal_cost", type="integer", nullable=false)
-     */
-    private $scanRelayCrystalCost;
-
-    /**
-     * @var int
-     *
      * @Column(name="extractor_metal_income", type="integer", nullable=false)
      */
     private $extractorMetalIncome;
@@ -304,10 +281,6 @@ class Universe
         $this->maxPrivateGalaxyPlayers = 8;
         $this->maxPublicGalaxyPlayers = 12;
         $this->maxAllianceGalaxies = 3;
-        $this->scanBlockerMetalCost = 5000;
-        $this->scanBlockerCrystalCost = 2000;
-        $this->scanRelayMetalCost = 2000;
-        $this->scanRelayCrystalCost = 5000;
         $this->extractorMetalIncome = 50;
         $this->extractorCrystalIncome = 50;
         $this->extractorStartCost = 65;
@@ -466,7 +439,7 @@ class Universe
      */
     public function getRouteName(): string
     {
-        return \strtolower($this->name);
+        return strtolower($this->name);
     }
 
     /**
@@ -586,79 +559,6 @@ class Universe
     {
         $this->ticksDefense = $ticksDefense;
     }
-
-    /**
-     * @return int
-     */
-    public function getScanBlockerMetalCost(): int
-    {
-        return $this->scanBlockerMetalCost;
-    }
-
-    /**
-     * @param int $scanBlockerMetalCost
-     *
-     * @return void
-     */
-    public function setScanBlockerMetalCost(int $scanBlockerMetalCost): void
-    {
-        $this->scanBlockerMetalCost = $scanBlockerMetalCost;
-    }
-
-    /**
-     * @return int
-     */
-    public function getScanBlockerCrystalCost(): int
-    {
-        return $this->scanBlockerCrystalCost;
-    }
-
-    /**
-     * @param int $scanBlockerCrystalCost
-     *
-     * @return void
-     */
-    public function setScanBlockerCrystalCost(int $scanBlockerCrystalCost): void
-    {
-        $this->scanBlockerCrystalCost = $scanBlockerCrystalCost;
-    }
-
-    /**
-     * @return int
-     */
-    public function getScanRelayMetalCost(): int
-    {
-        return $this->scanRelayMetalCost;
-    }
-
-    /**
-     * @param int $scanRelayMetalCost
-     *
-     * @return void
-     */
-    public function setScanRelayMetalCost(int $scanRelayMetalCost): void
-    {
-        $this->scanRelayMetalCost = $scanRelayMetalCost;
-    }
-
-    /**
-     * @return int
-     */
-    public function getScanRelayCrystalCost(): int
-    {
-        return $this->scanRelayCrystalCost;
-    }
-
-    /**
-     * @param int $scanRelayCrystalCost
-     *
-     * @return void
-     */
-    public function setScanRelayCrystalCost(int $scanRelayCrystalCost): void
-    {
-        $this->scanRelayCrystalCost = $scanRelayCrystalCost;
-    }
-
 
     /**
      * @return int
@@ -881,12 +781,13 @@ class Universe
     /**
      * @param string $name
      * @param \GC\Faction\Model\Faction $faction
+     * @param string $group
      *
      * @return \GC\Unit\Model\Unit
      */
-    public function createUnit(string $name, Faction $faction): Unit
+    public function createUnit(string $name, Faction $faction, string $group): Unit
     {
-        $unit = new Unit($name, $faction);
+        $unit = new Unit($name, $faction, $group);
         $this->units->add($unit);
 
         return $unit;
@@ -992,7 +893,7 @@ class Universe
     {
         $galaxies = $this->getGalaxies();
 
-        \shuffle($galaxies);
+        shuffle($galaxies);
 
         foreach ($galaxies as $galaxy) {
             if ($galaxy->isPublicGalaxy() && $galaxy->hasSpaceForNewPlayer()) {
@@ -1025,7 +926,7 @@ class Universe
      */
     public function calculateTicksPerDay(): int
     {
-        return (int) \floor(1440 / $this->getTickInterval());
+        return (int) floor(1440 / $this->getTickInterval());
     }
 
     /**
@@ -1112,7 +1013,7 @@ class Universe
             return $playerFirst->getPoints() <=> $playerSecond->getPoints();
         });
 
-        $players = \array_reverse($players);
+        $players = array_reverse($players);
         foreach ($players as $index => $player) {
             $rankingPosition = $index + 1;
             $player->setRankingPosition($rankingPosition);
@@ -1158,7 +1059,7 @@ class Universe
             return $galaxyFirst->getExtractorPoints() <=> $galaxySecond->getExtractorPoints();
         });
 
-        $rankedGalaxies = \array_reverse($rankedGalaxies);
+        $rankedGalaxies = array_reverse($rankedGalaxies);
         foreach ($rankedGalaxies as $index => $rankedGalaxy) {
             $rankingPosition = $index + 1;
             $rankedGalaxy->setRankingPosition($rankingPosition);
@@ -1175,7 +1076,7 @@ class Universe
             return $allianceFirst->getExtractorPoints() <=> $allianceSecond->getExtractorPoints();
         });
 
-        $rankedAlliances = \array_reverse($rankedAlliances);
+        $rankedAlliances = array_reverse($rankedAlliances);
         foreach ($rankedAlliances as $index => $rankedAlliance) {
             $rankingPosition = $index + 1;
             $rankedAlliance->setRankingPosition($rankingPosition);
