@@ -32,7 +32,7 @@ class PlayerFleet
     /**
      * @var integer
      *
-     * @Column(name="number", type="integer", nullable=false)
+     * @Column(name="number", type="integer", nullable=true)
      */
     private $number;
 
@@ -124,16 +124,21 @@ class PlayerFleet
 
     /**
      * @param \GC\Player\Model\Player $player
+     * @param bool $isMovable - default: false
      */
-    public function __construct(Player $player)
+    public function __construct(Player $player, bool $isMovable = false)
     {
         $this->playerFleetUnits = new ArrayCollection();
         $this->player = $player;
-        $this->isMovable = false;
+        $this->isMovable = $isMovable;
         $this->isOffensive = false;
         $this->isDefensive = false;
         $this->isOrbit = false;
         $this->isStationary = false;
+
+        if ($isMovable) {
+            $this->number = count($player->getPlayerFleetsMovable()) + 1;
+        }
     }
 
     /**

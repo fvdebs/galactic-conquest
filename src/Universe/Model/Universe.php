@@ -859,6 +859,7 @@ class Universe
     public function getPlayers(): array
     {
         $players = [];
+
         foreach ($this->getGalaxies() as $galaxy) {
             foreach ($galaxy->getPlayers() as $player) {
                 $players[] = $player;
@@ -866,6 +867,20 @@ class Universe
         }
 
         return $players;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlayerCount(): int
+    {
+        $count = 0;
+
+        foreach ($this->getGalaxies() as $galaxy) {
+            $count += $galaxy->getPlayerCount();
+        }
+
+        return $count;
     }
 
     /**

@@ -64,10 +64,10 @@ class Unit extends \GC\Unit\Model\Unit implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'group', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanRelaisFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanBlockerFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'grouping', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanRelaisFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanBlockerFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'group', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanRelaisFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanBlockerFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitId', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'name', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'grouping', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'description', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'isStationary', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'crystalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'metalCost', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'ticksToBuild', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpace', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'carrierSpaceConsumption', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorStealAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'faction', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'extractorGuardAmount', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanRelaisFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'scanBlockerFactor', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'unitCombatSettings', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'universe', '' . "\0" . 'GC\\Unit\\Model\\Unit' . "\0" . 'requiredTechnology'];
     }
 
     /**
@@ -213,23 +213,23 @@ class Unit extends \GC\Unit\Model\Unit implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getGroup(): string
+    public function getGrouping(): string
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGroup', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGrouping', []);
 
-        return parent::getGroup();
+        return parent::getGrouping();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setGroup(string $group): void
+    public function setGrouping(string $grouping): void
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGroup', [$group]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGrouping', [$grouping]);
 
-        parent::setGroup($group);
+        parent::setGrouping($grouping);
     }
 
     /**

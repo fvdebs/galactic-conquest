@@ -15,9 +15,9 @@ use GC\Universe\Model\Universe;
  */
 class Unit
 {
-    public const GROUP_SCAN = 'SCAN';
-    public const GROUP_DEFENSE = 'DEFENSE';
-    public const GROUP_OFFENSIVE = 'OFFENSIVE';
+    public const GROUPING_SCAN = 'SCAN';
+    public const GROUPING_DEFENSE = 'DEFENSE';
+    public const GROUPING_OFFENSIVE = 'OFFENSIVE';
 
     /**
      * @var int
@@ -38,9 +38,9 @@ class Unit
     /**
      * @var string
      *
-     * @Column(name="group", type="string", length=150, nullable=false)
+     * @Column(name="grouping", type="string", length=150, nullable=false)
      */
-    private $group;
+    private $grouping;
 
     /**
      * @var string
@@ -152,9 +152,9 @@ class Unit
     /**
      * @param string $name
      * @param \GC\Faction\Model\Faction $faction
-     * @param string $group
+     * @param string $grouping
      */
-    public function __construct(string $name, Faction $faction, string $group)
+    public function __construct(string $name, Faction $faction, string $grouping)
     {
         $this->unitCombatSettings = new ArrayCollection();
         $this->universe = $faction->getUniverse();
@@ -168,7 +168,7 @@ class Unit
         $this->carrierSpaceConsumption = 0;
         $this->extractorGuardAmount = 0;
         $this->extractorStealAmount = 0;
-        $this->group = $group;
+        $this->grouping = $grouping;
         $this->scanRelaisFactor = 0;
         $this->scanBlockerFactor = 0;
         $this->faction = $faction;
@@ -203,19 +203,19 @@ class Unit
     /**
      * @return string
      */
-    public function getGroup(): string
+    public function getGrouping(): string
     {
-        return $this->group;
+        return $this->grouping;
     }
 
     /**
-     * @param string $group
+     * @param string $grouping
      *
      * @return void
      */
-    public function setGroup(string $group): void
+    public function setGrouping(string $grouping): void
     {
-        $this->group = $group;
+        $this->grouping = $grouping;
     }
 
     /**

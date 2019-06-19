@@ -64,10 +64,10 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'universeId', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'name', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'description', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksStartingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastTickAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastRankingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'rankingInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickCurrent', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksAttack', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefense', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAlliance', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAllied', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionOffensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionDefensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPrivateGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPublicGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxAllianceGalaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanBlockerMetalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanBlockerCrystalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanRelayMetalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanRelayCrystalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorMetalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorCrystalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorStartCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'resourcePointsDivider', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isActive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isClosed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'closedAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isRegistrationAllowed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'galaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'alliances', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'units', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'technologies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'factions'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'universeId', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'name', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'description', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksStartingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastTickAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastRankingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'rankingInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickCurrent', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksAttack', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefense', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAlliance', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAllied', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionOffensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionDefensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPrivateGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPublicGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxAllianceGalaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorMetalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorCrystalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorStartCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'resourcePointsDivider', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isActive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isClosed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'closedAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isRegistrationAllowed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'galaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'alliances', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'units', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'technologies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'factions'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'universeId', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'name', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'description', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksStartingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastTickAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastRankingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'rankingInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickCurrent', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksAttack', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefense', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAlliance', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAllied', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionOffensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionDefensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPrivateGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPublicGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxAllianceGalaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanBlockerMetalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanBlockerCrystalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanRelayMetalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'scanRelayCrystalCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorMetalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorCrystalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorStartCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'resourcePointsDivider', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isActive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isClosed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'closedAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isRegistrationAllowed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'galaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'alliances', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'units', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'technologies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'factions'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'universeId', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'name', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'description', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksStartingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastTickAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'lastRankingAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'rankingInterval', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'tickCurrent', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksAttack', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefense', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAlliance', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'ticksDefenseAllied', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionOffensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxTicksMissionDefensive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPrivateGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxPublicGalaxyPlayers', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'maxAllianceGalaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorMetalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorCrystalIncome', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorStartCost', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'resourcePointsDivider', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isActive', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isClosed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'closedAt', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'isRegistrationAllowed', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'galaxies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'alliances', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'units', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'technologies', '' . "\0" . 'GC\\Universe\\Model\\Universe' . "\0" . 'factions'];
     }
 
     /**
@@ -521,94 +521,6 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function getScanBlockerMetalCost(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScanBlockerMetalCost', []);
-
-        return parent::getScanBlockerMetalCost();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setScanBlockerMetalCost(int $scanBlockerMetalCost): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setScanBlockerMetalCost', [$scanBlockerMetalCost]);
-
-        parent::setScanBlockerMetalCost($scanBlockerMetalCost);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getScanBlockerCrystalCost(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScanBlockerCrystalCost', []);
-
-        return parent::getScanBlockerCrystalCost();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setScanBlockerCrystalCost(int $scanBlockerCrystalCost): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setScanBlockerCrystalCost', [$scanBlockerCrystalCost]);
-
-        parent::setScanBlockerCrystalCost($scanBlockerCrystalCost);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getScanRelayMetalCost(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScanRelayMetalCost', []);
-
-        return parent::getScanRelayMetalCost();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setScanRelayMetalCost(int $scanRelayMetalCost): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setScanRelayMetalCost', [$scanRelayMetalCost]);
-
-        parent::setScanRelayMetalCost($scanRelayMetalCost);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getScanRelayCrystalCost(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScanRelayCrystalCost', []);
-
-        return parent::getScanRelayCrystalCost();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setScanRelayCrystalCost(int $scanRelayCrystalCost): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setScanRelayCrystalCost', [$scanRelayCrystalCost]);
-
-        parent::setScanRelayCrystalCost($scanRelayCrystalCost);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getTicksDefenseAlliance(): int
     {
 
@@ -862,12 +774,12 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function createUnit(string $name, \GC\Faction\Model\Faction $faction): \GC\Unit\Model\Unit
+    public function createUnit(string $name, \GC\Faction\Model\Faction $faction, string $group): \GC\Unit\Model\Unit
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'createUnit', [$name, $faction]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'createUnit', [$name, $faction, $group]);
 
-        return parent::createUnit($name, $faction);
+        return parent::createUnit($name, $faction, $group);
     }
 
     /**
@@ -923,6 +835,17 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayers', []);
 
         return parent::getPlayers();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlayerCount(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerCount', []);
+
+        return parent::getPlayerCount();
     }
 
     /**

@@ -86,7 +86,8 @@ final class UniverseServiceProvider implements ServiceProviderInterface
             $application->add(new TickCommand(
                 $container->offsetGet(UniverseRepository::class),
                 $container->offsetGet(EntityManager::class),
-                $container->offsetGet(LoggerInterface::class)
+                $container->offsetGet(LoggerInterface::class),
+                $container->offsetGet('baseDir')
             ));
 
             return $application;

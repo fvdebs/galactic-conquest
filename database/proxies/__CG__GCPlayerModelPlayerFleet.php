@@ -64,10 +64,10 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionTypeOriginal', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'number', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionTypeOriginal', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionTypeOriginal', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetId', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'number', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOrbit', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isOffensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isDefensive', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isStationary', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'isMovable', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionType', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'missionTypeOriginal', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionCompleted', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'ticksLeftUntilMissionReach', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'player', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'targetPlayer', '' . "\0" . 'GC\\Player\\Model\\PlayerFleet' . "\0" . 'playerFleetUnits'];
     }
 
     /**
@@ -186,6 +186,17 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerFleetId', []);
 
         return parent::getPlayerFleetId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNumber(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNumber', []);
+
+        return parent::getNumber();
     }
 
     /**

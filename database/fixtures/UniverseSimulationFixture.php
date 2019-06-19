@@ -17,6 +17,14 @@ use GC\Unit\Model\Unit;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
 
+use function array_rand;
+use function count;
+use function in_array;
+use function json_encode;
+use function password_hash;
+use function random_int;
+use function round;
+
 class UniverseSimulationFixture extends AbstractFixture
 {
     /**
@@ -162,7 +170,7 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->manager = $manager;
 
         // config
-        $galaxyAndAlliancesMultiplier = 10;
+        $galaxyAndAlliancesMultiplier = 100;
         $universes = ['Sirius', 'Eridanus', 'Starman'];
         $universesPermanentPlayersAppliedTo = ['Sirius', 'Eridanus'];
         $this->createPermanentUser('John Doe', 'example@example.org');
@@ -178,7 +186,7 @@ class UniverseSimulationFixture extends AbstractFixture
 
             $universe = $this->createRandomGalaxiesAndAlliances($universe, $galaxyAndAlliancesMultiplier);
 
-            if (\in_array($universeName, $universesPermanentPlayersAppliedTo)) {
+            if (in_array($universeName, $universesPermanentPlayersAppliedTo)) {
                 $universe = $this->createPermanentPlayersAndAssignToUniverse($universe);
                 $universe->setTickInterval(5);
             }
@@ -237,7 +245,7 @@ class UniverseSimulationFixture extends AbstractFixture
     private function createRandomGalaxiesAndAlliances(Universe $universe, int $galaxyAndAlliancesMultiplier): Universe
     {
         for ($i = 0; $i < $galaxyAndAlliancesMultiplier; $i++) {
-            switch (\random_int(1, 6)) {
+            switch (random_int(1, 6)) {
                 case 1:
                 case 2:
                 case 3:
@@ -294,7 +302,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function randomValueFrom(array $array)
     {
-        $key = \array_rand($array);
+        $key = array_rand($array);
 
         return $array[$key];
     }
@@ -306,7 +314,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomPrivateGalaxyPlayerValue(Universe $universe): int
     {
-        return \random_int(4, $universe->getMaxPrivateGalaxyPlayers());
+        return random_int(4, $universe->getMaxPrivateGalaxyPlayers());
     }
 
     /**
@@ -316,7 +324,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomAllianceGalaxyValue(Universe $universe): int
     {
-        return \random_int(1, $universe->getMaxAllianceGalaxies());
+        return random_int(1, $universe->getMaxAllianceGalaxies());
     }
 
     /**
@@ -326,7 +334,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomPublicGalaxyPlayerValue(Universe $universe): int
     {
-        return \random_int(5, $universe->getMaxPublicGalaxyPlayers());
+        return random_int(5, $universe->getMaxPublicGalaxyPlayers());
     }
 
     /**
@@ -334,7 +342,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomExtractorValue(): int
     {
-        return \random_int(50, 500);
+        return random_int(50, 500);
     }
 
     /**
@@ -342,7 +350,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomNumberOfGalaxyCreationPerIteration(): int
     {
-        return \random_int(1, 4);
+        return random_int(1, 4);
     }
 
     /**
@@ -350,7 +358,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomResourceValue(): int
     {
-        return \random_int(5000000, 50000000);
+        return random_int(5000000, 50000000);
     }
 
     /**
@@ -358,7 +366,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomResourceProductionValue(): int
     {
-        return \random_int(1000, 10000);
+        return random_int(1000, 10000);
     }
 
     /**
@@ -366,7 +374,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomTicksValue(): int
     {
-        return \random_int(2, 10);
+        return random_int(2, 10);
     }
 
     /**
@@ -374,7 +382,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomTechnologyCostValue(): int
     {
-        return \random_int(500, 2000000);
+        return random_int(500, 2000000);
     }
 
     /**
@@ -382,7 +390,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomUnitCostValue(): int
     {
-        return (int) \round(\random_int(10000, 250000), -4);
+        return (int) round(random_int(10000, 250000), -4);
     }
 
     /**
@@ -390,7 +398,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomTaxValue(): int
     {
-        return \random_int(0, 50);
+        return random_int(0, 50);
     }
 
     /**
@@ -422,7 +430,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createPassword(): string
     {
-        return \password_hash('secret', PASSWORD_DEFAULT);
+        return password_hash('secret', PASSWORD_DEFAULT);
     }
 
     /**
@@ -494,11 +502,11 @@ class UniverseSimulationFixture extends AbstractFixture
     private function fillUniverseWithRandomValues(Universe $universe): Universe
     {
         $universe->setDescription('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis.');
-        $universe->setExtractorCrystalIncome(\random_int(20, 100));
-        $universe->setExtractorMetalIncome(\random_int(20, 100));
-        $universe->setMaxAllianceGalaxies(\random_int(2, 6));
-        $universe->setMaxPrivateGalaxyPlayers(\random_int(5, 12));
-        $universe->setMaxPublicGalaxyPlayers($universe->getMaxPrivateGalaxyPlayers() + \random_int(3, 5));
+        $universe->setExtractorCrystalIncome(random_int(20, 100));
+        $universe->setExtractorMetalIncome(random_int(20, 100));
+        $universe->setMaxAllianceGalaxies(random_int(2, 6));
+        $universe->setMaxPrivateGalaxyPlayers(random_int(5, 12));
+        $universe->setMaxPublicGalaxyPlayers($universe->getMaxPrivateGalaxyPlayers() + random_int(3, 5));
         $universe->setRankingInterval($this->randomValueFrom([6, 12, 24]));
         $universe->setTickInterval($this->randomValueFrom([5, 10, 15]));
         $universe->setTicksStartingAt(new DateTime());
@@ -712,7 +720,7 @@ class UniverseSimulationFixture extends AbstractFixture
         $player->increaseCrystal($this->getRandomResourceValue());
 
         if ($this->randomBool()) {
-            $player->createPlayerCombatReport(\json_encode(['test' => 'todo']));
+            $player->createPlayerCombatReport(json_encode(['test' => 'todo']));
         }
 
         // add some technologies to player
@@ -724,13 +732,11 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->buildUnits($player, $randomUnits);
 
         // add movable fleets
-        $firstFleet = $player->createPlayerFleet();
-        $firstFleet->setIsMovable(true);
+        $firstFleet = $player->createPlayerFleet(true);
         $firstFleet->setIsDefensive(true);
         $firstFleet->setIsOffensive(true);
 
-        $secondFleet = $player->createPlayerFleet();
-        $secondFleet->setIsMovable(true);
+        $secondFleet = $player->createPlayerFleet(true);
         $secondFleet->setIsOffensive(true);
 
         return $player;
@@ -741,7 +747,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomUnits(): array
     {
-        $randomKeys = \array_rand($this->units, \random_int(3, \count($this->units)));
+        $randomKeys = array_rand($this->units, random_int(3, count($this->units)));
 
         $randoms = [];
         foreach ($randomKeys as $randomKey) {
@@ -757,7 +763,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomUnitQuantity(): int
     {
-        return \random_int(1, 500);
+        return random_int(1, 500);
     }
 
     /**
@@ -778,7 +784,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function getRandomPlayerTechnologies(): array
     {
-        $randomKeys =  \array_rand($this->playerTechnologies, \random_int(5, \count($this->playerTechnologies)));
+        $randomKeys =  array_rand($this->playerTechnologies, random_int(5, count($this->playerTechnologies)));
 
         $randoms = [];
         foreach ($randomKeys as $randomKey) {
@@ -1010,7 +1016,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createHumanUnitStationary(Universe $universe, string $name): Unit
     {
-        $unit = $universe->createUnit($name, $this->human, UNIT::GROUP_DEFENSE);
+        $unit = $universe->createUnit($name, $this->human, UNIT::GROUPING_DEFENSE);
         $unit->setIsStationary(true);
         $unit = $this->fillUnitWithRandomValues($unit);
 
@@ -1025,7 +1031,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createHumanUnit(Universe $universe, string $name): Unit
     {
-        $unit = $universe->createUnit($name, $this->human, UNIT::GROUP_OFFENSIVE);
+        $unit = $universe->createUnit($name, $this->human, UNIT::GROUPING_OFFENSIVE);
         $unit = $this->fillUnitWithRandomValues($unit);
 
         return $unit;
@@ -1039,7 +1045,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createHumanUnitScan(Universe $universe, string $name): Unit
     {
-        $unit = $universe->createUnit($name, $this->human, UNIT::GROUP_SCAN);
+        $unit = $universe->createUnit($name, $this->human, UNIT::GROUPING_SCAN);
         $unit->setIsStationary(true);
         $unit = $this->fillUnitWithRandomValues($unit);
 

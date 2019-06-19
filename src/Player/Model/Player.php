@@ -73,20 +73,6 @@ class Player
     /**
      * @var int
      *
-     * @Column(name="scan_relays", type="integer", nullable=false)
-     */
-    private $scanRelays;
-
-    /**
-     * @var int
-     *
-     * @Column(name="scan_blocker", type="integer", nullable=false)
-     */
-    private $scanBlocker;
-
-    /**
-     * @var int
-     *
      * @Column(name="alliance_scan_relays", type="integer", nullable=false)
      */
     private $allianceScanRelays;
@@ -214,8 +200,6 @@ class Player
         $this->galaxy = $galaxy;
         $this->metal = 5000;
         $this->crystal = 5000;
-        $this->scanRelays = 0;
-        $this->scanBlocker = 0;
         $this->allianceScanRelays = 0;
         $this->points = 0;
         $this->rankingPosition = 0;
@@ -224,10 +208,10 @@ class Player
         $this->isAdmiral = false;
         $this->isCommander = false;
 
-        $playerFleetStationary = $this->createPlayerFleet();
+        $playerFleetStationary = $this->createPlayerFleet(false);
         $playerFleetStationary->setIsStationary(true);
 
-        $playerFleetOrbit = $this->createPlayerFleet();
+        $playerFleetOrbit = $this->createPlayerFleet(false);
         $playerFleetOrbit->setIsOrbit(true);
 
         $this->calculatePoints();
@@ -295,22 +279,6 @@ class Player
     public function getExtractorCrystal(): int
     {
         return $this->extractorCrystal;
-    }
-
-    /**
-     * @return int
-     */
-    public function getScanRelays(): int
-    {
-        return $this->scanRelays;
-    }
-
-    /**
-     * @return int
-     */
-    public function getScanBlocker(): int
-    {
-        return $this->scanBlocker;
     }
 
     /**
@@ -1312,11 +1280,13 @@ class Player
     }
 
     /**
+     * @param bool $isMovable - default: false
+     *
      * @return \GC\Player\Model\PlayerFleet
      */
-    public function createPlayerFleet(): PlayerFleet
+    public function createPlayerFleet(bool $isMovable = false): PlayerFleet
     {
-        $playerFleet = new PlayerFleet($this);
+        $playerFleet = new PlayerFleet($this, $isMovable);
         $this->playerFleets->add($playerFleet);
 
         return $playerFleet;
