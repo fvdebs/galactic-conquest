@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Universe\Command;
 
 use Doctrine\ORM\EntityManager;
+use GC\Universe\Exception\UniverseNotFoundException;
 use GC\Universe\Model\Universe;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -82,7 +83,7 @@ final class TickCommand extends Command
     /**
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName(static::COMMAND_NAME)
             ->setDescription(static::COMMAND_DESCRIPTION)
@@ -101,42 +102,38 @@ final class TickCommand extends Command
      *
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->input = $input;
         $this->output = $output;
 
-        $universeId = $input->getArgument(static::ARGUMENT_UNIVERSE_ID);
-        if ($universeId === null) {
-            $this->spawnAsyncProcessesForTickCalculation();
-            return 0;
+        if (!$this->hasUniverseIdArgument()) {
+            return $this->spawnAsyncProcessesForUniverses();
         }
 
-        // from now on async
-        $start = $this->startMicrotime();
-
-        $universe = $this->universeRepository->findById((int) $universeId);
-
-        $this->startCalculationFor($universe);
-
-        $end = $this->endMicrotime($start);
-        $this->output->writeln(sprintf('%s overall (%s players) %s sec', $universe->getName(), $universe->getPlayerCount(), $end));
-
-        return 0;
+        // async
+        return $this->startCalculationFor(
+            $this->getUniverseIdArgument()
+        );
     }
+
 
     /**
      * @async
      *
-     * @param \GC\Universe\Model\Universe $universe
+     * @param int $universeId
      *
-     * @return void
+     * @return int
      */
-    protected function startCalculationFor(Universe $universe): void
+    protected function startCalculationFor(int $universeId): int
     {
-        $this->entityManager->getConnection()->beginTransaction();
-
         try {
+            $startUniverse = $this->startMicroTime();
+
+            $this->entityManager->getConnection()->beginTransaction();
+
+            $universe = $this->getUniverseById($universeId);
+
             if ($this->hasForceTickOption() || $universe->isTickCalculationNeeded()) {
                 $this->calculateTickOf($universe);
             }
@@ -145,47 +142,88 @@ final class TickCommand extends Command
                 $this->calculateRankingOf($universe);
             }
 
-            $start = $this->startMicrotime();
+            $start = $this->startMicroTime();
 
             $this->entityManager->flush();
             $this->entityManager->commit();
 
-            $end = $this->endMicrotime($start);
-            $this->output->writeln(sprintf('%s commit %s sec', $universe->getName(), $end));
+            $this->output('%s commit %s sec', [$universe->getName(), $this->endMicrotime($start)]);
+            $this->output('%s overall (%s players) %s sec', [$universe->getName(), $universe->getPlayerCount(), $this->endMicrotime($startUniverse)]);
 
         } catch (Throwable $throwable) {
             $this->entityManager->rollback();
             $this->logger->error($throwable);
             throw $throwable;
         }
+
+        return 0;
     }
 
     /**
-     * @return bool
+     * @param int $universeId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return \GC\Universe\Model\Universe
      */
-    protected function hasForceTickOption(): bool
+    protected function getUniverseById(int $universeId): Universe
     {
-        return $this->input->getOption(static::OPTION_FORCE_TICK) == true;
+        $universe = $this->universeRepository->findById($universeId);
+
+        if ($universe === null) {
+            throw UniverseNotFoundException::fromUniverseId($universeId);
+        }
+
+        return $universe;
     }
 
     /**
-     * @return bool
-     */
-    protected function hasForceRankingOption(): bool
-    {
-        return $this->input->getOption(static::OPTION_FORCE_RANKING) == true;
-    }
-
-    /**
+     * @param \GC\Universe\Model\Universe $universe
+     *
      * @return void
      */
-    protected function spawnAsyncProcessesForTickCalculation(): void
+    protected function calculateTickOf(Universe $universe): void
     {
-        $start = $this->startMicrotime();
+        $start = $this->startMicroTime();
+
+        $universe->tick();
+
+        $this->output('%s tick %s sec', [
+            $universe->getName(),
+            $this->endMicrotime($start)
+        ]);
+    }
+
+    /**
+     * @param \GC\Universe\Model\Universe $universe
+     *
+     * @return void
+     */
+    protected function calculateRankingOf(Universe $universe): void
+    {
+        $start = $this->startMicroTime();
+
+        $universe->generateAllianceAndGalaxyRanking();
+
+        $this->output('%s ranking %s sec', [
+            $universe->getName(),
+            $this->endMicrotime($start)]
+        );
+    }
+
+    /**
+     * @return int
+     */
+    protected function spawnAsyncProcessesForUniverses(): int
+    {
+        $start = $this->startMicroTime();
 
         $processList = [];
         foreach ($this->universeRepository->findStartedAndActiveUniverses() as $universe) {
-            $process = new Process($this->getAsyncProcessArgumentsFor($universe));
+            $process = new Process(
+                $this->getAsyncProcessArgumentsFor($universe)
+            );
+
             $process->start();
 
             $processList[] = $process;
@@ -196,11 +234,14 @@ final class TickCommand extends Command
                 usleep(200000);
             }
 
-            $this->output->write($process->getOutput());
+            $this->output($process->getOutput());
         }
 
-        $end = $this->endMicrotime($start);
-        $this->output->writeln(sprintf('overall %s sec', $end));
+        $this->output('overall %s sec', [
+            $this->endMicrotime($start)
+        ]);
+
+        return 0;
     }
 
     /**
@@ -239,7 +280,7 @@ final class TickCommand extends Command
     /**
      * @return float
      */
-    protected function startMicrotime(): float
+    protected function startMicroTime(): float
     {
         return microtime(true);
     }
@@ -249,34 +290,58 @@ final class TickCommand extends Command
      *
      * @return float
      */
-    protected function endMicrotime(float $start): float
+    protected function endMicroTime(float $start): float
     {
         return round(microtime(true) - $start, 2);
     }
 
     /**
-     * @param \GC\Universe\Model\Universe $universe
+     * @param string $text
+     * @param string[] $arguments
      *
      * @return void
      */
-    protected function calculateTickOf(Universe $universe): void
+    protected function output(string $text, array $arguments = []): void
     {
-        $start = $this->startMicrotime();
-        $universe->tick();
-        $end = $this->endMicrotime($start);
-        $this->output->writeln(sprintf('%s tick %s sec', $universe->getName(), $end));
+        $this->output->writeln(sprintf($text, ...$arguments));
     }
 
     /**
-     * @param \GC\Universe\Model\Universe $universe
-     *
-     * @return void
+     * @return bool
      */
-    protected function calculateRankingOf(Universe $universe): void
+    protected function hasUniverseIdArgument(): bool
     {
-        $start = $this->startMicrotime();
-        $universe->generateAllianceAndGalaxyRanking();
-        $end = $this->endMicrotime($start);
-        $this->output->writeln(sprintf('%s ranking %s sec', $universe->getName(), $end));
+        return $this->input->getArgument(static::ARGUMENT_UNIVERSE_ID) !== null;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getUniverseIdArgument(): int
+    {
+        $universeIdOriginal = $this->input->getArgument(static::ARGUMENT_UNIVERSE_ID);
+        $universeId = (int) $universeIdOriginal;
+
+        if ($universeId === 0) {
+            throw UniverseNotFoundException::fromInvalidUniverseId($universeIdOriginal);
+        }
+
+       return $universeId;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasForceTickOption(): bool
+    {
+        return $this->input->getOption(static::OPTION_FORCE_TICK) === true;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasForceRankingOption(): bool
+    {
+        return $this->input->getOption(static::OPTION_FORCE_RANKING) === true;
     }
 }

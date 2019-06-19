@@ -6,6 +6,7 @@ namespace GC\App;
 
 use GC\App\Command\ClearCacheCommand;
 use GC\App\Command\CreateHandlerCommand;
+use GC\App\Command\SetupCommand;
 use GC\App\Http\ErrorResponseFactory;
 use GC\App\Middleware\AuthorizationMiddleware;
 use GC\App\Middleware\SetCurrentPlayerMiddleware;
@@ -48,6 +49,7 @@ final class AppServiceProvider implements ServiceProviderInterface
         if ($pimple->offsetGet('config.isCli')) {
             $this->provideClearCacheCommand($pimple);
             $this->provideCreateHandlerCommand($pimple);
+            $this->provideSetupCommand($pimple);
         }
     }
 
@@ -215,6 +217,26 @@ final class AppServiceProvider implements ServiceProviderInterface
             $application->add(new CreateHandlerCommand(
                 $container->offsetGet('baseDir'),
                 $container->offsetGet('renderer')
+            ));
+
+            return $application;
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function provideSetupCommand(Container $container): void
+    {
+        $container->extend(Application::class, function (Application $application, Container $container) {
+            $parameters = $container->offsetGet('config.doctrine-config');
+            $application->add(new SetupCommand(
+                $parameters['host'],
+                $parameters['dbname'],
+                $parameters['user'],
+                $parameters['password']
             ));
 
             return $application;
