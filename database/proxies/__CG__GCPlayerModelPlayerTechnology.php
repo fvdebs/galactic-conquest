@@ -235,17 +235,6 @@ class PlayerTechnology extends \GC\Player\Model\PlayerTechnology implements \Doc
     /**
      * {@inheritDoc}
      */
-    public function decreaseTicksLeft(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'decreaseTicksLeft', []);
-
-        parent::decreaseTicksLeft();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function isInConstruction(): bool
     {
 

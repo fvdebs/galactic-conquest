@@ -52,9 +52,23 @@ class Player
     /**
      * @var int
      *
+     * @Column(name="metal_per_tick", type="integer", nullable=false)
+     */
+    private $metalPerTick;
+
+    /**
+     * @var int
+     *
      * @Column(name="crystal", type="integer", nullable=false)
      */
     private $crystal;
+
+    /**
+     * @var int
+     *
+     * @Column(name="crystal_per_tick", type="integer", nullable=false)
+     */
+    private $crystalPerTick;
 
     /**
      * @var int
@@ -69,13 +83,6 @@ class Player
      * @Column(name="extractor_crystal", type="integer", nullable=false)
      */
     private $extractorCrystal;
-
-    /**
-     * @var int
-     *
-     * @Column(name="alliance_scan_relays", type="integer", nullable=false)
-     */
-    private $allianceScanRelays;
 
     /**
      * @var int
@@ -199,8 +206,9 @@ class Player
         $this->galaxyPosition = $galaxy->getNextFreeGalaxyPosition();
         $this->galaxy = $galaxy;
         $this->metal = 5000;
+        $this->metalPerTick = 0;
         $this->crystal = 5000;
-        $this->allianceScanRelays = 0;
+        $this->crystalPerTick = 0;
         $this->points = 0;
         $this->rankingPosition = 0;
         $this->extractorMetal = 0;
@@ -213,8 +221,6 @@ class Player
 
         $playerFleetOrbit = $this->createPlayerFleet(false);
         $playerFleetOrbit->setIsOrbit(true);
-
-        $this->calculatePoints();
     }
 
     /**
@@ -260,9 +266,25 @@ class Player
     /**
      * @return int
      */
+    public function getMetalPerTick(): int
+    {
+        return $this->metalPerTick;
+    }
+
+    /**
+     * @return int
+     */
     public function getCrystal(): int
     {
         return $this->crystal;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCrystalPerTick(): int
+    {
+        return $this->crystalPerTick;
     }
 
     /**
@@ -279,14 +301,6 @@ class Player
     public function getExtractorCrystal(): int
     {
         return $this->extractorCrystal;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAllianceScanRelays(): int
-    {
-        return $this->allianceScanRelays;
     }
 
     /**
@@ -359,6 +373,8 @@ class Player
 
     /**
      * @param \GC\Galaxy\Model\Galaxy $galaxy
+     *
+     * @return void
      */
     public function relocate(Galaxy $galaxy): void
     {
@@ -382,6 +398,7 @@ class Player
     public function buildMetalExtractors(int $number): void
     {
         $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
+
         $this->extractorMetal += $number;
     }
 
@@ -393,6 +410,7 @@ class Player
     public function buildCrystalExtractors(int $number): void
     {
         $this->decreaseMetal($this->calculateMetalCostForExtractors($number, $this->getNumberOfExtractors()));
+
         $this->extractorCrystal += $number;
     }
 
@@ -443,69 +461,6 @@ class Player
         }
 
         return $numberOfPossibleExtractors;
-    }
-
-    /**
-     * @return int
-     */
-    public function calculatePoints(): int
-    {
-        $this->points = 0;
-        $this->points += $this->calculateResourcePoints();
-        $this->points += $this->calculateExtractorPoints();
-        $this->points += $this->calculateTechnologyPoints();
-        $this->points += $this->calculateUnitPoints();
-
-        return $this->points;
-    }
-
-    /**
-     * @return int
-     */
-    protected function calculateResourcePoints(): int
-    {
-        $calculation = ($this->metal + $this->crystal) / $this->universe->getResourcePointsDivider();
-
-        return (int) round($calculation);
-    }
-
-    /**
-     * @return int
-     */
-    protected function calculateExtractorPoints(): int
-    {
-        $calculation = ($this->getExtractorMetal() + $this->getExtractorCrystal()) * $this->universe->getExtractorPoints();
-
-        return (int) round($calculation);
-    }
-
-    /**
-     * @return int
-     */
-    protected function calculateTechnologyPoints(): int
-    {
-        $calculation = 0;
-
-        foreach ($this->getPlayerTechnologies() as $playerTechnology) {
-            $calculation += $playerTechnology->getTechnology()->getCrystalCost();
-            $calculation += $playerTechnology->getTechnology()->getMetalCost();
-        }
-
-        return (int) round($calculation);
-    }
-
-    /**
-     * @return int
-     */
-    protected function calculateUnitPoints(): int
-    {
-        $calculation = 0;
-
-        foreach ($this->getPlayerFleets() as $playerFleet) {
-            $calculation += $playerFleet->calculateUnitPoints();
-        }
-
-        return (int) round($calculation);
     }
 
     /**
@@ -645,20 +600,6 @@ class Player
     public function calculateCrystalTaxPerDay(): int
     {
         return $this->galaxy->calculateCrystalTaxFor($this) * $this->universe->calculateTicksPerDay();
-    }
-
-    /**
-     * @return void
-     */
-    public function increaseResourceIncomePerTick(): void
-    {
-        $this->increaseMetal(
-            $this->calculateMetalIncomePerTick() - $this->calculateMetalTaxPerTick()
-        );
-
-        $this->increaseCrystal(
-            $this->calculateCrystalIncomePerTick() - $this->calculateCrystalTaxPerTick()
-        );
     }
 
     /**
@@ -849,33 +790,6 @@ class Player
     public function getPlayerUnitConstructions(): array
     {
         return $this->playerUnitConstructions->getValues();
-    }
-
-    /**
-     * @return void
-     */
-    public function finishUnitConstructions(): void
-    {
-        foreach ($this->getPlayerUnitConstructions() as $playerUnitConstruction) {
-            if ($playerUnitConstruction->getTicksLeft() > 0) {
-                $playerUnitConstruction->decreaseTicksLeft();
-            }
-
-            if ($playerUnitConstruction->getTicksLeft() === 0) {
-                if ($playerUnitConstruction->getUnit()->isStationary()) {
-                    $playerFleet = $this->getPlayerFleetStationary();
-                } else {
-                    $playerFleet = $this->getPlayerFleetOrbit();
-                }
-
-                $playerFleet->increaseUnitQuantity(
-                    $playerUnitConstruction->getUnit(),
-                    $playerUnitConstruction->getQuantity()
-                );
-
-                $this->playerUnitConstructions->removeElement($playerUnitConstruction);
-            }
-        }
     }
 
     /**
@@ -1179,16 +1093,6 @@ class Player
         }
 
         return true;
-    }
-
-    /**
-     * @return void
-     */
-    public function finishPlayerTechnologyConstructions(): void
-    {
-        foreach ($this->getPlayerTechnologiesInConstruction() as $playerTechnology) {
-            $playerTechnology->decreaseTicksLeft();
-        }
     }
 
     /**
@@ -1570,27 +1474,5 @@ class Player
         }
 
         return false;
-    }
-
-    /**
-     *
-     * @return void
-     */
-    public function movePlayerFleetsForward(): void
-    {
-        foreach ($this->getPlayerFleetsMovable() as $movablePlayerFleet) {
-            $movablePlayerFleet->decreaseTicksLeft();
-        }
-    }
-
-    /**
-     *
-     * @return void
-     */
-    public function clearOrRecallPlayerFleets(): void
-    {
-        foreach ($this->getPlayerFleetsMovable() as $movablePlayerFleet) {
-            $movablePlayerFleet->clearOrRecall();
-        }
     }
 }

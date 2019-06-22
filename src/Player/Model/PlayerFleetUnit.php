@@ -9,6 +9,7 @@ use GC\Unit\Model\Unit;
 /**
  * @Table(name="player_fleet_unit")
  * @Entity
+ * @Table(name="player_fleet_unit",uniqueConstraints={@UniqueConstraint(name="unit_constraint", columns={"unit_id", "player_fleet_id"})})
  */
 class PlayerFleetUnit
 {

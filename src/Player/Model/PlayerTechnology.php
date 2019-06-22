@@ -6,6 +6,8 @@ namespace GC\Player\Model;
 
 use GC\Technology\Model\Technology;
 
+use function round;
+
 /**
  * @Table(name="player_technology")
  * @Entity
@@ -74,7 +76,7 @@ class PlayerTechnology
     /**
      * @return \GC\Technology\Model\Technology
      */
-    public function getTechnology():Technology
+    public function getTechnology(): Technology
     {
         return $this->technology;
     }
@@ -98,15 +100,7 @@ class PlayerTechnology
 
         $tickToBuild = ($this->getTechnology()->getTicksToBuild() - $this->getTicksLeft()) / $this->getTechnology()->getTicksToBuild();
 
-        return (int) \round($tickToBuild * 100);
-    }
-
-    /**
-     * @return void
-     */
-    public function decreaseTicksLeft(): void
-    {
-        --$this->ticksLeft;
+        return (int) round($tickToBuild * 100);
     }
 
     /**

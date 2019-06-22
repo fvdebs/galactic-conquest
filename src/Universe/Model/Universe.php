@@ -11,11 +11,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use GC\Alliance\Model\Alliance;
 use GC\Faction\Model\Faction;
 use GC\Galaxy\Model\Galaxy;
-use GC\Player\Model\Player;
 use GC\Technology\Model\Technology;
 use GC\Unit\Model\Unit;
 
-use function array_reverse;
 use function floor;
 use function shuffle;
 use function strtolower;
@@ -854,6 +852,14 @@ class Universe
     }
 
     /**
+     * @return int
+     */
+    public function getGalaxyCount(): int
+    {
+        return $this->galaxies->count();
+    }
+
+    /**
      * @return \GC\Player\Model\Player[]
      */
     public function getPlayers(): array
@@ -899,6 +905,14 @@ class Universe
     public function getAlliances(): array
     {
         return $this->alliances->getValues();
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllianceCount(): int
+    {
+        return $this->alliances->count();
     }
 
     /**
@@ -960,82 +974,7 @@ class Universe
         return !($nextTick > new DateTime());
     }
 
-    /**
-     *
-     * @return array
-     */
-    protected function createCombatTransfers(): array
-    {
-        return [];
-    }
-
-    /**
-     * @throws \Exception
-     *
-     * @return void
-     */
-    public function tick(): void
-    {
-        $this->lastTickAt = new DateTime();
-        ++$this->tickCurrent;
-
-        $players = $this->getPlayers();
-        $galaxies = $this->getGalaxies();
-        $alliances = $this->getAlliances();
-
-        foreach ($players as $player) {
-            $player->increaseResourceIncomePerTick();
-            $player->finishPlayerTechnologyConstructions();
-            $player->finishUnitConstructions();
-            $player->movePlayerFleetsForward();
-        }
-
-        foreach ($this->createCombatTransfers() as $combat) {
-            // $combatReport = $combatService->calculate($combat)
-            // combatReport Add
-        }
-
-        foreach ($players as $player) {
-            $player->clearOrRecallPlayerFleets();
-            $player->calculatePoints();
-
-        }
-
-        foreach ($galaxies as $galaxy) {
-            $galaxy->finishTechnologyConstructions();
-            $galaxy->increaseExtractorPointsPerTick();
-            $galaxy->increaseResourceIncomePerTick();
-            $galaxy->calculateAveragePlayerPoints();
-        }
-
-        foreach ($alliances as $alliance) {
-            $alliance->finishTechnologyConstructions();
-            $alliance->increaseExtractorPointsPerTick();
-            $alliance->increaseResourceIncomePerTick();
-            $alliance->calculateAverageGalaxyPoints();
-        }
-
-        $this->generatePlayerRanking();
-    }
-
-    /**
-     * @return void
-     */
-    public function generatePlayerRanking(): void
-    {
-        $players = $this->getPlayers();
-        usort($players, function (Player $playerFirst, Player $playerSecond) {
-            return $playerFirst->getPoints() <=> $playerSecond->getPoints();
-        });
-
-        $players = array_reverse($players);
-        foreach ($players as $index => $player) {
-            $rankingPosition = $index + 1;
-            $player->setRankingPosition($rankingPosition);
-        }
-    }
-
-    /**
+    /** @TODO
      * @throws \Exception
      *
      * @return bool
@@ -1049,53 +988,6 @@ class Universe
         $nextRankingAt->add($interval);
 
         return !($nextRankingAt > new DateTime());
-    }
-
-    /**
-     * @throws \Exception
-     *
-     * @return void
-     */
-    public function generateAllianceAndGalaxyRanking(): void
-    {
-        $this->lastRankingAt = new DateTime();
-
-        $this->generateGalaxyRanking();
-        $this->generateAllianceRanking();
-    }
-
-    /**
-     * @return void
-     */
-    private function generateGalaxyRanking(): void
-    {
-        $rankedGalaxies = $this->getGalaxies();
-        usort($rankedGalaxies, function (Galaxy $galaxyFirst, Galaxy $galaxySecond) {
-            return $galaxyFirst->getExtractorPoints() <=> $galaxySecond->getExtractorPoints();
-        });
-
-        $rankedGalaxies = array_reverse($rankedGalaxies);
-        foreach ($rankedGalaxies as $index => $rankedGalaxy) {
-            $rankingPosition = $index + 1;
-            $rankedGalaxy->setRankingPosition($rankingPosition);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function generateAllianceRanking(): void
-    {
-        $rankedAlliances = $this->getAlliances();
-        usort($rankedAlliances, function (Alliance $allianceFirst, Alliance $allianceSecond) {
-            return $allianceFirst->getExtractorPoints() <=> $allianceSecond->getExtractorPoints();
-        });
-
-        $rankedAlliances = array_reverse($rankedAlliances);
-        foreach ($rankedAlliances as $index => $rankedAlliance) {
-            $rankingPosition = $index + 1;
-            $rankedAlliance->setRankingPosition($rankingPosition);
-        }
     }
 
     /**

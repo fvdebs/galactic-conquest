@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -95,23 +96,31 @@ final class SetupCommand extends Command
 
         $this->style = new SymfonyStyle($input, $output);
 
-        $this->style->section('Drop and create database');
+        $this->style->success('Drop database if exists');
+        $this->style->success('Create database');
         $this->dropAndCreateDatabase();
 
-        $this->style->section('Create scheme');
-        $this->executeCommand('orm:schema-tool:create');
+        $this->style->success('Create database scheme');
+        $this->executeCommand('orm:schema-tool:create', [], true);
 
-        $this->style->section('Run fixtures and create universe simulation');
+        $this->style->success('Create doctrine proxies');
+        $this->executeCommand('orm:generate-proxies', [], true);
+
+        $this->style->success('Clearing cache', [], true);
+        $this->executeCommand('app:cache-clear');
+
+        $this->style->success('Create universe simulation');
         $this->executeCommand('app:doctrine:fixtures');
 
-        $this->style->section('Run tick');
+        $this->style->success('Running Ticks');
         for ($counter = 1; $counter <= $this->getNumberOfTicksArgument(); $counter++) {
-            $this->style->note(sprintf('Tick %s', $counter));
-            $this->executeCommand('app:tick:run', ['--force-tick', '--force-ranking']);
+            $this->style->newLine();
+            $this->style->title(sprintf('Tick %s', $counter));
+            $this->executeCommand('app:tick:run', ['--force' => true]);
         }
 
-        $this->style->section('Cache clear');
-        $this->executeCommand('app:cache-clear');
+        $this->style->newLine();
+        $this->style->success('Setup Completed');
 
         return 0;
     }
@@ -134,13 +143,19 @@ final class SetupCommand extends Command
     /**
      * @param string $commandName
      * @param string[] $arguments
+     * @param bool $verbose
      *
      * @return void
      */
-    protected function executeCommand(string $commandName, array $arguments = []): void
+    protected function executeCommand(string $commandName, array $arguments = [], bool $verbose = false): void
     {
-        $command = $this->getApplication()->find($commandName);
-        $command->run(new ArrayInput($arguments), $this->output);
+        $command = $this->getApplication()
+            ->find($commandName);
+
+        $command->run(
+            new ArrayInput($arguments),
+            $verbose ? new NullOutput() : $this->output
+        );
     }
 
     /**

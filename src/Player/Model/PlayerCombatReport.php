@@ -6,6 +6,9 @@ namespace GC\Player\Model;
 
 use DateTime;
 
+use function str_shuffle;
+use function substr;
+
 /**
  * @Table(name="player_combat_report")
  * @Entity
@@ -110,7 +113,7 @@ class PlayerCombatReport
      */
     public function generateExternalId(): string
     {
-        $this->externalId = \substr(\str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 15);
+        $this->externalId = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 15);
 
         return $this->externalId;
     }

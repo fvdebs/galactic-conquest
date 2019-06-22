@@ -6,6 +6,8 @@ namespace GC\Player\Model;
 
 use GC\Unit\Model\Unit;
 
+use function round;
+
 /**
  * @Table(name="player_unit_construction")
  * @Entity
@@ -105,20 +107,12 @@ class PlayerUnitConstruction
     }
 
     /**
-     * @return void
-     */
-    public function decreaseTicksLeft(): void
-    {
-        --$this->ticksLeft;
-    }
-
-    /**
      * @return int
      */
     public function calculateProgress(): int
     {
         $tickToBuild = ($this->getUnit()->getTicksToBuild() - $this->getTicksLeft()) / $this->getUnit()->getTicksToBuild();
 
-        return (int) \round($tickToBuild * 100);
+        return (int) round($tickToBuild * 100);
     }
 }

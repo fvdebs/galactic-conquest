@@ -15,12 +15,10 @@ use GC\Universe\Model\Universe;
 class Technology
 {
     public const FEATURE_ALLIANCE_FINANCE = 'alliance.finance';
-
     public const FEATURE_GALAXY_FINANCE = 'galaxy.finance';
     public const FEATURE_GALAXY_TACTIC = 'galaxy.tactic';
     public const FEATURE_GALAXY_TACTIC_INCOMING = 'galaxy.tactic.incoming';
     public const FEATURE_GALAXY_TACTIC_FLEET = 'galaxy.tactic.fleet';
-
     public const FEATURE_PLAYER_TRADE = 'player.trade';
 
     /**

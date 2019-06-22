@@ -10,6 +10,9 @@ use GC\Player\Model\Player;
 use GC\Technology\Model\Technology;
 use GC\Universe\Model\Universe;
 
+use function round;
+use function count;
+
 /**
  * @Table(name="alliance")
  * @Entity(repositoryClass="GC\Alliance\Model\AllianceRepository")
@@ -73,13 +76,6 @@ class Alliance
      * @Column(name="tax_crystal", type="integer", nullable=false)
      */
     private $taxCrystal;
-
-    /**
-     * @var int
-     *
-     * @Column(name="scan_relays", type="integer", nullable=false)
-     */
-    private $scanRelays;
 
     /**
      * @var int
@@ -150,7 +146,6 @@ class Alliance
         $this->crystal = 0;
         $this->taxMetal = 0;
         $this->taxCrystal = 0;
-        $this->scanRelays = 0;
         $this->extractorPoints = 0;
         $this->rankingPosition = 0;
         $this->averagePoints = 0;
@@ -252,14 +247,6 @@ class Alliance
     }
 
     /**
-     * @return int
-     */
-    public function getCrystal(): int
-    {
-        return $this->crystal;
-    }
-
-    /**
      * @param int $crystal
      *
      * @return void
@@ -303,24 +290,6 @@ class Alliance
     public function setTaxCrystal(int $taxCrystal): void
     {
         $this->taxCrystal = $taxCrystal;
-    }
-
-    /**
-     * @return int
-     */
-    public function getScanRelays(): int
-    {
-        return $this->scanRelays;
-    }
-
-    /**
-     * @param int $scanRelays
-     *
-     * @return void
-     */
-    public function setScanRelays(int $scanRelays): void
-    {
-        $this->scanRelays = $scanRelays;
     }
 
     /**
@@ -424,42 +393,6 @@ class Alliance
     }
 
     /**
-     * @return int
-     */
-    public function calculateExtractorPointsPerTick(): int
-    {
-        $extractorPoints = 0;
-        foreach ($this->getGalaxies() as $galaxy) {
-            $extractorPoints += $galaxy->getExtractorPoints();
-        }
-
-        return $extractorPoints;
-    }
-
-    /**
-     * @return void
-     */
-    public function increaseExtractorPointsPerTick(): void
-    {
-        $this->extractorPoints += $this->calculateExtractorPointsPerTick();
-    }
-
-    /**
-     * @return void
-     */
-    public function calculateAverageGalaxyPoints(): void
-    {
-        $averagePoints = 0;
-        foreach ($this->getGalaxies() as $galaxy) {
-            $averagePoints += $galaxy->getAveragePoints();
-        }
-
-        $calculation = $averagePoints / \count($this->getGalaxies());
-
-        $this->averagePoints = (int) \round($calculation);
-    }
-
-    /**
      * @return \GC\Player\Model\Player|null
      */
     public function getAdmiral(): ?Player
@@ -533,7 +466,7 @@ class Alliance
     {
         $calculation = ($galaxy->calculateMetalIncomePerTick() / 100) * $this->taxMetal;
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -545,7 +478,7 @@ class Alliance
     {
         $calculation = ($galaxy->calculateCrystalIncomePerTick() / 100) * $this->taxCrystal;
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -572,15 +505,6 @@ class Alliance
         }
 
         return $income;
-    }
-
-    /**
-     * @return void
-     */
-    public function increaseResourceIncomePerTick(): void
-    {
-        $this->increaseMetal($this->calculateMetalIncomePerTick());
-        $this->increaseCrystal($this->calculateCrystalIncomePerTick());
     }
 
     /**
@@ -686,18 +610,6 @@ class Alliance
         }
 
         return false;
-    }
-
-    /**
-     * @return void
-     */
-    public function finishTechnologyConstructions(): void
-    {
-        foreach ($this->getAllianceTechnologies() as $allianceTechnology) {
-            if ($allianceTechnology->getTicksLeft() > 0) {
-                $allianceTechnology->decreaseTicksLeft();
-            }
-        }
     }
 
     /**

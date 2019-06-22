@@ -12,6 +12,10 @@ use GC\Technology\Model\Technology;
 use GC\Universe\Model\Universe;
 use GC\User\Model\User;
 
+use function round;
+use function str_shuffle;
+use function substr;
+
 /**
  * @Table(name="galaxy")
  * @Entity(repositoryClass="GC\Galaxy\Model\GalaxyRepository")
@@ -54,6 +58,20 @@ class Galaxy
      * @Column(name="crystal", type="integer", nullable=false)
      */
     private $crystal;
+
+    /**
+     * @var int
+     *
+     * @Column(name="metal_per_tick", type="integer", nullable=false)
+     */
+    private $metalPerTick;
+
+    /**
+     * @var int
+     *
+     * @Column(name="crystal_per_tick", type="integer", nullable=false)
+     */
+    private $crystalPerTick;
 
     /**
      * @var int
@@ -134,6 +152,8 @@ class Galaxy
         $this->number = $universe->getNextFreeGalaxyNumber();
         $this->metal = 0;
         $this->crystal = 0;
+        $this->metalPerTick = 0;
+        $this->crystalPerTick = 0;
         $this->taxCrystal = 0;
         $this->taxMetal = 0;
         $this->extractorPoints = 0;
@@ -213,6 +233,22 @@ class Galaxy
     public function setMetal(int $metal): void
     {
         $this->metal = $metal;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMetalPerTick(): int
+    {
+        return $this->metalPerTick;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCrystalPerTick(): int
+    {
+        return $this->crystalPerTick;
     }
 
     /**
@@ -360,7 +396,7 @@ class Galaxy
      */
     public function generateGalaxyPassword(): string
     {
-        $this->password = \substr(\str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
+        $this->password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
 
         return $this->password;
     }
@@ -447,26 +483,6 @@ class Galaxy
     }
 
     /**
-     * @return void
-     */
-    public function increaseExtractorPointsPerTick(): void
-    {
-        $this->extractorPoints += $this->calculateAverageExtractors();
-    }
-
-    /**
-     * @return int
-     */
-    public function calculateAveragePlayerPoints(): int
-    {
-        $calculation = $this->calculateTotalPlayerPoints() / \count($this->getPlayers());
-
-        $this->averagePoints = (int) \round($calculation);
-
-        return $this->averagePoints;
-    }
-
-    /**
      * @return int
      */
     public function calculateTotalPlayerPoints(): int
@@ -491,9 +507,9 @@ class Galaxy
             $extractors += $player->getNumberOfExtractors();
         }
 
-        $calculation = $extractors / \count($this->getPlayers());
+        $calculation = $extractors / count($this->getPlayers());
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -501,9 +517,9 @@ class Galaxy
      */
     public function calculateAverageMetalExtractors(): int
     {
-        $calculation = $this->calculateTotalMetalExtractors() / \count($this->getPlayers());
+        $calculation = $this->calculateTotalMetalExtractors() / count($this->getPlayers());
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -525,9 +541,9 @@ class Galaxy
      */
     public function calculateAverageCrystalExtractors(): int
     {
-        $calculation = $this->calculateTotalCrystalExtractors() / \count($this->getPlayers());
+        $calculation = $this->calculateTotalCrystalExtractors() / count($this->getPlayers());
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -549,9 +565,9 @@ class Galaxy
      */
     public function calculateUnitsMovableAverageQuantity(): int
     {
-        $calculation = $this->calculateUnitsMovableTotalQuantity() / \count($this->getPlayers());
+        $calculation = $this->calculateUnitsMovableTotalQuantity() / count($this->getPlayers());
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -573,9 +589,9 @@ class Galaxy
      */
     public function calculateUnitsStationaryAverageQuantity(): int
     {
-        $calculation = $this->calculateUnitsStationaryTotalQuantity() / \count($this->getPlayers());
+        $calculation = $this->calculateUnitsStationaryTotalQuantity() / count($this->getPlayers());
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -666,7 +682,7 @@ class Galaxy
     {
         $calculation = ($player->calculateMetalIncomePerTick() / 100) * $this->taxMetal;
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -678,7 +694,7 @@ class Galaxy
     {
         $calculation = ($player->calculateCrystalIncomePerTick() / 100) * $this->taxCrystal;
 
-        return (int) \round($calculation);
+        return (int) round($calculation);
     }
 
     /**
@@ -729,20 +745,6 @@ class Galaxy
         }
 
         return 0;
-    }
-
-    /**
-     * @return void
-     */
-    public function increaseResourceIncomePerTick(): void
-    {
-        $this->increaseMetal(
-            $this->calculateMetalIncomePerTick() - $this->calculateMetalTaxPerTick()
-        );
-
-        $this->increaseCrystal(
-            $this->calculateCrystalIncomePerTick() - $this->calculateCrystalTaxPerTick()
-        );
     }
 
     /**
@@ -840,18 +842,6 @@ class Galaxy
         }
 
         return false;
-    }
-
-    /**
-     * @return void
-     */
-    public function finishTechnologyConstructions(): void
-    {
-        foreach ($this->getGalaxyTechnologies() as $galaxyTechnology) {
-            if ($galaxyTechnology->getTicksLeft() > 0) {
-                $galaxyTechnology->decreaseTicksLeft();
-            }
-        }
     }
 
     /**

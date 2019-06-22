@@ -521,17 +521,6 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function calculateUnitPoints(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateUnitPoints', []);
-
-        return parent::calculateUnitPoints();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function hasEnoughCarrierSpaceToStart(): bool
     {
 
@@ -571,28 +560,6 @@ class PlayerFleet extends \GC\Player\Model\PlayerFleet implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'recall', []);
 
         parent::recall();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function decreaseTicksLeft(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'decreaseTicksLeft', []);
-
-        parent::decreaseTicksLeft();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function clearOrRecall(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'clearOrRecall', []);
-
-        parent::clearOrRecall();
     }
 
     /**

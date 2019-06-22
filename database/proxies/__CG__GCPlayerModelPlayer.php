@@ -64,10 +64,10 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'allianceScanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'targetPlayerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metalPerTick', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystalPerTick', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'targetPlayerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'allianceScanRelays', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'targetPlayerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerId', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxyPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'metalPerTick', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'crystalPerTick', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorMetal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'extractorCrystal', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'points', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isAdmiral', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'isCommander', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'faction', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'galaxy', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'universe', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'user', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'targetPlayerFleets', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerTechnologies', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerUnitConstructions', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'playerCombatReports', '' . "\0" . 'GC\\Player\\Model\\Player' . "\0" . 'scans'];
     }
 
     /**
@@ -235,12 +235,34 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function getMetalPerTick(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMetalPerTick', []);
+
+        return parent::getMetalPerTick();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getCrystal(): int
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCrystal', []);
 
         return parent::getCrystal();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCrystalPerTick(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCrystalPerTick', []);
+
+        return parent::getCrystalPerTick();
     }
 
     /**
@@ -263,17 +285,6 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getExtractorCrystal', []);
 
         return parent::getExtractorCrystal();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAllianceScanRelays(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAllianceScanRelays', []);
-
-        return parent::getAllianceScanRelays();
     }
 
     /**
@@ -444,17 +455,6 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function calculatePoints(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculatePoints', []);
-
-        return parent::calculatePoints();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setMetal(int $number): void
     {
 
@@ -609,17 +609,6 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function increaseResourceIncomePerTick(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'increaseResourceIncomePerTick', []);
-
-        parent::increaseResourceIncomePerTick();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function grantCommanderRole(): void
     {
 
@@ -769,17 +758,6 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPlayerUnitConstructions', []);
 
         return parent::getPlayerUnitConstructions();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function finishUnitConstructions(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'finishUnitConstructions', []);
-
-        parent::finishUnitConstructions();
     }
 
     /**
@@ -989,17 +967,6 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasTechnologyRequirementsFor', [$technology]);
 
         return parent::hasTechnologyRequirementsFor($technology);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function finishPlayerTechnologyConstructions(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'finishPlayerTechnologyConstructions', []);
-
-        parent::finishPlayerTechnologyConstructions();
     }
 
     /**
@@ -1286,28 +1253,6 @@ class Player extends \GC\Player\Model\Player implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'isAttackingAndIsTarget', [$targetPlayer]);
 
         return parent::isAttackingAndIsTarget($targetPlayer);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function movePlayerFleetsForward(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'movePlayerFleetsForward', []);
-
-        parent::movePlayerFleetsForward();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function clearOrRecallPlayerFleets(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'clearOrRecallPlayerFleets', []);
-
-        parent::clearOrRecallPlayerFleets();
     }
 
 }

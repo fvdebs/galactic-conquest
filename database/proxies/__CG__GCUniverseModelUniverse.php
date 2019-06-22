@@ -829,6 +829,17 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
+    public function getGalaxyCount(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGalaxyCount', []);
+
+        return parent::getGalaxyCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getPlayers(): array
     {
 
@@ -868,6 +879,17 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAlliances', []);
 
         return parent::getAlliances();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllianceCount(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAllianceCount', []);
+
+        return parent::getAllianceCount();
     }
 
     /**
@@ -917,45 +939,12 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function tick(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'tick', []);
-
-        parent::tick();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function generatePlayerRanking(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'generatePlayerRanking', []);
-
-        parent::generatePlayerRanking();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function isAllianceAndGalaxyRankingGenerationNeeded(): bool
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'isAllianceAndGalaxyRankingGenerationNeeded', []);
 
         return parent::isAllianceAndGalaxyRankingGenerationNeeded();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function generateAllianceAndGalaxyRanking(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'generateAllianceAndGalaxyRanking', []);
-
-        parent::generateAllianceAndGalaxyRanking();
     }
 
     /**

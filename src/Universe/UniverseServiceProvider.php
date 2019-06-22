@@ -31,10 +31,6 @@ final class UniverseServiceProvider implements ServiceProviderInterface
     {
         $this->provideUniverseRoutes($pimple);
         $this->provideUniverseRepository($pimple);
-
-        if ($pimple->offsetGet('config.isCli')) {
-            $this->provideTickCommand($pimple);
-        }
     }
 
     /**
@@ -72,25 +68,6 @@ final class UniverseServiceProvider implements ServiceProviderInterface
     {
         $container->offsetSet(UniverseRepository::class, function (Container $container) {
             return $container->offsetGet(EntityManager::class)->getRepository(Universe::class);
-        });
-    }
-
-    /**
-     * @param \Pimple\Container $container
-     *
-     * @return void
-     */
-    private function provideTickCommand(Container $container): void
-    {
-        $container->extend(Application::class, function (Application $application, Container $container) {
-            $application->add(new TickCommand(
-                $container->offsetGet(UniverseRepository::class),
-                $container->offsetGet(EntityManager::class),
-                $container->offsetGet(LoggerInterface::class),
-                $container->offsetGet('baseDir')
-            ));
-
-            return $application;
         });
     }
 }

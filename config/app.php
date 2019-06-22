@@ -29,5 +29,6 @@ return [
         \GC\Scan\ScanServiceProvider::class,
         \GC\User\UserServiceProvider::class,
         \GC\Universe\UniverseServiceProvider::class,
+        \GC\Tick\TickServiceProvider::class,
     ],
 ];

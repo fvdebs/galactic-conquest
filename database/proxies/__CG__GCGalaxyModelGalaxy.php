@@ -64,10 +64,10 @@ class Galaxy extends \GC\Galaxy\Model\Galaxy implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyId', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'number', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'password', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'metal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'crystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'alliance', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyTechnologies', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'players', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'universe'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyId', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'number', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'password', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'metal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'crystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'metalPerTick', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'crystalPerTick', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'alliance', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyTechnologies', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'players', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'universe'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyId', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'number', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'password', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'metal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'crystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'alliance', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyTechnologies', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'players', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'universe'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyId', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'number', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'password', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'metal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'crystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'metalPerTick', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'crystalPerTick', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'alliance', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'galaxyTechnologies', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'players', '' . "\0" . 'GC\\Galaxy\\Model\\Galaxy' . "\0" . 'universe'];
     }
 
     /**
@@ -263,6 +263,28 @@ class Galaxy extends \GC\Galaxy\Model\Galaxy implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMetal', [$metal]);
 
         parent::setMetal($metal);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetalPerTick(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMetalPerTick', []);
+
+        return parent::getMetalPerTick();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCrystalPerTick(): int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCrystalPerTick', []);
+
+        return parent::getCrystalPerTick();
     }
 
     /**
@@ -532,28 +554,6 @@ class Galaxy extends \GC\Galaxy\Model\Galaxy implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function increaseExtractorPointsPerTick(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'increaseExtractorPointsPerTick', []);
-
-        parent::increaseExtractorPointsPerTick();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function calculateAveragePlayerPoints(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateAveragePlayerPoints', []);
-
-        return parent::calculateAveragePlayerPoints();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function calculateTotalPlayerPoints(): int
     {
 
@@ -796,17 +796,6 @@ class Galaxy extends \GC\Galaxy\Model\Galaxy implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function increaseResourceIncomePerTick(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'increaseResourceIncomePerTick', []);
-
-        parent::increaseResourceIncomePerTick();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function buildTechnology(\GC\Technology\Model\Technology $technology): \GC\Galaxy\Model\GalaxyTechnology
     {
 
@@ -868,17 +857,6 @@ class Galaxy extends \GC\Galaxy\Model\Galaxy implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'isTechnologyInConstruction', [$technology]);
 
         return parent::isTechnologyInConstruction($technology);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function finishTechnologyConstructions(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'finishTechnologyConstructions', []);
-
-        parent::finishTechnologyConstructions();
     }
 
     /**

@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use GC\Unit\Model\Unit;
 
 use function count;
-use function round;
 
 /**
  * @Table(name="player_fleet")
@@ -489,21 +488,6 @@ class PlayerFleet
     }
 
     /**
-     * @return int
-     */
-    public function calculateUnitPoints(): int
-    {
-        $calculation = 0;
-
-        foreach ($this->getPlayerFleetUnits() as $playerFleetUnit) {
-            $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getMetalCost();
-            $calculation += $playerFleetUnit->getQuantity() * $playerFleetUnit->getUnit()->getCrystalCost();
-        }
-
-        return (int) round($calculation);
-    }
-
-    /**
      * @return bool
      */
     public function hasEnoughCarrierSpaceToStart(): bool
@@ -614,67 +598,6 @@ class PlayerFleet
         $this->ticksLeftUntilMissionReach = $recallTicksLeft;
         $this->ticksLeftUntilMissionCompleted = 0;
         $this->missionType = static::MISSION_TYPE_RECALL;
-    }
-
-    /**
-     * @return void
-     */
-    public function decreaseTicksLeft(): void
-    {
-        if ($this->isIdling()) {
-            return;
-        }
-
-        if ($this->ticksLeftUntilMissionReach > 0) {
-            --$this->ticksLeftUntilMissionReach;
-            return;
-        }
-
-        if ($this->ticksLeftUntilMissionCompleted > 0) {
-            --$this->ticksLeftUntilMissionCompleted;
-        }
-    }
-
-    /**
-     * @return void
-     */
-    public function clearOrRecall(): void
-    {
-        if ($this->isIdling()) {
-            return;
-        }
-
-        if ($this->getUnitQuantity() === 0) {
-            $this->clear();
-            return;
-        }
-
-        if ($this->ticksLeftUntilMissionReach !== 0 || $this->ticksLeftUntilMissionCompleted !== 0) {
-            return;
-        }
-
-        if ($this->isRecalling()) {
-            $this->clear();
-            return;
-        }
-
-        $this->recall();
-    }
-
-    /**
-     * @return void
-     */
-    protected function clear(): void
-    {
-        if ($this->isIdling()) {
-            return;
-        }
-
-        $this->missionType = null;
-        $this->missionTypeOriginal = null;
-        $this->ticksLeftUntilMissionReach = 0;
-        $this->ticksLeftUntilMissionCompleted = 0;
-        $this->targetPlayer = null;
     }
 
     /**

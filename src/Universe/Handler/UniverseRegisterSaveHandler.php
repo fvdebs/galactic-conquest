@@ -139,7 +139,6 @@ final class UniverseRegisterSaveHandler implements RequestHandlerInterface
      * @param \GC\Universe\Model\Universe $universe
      * @param string $password
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \GC\Universe\Exception\RegisterUniversePrivateGalaxyPasswordFailedException
      * @throws \GC\Universe\Exception\RegisterUniversePrivateGalaxyFullException
      *

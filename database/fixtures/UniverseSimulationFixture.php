@@ -170,16 +170,15 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->manager = $manager;
 
         // config
-        $galaxyAndAlliancesMultiplier = 100;
+        $galaxyAndAlliancesMultiplier = 200;
         $universes = ['Sirius', 'Eridanus', 'Starman'];
         $universesPermanentPlayersAppliedTo = ['Sirius', 'Eridanus'];
         $this->createPermanentUser('John Doe', 'example@example.org');
+        $this->createPermanentUser('Carpenter', 'example2@example.org');
+        $this->output();
 
         // create universes
-        $this->output();
         foreach ($universes as $index => $universeName) {
-            $this->output("====================== $universeName ==========================\n");
-
             $universe = $this->createUniverse($universeName);
             $universe = $this->fillUniverseWithRandomValues($universe);
             $universe = $this->createUniverseDefaults($universe);
@@ -195,18 +194,17 @@ class UniverseSimulationFixture extends AbstractFixture
                 $this->givePlayerRandomResources($player);
             }
 
-            $this->output("Generating alliance and galaxy ranking.\n");
-            $universe->generateAllianceAndGalaxyRanking();
-
-            $this->output("flushing...\n");
             $this->manager->flush();
 
-            $this->output("calculating first tick...\n");
-            $universe->tick();
-
-            $this->output("flushing...\n");
-            $this->manager->flush();
+            $this->output(sprintf('%s %s players %s galaxies %s alliances.',
+                $universe->getName(),
+                $universe->getPlayerCount(),
+                $universe->getGalaxyCount(),
+                $universe->getAllianceCount()
+            ));
         }
+
+        $this->output();
     }
 
     /**
@@ -446,8 +444,6 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->createDefaultUniversePlayerTechnologies($universe);
         $this->createDefaultUniverseUnits($universe);
 
-        $this->output();
-
         return $universe;
     }
 
@@ -469,7 +465,7 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createPermanentUser(string $username, string $mail): User
     {
-        $this->output("Creating permanent user '$username' with mail '$mail' and password 'secret'");
+        $this->output("Testuser '$username' with mail '$mail' and password 'secret'");
 
         $user = $this->createUser($username, $mail);
         $this->addPermanentUser($user);
@@ -523,9 +519,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createPrivateGalaxies(Universe $universe, int $numberOfPrivateGalaxies, int $numberOfPlayers): Universe
     {
-        $this->output("Creating $numberOfPrivateGalaxies private galaxies with $numberOfPlayers players");
-        $this->output();
-
         for ($i = 0; $i < $numberOfPrivateGalaxies; $i++) {
             $this->createPrivateGalaxy($universe, $numberOfPlayers);
         }
@@ -559,7 +552,6 @@ class UniverseSimulationFixture extends AbstractFixture
     private function createPrivateGalaxiesInAlliance(Universe $universe, int $numberOfAlliances, int $numberOfPrivateGalaxies, int $numberOfPlayers): Universe
     {
         for ($a = 0; $a < $numberOfAlliances; $a++) {
-            $this->output();
             $galaxy = $this->createPrivateGalaxy($universe, $numberOfPlayers);
             $alliance = $this->createAlliance($galaxy);
 
@@ -567,19 +559,13 @@ class UniverseSimulationFixture extends AbstractFixture
                 $alliance->buildTechnology($this->getRandomAllianceTechnology());
             }
 
-            $this->output("Creating alliance {$alliance->getName()} on galaxy {$galaxy->getNumber()}");
-
             for ($g = 0; $g < ($numberOfPrivateGalaxies - 1); $g++) {
                 $galaxy = $this->createPrivateGalaxy($universe, $numberOfPlayers);
 
                 $allianceApplication = $alliance->createAllianceApplicationFor($galaxy);
                 $alliance->acceptAllianceApplication($allianceApplication);
-
-                $this->output("Galaxy {$galaxy->getNumber()} added to alliance");
             }
         }
-
-        $this->output();
 
         return $universe;
     }
@@ -621,9 +607,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createPublicGalaxies(Universe $universe, int $numberOfPublicGalaxies, int $numberOfPlayers): Universe
     {
-        $this->output("Creating $numberOfPublicGalaxies public galaxies with $numberOfPlayers players");
-        $this->output();
-
         for ($i = 0; $i < $numberOfPublicGalaxies; $i++) {
             $galaxy = $universe->createPublicGalaxy();
             $galaxy = $this->fillGalaxyWithRandomValues($galaxy);
@@ -719,9 +702,11 @@ class UniverseSimulationFixture extends AbstractFixture
         $player->increaseMetal($this->getRandomResourceValue());
         $player->increaseCrystal($this->getRandomResourceValue());
 
+        /*
         if ($this->randomBool()) {
             $player->createPlayerCombatReport(json_encode(['test' => 'todo']));
         }
+        */
 
         // add some technologies to player
         $randomPlayerTechnologies = $this->getRandomPlayerTechnologies();
@@ -814,7 +799,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createDefaultUniverseFactions(Universe $universe): void
     {
-        $this->output('Creating default factions.');
         $this->human = $universe->createFaction('faction.human', true);
         $this->alien = $universe->createFaction('faction.alien');
         $this->factions = [$this->human, $this->alien];
@@ -827,8 +811,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createDefaultUniversePlayerTechnologies(Universe $universe): void
     {
-        $this->output('Creating default player technolgies.');
-
         $colony = $this->createPlayerHumanTechnology($universe, 'technology.colony');
         $colony->setMetalProduction($this->getRandomResourceProductionValue());
         $colony->setCrystalProduction($this->getRandomResourceProductionValue());
@@ -979,8 +961,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createDefaultUniverseGalaxyTechnologies(Universe $universe): void
     {
-        $this->output('Creating default galaxy technologies.');
-
         // technology
         $finance = $this->createGalaxyTechnology($universe, 'technology.galaxy.finance', Technology::FEATURE_GALAXY_FINANCE);
         $tacticFirst = $this->createGalaxyTechnology($universe, 'technology.galaxy.tactic.first', Technology::FEATURE_GALAXY_TACTIC);
@@ -1001,7 +981,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createDefaultUniverseAllianceTechnologies(Universe $universe): void
     {
-        $this->output('Creating default alliance technolgies.');
         $finance = $this->createAllianceTechnology($universe, 'technology.alliance.finance', Technology::FEATURE_GALAXY_FINANCE);
 
         $this->allianceTechnologies = [$finance];
@@ -1073,8 +1052,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createDefaultUniverseUnits(Universe $universe): void
     {
-        $this->output('Creating default units.');
-
         $horus = $this->createHumanUnitStationary($universe, 'unit.horus');
         $horus->setRequiredTechnology($this->techHorus);
 
@@ -1173,8 +1150,6 @@ class UniverseSimulationFixture extends AbstractFixture
      */
     private function createPermanentUserPlayer(Universe $universe, User $user): Player
     {
-        $this->output('Creating permanent user players.');
-
         $galaxy = $universe->getRandomPublicGalaxyWithFreeSpace();
         if ($galaxy === null) {
             $galaxy = $universe->createPublicGalaxy();

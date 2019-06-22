@@ -64,10 +64,10 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceId', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'name', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'code', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'description', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'metal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'crystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'scanRelays', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'universe', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'galaxies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceTechnologies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceApplications'];
+            return ['__isInitialized__', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceId', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'name', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'code', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'description', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'metal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'crystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'universe', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'galaxies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceTechnologies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceApplications'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceId', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'name', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'code', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'description', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'metal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'crystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'scanRelays', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'universe', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'galaxies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceTechnologies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceApplications'];
+        return ['__isInitialized__', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceId', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'name', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'code', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'description', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'metal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'crystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxMetal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'taxCrystal', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'extractorPoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'rankingPosition', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'averagePoints', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'universe', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'galaxies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceTechnologies', '' . "\0" . 'GC\\Alliance\\Model\\Alliance' . "\0" . 'allianceApplications'];
     }
 
     /**
@@ -290,17 +290,6 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function getCrystal(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCrystal', []);
-
-        return parent::getCrystal();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setCrystal(int $crystal): void
     {
 
@@ -351,28 +340,6 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTaxCrystal', [$taxCrystal]);
 
         parent::setTaxCrystal($taxCrystal);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getScanRelays(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScanRelays', []);
-
-        return parent::getScanRelays();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setScanRelays(int $scanRelays): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setScanRelays', [$scanRelays]);
-
-        parent::setScanRelays($scanRelays);
     }
 
     /**
@@ -488,39 +455,6 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function calculateExtractorPointsPerTick(): int
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateExtractorPointsPerTick', []);
-
-        return parent::calculateExtractorPointsPerTick();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function increaseExtractorPointsPerTick(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'increaseExtractorPointsPerTick', []);
-
-        parent::increaseExtractorPointsPerTick();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function calculateAverageGalaxyPoints(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'calculateAverageGalaxyPoints', []);
-
-        parent::calculateAverageGalaxyPoints();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getAdmiral(): ?\GC\Player\Model\Player
     {
 
@@ -631,17 +565,6 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
-    public function increaseResourceIncomePerTick(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'increaseResourceIncomePerTick', []);
-
-        parent::increaseResourceIncomePerTick();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getAllianceTechnologies(): array
     {
 
@@ -714,17 +637,6 @@ class Alliance extends \GC\Alliance\Model\Alliance implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'isTechnologyInConstruction', [$technology]);
 
         return parent::isTechnologyInConstruction($technology);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function finishTechnologyConstructions(): void
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'finishTechnologyConstructions', []);
-
-        parent::finishTechnologyConstructions();
     }
 
     /**
