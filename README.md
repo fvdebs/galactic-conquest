@@ -17,14 +17,9 @@ vendor/bin/inferno list
 composer update
 ```
 
-Create database schema
+Project setup
 ```
-vendor/bin/inferno orm:schema-tool:create
-```
-
-Create test data and fixtures
-```
-vendor/bin/inferno app:doctrine:fixtures
+vendor/bin/inferno app:setup
 ```
 
 Create a new handler
@@ -51,20 +46,10 @@ vendor/bin/inferno app:tick:run
 
 Executes a tick. Ignores universe tick interval.
 ```
-vendor/bin/inferno app:tick:run --force-tick
+vendor/bin/inferno app:tick:run --force
 ```
 
-Executes a tick. Ignores universe ranking interval.
-```
-vendor/bin/inferno app:tick:run --force-ranking
-```
-
-Executes a tick. Ignores tick and ranking interval.
-```
-vendor/bin/inferno app:tick:run --force-tick --force-ranking
-```
-
-## Configfiles
+## Config
 ```
 /config/config.php
 /config/app.php
