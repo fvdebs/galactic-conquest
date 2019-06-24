@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace GC\Combat\Command;
 
-use GC\Combat\Calculator\CalculatorResultInterface;
 use GC\Combat\Mapper\MapperInterface;
 use GC\Combat\Model\Battle;
 use GC\Combat\Model\BattleInterface;
@@ -72,13 +71,10 @@ final class CombatTestCommand extends Command
     {
 
         $settings = $this->mapper->mapSettings($this->universeRepository->findById(1));
+        $battle = $this->createBattle();
 
-        $result = $this->combatService->calculate(
-            $this->createBattle(),
-            $settings
-        );
-
-        $json = $this->combatService->formatJson($result);
+        $result = $this->combatService->calculate($battle, $settings);
+        $json = $this->combatService->formatJson($result, $settings);
 
         $output->writeln($json);
 
