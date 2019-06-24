@@ -30,5 +30,6 @@ return [
         \GC\User\UserServiceProvider::class,
         \GC\Universe\UniverseServiceProvider::class,
         \GC\Tick\TickServiceProvider::class,
+        \GC\Combat\CombatServiceProvider::class,
     ],
 ];

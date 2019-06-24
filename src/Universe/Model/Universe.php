@@ -794,7 +794,7 @@ class Universe
     /**
      * @return \GC\Unit\Model\Unit[]
      */
-    protected function getUnits(): array
+    public function getUnits(): array
     {
         return $this->units->getValues();
     }

@@ -472,4 +472,12 @@ class Unit
 
         return $unitCombatSetting;
     }
+
+    /**
+     * @return \GC\Unit\Model\UnitCombatSetting[]
+     */
+    public function getUnitCombatSettings(): array
+    {
+        return $this->unitCombatSettings->getValues();
+    }
 }
