@@ -32,18 +32,18 @@ final class Battle implements BattleInterface
     private $targetData;
 
     /**
-     * @param \GC\Combat\Model\FleetInterface[] $attackingFleets
-     * @param \GC\Combat\Model\FleetInterface[] $defendingFleets
+     * @param \GC\Combat\Model\FleetInterface[] $attackingFleets - default: []
+     * @param \GC\Combat\Model\FleetInterface[] $defendingFleets - default: []
      * @param int $targetExtractorsMetal - default: 0
      * @param int $targetExtractorsCrystal -  default: 0
      * @param string[] $targetData - default: []
      */
     public function __construct(
-        array $attackingFleets,
-        array $defendingFleets,
+        array $attackingFleets = [],
+        array $defendingFleets = [],
+        array $targetData = [],
         int $targetExtractorsMetal = 0,
-        int $targetExtractorsCrystal = 0,
-        array $targetData = []
+        int $targetExtractorsCrystal = 0
     ) {
         $this->attackingFleets = $attackingFleets;
         $this->defendingFleets = $defendingFleets;
@@ -98,7 +98,7 @@ final class Battle implements BattleInterface
      *
      * @return \GC\Combat\Model\FleetInterface[]
      */
-    public function groupFleetsByDataKey(string $dataKey, array $fleets): array
+    public function groupFleetsByDataValue(string $dataKey, array $fleets): array
     {
         $data = [];
         foreach ($fleets as $fleet) {

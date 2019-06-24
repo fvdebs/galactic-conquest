@@ -37,5 +37,5 @@ interface BattleInterface
      *
      * @return \GC\Combat\Model\FleetInterface[]
      */
-    public function groupFleetsByDataKey(string $dataKey, array $fleets): array;
+    public function groupFleetsByDataValue(string $dataKey, array $fleets): array;
 }
