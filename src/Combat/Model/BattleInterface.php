@@ -7,14 +7,33 @@ namespace GC\Combat\Model;
 interface BattleInterface
 {
     /**
-     * @return \GC\Combat\Model\FleetInterface[]
+     * @return string[]
      */
-    public function getAttackingFleets();
+    public function getData(): array;
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasDataValue(string $key): bool;
+
+    /**
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getDataValue(string $key);
 
     /**
      * @return \GC\Combat\Model\FleetInterface[]
      */
-    public function getDefendingFleets();
+    public function getAttackingFleets(): array;
+
+    /**
+     * @return \GC\Combat\Model\FleetInterface[]
+     */
+    public function getDefendingFleets(): array;
 
     /**
      * @return int
@@ -32,10 +51,25 @@ interface BattleInterface
     public function getTargetData(): array;
 
     /**
-     * @param string $dataKey
+     * @param int $fleetReference
      * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
-     * @return \GC\Combat\Model\FleetInterface[]
+     * @return \GC\Combat\Model\FleetInterface
      */
-    public function groupFleetsByDataValue(string $dataKey, array $fleets): array;
+    public function getFleetByReference(int $fleetReference, array $fleets): FleetInterface;
+
+    /**
+     * Returns true if its equal and not empty.
+     *
+     * @param \GC\Combat\Model\FleetInterface $fleet
+     * @param string $dataKey
+     *
+     * @return bool
+     */
+    public function compareFleetDataValueWithTargetDataValue(FleetInterface $fleet, string $dataKey): bool;
+
+    /**
+     * @return void
+     */
+    public function __clone();
 }

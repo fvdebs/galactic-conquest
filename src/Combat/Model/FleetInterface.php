@@ -7,9 +7,19 @@ namespace GC\Combat\Model;
 interface FleetInterface
 {
     /**
+     * @return int
+     */
+    public function getFleetReference(): int;
+
+    /**
      * @return string[]
      */
     public function getData(): array;
+
+    /**
+     * @return int[]
+     */
+    public function getUnits(): array;
 
     /**
      * @param string $key
@@ -31,7 +41,22 @@ interface FleetInterface
      *
      * @return void
      */
-    public function increaseUnitDestroyedQuantity(int $unitId, int $quantity): void;
+    public function destroyUnit(int $unitId, int $quantity): void;
+
+    /**
+     * @return int[]
+     */
+    public function getUnitsLost(): array;
+
+    /**
+     * @return bool
+     */
+    public function hasUnitsDestroyed(): bool;
+
+    /**
+     * @return array
+     */
+    public function getUnitsDestroyed(): array;
 
     /**
      * @param int $unitId
@@ -39,7 +64,7 @@ interface FleetInterface
      *
      * @return void
      */
-    public function decreaseUnitQuantity(int $unitId, int $quantity): void;
+    public function increaseUnitDestroyedQuantity(int $unitId, int $quantity): void;
 
     /**
      * @param int $unitId
@@ -58,7 +83,7 @@ interface FleetInterface
      *
      * @return void
      */
-    public function increaseSalvageMetal(int $salvageMetal): void;
+    public function setSalvageMetal(int $salvageMetal): void;
 
     /**
      * @return int
@@ -70,7 +95,7 @@ interface FleetInterface
      *
      * @return void
      */
-    public function increaseSalvageCrystal(int $salvageCrystal): void;
+    public function setSalvageCrystal(int $salvageCrystal): void;
 
     /**
      * @return int
@@ -107,4 +132,46 @@ interface FleetInterface
      * @return void
      */
     public function setExtractorsGuarded(int $extractorsGuarded): void;
+
+    /**
+     * @return int[]
+     */
+    public function getInsufficientCarrierLosses(): array;
+
+    /**
+     * @param int $unitId
+     * @param int $quantity
+     *
+     * @return void
+     */
+    public function addInsufficientCarrierLosses(int $unitId, int $quantity): void;
+
+    /**
+     * @return int
+     */
+    public function getCarrierSpace(): int;
+
+    /**
+     * @param int $carrierSpace
+     *
+     * @return void
+     */
+    public function setCarrierSpace(int $carrierSpace): void;
+
+    /**
+     * @return int
+     */
+    public function getCarrierConsumption(): int;
+
+    /**
+     * @param int $carrierConsumption
+     *
+     * @return void
+     */
+    public function setCarrierConsumption(int $carrierConsumption): void;
+
+    /**
+     * @return void
+     */
+    public function __clone();
 }

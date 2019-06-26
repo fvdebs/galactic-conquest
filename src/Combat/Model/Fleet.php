@@ -4,19 +4,36 @@ declare(strict_types=1);
 
 namespace GC\Combat\Model;
 
+use RuntimeException;
+
 use function array_key_exists;
+use function count;
+use function is_object;
+use function is_array;
+use function unserialize;
+use function serialize;
 
 final class Fleet implements FleetInterface
 {
     /**
+     * @var int
+     */
+    private $fleetReference;
+
+    /**
      * @var int[]
      */
-    private $units = [];
+    private $units;
 
     /**
      * @var string[]
      */
-    private $data = [];
+    private $data;
+
+    /**
+     * @var int[]
+     */
+    private $unitsLost = [];
 
     /**
      * @var int[]
@@ -49,13 +66,38 @@ final class Fleet implements FleetInterface
     private $extractorsGuarded = 0;
 
     /**
-     * @param int[] $units
+     * @var int[]
+     */
+    private $insufficientCarrierLosses = [];
+
+    /**
+     * @var int
+     */
+    private $carrierSpace = 0;
+
+    /**
+     * @var int
+     */
+    private $carrierConsumption = 0;
+
+    /**
+     * @param int $fleetReference
+     * @param int[] $units - unitId => quantity
      * @param string[] $data
      */
-    public function __construct(array $units = [], array $data = [])
+    public function __construct(int $fleetReference, array $units = [], array $data = [])
     {
+        $this->fleetReference = $fleetReference;
         $this->units = $units;
         $this->data = $data;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFleetReference(): int
+    {
+        return $this->fleetReference;
     }
 
     /**
@@ -64,6 +106,14 @@ final class Fleet implements FleetInterface
     public function getData(): array
     {
         return $this->data;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getUnits(): array
+    {
+        return $this->units;
     }
 
     /**
@@ -96,10 +146,35 @@ final class Fleet implements FleetInterface
      *
      * @return void
      */
-    public function decreaseUnitQuantity(int $unitId, int $quantity): void
+    public function destroyUnit(int $unitId, int $quantity): void
+    {
+        $this->decreaseUnitQuantity($unitId, $quantity);
+
+        if (!array_key_exists($unitId, $this->unitsLost)) {
+            $this->unitsLost[$unitId] = 0;
+        }
+
+        $this->unitsLost[$unitId] += $quantity;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getUnitsLost(): array
+    {
+        return $this->unitsLost;
+    }
+
+    /**
+     * @param int $unitId
+     * @param int $quantity
+     *
+     * @return void
+     */
+    private function decreaseUnitQuantity(int $unitId, int $quantity): void
     {
         if (!$this->hasUnit($unitId)) {
-            return;
+            throw new RuntimeException('can not decrease unit with given id: ' . $unitId);
         }
 
         $this->units[$unitId] -= $quantity;
@@ -121,6 +196,22 @@ final class Fleet implements FleetInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasUnitsDestroyed(): bool
+    {
+        return count($this->unitsDestroyed) !== 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnitsDestroyed(): array
+    {
+        return $this->unitsDestroyed;
+    }
+
+    /**
      * @param int $unitId
      * @param int $quantity
      *
@@ -128,21 +219,11 @@ final class Fleet implements FleetInterface
      */
     public function increaseUnitDestroyedQuantity(int $unitId, int $quantity): void
     {
-        if (!$this->hasUnitDestroyed($unitId)) {
+        if (!array_key_exists($unitId, $this->unitsDestroyed)) {
             $this->unitsDestroyed[$unitId] = 0;
         }
 
-        $this->units[$unitId] += $quantity;
-    }
-
-    /**
-     * @param int $unitId
-     *
-     * @return bool
-     */
-    private function hasUnitDestroyed(int $unitId): bool
-    {
-        return array_key_exists($unitId, $this->unitsDestroyed);
+        $this->unitsDestroyed[$unitId] += $quantity;
     }
 
     /**
@@ -168,9 +249,9 @@ final class Fleet implements FleetInterface
      *
      * @return void
      */
-    public function increaseSalvageMetal(int $salvageMetal): void
+    public function setSalvageMetal(int $salvageMetal): void
     {
-        $this->salvageMetal += $salvageMetal;
+        $this->salvageMetal = $salvageMetal;
     }
 
     /**
@@ -186,9 +267,9 @@ final class Fleet implements FleetInterface
      *
      * @return void
      */
-    public function increaseSalvageCrystal(int $salvageCrystal): void
+    public function setSalvageCrystal(int $salvageCrystal): void
     {
-        $this->salvageCrystal += $salvageCrystal;
+        $this->salvageCrystal = $salvageCrystal;
     }
 
     /**
@@ -243,5 +324,78 @@ final class Fleet implements FleetInterface
     public function setExtractorsGuarded(int $extractorsGuarded): void
     {
         $this->extractorsGuarded = $extractorsGuarded;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getInsufficientCarrierLosses(): array
+    {
+        return $this->insufficientCarrierLosses;
+    }
+
+    /**
+     * @param int $unitId
+     * @param int $quantity
+     *
+     * @return void
+     */
+    public function addInsufficientCarrierLosses(int $unitId, int $quantity): void
+    {
+        $this->decreaseUnitQuantity($unitId, $quantity);
+
+        if (!array_key_exists($unitId, $this->insufficientCarrierLosses)) {
+            $this->insufficientCarrierLosses[$unitId] = 0;
+        }
+
+        $this->insufficientCarrierLosses[$unitId] += $quantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCarrierSpace(): int
+    {
+        return $this->carrierSpace;
+    }
+
+    /**
+     * @param int $carrierSpace
+     *
+     * @return void
+     */
+    public function setCarrierSpace(int $carrierSpace): void
+    {
+        $this->carrierSpace = $carrierSpace;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCarrierConsumption(): int
+    {
+        return $this->carrierConsumption;
+    }
+
+    /**
+     * @param int $carrierConsumption
+     *
+     * @return void
+     */
+    public function setCarrierConsumption(int $carrierConsumption): void
+    {
+        $this->carrierConsumption = $carrierConsumption;
+    }
+
+    /**
+     * @return void
+     */
+    public function __clone()
+    {
+        foreach($this as $key => $val) {
+            if (is_object($val) || (is_array($val))) {
+                $this->{$key} = unserialize(serialize($val));
+            }
+        }
     }
 }

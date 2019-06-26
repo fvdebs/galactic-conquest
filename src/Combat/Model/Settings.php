@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace GC\Combat\Model;
 
+use RuntimeException;
+
 final class Settings implements SettingsInterface
 {
     /**
@@ -113,7 +115,7 @@ final class Settings implements SettingsInterface
             }
         }
 
-        throw new \Exception('unit not given: ' . $unitId);
+        throw new RuntimeException('unit not given: ' . $unitId);
     }
 
     /**

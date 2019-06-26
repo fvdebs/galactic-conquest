@@ -48,12 +48,15 @@ final class CombatService implements CombatServiceInterface
     /**
      * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
      * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function formatJson(CalculatorResultInterface $calculatorResult, SettingsInterface $settings): string
-    {
-        return $this->jsonFormatter->format($calculatorResult, $settings);
+    public function formatJson(
+        CalculatorResultInterface $calculatorResult,
+        SettingsInterface $settings,
+        ?string $mergeByDataKey = null
+    ) : string {
+        return $this->jsonFormatter->format($calculatorResult, $settings, $mergeByDataKey);
     }
 }
-

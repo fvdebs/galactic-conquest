@@ -12,8 +12,13 @@ interface JsonFormatterInterface
     /**
      * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
      * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function format(CalculatorResultInterface $calculatorResult, SettingsInterface $settings): string;
+    public function format(
+        CalculatorResultInterface $calculatorResult,
+        SettingsInterface $settings,
+        ?string $mergeByDataKey = null
+    ) : string;
 }

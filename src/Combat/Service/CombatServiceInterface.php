@@ -7,7 +7,6 @@ namespace GC\Combat\Service;
 use GC\Combat\Calculator\CalculatorResultInterface;
 use GC\Combat\Model\BattleInterface;
 use GC\Combat\Model\SettingsInterface;
-use GC\Universe\Model\Universe;
 
 interface CombatServiceInterface
 {
@@ -22,8 +21,13 @@ interface CombatServiceInterface
     /**
      * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
      * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function formatJson(CalculatorResultInterface $calculatorResult, SettingsInterface $settings): string;
+    public function formatJson(
+        CalculatorResultInterface $calculatorResult,
+        SettingsInterface $settings,
+        ?string $mergeByDataKey = null
+    ) : string;
 }
