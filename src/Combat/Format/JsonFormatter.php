@@ -275,12 +275,35 @@ final class JsonFormatter implements JsonFormatterInterface
      */
     private function createFleetArray(array $fleetArray, FleetInterface $before, FleetInterface $after, SettingsInterface $settings): array
     {
-        $fleetArray[static::KEY_BEFORE] = $this->createFleetList($before->getUnits(), $settings);
-        $fleetArray[static::KEY_AFTER] = $this->createFleetList($after->getUnits(), $settings);
-        $fleetArray[static::KEY_DESTROYED] = $this->createFleetList($after->getUnitsDestroyed(), $settings);
+        $unitsBefore = $this->sortArrayByKeyAndRemoveEmptyValues(
+            $before->getUnits()
+        );
+
+        $unitsAfter = $this->sortArrayByKeyAndRemoveEmptyValues(
+            $after->getUnits()
+        );
+
+        $unitsDestroyed = $this->sortArrayByKeyAndRemoveEmptyValues(
+            $after->getUnitsDestroyed()
+        );
+
+        $fleetArray[static::KEY_BEFORE] = $this->createFleetList($unitsBefore, $settings);
+        $fleetArray[static::KEY_AFTER] = $this->createFleetList($unitsAfter, $settings);
+        $fleetArray[static::KEY_DESTROYED] = $this->createFleetList($unitsDestroyed, $settings);
         $fleetArray[static::KEY_CARRIER] = $this->createCarrierListFor($after, $settings);
 
         return $fleetArray;
+    }
+
+    /**
+     * @param int[] $array
+     *
+     * @return int[]
+     */
+    private function sortArrayByKeyAndRemoveEmptyValues(array $array): array
+    {
+        ksort($array);
+        return array_filter($array);
     }
 
     /**

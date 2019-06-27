@@ -7,12 +7,8 @@ namespace GC\Combat;
 use GC\Combat\Calculator\Calculator;
 use GC\Combat\Calculator\CalculatorInterface;
 use GC\Combat\Calculator\Plugin\CarrierCalculatorPlugin;
-use GC\Combat\Calculator\Plugin\CarrierConsumptionCalculatorPlugin;
-use GC\Combat\Calculator\Plugin\CarrierLossesCalculatorPlugin;
 use GC\Combat\Calculator\Plugin\CombatCalculatorPlugin;
-use GC\Combat\Calculator\Plugin\ExtractorDistributionCalculatorPlugin;
-use GC\Combat\Calculator\Plugin\ExtractorGuardedCalculatorPlugin;
-use GC\Combat\Calculator\Plugin\ExtractorStolenCalculatorPlugin;
+use GC\Combat\Calculator\Plugin\ExtractorCalculatorPlugin;
 use GC\Combat\Calculator\Plugin\SalvageCalculatorPlugin;
 use GC\Combat\Format\JsonFormatter;
 use GC\Combat\Format\JsonFormatterInterface;
@@ -92,10 +88,9 @@ final class CombatServiceProvider implements ServiceProviderInterface
     {
         return [
             new CombatCalculatorPlugin(),
-            new CarrierCalculatorPlugin(),
             new SalvageCalculatorPlugin(),
-            new ExtractorGuardedCalculatorPlugin(),
-            new ExtractorStolenCalculatorPlugin(),
+            new CarrierCalculatorPlugin(),
+            new ExtractorCalculatorPlugin(),
         ];
     }
 

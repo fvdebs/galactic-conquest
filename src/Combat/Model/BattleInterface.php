@@ -51,12 +51,33 @@ interface BattleInterface
     public function getTargetData(): array;
 
     /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasTargetDataValue(string $key): bool;
+
+    /**
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getTargetDataValue(string $key);
+
+    /**
      * @param int $fleetReference
      * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
      * @return \GC\Combat\Model\FleetInterface
      */
     public function getFleetByReference(int $fleetReference, array $fleets): FleetInterface;
+
+    /**
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
+     *
+     * @return float[]
+     */
+    public function getUnitSumFromFleets(array $fleets): array;
 
     /**
      * Returns true if its equal and not empty.

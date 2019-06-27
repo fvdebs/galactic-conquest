@@ -9,6 +9,7 @@ use GC\Combat\Model\FleetInterface;
 use GC\Combat\Model\SettingsInterface;
 
 use function array_merge;
+use function round;
 
 final class CarrierCalculatorPlugin implements CalculatorPluginInterface
 {
@@ -70,35 +71,30 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
      */
     public function calculateCarrierLossesFor(FleetInterface $fleet, SettingsInterface $settings): void
     {
-        /*
         if ($fleet->getCarrierConsumption() <= $fleet->getCarrierSpace()) {
            return;
         }
 
-        $carrierSpaceNeeded = $fleet->getCarrierSpace() - $fleet->getCarrierConsumption();
-
         foreach ($fleet->getUnits() as $unitId => $quantity) {
-            if ($carrierSpaceNeeded >= 0) {
-                break;
-            }
-
-            $unit = $settings->getUnitById($unitId);
-            if ($unit->getCarrierSpaceConsumption() === 0) {
+            if ($quantity === 0) {
                 continue;
             }
 
-            $spaceNeededForCurrentUnit = $quantity * $unit->getCarrierSpaceConsumption();
+            $carrierCapacityNeededForUnitType = $settings->getUnitById($unitId)
+                ->getCarrierSpaceConsumption();
 
-            if ($carrierSpaceNeeded <= $spaceNeededForCurrentUnit) {
-                $quantityToLose = ceil($carrierSpaceNeeded / $unit->getCarrierSpaceConsumption());
-            } else {
-                $quantityToLose = $quantity;
+            if ($carrierCapacityNeededForUnitType === 0) {
+                continue;
             }
 
-            $overExtendedSpace += $quantityToLose;
+            if ($fleet->getCarrierSpace() === 0) {
+                $fleet->addInsufficientCarrierLosses($unitId, $quantity);
+                continue;
+            }
 
-            $fleet->addInsufficientCarrierLosses($unitId, $quantityToLose);
+            $quantityToLose = ($fleet->getCarrierSpace() / $fleet->getCarrierConsumption()) * ($carrierCapacityNeededForUnitType * $quantity);
+
+            $fleet->addInsufficientCarrierLosses($unitId, (int) round($quantityToLose));
         }
-        */
     }
 }

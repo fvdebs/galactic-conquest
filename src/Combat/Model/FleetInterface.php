@@ -37,11 +37,11 @@ interface FleetInterface
 
     /**
      * @param int $unitId
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return void
      */
-    public function destroyUnit(int $unitId, int $quantity): void;
+    public function destroyUnit(int $unitId, float $quantity): void;
 
     /**
      * @return int[]
@@ -60,18 +60,18 @@ interface FleetInterface
 
     /**
      * @param int $unitId
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return void
      */
-    public function increaseUnitDestroyedQuantity(int $unitId, int $quantity): void;
+    public function addUnitDestroyedQuantity(int $unitId, float $quantity): void;
 
     /**
      * @param int $unitId
      *
-     * @return int
+     * @return float
      */
-    public function getQuantityOf(int $unitId): int;
+    public function getQuantityOf(int $unitId): float;
 
     /**
      * @return int
@@ -134,6 +134,23 @@ interface FleetInterface
     public function setExtractorsGuarded(int $extractorsGuarded): void;
 
     /**
+     * @return int
+     */
+    public function getExtractorsStealCapacity(): int;
+
+    /**
+     * @param int $extractorsStealCapacity
+     */
+    public function setExtractorsStealCapacity(int $extractorsStealCapacity): void;
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseExtractorsStealCapacity(int $number): void;
+
+    /**
      * @return int[]
      */
     public function getInsufficientCarrierLosses(): array;
@@ -169,6 +186,11 @@ interface FleetInterface
      * @return void
      */
     public function setCarrierConsumption(int $carrierConsumption): void;
+
+    /**
+     * @return void
+     */
+    public function normalize(): void;
 
     /**
      * @return void

@@ -12,6 +12,7 @@ use function is_object;
 use function is_array;
 use function unserialize;
 use function serialize;
+use function round;
 
 final class Fleet implements FleetInterface
 {
@@ -21,7 +22,7 @@ final class Fleet implements FleetInterface
     private $fleetReference;
 
     /**
-     * @var int[]
+     * @var float[]
      */
     private $units;
 
@@ -31,12 +32,12 @@ final class Fleet implements FleetInterface
     private $data;
 
     /**
-     * @var int[]
+     * @var float[]
      */
     private $unitsLost = [];
 
     /**
-     * @var int[]
+     * @var float[]
      */
     private $unitsDestroyed = [];
 
@@ -66,6 +67,11 @@ final class Fleet implements FleetInterface
     private $extractorsGuarded = 0;
 
     /**
+     * @var int
+     */
+    private $extractorsStealCapacity = 0;
+
+    /**
      * @var int[]
      */
     private $insufficientCarrierLosses = [];
@@ -82,7 +88,7 @@ final class Fleet implements FleetInterface
 
     /**
      * @param int $fleetReference
-     * @param int[] $units - unitId => quantity
+     * @param float[] $units - unitId => quantity
      * @param string[] $data
      */
     public function __construct(int $fleetReference, array $units = [], array $data = [])
@@ -109,7 +115,7 @@ final class Fleet implements FleetInterface
     }
 
     /**
-     * @return int[]
+     * @return float[]
      */
     public function getUnits(): array
     {
@@ -142,11 +148,11 @@ final class Fleet implements FleetInterface
 
     /**
      * @param int $unitId
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return void
      */
-    public function destroyUnit(int $unitId, int $quantity): void
+    public function destroyUnit(int $unitId, float $quantity): void
     {
         $this->decreaseUnitQuantity($unitId, $quantity);
 
@@ -158,7 +164,7 @@ final class Fleet implements FleetInterface
     }
 
     /**
-     * @return int[]
+     * @return float[]
      */
     public function getUnitsLost(): array
     {
@@ -167,11 +173,11 @@ final class Fleet implements FleetInterface
 
     /**
      * @param int $unitId
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return void
      */
-    private function decreaseUnitQuantity(int $unitId, int $quantity): void
+    private function decreaseUnitQuantity(int $unitId, float $quantity): void
     {
         if (!$this->hasUnit($unitId)) {
             throw new RuntimeException('can not decrease unit with given id: ' . $unitId);
@@ -183,9 +189,9 @@ final class Fleet implements FleetInterface
     /**
      * @param int $unitId
      *
-     * @return int
+     * @return float
      */
-    public function getQuantityOf(int $unitId): int
+    public function getQuantityOf(int $unitId): float
     {
         $quantity = 0;
         if ($this->hasUnit($unitId)) {
@@ -204,7 +210,7 @@ final class Fleet implements FleetInterface
     }
 
     /**
-     * @return array
+     * @return float[]
      */
     public function getUnitsDestroyed(): array
     {
@@ -213,11 +219,11 @@ final class Fleet implements FleetInterface
 
     /**
      * @param int $unitId
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return void
      */
-    public function increaseUnitDestroyedQuantity(int $unitId, int $quantity): void
+    public function addUnitDestroyedQuantity(int $unitId, float $quantity): void
     {
         if (!array_key_exists($unitId, $this->unitsDestroyed)) {
             $this->unitsDestroyed[$unitId] = 0;
@@ -327,6 +333,32 @@ final class Fleet implements FleetInterface
     }
 
     /**
+     * @return int
+     */
+    public function getExtractorsStealCapacity(): int
+    {
+        return $this->extractorsStealCapacity;
+    }
+
+    /**
+     * @param int $extractorsStealCapacity
+     */
+    public function setExtractorsStealCapacity(int $extractorsStealCapacity): void
+    {
+        $this->extractorsStealCapacity = $extractorsStealCapacity;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseExtractorsStealCapacity(int $number): void
+    {
+        $this->extractorsStealCapacity -= $number;
+    }
+
+    /**
      * @return int[]
      */
     public function getInsufficientCarrierLosses(): array
@@ -385,6 +417,32 @@ final class Fleet implements FleetInterface
     public function setCarrierConsumption(int $carrierConsumption): void
     {
         $this->carrierConsumption = $carrierConsumption;
+    }
+
+    /**
+     * @return void
+     */
+    public function normalize(): void
+    {
+        $this->units = $this->arrayToInt($this->units);
+        $this->unitsLost = $this->arrayToInt($this->units);
+        $this->unitsDestroyed = $this->arrayToInt($this->units);
+    }
+
+    /**
+     * @param float[] $array
+     *
+     * @return int[]
+     */
+    private function arrayToInt(array $array): array
+    {
+        $normalized = [];
+
+        foreach ($array as $index => $value) {
+            $normalized[$index] = (int) round($value);
+        }
+
+        return $normalized;
     }
 
     /**

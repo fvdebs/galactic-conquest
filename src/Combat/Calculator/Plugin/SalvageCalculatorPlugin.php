@@ -22,8 +22,6 @@ final class SalvageCalculatorPlugin implements CalculatorPluginInterface
     public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface
     {
         foreach ($after->getDefendingFleets() as $fleet) {
-
-            $fleet->increaseUnitDestroyedQuantity(1, 20);
             if (!$fleet->hasUnitsDestroyed()) {
                 continue;
             }
@@ -62,7 +60,7 @@ final class SalvageCalculatorPlugin implements CalculatorPluginInterface
             $salvageCrystal += ($crystalCost / 100) * $salvageModifier;
         }
 
-        $fleet->setSalvageMetal($salvageMetal);
-        $fleet->setSalvageCrystal($salvageCrystal);
+        $fleet->setSalvageMetal((int) round($salvageMetal));
+        $fleet->setSalvageCrystal((int) round($salvageCrystal));
     }
 }

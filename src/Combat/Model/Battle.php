@@ -6,6 +6,8 @@ namespace GC\Combat\Model;
 
 use RuntimeException;
 
+use function array_key_exists;
+
 final class Battle implements BattleInterface
 {
     /**
@@ -135,6 +137,30 @@ final class Battle implements BattleInterface
     }
 
     /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasTargetDataValue(string $key): bool
+    {
+        return array_key_exists($key, $this->targetData);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getTargetDataValue(string $key)
+    {
+        if ($this->hasTargetDataValue($key)) {
+            return $this->targetData[$key];
+        }
+
+        return null;
+    }
+
+    /**
      * @param int $fleetReference
      * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
@@ -152,7 +178,33 @@ final class Battle implements BattleInterface
     }
 
     /**
-     * Returns true if its equal and not empty.
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
+     *
+     * @return float[]
+     */
+    public function getUnitSumFromFleets(array $fleets): array
+    {
+        $summary = [];
+
+        foreach ($fleets as $fleet) {
+            foreach ($fleet->getUnits() as $unitId => $quantity) {
+                if ($quantity === 0) {
+                    continue;
+                }
+
+                if (!array_key_exists($unitId, $summary)) {
+                    $summary[$unitId] = 0;
+                }
+
+                $summary[$unitId] += $quantity;
+            }
+        }
+
+        return $summary;
+    }
+
+    /**
+     * Returns true if data value is equal and not null.
      *
      * @param \GC\Combat\Model\FleetInterface $fleet
      * @param string $dataKey
@@ -161,21 +213,17 @@ final class Battle implements BattleInterface
      */
     public function compareFleetDataValueWithTargetDataValue(FleetInterface $fleet, string $dataKey): bool
     {
-        $targetValue = $this->hasDataValue($dataKey);
+        $targetValue = $this->hasTargetDataValue($dataKey);
         $fleetValue = $fleet->hasDataValue($dataKey);
 
         if (!$targetValue || !$fleetValue) {
             return false;
         }
 
-        $targetValue = $this->getDataValue($dataKey);
+        $targetValue = $this->getTargetDataValue($dataKey);
         $fleetValue = $fleet->getDataValue($dataKey);
 
-        if ($targetValue === null || $targetValue !== $fleetValue) {
-            return false;
-        }
-
-        return true;
+        return !($targetValue === null || $targetValue !== $fleetValue);
     }
 
     /**

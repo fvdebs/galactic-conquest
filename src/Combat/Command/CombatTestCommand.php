@@ -118,9 +118,9 @@ final class CombatTestCommand extends Command
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
+     * @return int
      * @throws \Throwable
      *
-     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -130,14 +130,15 @@ final class CombatTestCommand extends Command
                 $this->createAttackingFleets(),
                 $this->createDefendingFleets(),
                 $this->createTargetData(),
-                $this->createEnvironmentData()
+                $this->createEnvironmentData(),
+                100,
+                100
             );
 
             $result = $this->combatService->calculate($battle, $settings);
             $json = $this->combatService->formatJson($result, $settings, static::DATA_KEY_PLAYER_ID);
 
             file_put_contents(__DIR__ . '/data.json', $json);
-            $output->writeln($json);
 
         } catch (Exception $e) {
             echo $e->getMessage() . "\n" . $e->getFile() . ':' . $e->getLine();
@@ -165,7 +166,8 @@ final class CombatTestCommand extends Command
         array $data = [],
         int $targetExtractorsMetal = 100,
         int $targetExtractorsCrystal = 100
-    ): BattleInterface  {
+    ): BattleInterface
+    {
         return new Battle(
             $attackingFleets,
             $defendingFleets,
@@ -200,6 +202,8 @@ final class CombatTestCommand extends Command
             $this->createFleet(),
             $this->createTargetData()
         );
+
+        return $fleets;
 
         $fleets[] = new Fleet(
             static::TARGET_FLEET_SECOND_ID,
@@ -247,6 +251,8 @@ final class CombatTestCommand extends Command
             $this->createFirstAttackerData()
         );
 
+        return $fleets;
+
         $fleets[] = new Fleet(
             static::ATTACKER_SECOND_FLEET_FIRST_ID,
             $this->createFleet(),
@@ -254,38 +260,6 @@ final class CombatTestCommand extends Command
         );
 
         return $fleets;
-    }
-
-    /**
-     * @return int[]
-     */
-    private function createFleet(): array
-    {
-        return [
-            static::UNIT_ID_JAG => 100,
-            static::UNIT_ID_BOM => 100,
-            static::UNIT_ID_FRE => 100,
-            static::UNIT_ID_ZER => 100,
-            static::UNIT_ID_KRZ => 100,
-            static::UNIT_ID_SS => 100,
-            static::UNIT_ID_TR => 1,
-            static::UNIT_ID_CA => 100,
-            static::UNIT_ID_CL => 100,
-        ];
-    }
-
-    /**
-     * @return int[]
-     */
-    private function createFleetStationary(): array
-    {
-        return [
-            static::UNIT_ID_AJ => 100,
-            static::UNIT_ID_RU => 100,
-            static::UNIT_ID_PU => 100,
-            static::UNIT_ID_CO => 100,
-            static::UNIT_ID_CE => 100,
-        ];
     }
 
     /**
@@ -376,14 +350,46 @@ final class CombatTestCommand extends Command
     }
 
     /**
+     * @return int[]
+     */
+    private function createFleetStationary(): array
+    {
+        return [
+            static::UNIT_ID_AJ => 0,
+            static::UNIT_ID_RU => 0,
+            static::UNIT_ID_PU => 0,
+            static::UNIT_ID_CO => 0,
+            static::UNIT_ID_CE => 0,
+        ];
+    }
+
+    /**
+     * @return int[]
+     */
+    private function createFleet(): array
+    {
+        return [
+            static::UNIT_ID_JAG => 500,
+            static::UNIT_ID_BOM => 500,
+            static::UNIT_ID_FRE => 500,
+            static::UNIT_ID_ZER => 500,
+            static::UNIT_ID_KRZ => 500,
+            static::UNIT_ID_SS => 500,
+            static::UNIT_ID_TR => 500,
+            static::UNIT_ID_CA => 500,
+            static::UNIT_ID_CL => 500,
+        ];
+    }
+
+    /**
      *
      * @return \GC\Combat\Model\SettingsInterface
      */
     private function createSettings(): SettingsInterface
     {
         $units = [
-            new Unit(static::UNIT_ID_JAG, 'unit.fighter', 4000, 6000, 0, 1, 0, 0),
-            new Unit(static::UNIT_ID_BOM, 'unit.fighter', 2000, 8000, 0, 1, 0, 0),
+            new Unit(static::UNIT_ID_JAG, 'unit.fighter', 4000, 6000, 0, 3, 0, 0),
+            new Unit(static::UNIT_ID_BOM, 'unit.bomber', 2000, 8000, 0, 3, 0, 0),
             new Unit(static::UNIT_ID_FRE, 'unit.frigate', 15000, 7500, 0, 0, 0, 0),
             new Unit(static::UNIT_ID_ZER, 'unit.destroyer', 40000, 30000, 0, 0, 0, 0),
             new Unit(static::UNIT_ID_KRZ, 'unit.cruiser', 65000, 85000, 0, 0, 0, 0),
