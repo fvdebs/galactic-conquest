@@ -65,12 +65,12 @@ interface BattleInterface
     public function getTargetDataValue(string $key);
 
     /**
-     * @param int $fleetReference
+     * @param int $fleetId
      * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
      * @return \GC\Combat\Model\FleetInterface
      */
-    public function getFleetByReference(int $fleetReference, array $fleets): FleetInterface;
+    public function getFleetById(int $fleetId, array $fleets): FleetInterface;
 
     /**
      * @param \GC\Combat\Model\FleetInterface[] $fleets
@@ -80,14 +80,12 @@ interface BattleInterface
     public function getUnitSumFromFleets(array $fleets): array;
 
     /**
-     * Returns true if its equal and not empty.
-     *
      * @param \GC\Combat\Model\FleetInterface $fleet
-     * @param string $dataKey
+     * @param string $userInfoKey - default: Battle::KEY_PLAYER_ID
      *
      * @return bool
      */
-    public function compareFleetDataValueWithTargetDataValue(FleetInterface $fleet, string $dataKey): bool;
+    public function isFleetFromTarget(FleetInterface $fleet, string $userInfoKey = Battle::KEY_PLAYER_ID): bool;
 
     /**
      * @return void

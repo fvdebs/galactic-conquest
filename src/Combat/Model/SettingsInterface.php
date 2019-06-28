@@ -7,19 +7,19 @@ namespace GC\Combat\Model;
 interface SettingsInterface
 {
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorStealPerCentModifier(): int;
+    public function getExtractorStealRatio(): float;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getTargetSalvagePerCentModifier(): int;
+    public function getTargetSalvageRatio(): float;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getDefenderSalvagePerCentModifier(): int;
+    public function getDefenderSalvageRatio(): float;
 
     /**
      * @return int
@@ -30,6 +30,16 @@ interface SettingsInterface
      * @return \GC\Combat\Model\UnitInterface[]
      */
     public function getUnits(): array;
+
+    /**
+     * @return bool
+     */
+    public function isLastTick(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isPreFireTick(): bool;
 
     /**
      * @param int $unitId
@@ -48,5 +58,5 @@ interface SettingsInterface
      *
      * @return \GC\Combat\Model\UnitCombatSettingInterface[]
      */
-    public function getUnitCombatSettingsTargetsOf(int $unitId): array;
+    public function getUnitCombatSettingTargetsOf(int $unitId): array;
 }

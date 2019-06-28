@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace GC\Combat\Model;
 
+use function array_key_exists;
+
 final class CombatTickResult implements CombatTickResultInterface
 {
     /**
@@ -60,7 +62,7 @@ final class CombatTickResult implements CombatTickResultInterface
             return $this->destroyedUnit[$unitId];
         }
 
-        return (float) 0;
+        return 0;
     }
 
     /**

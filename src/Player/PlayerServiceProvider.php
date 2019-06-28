@@ -15,9 +15,7 @@ use GC\Player\Handler\PlayerFleetMissionHandler;
 use GC\Player\Handler\PlayerFleetHandler;
 use GC\Player\Handler\PlayerOverviewHandler;
 use GC\Player\Handler\PlayerResourcesHandler;
-use GC\Player\Handler\PlayerScanBlockerBuildHandler;
 use GC\Player\Handler\PlayerScanListHandler;
-use GC\Player\Handler\PlayerScanRelayBuildHandler;
 use GC\Player\Handler\PlayerTechnologyBuildHandler;
 use GC\Player\Handler\PlayerTechnologyListHandler;
 use GC\Player\Handler\PlayerUnitBuildHandler;
@@ -50,7 +48,7 @@ final class PlayerServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
-            $collection->get('/{locale}/report/{combatReportExternalId}', PlayerCombatReportExternalHandler::class)->addAttribute('public', true);
+            $collection->get('/{locale}/report/{externalId}', PlayerCombatReportExternalHandler::class)->addAttribute('public', true);
 
             $collection->get('/{locale}/{universe}/overview', PlayerOverviewHandler::class);
             $collection->get('/{locale}/{universe}/technology', PlayerTechnologyListHandler::class);
@@ -64,8 +62,6 @@ final class PlayerServiceProvider implements ServiceProviderInterface
             $collection->post('/{locale}/{universe}/technology', PlayerTechnologyBuildHandler::class);
             $collection->post('/{locale}/{universe}/unit', PlayerUnitBuildHandler::class);
             $collection->post('/{locale}/{universe}/extractor', PlayerExtractorBuildHandler::class);
-            $collection->post('/{locale}/{universe}/scan-relay', PlayerScanRelayBuildHandler::class);
-            $collection->post('/{locale}/{universe}/scan-blocker', PlayerScanBlockerBuildHandler::class);
             $collection->post('/{locale}/{universe}/fleet/resort', PlayerFleetResortHandler::class);
             $collection->post('/{locale}/{universe}/fleet/mission', PlayerFleetMissionHandler::class);
             $collection->post('/{locale}/{universe}/fleet/mission/recall', PlayerFleetMissionRecallHandler::class);

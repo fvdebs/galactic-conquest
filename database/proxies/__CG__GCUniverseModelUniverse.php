@@ -785,6 +785,17 @@ class Universe extends \GC\Universe\Model\Universe implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
+    public function getUnits(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUnits', []);
+
+        return parent::getUnits();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function createTechnology(string $name, \GC\Faction\Model\Faction $faction): \GC\Technology\Model\Technology
     {
 

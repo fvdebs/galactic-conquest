@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace GC\Combat\Model;
 
-use RuntimeException;
+use GC\Combat\Exception\UnitNotFoundException;
 
 final class Settings implements SettingsInterface
 {
     /**
-     * @var int
+     * @var float
      */
-    private $extractorStealPerCentModifier;
+    private $extractorStealRatio;
 
     /**
-     * @var int
+     * @var float
      */
-    private $targetSalvagePerCentModifier;
+    private $targetSalvageRatio;
 
     /**
-     * @var int
+     * @var float
      */
-    private $defenderSalvagePerCentModifier;
+    private $defenderSalvageRatio;
 
     /**
      * @var int
@@ -37,53 +37,67 @@ final class Settings implements SettingsInterface
      * @var \GC\Combat\Model\UnitCombatSetting[]
      */
     private $unitCombatSettings;
+    /**
+     * @var bool
+     */
+    private $isLastTick;
+    /**
+     * @var bool
+     */
+    private $isPreFireTick;
 
     /**
-     * @param int $extractorStealPerCentModifier
-     * @param int $targetSalvagePerCentModifier
-     * @param int $defenderSalvagePerCentModifier
+     * @param float $extractorStealRatio
+     * @param float $targetSalvageRatio
+     * @param float $defenderSalvageRatio
      * @param int $combatTicks
      * @param \GC\Combat\Model\UnitInterface[] $units
      * @param \GC\Combat\Model\UnitCombatSetting[] $unitCombatSettings
+     * @param bool $isLastTick
+     * @param bool $isPreFireTick - no functionality
      */
     public function __construct(
-        int $extractorStealPerCentModifier,
-        int $targetSalvagePerCentModifier,
-        int $defenderSalvagePerCentModifier,
+        float $extractorStealRatio,
+        float $targetSalvageRatio,
+        float $defenderSalvageRatio,
         int $combatTicks,
         array $units,
-        array $unitCombatSettings
+        array $unitCombatSettings,
+        bool $isLastTick = false,
+        bool $isPreFireTick = false
     ) {
-        $this->extractorStealPerCentModifier = $extractorStealPerCentModifier;
-        $this->targetSalvagePerCentModifier = $targetSalvagePerCentModifier;
-        $this->defenderSalvagePerCentModifier = $defenderSalvagePerCentModifier;
+        $this->extractorStealRatio = $extractorStealRatio;
+        $this->targetSalvageRatio = $targetSalvageRatio;
+        $this->defenderSalvageRatio = $defenderSalvageRatio;
         $this->combatTicks = $combatTicks;
         $this->units = $units;
         $this->unitCombatSettings = $unitCombatSettings;
+        $this->isLastTick = $isLastTick;
+        $this->isPreFireTick = $isPreFireTick;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorStealPerCentModifier(): int
+    public function getExtractorStealRatio(): float
     {
-        return $this->extractorStealPerCentModifier;
+        return $this->extractorStealRatio;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getTargetSalvagePerCentModifier(): int
+    public function getTargetSalvageRatio(): float
     {
-        return $this->targetSalvagePerCentModifier;
+        return $this->targetSalvageRatio;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getDefenderSalvagePerCentModifier(): int
+    public function getDefenderSalvageRatio(): float
     {
-        return $this->defenderSalvagePerCentModifier;
+        return $this->defenderSalvageRatio;
     }
 
     /**
@@ -103,6 +117,22 @@ final class Settings implements SettingsInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isLastTick(): bool
+    {
+        return $this->isLastTick;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPreFireTick(): bool
+    {
+        return $this->isPreFireTick;
+    }
+
+    /**
      * @param int $unitId
      *
      * @return \GC\Combat\Model\UnitInterface
@@ -115,7 +145,7 @@ final class Settings implements SettingsInterface
             }
         }
 
-        throw new RuntimeException('unit not given: ' . $unitId);
+        throw UnitNotFoundException::fromUnitId($unitId);
     }
 
     /**
@@ -131,9 +161,10 @@ final class Settings implements SettingsInterface
      *
      * @return \GC\Combat\Model\UnitCombatSettingInterface[]
      */
-    public function getUnitCombatSettingsTargetsOf(int $unitId): array
+    public function getUnitCombatSettingTargetsOf(int $unitId): array
     {
         $unitCombatSettings = [];
+
         foreach ($this->getUnitCombatSettings() as $unitCombatSetting) {
             if ($unitCombatSetting->getSourceUnitId() === $unitId) {
                 $unitCombatSettings[] = $unitCombatSetting;

@@ -1,0 +1,336 @@
+{
+  "report": {
+    "universe": "Sirius",
+    "universeId": 1,
+    "currentTick": 20,
+    "createdAt": "2019-06-28 02:03:59"
+  },
+  "settings": {
+    "combatTicks": 5,
+    "isPreFireTick": false,
+    "isLastTick": false,
+    "extractorStealRatio": 0.1,
+    "targetSalvageRatio": 0.4,
+    "defenderSalvageRatio": 0.2
+  },
+  "target": {
+    "data": {
+      "userId": 1,
+      "playerId": 1,
+      "name": "Tegrat",
+      "galaxyId": 1,
+      "galaxyNumber": 1,
+      "galaxyPosition": 1
+    },
+    "resource": {
+      "extractor": {
+        "lost": {
+          "metal": 0,
+          "crystal": 0
+        }
+      }
+    }
+  },
+  "defense": [
+    {
+      "data": [
+        {
+          "userId": 1,
+          "playerId": 1,
+          "name": "Tegrat",
+          "galaxyId": 1,
+          "galaxyNumber": 1,
+          "galaxyPosition": 1,
+          "fleetId": 10
+        },
+        {
+          "userId": 1,
+          "playerId": 1,
+          "name": "Tegrat",
+          "galaxyId": 1,
+          "galaxyNumber": 1,
+          "galaxyPosition": 1,
+          "fleetId": 1
+        }
+      ],
+      "before": {
+        "unit.interceptor": 100,
+        "unit.rubium": 100,
+        "unit.pulsar": 100,
+        "unit.coon": 100,
+        "unit.centurion": 100,
+        "unit.fighter": 100,
+        "unit.bomber": 100,
+        "unit.frigate": 100,
+        "unit.destroyer": 100,
+        "unit.cruiser": 100,
+        "unit.battleship": 100,
+        "unit.carrier": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.coon": 61,
+        "unit.centurion": 99,
+        "unit.fighter": 50,
+        "unit.bomber": 80,
+        "unit.frigate": 14,
+        "unit.destroyer": 54,
+        "unit.cruiser": 58,
+        "unit.battleship": 84,
+        "unit.carrier": 88,
+        "unit.cancri": 97161,
+        "unit.cleptor": 97632
+      },
+      "destroyed": {
+        "unit.fighter": 57,
+        "unit.bomber": 35,
+        "unit.frigate": 115,
+        "unit.destroyer": 62,
+        "unit.cruiser": 52,
+        "unit.battleship": 33,
+        "unit.carrier": 25,
+        "unit.cleptor": 1204,
+        "unit.cancri": 1736
+      },
+      "carrier": {
+        "capacity": 8800,
+        "consumed": 390,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 379920,
+          "crystal": 304220
+        },
+        "extractor": {
+          "protected": 97161
+        }
+      }
+    }
+  ],
+  "offense": [
+    {
+      "data": [
+        {
+          "userId": 4,
+          "playerId": 4,
+          "name": "Rekcatta1",
+          "galaxyId": 3,
+          "galaxyNumber": 3,
+          "galaxyPosition": 1,
+          "fleetId": 7
+        },
+        {
+          "userId": 4,
+          "playerId": 4,
+          "name": "Rekcatta1",
+          "galaxyId": 3,
+          "galaxyNumber": 3,
+          "galaxyPosition": 1,
+          "fleetId": 8
+        }
+      ],
+      "before": {
+        "unit.fighter": 200,
+        "unit.bomber": 200,
+        "unit.frigate": 200,
+        "unit.destroyer": 200,
+        "unit.cruiser": 200,
+        "unit.battleship": 200,
+        "unit.carrier": 200,
+        "unit.cancri": 200200,
+        "unit.cleptor": 140000
+      },
+      "after": {
+        "unit.fighter": 142,
+        "unit.bomber": 162,
+        "unit.frigate": 84,
+        "unit.destroyer": 136,
+        "unit.cruiser": 146,
+        "unit.battleship": 164,
+        "unit.carrier": 172,
+        "unit.cancri": 198462,
+        "unit.cleptor": 138794
+      },
+      "destroyed": {
+        "unit.fighter": 48,
+        "unit.bomber": 18,
+        "unit.frigate": 84,
+        "unit.destroyer": 44,
+        "unit.cruiser": 40,
+        "unit.battleship": 14,
+        "unit.carrier": 10,
+        "unit.cancri": 2938,
+        "unit.cleptor": 2366,
+        "unit.interceptor": 100,
+        "unit.rubium": 100,
+        "unit.pulsar": 100,
+        "unit.coon": 38
+      },
+      "carrier": {
+        "capacity": 17200,
+        "consumed": 912,
+        "losses": []
+      },
+      "resource": {
+        "extractor": {
+          "stolen": {
+            "metal": 9,
+            "crystal": 9
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "defense": {
+      "data": [
+        {
+          "userId": 1,
+          "playerId": 1,
+          "name": "Tegrat",
+          "galaxyId": 1,
+          "galaxyNumber": 1,
+          "galaxyPosition": 1,
+          "fleetId": 10
+        },
+        {
+          "userId": 1,
+          "playerId": 1,
+          "name": "Tegrat",
+          "galaxyId": 1,
+          "galaxyNumber": 1,
+          "galaxyPosition": 1,
+          "fleetId": 1
+        }
+      ],
+      "before": {
+        "unit.interceptor": 100,
+        "unit.rubium": 100,
+        "unit.pulsar": 100,
+        "unit.coon": 100,
+        "unit.centurion": 100,
+        "unit.fighter": 100,
+        "unit.bomber": 100,
+        "unit.frigate": 100,
+        "unit.destroyer": 100,
+        "unit.cruiser": 100,
+        "unit.battleship": 100,
+        "unit.carrier": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.coon": 61,
+        "unit.centurion": 99,
+        "unit.fighter": 50,
+        "unit.bomber": 80,
+        "unit.frigate": 14,
+        "unit.destroyer": 54,
+        "unit.cruiser": 58,
+        "unit.battleship": 84,
+        "unit.carrier": 88,
+        "unit.cancri": 97161,
+        "unit.cleptor": 97632
+      },
+      "destroyed": {
+        "unit.fighter": 57,
+        "unit.bomber": 35,
+        "unit.frigate": 115,
+        "unit.destroyer": 62,
+        "unit.cruiser": 52,
+        "unit.battleship": 33,
+        "unit.carrier": 25,
+        "unit.cleptor": 1204,
+        "unit.cancri": 1736
+      },
+      "carrier": {
+        "capacity": 8800,
+        "consumed": 390,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 379920,
+          "crystal": 304220
+        },
+        "extractor": {
+          "protected": 97161
+        }
+      }
+    },
+    "offense": {
+      "data": [
+        {
+          "userId": 4,
+          "playerId": 4,
+          "name": "Rekcatta1",
+          "galaxyId": 3,
+          "galaxyNumber": 3,
+          "galaxyPosition": 1,
+          "fleetId": 7
+        },
+        {
+          "userId": 4,
+          "playerId": 4,
+          "name": "Rekcatta1",
+          "galaxyId": 3,
+          "galaxyNumber": 3,
+          "galaxyPosition": 1,
+          "fleetId": 8
+        }
+      ],
+      "before": {
+        "unit.fighter": 200,
+        "unit.bomber": 200,
+        "unit.frigate": 200,
+        "unit.destroyer": 200,
+        "unit.cruiser": 200,
+        "unit.battleship": 200,
+        "unit.carrier": 200,
+        "unit.cancri": 200200,
+        "unit.cleptor": 140000
+      },
+      "after": {
+        "unit.fighter": 142,
+        "unit.bomber": 162,
+        "unit.frigate": 84,
+        "unit.destroyer": 136,
+        "unit.cruiser": 146,
+        "unit.battleship": 164,
+        "unit.carrier": 172,
+        "unit.cancri": 198462,
+        "unit.cleptor": 138794
+      },
+      "destroyed": {
+        "unit.fighter": 48,
+        "unit.bomber": 18,
+        "unit.frigate": 84,
+        "unit.destroyer": 44,
+        "unit.cruiser": 40,
+        "unit.battleship": 14,
+        "unit.carrier": 10,
+        "unit.cancri": 2938,
+        "unit.cleptor": 2366,
+        "unit.interceptor": 100,
+        "unit.rubium": 100,
+        "unit.pulsar": 100,
+        "unit.coon": 38
+      },
+      "carrier": {
+        "capacity": 17200,
+        "consumed": 912,
+        "losses": []
+      },
+      "resource": {
+        "extractor": {
+          "stolen": {
+            "metal": 9,
+            "crystal": 9
+          }
+        }
+      }
+    }
+  }
+}

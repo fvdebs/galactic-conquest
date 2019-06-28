@@ -20,13 +20,14 @@ use GC\User\Model\User;
 use function array_rand;
 use function count;
 use function in_array;
-use function json_encode;
 use function password_hash;
 use function random_int;
 use function round;
 
 class UniverseSimulationFixture extends AbstractFixture
 {
+    private const MULTIPLIER = 2;
+
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
      */
@@ -170,7 +171,7 @@ class UniverseSimulationFixture extends AbstractFixture
         $this->manager = $manager;
 
         // config
-        $galaxyAndAlliancesMultiplier = 200;
+        $galaxyAndAlliancesMultiplier = static::MULTIPLIER;
         $universes = ['Sirius', 'Eridanus', 'Starman'];
         $universesPermanentPlayersAppliedTo = ['Sirius', 'Eridanus'];
         $this->createPermanentUser('John Doe', 'example@example.org');

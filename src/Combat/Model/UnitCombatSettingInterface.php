@@ -17,9 +17,9 @@ interface UnitCombatSettingInterface
     public function getTargetUnitId(): int;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getDistributionPerCent(): int;
+    public function getDistributionRatio(): float;
 
     /**
      * @return float

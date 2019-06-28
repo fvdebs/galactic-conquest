@@ -10,6 +10,13 @@ use GC\Combat\Model\FleetInterface;
 use GC\Combat\Model\SettingsInterface;
 
 use function json_encode;
+use function array_merge;
+use function array_key_exists;
+use function array_filter;
+use function ksort;
+use function in_array;
+use function is_numeric;
+use function is_array;
 
 final class JsonFormatter implements JsonFormatterInterface
 {
@@ -20,21 +27,23 @@ final class JsonFormatter implements JsonFormatterInterface
     private const KEY_OFFENSE = 'offense';
     private const KEY_SUMMARY = 'summary';
     private const KEY_RESOURCE = 'resource';
-    private const KEY_SALVAGE = 'salvage';
+    private const KEY_SALVAGED = 'salvaged';
     private const KEY_EXTRACTOR = 'extractor';
+    private const KEY_PROTECTED = 'protected';
     private const KEY_EXTRACTOR_LOST = 'lost';
     private const KEY_EXTRACTOR_STOLEN = 'stolen';
     private const KEY_METAL = 'metal';
     private const KEY_CRYSTAL = 'crystal';
     private const KEY_CARRIER = 'carrier';
-    private const KEY_CARRIER_SPACE = 'space';
-    private const KEY_CARRIER_CONSUMPTION = 'consumption';
+    private const KEY_CARRIER_CAPACITY = 'capacity';
+    private const KEY_CARRIER_CAPACITY_CONSUMED = 'consumed';
     private const KEY_CARRIER_LOSSES = 'losses';
     private const KEY_BEFORE = 'before';
     private const KEY_AFTER = 'after';
     private const KEY_DESTROYED = 'destroyed';
-    private const KEY_FLEET_REFERENCE = 'fleetReference';
+    private const KEY_FLEET_ID = 'fleetId';
     private const KEY_CREATED_AT = 'createdAt';
+    private const KEY_SETTINGS = 'settings';
 
     /**
      * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
@@ -51,6 +60,7 @@ final class JsonFormatter implements JsonFormatterInterface
         ?string $mergeByDataKey = null
     ) : string {
         $data = $this->addReportData([], $calculatorResult);
+        $data = $this->addSettings($data, $settings);
         $data = $this->addTargetData($data, $calculatorResult);
         $data = $this->addDefense($data, $calculatorResult, $settings);
         $data = $this->addOffense($data, $calculatorResult, $settings);
@@ -176,14 +186,14 @@ final class JsonFormatter implements JsonFormatterInterface
     ): array {
         $beforeFleets = $calculatorResult->getBeforeBattle()->getDefendingFleets();
         foreach ($beforeFleets as $beforeFleet) {
-            $afterFleet = $calculatorResult->getAfterBattle()->getFleetByReference(
-                $beforeFleet->getFleetReference(),
+            $afterFleet = $calculatorResult->getAfterBattle()->getFleetById(
+                $beforeFleet->getFleetId(),
                 $calculatorResult->getAfterBattle()->getDefendingFleets()
             );
 
             $fleetArray = $this->addMetaDataArray([], $afterFleet);
             $fleetArray = $this->createFleetArray($fleetArray,$beforeFleet, $afterFleet, $settings);
-            $fleetArray = $this->addSalvageArray($fleetArray, $afterFleet);
+            $fleetArray = $this->addDefenseResourceArray($fleetArray, $afterFleet);
 
             $data[static::KEY_DEFENSE][] = $fleetArray;
         }
@@ -204,9 +214,10 @@ final class JsonFormatter implements JsonFormatterInterface
         SettingsInterface $settings
     ): array {
         $beforeFleets = $calculatorResult->getBeforeBattle()->getAttackingFleets();
+
         foreach ($beforeFleets as $beforeFleet) {
-            $afterFleet = $calculatorResult->getAfterBattle()->getFleetByReference(
-                $beforeFleet->getFleetReference(),
+            $afterFleet = $calculatorResult->getAfterBattle()->getFleetById(
+                $beforeFleet->getFleetId(),
                 $calculatorResult->getAfterBattle()->getAttackingFleets()
             );
 
@@ -221,6 +232,24 @@ final class JsonFormatter implements JsonFormatterInterface
     }
 
     /**
+     * @param string[] $data
+     * @param \GC\Combat\Model\SettingsInterface $settings
+     *
+     * @return array
+     */
+    private function addSettings(array $data, SettingsInterface $settings): array
+    {
+        $data[static::KEY_SETTINGS]['combatTicks'] = $settings->getCombatTicks();
+        $data[static::KEY_SETTINGS]['isPreFireTick'] = $settings->isPreFireTick();
+        $data[static::KEY_SETTINGS]['isLastTick'] = $settings->isLastTick();
+        $data[static::KEY_SETTINGS]['extractorStealRatio'] = $settings->getExtractorStealRatio();
+        $data[static::KEY_SETTINGS]['targetSalvageRatio'] = $settings->getTargetSalvageRatio();
+        $data[static::KEY_SETTINGS]['defenderSalvageRatio'] = $settings->getDefenderSalvageRatio();
+
+        return $data;
+    }
+
+    /**
      * @param string[] $fleetArray
      * @param \GC\Combat\Model\FleetInterface $afterFleet
      *
@@ -229,7 +258,7 @@ final class JsonFormatter implements JsonFormatterInterface
     private function addMetaDataArray(array $fleetArray, FleetInterface $afterFleet): array
     {
         $fleetArray[static::KEY_DATA] = $afterFleet->getData();
-        $fleetArray[static::KEY_DATA][static::KEY_FLEET_REFERENCE] = $afterFleet->getFleetReference();
+        $fleetArray[static::KEY_DATA][static::KEY_FLEET_ID] = $afterFleet->getFleetId();
 
         return $fleetArray;
     }
@@ -257,10 +286,11 @@ final class JsonFormatter implements JsonFormatterInterface
      *
      * @return string[]
      */
-    private function addSalvageArray(array $fleetArray, FleetInterface $afterFleet): array
+    private function addDefenseResourceArray(array $fleetArray, FleetInterface $afterFleet): array
     {
-        $fleetArray[static::KEY_RESOURCE][static::KEY_SALVAGE][static::KEY_METAL]= $afterFleet->getSalvageMetal();
-        $fleetArray[static::KEY_RESOURCE][static::KEY_SALVAGE][static::KEY_CRYSTAL]= $afterFleet->getSalvageCrystal();
+        $fleetArray[static::KEY_RESOURCE][static::KEY_SALVAGED][static::KEY_METAL]= $afterFleet->getSalvagedMetal();
+        $fleetArray[static::KEY_RESOURCE][static::KEY_SALVAGED][static::KEY_CRYSTAL]= $afterFleet->getSalvagedCrystal();
+        $fleetArray[static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_PROTECTED]= $afterFleet->getExtractorsProtected();
 
         return $fleetArray;
     }
@@ -283,13 +313,13 @@ final class JsonFormatter implements JsonFormatterInterface
             $after->getUnits()
         );
 
-        $unitsDestroyed = $this->sortArrayByKeyAndRemoveEmptyValues(
+        $afterUnitsDestroyed = $this->sortArrayByKeyAndRemoveEmptyValues(
             $after->getUnitsDestroyed()
         );
 
         $fleetArray[static::KEY_BEFORE] = $this->createFleetList($unitsBefore, $settings);
         $fleetArray[static::KEY_AFTER] = $this->createFleetList($unitsAfter, $settings);
-        $fleetArray[static::KEY_DESTROYED] = $this->createFleetList($unitsDestroyed, $settings);
+        $fleetArray[static::KEY_DESTROYED] = $this->createFleetList($afterUnitsDestroyed, $settings);
         $fleetArray[static::KEY_CARRIER] = $this->createCarrierListFor($after, $settings);
 
         return $fleetArray;
@@ -332,11 +362,11 @@ final class JsonFormatter implements JsonFormatterInterface
     private function createCarrierListFor(FleetInterface $fleet, SettingsInterface $settings): array
     {
         $carrierArray = [];
-        $carrierArray[static::KEY_CARRIER_SPACE] = $fleet->getCarrierSpace();
-        $carrierArray[static::KEY_CARRIER_CONSUMPTION] = $fleet->getCarrierConsumption();
+        $carrierArray[static::KEY_CARRIER_CAPACITY] = $fleet->getCarrierCapacity();
+        $carrierArray[static::KEY_CARRIER_CAPACITY_CONSUMED] = $fleet->getCarrierCapacityConsumed();
 
         $carrierLossesArray = [];
-        foreach ($fleet->getInsufficientCarrierLosses() as $unitId => $quantity) {
+        foreach ($fleet->getInsufficientCarrierCapacityLosses() as $unitId => $quantity) {
             $carrierLossesArray[$settings->getUnitById($unitId)->getName()] = $quantity;
         }
 

@@ -7,7 +7,7 @@ namespace GC\Combat\Calculator\Plugin;
 use GC\Combat\Model\BattleInterface;
 use GC\Combat\Model\SettingsInterface;
 
-use function round;
+use function floor;
 
 final class ExtractorCalculatorPlugin implements CalculatorPluginInterface
 {
@@ -30,34 +30,20 @@ final class ExtractorCalculatorPlugin implements CalculatorPluginInterface
             $settings
         );
 
-        if ($extractorStealCapacityTotal === 0 || $extractorsProtectedTotal >= $extractorStealCapacityTotal) {
+        if ($extractorStealCapacityTotal === 0.0 || $extractorsProtectedTotal >= $extractorStealCapacityTotal) {
             return $after;
         }
 
-        $extractorsUnprotected = $extractorStealCapacityTotal - $extractorsProtectedTotal;
-
-        $stealRatio = $settings->getExtractorStealPerCentModifier() / 100;
-
-        $totalMetalExtractorsToSteal = $after->getTargetExtractorsMetal() * ($stealRatio / 100);
-        $totalCrystalExtractorsToSteal = $after->getTargetExtractorsCrystal() * ($stealRatio / 100);
+        $totalMetalExtractorsToSteal = $after->getTargetExtractorsMetal() *  $settings->getExtractorStealRatio();
+        $totalCrystalExtractorsToSteal = $after->getTargetExtractorsCrystal() *  $settings->getExtractorStealRatio();
 
         foreach ($after->getAttackingFleets() as $fleet) {
-            if ($fleet->getExtractorsStealCapacity() === 0) {
+            if ($fleet->getExtractorsStealCapacity() === 0.0) {
                 continue;
             }
 
-            $extractorsStolenMetal =
-                ($totalMetalExtractorsToSteal / $extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
-
-            $extractorsStolenCrystal =
-                ($totalCrystalExtractorsToSteal / $extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
-
-            $extractorsTotalPossibleToSteal = $extractorsStolenMetal + $extractorsStolenCrystal;
-
-            if ($extractorsUnprotected > $extractorsTotalPossibleToSteal) {
-                $extractorsStolenMetal = $extractorsStolenMetal * ($extractorsUnprotected / 100);
-                $extractorsStolenCrystal = $extractorsStolenCrystal * ($extractorsUnprotected / 100);
-            }
+            $extractorsStolenMetal = $totalMetalExtractorsToSteal / ($extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
+            $extractorsStolenCrystal = $totalCrystalExtractorsToSteal / ($extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
 
             $fleet->setExtractorStolenMetal((int) floor($extractorsStolenMetal));
             $fleet->setExtractorStolenCrystal((int) floor($extractorsStolenCrystal));
@@ -70,9 +56,9 @@ final class ExtractorCalculatorPlugin implements CalculatorPluginInterface
      * @param \GC\Combat\Model\FleetInterface[] $fleets
      * @param \GC\Combat\Model\SettingsInterface $settings
      *
-     * @return int
+     * @return float
      */
-    private function calculateNumberOfProtectedExtractors(array $fleets, SettingsInterface $settings): int
+    private function calculateNumberOfProtectedExtractors(array $fleets, SettingsInterface $settings): float
     {
         $extractorsProtectedTotal = 0;
 
@@ -82,27 +68,28 @@ final class ExtractorCalculatorPlugin implements CalculatorPluginInterface
 
             foreach ($fleet->getUnits() as $unitId => $quantity) {
                 $currentUnitTypeCanProtect = $settings->getUnitById($unitId)
-                    ->getExtractorGuardAmount();
+                    ->getExtractorProtectAmount();
 
-                $currentUnitCanProtect = $currentUnitTypeCanProtect * $quantity;
-                $currentFleetCanProtect += $currentUnitCanProtect;
+                $currentUnitQuantityCanProtect = $currentUnitTypeCanProtect * $quantity;
+
+                $currentFleetCanProtect += $currentUnitQuantityCanProtect;
             }
 
             $extractorsProtectedTotal += $currentFleetCanProtect;
 
-            $fleet->setExtractorsGuarded((int) round($currentFleetCanProtect));
+            $fleet->setExtractorsProtected($currentFleetCanProtect);
         }
 
-        return (int) round($extractorsProtectedTotal);
+        return $extractorsProtectedTotal;
     }
 
     /**
      * @param \GC\Combat\Model\FleetInterface[] $fleets
      * @param \GC\Combat\Model\SettingsInterface $settings
      *
-     * @return int
+     * @return float
      */
-    private function calculateNumberOfStealCapacity(array $fleets, SettingsInterface $settings): int
+    private function calculateNumberOfStealCapacity(array $fleets, SettingsInterface $settings): float
     {
         $extractorsStealCapacityTotal = 0;
 
@@ -114,15 +101,16 @@ final class ExtractorCalculatorPlugin implements CalculatorPluginInterface
                 $currentUnitTypeCanSteal = $settings->getUnitById($unitId)
                     ->getExtractorStealAmount();
 
-                $currentUnitCanSteal = $currentUnitTypeCanSteal * $quantity;
-                $currentFleetCanSteal += $currentUnitCanSteal;
+                $currentUnitQuantityCanSteal = $currentUnitTypeCanSteal * $quantity;
+
+                $currentFleetCanSteal += $currentUnitQuantityCanSteal;
             }
 
             $extractorsStealCapacityTotal += $currentFleetCanSteal;
 
-            $fleet->setExtractorsStealCapacity((int) round($currentFleetCanSteal));
+            $fleet->setExtractorsStealCapacity($currentFleetCanSteal);
         }
 
-        return (int) round($extractorsStealCapacityTotal);
+        return $extractorsStealCapacityTotal;
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Combat\Model;
 
-use RuntimeException;
+use GC\Combat\Exception\UnitNotFoundException;
 
 use function array_key_exists;
 use function count;
@@ -12,14 +12,14 @@ use function is_object;
 use function is_array;
 use function unserialize;
 use function serialize;
-use function round;
+use function floor;
 
 final class Fleet implements FleetInterface
 {
     /**
      * @var int
      */
-    private $fleetReference;
+    private $fleetId;
 
     /**
      * @var float[]
@@ -42,58 +42,58 @@ final class Fleet implements FleetInterface
     private $unitsDestroyed = [];
 
     /**
-     * @var int
+     * @var float
      */
     private $extractorStolenMetal = 0;
 
     /**
-     * @var int
+     * @var float
      */
     private $extractorStolenCrystal = 0;
 
     /**
-     * @var int
+     * @var float
      */
-    private $salvageMetal = 0;
+    private $salvagedMetal = 0;
 
     /**
-     * @var int
+     * @var float
      */
-    private $salvageCrystal = 0;
+    private $salvagedCrystal = 0;
 
     /**
-     * @var int
+     * @var float
      */
-    private $extractorsGuarded = 0;
+    private $extractorsProtected = 0;
 
     /**
-     * @var int
+     * @var float
      */
     private $extractorsStealCapacity = 0;
 
     /**
-     * @var int[]
+     * @var float[]
      */
-    private $insufficientCarrierLosses = [];
+    private $insufficientCarrierCapacityLosses = [];
 
     /**
-     * @var int
+     * @var float
      */
-    private $carrierSpace = 0;
+    private $carrierCapacity = 0;
 
     /**
-     * @var int
+     * @var float
      */
-    private $carrierConsumption = 0;
+    private $carrierCapacityConsumed = 0;
 
     /**
-     * @param int $fleetReference
+     * @param int $fleetId
      * @param float[] $units - unitId => quantity
      * @param string[] $data
      */
-    public function __construct(int $fleetReference, array $units = [], array $data = [])
+    public function __construct(int $fleetId, array $units = [], array $data = [])
     {
-        $this->fleetReference = $fleetReference;
+        $this->fleetId = $fleetId;
         $this->units = $units;
         $this->data = $data;
     }
@@ -101,9 +101,9 @@ final class Fleet implements FleetInterface
     /**
      * @return int
      */
-    public function getFleetReference(): int
+    public function getFleetId(): int
     {
-        return $this->fleetReference;
+        return $this->fleetId;
     }
 
     /**
@@ -180,7 +180,7 @@ final class Fleet implements FleetInterface
     private function decreaseUnitQuantity(int $unitId, float $quantity): void
     {
         if (!$this->hasUnit($unitId)) {
-            throw new RuntimeException('can not decrease unit with given id: ' . $unitId);
+            throw UnitNotFoundException::fromUnitId($unitId);
         }
 
         $this->units[$unitId] -= $quantity;
@@ -206,7 +206,7 @@ final class Fleet implements FleetInterface
      */
     public function hasUnitsDestroyed(): bool
     {
-        return count($this->unitsDestroyed) !== 0;
+        return count($this->unitsDestroyed) > 0;
     }
 
     /**
@@ -243,206 +243,214 @@ final class Fleet implements FleetInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getSalvageMetal(): int
+    public function getSalvagedMetal(): float
     {
-        return $this->salvageMetal;
+        return $this->salvagedMetal;
     }
 
     /**
-     * @param int $salvageMetal
+     * @param float $salvagedMetal
      *
      * @return void
      */
-    public function setSalvageMetal(int $salvageMetal): void
+    public function setSalvagedMetal(float $salvagedMetal): void
     {
-        $this->salvageMetal = $salvageMetal;
+        $this->salvagedMetal = $salvagedMetal;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getSalvageCrystal(): int
+    public function getSalvagedCrystal(): float
     {
-        return $this->salvageCrystal;
+        return $this->salvagedCrystal;
     }
 
     /**
-     * @param int $salvageCrystal
+     * @param float $salvagedCrystal
      *
      * @return void
      */
-    public function setSalvageCrystal(int $salvageCrystal): void
+    public function setSalvagedCrystal(float $salvagedCrystal): void
     {
-        $this->salvageCrystal = $salvageCrystal;
+        $this->salvagedCrystal = $salvagedCrystal;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorStolenMetal(): int
+    public function getExtractorStolenMetal(): float
     {
         return $this->extractorStolenMetal;
     }
 
     /**
-     * @param int $extractorStolenMetal
+     * @param float $extractorStolenMetal
      *
      * @return void
      */
-    public function setExtractorStolenMetal(int $extractorStolenMetal): void
+    public function setExtractorStolenMetal(float $extractorStolenMetal): void
     {
         $this->extractorStolenMetal = $extractorStolenMetal;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorStolenCrystal(): int
+    public function getExtractorStolenCrystal(): float
     {
         return $this->extractorStolenCrystal;
     }
 
     /**
-     * @param int $extractorStolenCrystal
+     * @param float $extractorStolenCrystal
      *
      * @return void
      */
-    public function setExtractorStolenCrystal(int $extractorStolenCrystal): void
+    public function setExtractorStolenCrystal(float $extractorStolenCrystal): void
     {
         $this->extractorStolenCrystal = $extractorStolenCrystal;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorsGuarded(): int
+    public function getExtractorsProtected(): float
     {
-        return $this->extractorsGuarded;
+        return $this->extractorsProtected;
     }
 
     /**
-     * @param int $extractorsGuarded
+     * @param float $extractorsProtected
      *
      * @return void
      */
-    public function setExtractorsGuarded(int $extractorsGuarded): void
+    public function setExtractorsProtected(float $extractorsProtected): void
     {
-        $this->extractorsGuarded = $extractorsGuarded;
+        $this->extractorsProtected = $extractorsProtected;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorsStealCapacity(): int
+    public function getExtractorsStealCapacity(): float
     {
         return $this->extractorsStealCapacity;
     }
 
     /**
-     * @param int $extractorsStealCapacity
+     * @param float $extractorsStealCapacity
+     *
+     * @return void
      */
-    public function setExtractorsStealCapacity(int $extractorsStealCapacity): void
+    public function setExtractorsStealCapacity(float $extractorsStealCapacity): void
     {
         $this->extractorsStealCapacity = $extractorsStealCapacity;
     }
 
     /**
-     * @param int $number
+     * @param float $capacity
      *
      * @return void
      */
-    public function decreaseExtractorsStealCapacity(int $number): void
+    public function decreaseExtractorsStealCapacity(float $capacity): void
     {
-        $this->extractorsStealCapacity -= $number;
+        $this->extractorsStealCapacity -= $capacity;
     }
 
     /**
-     * @return int[]
+     * @return float[]
      */
-    public function getInsufficientCarrierLosses(): array
+    public function getInsufficientCarrierCapacityLosses(): array
     {
-        return $this->insufficientCarrierLosses;
+        return $this->insufficientCarrierCapacityLosses;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasInsufficientCarrierCapacityLosses(): bool
+    {
+        return count($this->insufficientCarrierCapacityLosses) > 0;
     }
 
     /**
      * @param int $unitId
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return void
      */
-    public function addInsufficientCarrierLosses(int $unitId, int $quantity): void
+    public function addInsufficientCarrierCapacityLosses(int $unitId, float $quantity): void
     {
-        $this->decreaseUnitQuantity($unitId, $quantity);
-
-        if (!array_key_exists($unitId, $this->insufficientCarrierLosses)) {
-            $this->insufficientCarrierLosses[$unitId] = 0;
+        if (!array_key_exists($unitId, $this->insufficientCarrierCapacityLosses)) {
+            $this->insufficientCarrierCapacityLosses[$unitId] = 0;
         }
 
-        $this->insufficientCarrierLosses[$unitId] += $quantity;
+        $this->insufficientCarrierCapacityLosses[$unitId] += $quantity;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getCarrierSpace(): int
+    public function getCarrierCapacity(): float
     {
-        return $this->carrierSpace;
+        return $this->carrierCapacity;
     }
 
     /**
-     * @param int $carrierSpace
+     * @param float $carrierCapacity
      *
      * @return void
      */
-    public function setCarrierSpace(int $carrierSpace): void
+    public function setCarrierCapacity(float $carrierCapacity): void
     {
-        $this->carrierSpace = $carrierSpace;
+        $this->carrierCapacity = $carrierCapacity;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getCarrierConsumption(): int
+    public function getCarrierCapacityConsumed(): float
     {
-        return $this->carrierConsumption;
+        return $this->carrierCapacityConsumed;
     }
 
     /**
-     * @param int $carrierConsumption
+     * @param float $carrierCapacityConsumed
      *
      * @return void
      */
-    public function setCarrierConsumption(int $carrierConsumption): void
+    public function setCarrierCapacityConsumed(float $carrierCapacityConsumed): void
     {
-        $this->carrierConsumption = $carrierConsumption;
+        $this->carrierCapacityConsumed = $carrierCapacityConsumed;
     }
 
     /**
      * @return void
      */
-    public function normalize(): void
+    public function floorUnitQuantities(): void
     {
-        $this->units = $this->arrayToInt($this->units);
-        $this->unitsLost = $this->arrayToInt($this->units);
-        $this->unitsDestroyed = $this->arrayToInt($this->units);
+        $this->units = $this->floorArrayValues($this->units);
+        $this->unitsLost = $this->floorArrayValues($this->unitsLost);
+        $this->unitsDestroyed = $this->floorArrayValues($this->unitsDestroyed);
     }
 
     /**
      * @param float[] $array
      *
-     * @return int[]
+     * @return float[]
      */
-    private function arrayToInt(array $array): array
+    private function floorArrayValues(array $array): array
     {
-        $normalized = [];
+        $rounded = [];
 
         foreach ($array as $index => $value) {
-            $normalized[$index] = (int) round($value);
+            $rounded[$index] = floor($value);
         }
 
-        return $normalized;
+        return $rounded;
     }
 
     /**
@@ -451,7 +459,7 @@ final class Fleet implements FleetInterface
     public function __clone()
     {
         foreach($this as $key => $val) {
-            if (is_object($val) || (is_array($val))) {
+            if (is_object($val) || is_array($val)) {
                 $this->{$key} = unserialize(serialize($val));
             }
         }

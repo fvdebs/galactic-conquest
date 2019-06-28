@@ -29,12 +29,12 @@ final class Unit implements UnitInterface
     /**
      * @var int
      */
-    private $carrierSpace;
+    private $carrierCapacity;
 
     /**
      * @var int
      */
-    private $carrierSpaceConsumption;
+    private $carrierCapacityConsumed;
 
     /**
      * @var int
@@ -44,36 +44,36 @@ final class Unit implements UnitInterface
     /**
      * @var int
      */
-    private $extractorGuardAmount;
+    private $extractorProtectAmount;
 
     /**
      * @param int $unitId
      * @param string $name
      * @param int $metalCost
      * @param int $crystalCost
-     * @param int $carrierSpace
-     * @param int $carrierSpaceConsumption
+     * @param int $carrierCapacity
+     * @param int $carrierCapacityConsumed
      * @param int $extractorStealAmount
-     * @param int $extractorGuardAmount
+     * @param int $extractorProtectAmount
      */
     public function __construct(
         int $unitId,
         string $name,
         int $metalCost,
         int $crystalCost,
-        int $carrierSpace,
-        int $carrierSpaceConsumption,
+        int $carrierCapacity,
+        int $carrierCapacityConsumed,
         int $extractorStealAmount,
-        int $extractorGuardAmount
+        int $extractorProtectAmount
     ) {
         $this->unitId = $unitId;
         $this->name = $name;
         $this->metalCost = $metalCost;
         $this->crystalCost = $crystalCost;
-        $this->carrierSpace = $carrierSpace;
-        $this->carrierSpaceConsumption = $carrierSpaceConsumption;
+        $this->carrierCapacity = $carrierCapacity;
+        $this->carrierCapacityConsumed = $carrierCapacityConsumed;
         $this->extractorStealAmount = $extractorStealAmount;
-        $this->extractorGuardAmount = $extractorGuardAmount;
+        $this->extractorProtectAmount = $extractorProtectAmount;
     }
 
     /**
@@ -111,17 +111,17 @@ final class Unit implements UnitInterface
     /**
      * @return int
      */
-    public function getCarrierSpace(): int
+    public function getCarrierCapacity(): int
     {
-        return $this->carrierSpace;
+        return $this->carrierCapacity;
     }
 
     /**
      * @return int
      */
-    public function getCarrierSpaceConsumption(): int
+    public function getCarrierCapacityConsumed(): int
     {
-        return $this->carrierSpaceConsumption;
+        return $this->carrierCapacityConsumed;
     }
 
     /**
@@ -135,8 +135,8 @@ final class Unit implements UnitInterface
     /**
      * @return int
      */
-    public function getExtractorGuardAmount(): int
+    public function getExtractorProtectAmount(): int
     {
-        return $this->extractorGuardAmount;
+        return $this->extractorProtectAmount;
     }
 }

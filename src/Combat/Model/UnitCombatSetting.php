@@ -17,9 +17,9 @@ final class UnitCombatSetting implements UnitCombatSettingInterface
     private $targetUnitId;
 
     /**
-     * @var int
+     * @var float
      */
-    private $distributionPerCent;
+    private $distributionRatio;
 
     /**
      * @var float
@@ -29,18 +29,18 @@ final class UnitCombatSetting implements UnitCombatSettingInterface
     /**
      * @param int $sourceUnitId
      * @param int $targetUnitId
-     * @param int $distributionPerCent
+     * @param float $distributionRatio
      * @param float $attackPower
      */
     public function __construct(
         int $sourceUnitId,
         int $targetUnitId,
-        int $distributionPerCent,
+        float $distributionRatio,
         float $attackPower
     ) {
         $this->sourceUnitId = $sourceUnitId;
         $this->targetUnitId = $targetUnitId;
-        $this->distributionPerCent = $distributionPerCent;
+        $this->distributionRatio = $distributionRatio;
         $this->attackPower = $attackPower;
     }
 
@@ -61,11 +61,11 @@ final class UnitCombatSetting implements UnitCombatSettingInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getDistributionPerCent(): int
+    public function getDistributionRatio(): float
     {
-        return $this->distributionPerCent;
+        return $this->distributionRatio;
     }
 
     /**

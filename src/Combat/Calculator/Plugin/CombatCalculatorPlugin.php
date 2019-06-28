@@ -13,8 +13,8 @@ use function array_sum;
 use function array_diff_key;
 use function array_values;
 use function array_keys;
-use function array_map;
-use function round;
+use function in_array;
+use function count;
 
 final class CombatCalculatorPlugin implements CalculatorPluginInterface
 {
@@ -30,7 +30,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
         $defenderFleets = [];
         $aggressorFleets = [];
 
-        for ($i = 1; $i <= $settings->getCombatTicks(); $i++) {
+        for ($currentCombatTick = 1; $currentCombatTick <= $settings->getCombatTicks(); $currentCombatTick++) {
             $defenderFleets = $after->getDefendingFleets();
             $aggressorFleets = $after->getAttackingFleets();
 
@@ -66,7 +66,8 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
         }
 
         foreach (array_merge($defenderFleets, $aggressorFleets) as $fleet) {
-            $fleet->normalize();
+            /* @var \GC\Combat\Model\FleetInterface $fleet */
+            $fleet->floorUnitQuantities();
         }
 
         return $after;
@@ -84,15 +85,15 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
         $combatTickResult = new CombatTickResult();
 
         foreach ($unitSumAttacking as $unitIdWhichCurrentlyFiring => $unitQuantityWhichCurrentlyFiring) {
-            if ($unitQuantityWhichCurrentlyFiring == 0) {
+            if ($unitQuantityWhichCurrentlyFiring === 0.0) {
                 continue;
             }
 
-            $combatSettingsForCurrentUnit = $settings->getUnitCombatSettingsTargetsOf(
+            $combatSettingsForCurrentUnit = $settings->getUnitCombatSettingTargetsOf(
                 $unitIdWhichCurrentlyFiring
             );
 
-            if (count($combatSettingsForCurrentUnit) == 0) {
+            if (count($combatSettingsForCurrentUnit) === 0.0) {
                 continue;
             }
 
@@ -103,16 +104,16 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
                 $unitSumDefending
             );
 
-            if (count($targetUnitsSum) == 0) {
+            if (count($targetUnitsSum) === 0.0) {
                 continue;
             }
 
             $unitIdDistributionsFireCalculated = $this->calculateDistributionFireForUnitIds(
-                $this->getDistributionFireFrom($combatSettingsForCurrentUnit),
+                $this->getDistributionRatiosFrom($combatSettingsForCurrentUnit),
                 $targetUnitsSum
             );
 
-            $unitIdAttackPowers = $this->getAttackPowerFrom(
+            $unitIdAttackPowers = $this->getAttackPowersFrom(
                 $combatSettingsForCurrentUnit
             );
 
@@ -140,7 +141,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
                     $destroyedQuantity = $destroyableLeft;
                 }
 
-                if ($destroyedQuantity == 0) {
+                if ($destroyedQuantity === 0.0) {
                     continue;
                 }
 
@@ -153,44 +154,38 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
     }
 
     /**
-     * @param int[] $unitIdDistributionsFire
+     * @param int[] $unitIdDistributionRatios
      * @param int[] $targetUnitsSum
      *
      * @return int[]
      */
-    private function calculateDistributionFireForUnitIds(array $unitIdDistributionsFire, array $targetUnitsSum): array
+    private function calculateDistributionFireForUnitIds(array $unitIdDistributionRatios, array $targetUnitsSum): array
     {
-        $unitIdDistributionsFireCount = count($unitIdDistributionsFire);
-        $targetUnitSumCount = count($targetUnitsSum);
-
-        if ($unitIdDistributionsFireCount === $targetUnitSumCount) {
-            // no need for calculation. aggressors have all target units
-            return array_map(
-                function(int $distributionValue) {
-                    return $distributionValue / 100;
-                }, $unitIdDistributionsFire
-            );
+        if (count($unitIdDistributionRatios) === count($targetUnitsSum)) {
+            // no distribution ratio calculation needed because aggressors have all target units in fleet.
+            return $unitIdDistributionRatios;
         }
 
-        if ($targetUnitSumCount === 1) {
-            // no calculation needed cause there is just one possible target
+        if (count($targetUnitsSum) === 1) {
+            // no distribution ratio calculation needed because there is just one possible target.
             return [array_keys($targetUnitsSum)[0] => 1];
         }
 
-        $unitsWhichAreNotInTargetUnitsSum = array_diff_key($unitIdDistributionsFire, $targetUnitsSum);
-        $distributionUsed = 100 - array_sum(array_values($unitsWhichAreNotInTargetUnitsSum));
+        $unitsWhichAreNotInTargetUnitsSum = array_diff_key($unitIdDistributionRatios, $targetUnitsSum);
+        $distributionUsed = 1 - array_sum(array_values($unitsWhichAreNotInTargetUnitsSum));
 
-        // calculate distribution fire proportionally
-        $unitIdDistributionsFireCalculated = [];
+        // calculate distribution ratio.
+        $unitIdDistributionRatiosCalculated = [];
+
         foreach ($targetUnitsSum as $unitId => $quantity) {
-            $baseDistributionFireForCurrentUnit = $unitIdDistributionsFire[$unitId];
+            $distributionRatioForCurrentUnit = $unitIdDistributionRatios[$unitId];
 
-            $distributionFireCalculated = $baseDistributionFireForCurrentUnit /  $distributionUsed;
+            $distributionRatioCalculated = $distributionRatioForCurrentUnit /  $distributionUsed;
 
-            $unitIdDistributionsFireCalculated[$unitId] = $distributionFireCalculated;
+            $unitIdDistributionRatiosCalculated[$unitId] = $distributionRatioCalculated;
         }
 
-        return $unitIdDistributionsFireCalculated;
+        return $unitIdDistributionRatiosCalculated;
     }
 
     /**
@@ -209,7 +204,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
             foreach ($targetUnitArray as $targetUnitId => $destroyedQuantity) {
                 foreach ($fleets as $fleet) {
                     $unitQuantityOfCurrentFleetWhichDestroyedTarget = $fleet->getQuantityOf($attackingUnitId);
-                    if ($unitQuantityOfCurrentFleetWhichDestroyedTarget == 0) {
+                    if ($unitQuantityOfCurrentFleetWhichDestroyedTarget === 0.0) {
                         continue;
                     }
 
@@ -218,13 +213,11 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
                     $destroyedQuantityCalculated =
                         ($destroyedQuantity / $unitQuantityWhichDestroyedTargetOverall) * $unitQuantityOfCurrentFleetWhichDestroyedTarget;
 
-                    $destroyedQuantityCalculatedRounded = $destroyedQuantityCalculated;
-
-                    if ($destroyedQuantityCalculatedRounded == 0) {
+                    if ($destroyedQuantityCalculated === 0.0) {
                         continue;
                     }
 
-                    $fleet->addUnitDestroyedQuantity($targetUnitId, $destroyedQuantityCalculatedRounded);
+                    $fleet->addUnitDestroyedQuantity($targetUnitId, $destroyedQuantityCalculated);
                 }
             }
         }
@@ -245,7 +238,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
         foreach ($combatTickResult->getDestroyedUnit() as $destroyedUnitId => $destroyedQuantityTotal) {
             foreach ($fleets as $fleet) {
                 $quantityOfCurrentFleet = $fleet->getQuantityOf($destroyedUnitId);
-                if ($quantityOfCurrentFleet == 0) {
+                if ($quantityOfCurrentFleet === 0.0) {
                     continue;
                 }
 
@@ -253,9 +246,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
 
                 $quantityToLose = ($destroyedQuantityTotal / $totalUnitsOfDestroyedUnit) * $quantityOfCurrentFleet;
 
-                $quantityToLoseRounded = $quantityToLose;
-
-                $fleet->destroyUnit($destroyedUnitId, $quantityToLoseRounded);
+                $fleet->destroyUnit($destroyedUnitId, $quantityToLose);
             }
         }
     }
@@ -281,7 +272,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
      *
      * @return int[]
      */
-    private function getAttackPowerFrom(array $unitCombatSettings): array
+    private function getAttackPowersFrom(array $unitCombatSettings): array
     {
         $unitIdAttackPowers = [];
 
@@ -297,12 +288,12 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
      *
      * @return int[]
      */
-    private function getDistributionFireFrom(array $unitCombatSettings): array
+    private function getDistributionRatiosFrom(array $unitCombatSettings): array
     {
         $unitIdDistributionsFire = [];
 
         foreach ($unitCombatSettings as $unitCombatSetting) {
-            $unitIdDistributionsFire[$unitCombatSetting->getTargetUnitId()] = $unitCombatSetting->getDistributionPerCent();
+            $unitIdDistributionsFire[$unitCombatSetting->getTargetUnitId()] = $unitCombatSetting->getDistributionRatio();
         }
 
         return $unitIdDistributionsFire;
@@ -319,7 +310,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
         $filteredUnitSum = [];
 
         foreach ($unitSum as $unitId => $quantity) {
-            if (!in_array($unitId, $unitIds)) {
+            if (!in_array($unitId, $unitIds, true)) {
                 continue;
             }
 

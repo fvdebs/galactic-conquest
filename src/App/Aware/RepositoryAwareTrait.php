@@ -10,6 +10,8 @@ use GC\Faction\Model\FactionRepository;
 use GC\Galaxy\Model\Galaxy;
 use GC\Galaxy\Model\GalaxyRepository;
 use GC\Player\Model\Player;
+use GC\Player\Model\PlayerCombatReport;
+use GC\Player\Model\PlayerCombatReportRepository;
 use GC\Player\Model\PlayerRepository;
 use GC\Scan\Model\Scan;
 use GC\Scan\Model\ScanRepository;
@@ -64,6 +66,14 @@ trait RepositoryAwareTrait
     protected function getPlayerRepository(): PlayerRepository
     {
         return $this->getDoctrineRepository(Player::class);
+    }
+
+    /**
+     * @return \GC\Player\Model\PlayerCombatReportRepository|\Doctrine\Common\Persistence\ObjectRepository
+     */
+    protected function getPlayerCombatReportRepository(): PlayerCombatReportRepository
+    {
+        return $this->getDoctrineRepository(PlayerCombatReport::class);
     }
 
     /**

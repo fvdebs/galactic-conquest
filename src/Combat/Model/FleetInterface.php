@@ -9,7 +9,7 @@ interface FleetInterface
     /**
      * @return int
      */
-    public function getFleetReference(): int;
+    public function getFleetId(): int;
 
     /**
      * @return string[]
@@ -44,7 +44,7 @@ interface FleetInterface
     public function destroyUnit(int $unitId, float $quantity): void;
 
     /**
-     * @return int[]
+     * @return float[]
      */
     public function getUnitsLost(): array;
 
@@ -54,7 +54,7 @@ interface FleetInterface
     public function hasUnitsDestroyed(): bool;
 
     /**
-     * @return array
+     * @return float[]
      */
     public function getUnitsDestroyed(): array;
 
@@ -74,123 +74,130 @@ interface FleetInterface
     public function getQuantityOf(int $unitId): float;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getSalvageMetal(): int;
+    public function getSalvagedMetal(): float;
 
     /**
-     * @param int $salvageMetal
+     * @param float $salvagedMetal
      *
      * @return void
      */
-    public function setSalvageMetal(int $salvageMetal): void;
+    public function setSalvagedMetal(float $salvagedMetal): void;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getSalvageCrystal(): int;
+    public function getSalvagedCrystal(): float;
 
     /**
-     * @param int $salvageCrystal
+     * @param float $salvagedCrystal
      *
      * @return void
      */
-    public function setSalvageCrystal(int $salvageCrystal): void;
+    public function setSalvagedCrystal(float $salvagedCrystal): void;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorStolenMetal(): int;
+    public function getExtractorStolenMetal(): float;
 
     /**
-     * @param int $extractorStolenMetal
+     * @param float $extractorStolenMetal
      *
      * @return void
      */
-    public function setExtractorStolenMetal(int $extractorStolenMetal): void;
+    public function setExtractorStolenMetal(float $extractorStolenMetal): void;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorStolenCrystal(): int;
+    public function getExtractorStolenCrystal(): float;
 
     /**
-     * @param int $extractorStolenCrystal
+     * @param float $extractorStolenCrystal
      *
      * @return void
      */
-    public function setExtractorStolenCrystal(int $extractorStolenCrystal): void;
+    public function setExtractorStolenCrystal(float $extractorStolenCrystal): void;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorsGuarded(): int;
+    public function getExtractorsProtected(): float;
 
     /**
-     * @param int $extractorsGuarded
+     * @param float $extractorsProtected
      *
      * @return void
      */
-    public function setExtractorsGuarded(int $extractorsGuarded): void;
+    public function setExtractorsProtected(float $extractorsProtected): void;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getExtractorsStealCapacity(): int;
+    public function getExtractorsStealCapacity(): float;
 
     /**
-     * @param int $extractorsStealCapacity
-     */
-    public function setExtractorsStealCapacity(int $extractorsStealCapacity): void;
-
-    /**
-     * @param int $number
+     * @param float $extractorsStealCapacity
      *
      * @return void
      */
-    public function decreaseExtractorsStealCapacity(int $number): void;
+    public function setExtractorsStealCapacity(float $extractorsStealCapacity): void;
 
     /**
-     * @return int[]
+     * @param float $extractorsStealCapacity
+     *
+     * @return void
      */
-    public function getInsufficientCarrierLosses(): array;
+    public function decreaseExtractorsStealCapacity(float $extractorsStealCapacity): void;
+
+    /**
+     * @return float[]
+     */
+    public function getInsufficientCarrierCapacityLosses(): array;
+
+    /**
+     * @return bool
+     */
+    public function hasInsufficientCarrierCapacityLosses(): bool;
 
     /**
      * @param int $unitId
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return void
      */
-    public function addInsufficientCarrierLosses(int $unitId, int $quantity): void;
+    public function addInsufficientCarrierCapacityLosses(int $unitId, float $quantity): void;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getCarrierSpace(): int;
+    public function getCarrierCapacity(): float;
 
     /**
-     * @param int $carrierSpace
+     * @param float $carrierCapacity
      *
      * @return void
      */
-    public function setCarrierSpace(int $carrierSpace): void;
+    public function setCarrierCapacity(float $carrierCapacity): void;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getCarrierConsumption(): int;
+    public function getCarrierCapacityConsumed(): float;
 
     /**
-     * @param int $carrierConsumption
+     * @param float $carrierCapacityConsumed
      *
      * @return void
      */
-    public function setCarrierConsumption(int $carrierConsumption): void;
+    public function setCarrierCapacityConsumed(float $carrierCapacityConsumed): void;
 
     /**
      * @return void
      */
-    public function normalize(): void;
+    public function floorUnitQuantities(): void;
 
     /**
      * @return void

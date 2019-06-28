@@ -9,7 +9,6 @@ use GC\Combat\Model\FleetInterface;
 use GC\Combat\Model\SettingsInterface;
 
 use function array_merge;
-use function round;
 
 final class CarrierCalculatorPlugin implements CalculatorPluginInterface
 {
@@ -25,12 +24,17 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
     public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface
     {
         foreach (array_merge($after->getAttackingFleets(), $after->getDefendingFleets()) as $fleet) {
-            $this->calculateCarrierConsumptionAndSpaceFor($fleet, $settings);
+            $this->calculateCarrierCapacitiesFor($fleet, $settings);
 
-            if (! $after->compareFleetDataValueWithTargetDataValue($fleet, static::KEY_PLAYER_ID)) {
-                // is target fleet
-                $this->calculateCarrierLossesFor($fleet, $settings);
+            if ($after->isFleetFromTarget($fleet)) {
+                continue;
             }
+
+            if (!$settings->isLastTick()) {
+               continue;
+            }
+
+            $this->calculateCarrierLossesFor($fleet, $settings);
         }
 
         return $after;
@@ -42,25 +46,29 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
      *
      * @return void
      */
-    public function calculateCarrierConsumptionAndSpaceFor(FleetInterface $fleet, SettingsInterface $settings): void
+    public function calculateCarrierCapacitiesFor(FleetInterface $fleet, SettingsInterface $settings): void
     {
-        $carrierSpaceConsumption = 0;
-        $carrierSpace = 0;
+        $carrierCapacityConsumed = 0;
+        $carrierCapacity = 0;
 
         foreach ($fleet->getUnits() as $unitId => $quantity) {
-            $unit = $settings->getUnitById($unitId);
-
-            if ($unit->getCarrierSpaceConsumption() > 0) {
-                $carrierSpaceConsumption += $unit->getCarrierSpaceConsumption() * $quantity;
+            if ($quantity === 0.0) {
+                continue;
             }
 
-            if ($unit->getCarrierSpace() > 0) {
-                $carrierSpace += $unit->getCarrierSpace() * $quantity;
+            $unit = $settings->getUnitById($unitId);
+
+            if ($unit->getCarrierCapacityConsumed() > 0) {
+                $carrierCapacityConsumed += $unit->getCarrierCapacityConsumed() * $quantity;
+            }
+
+            if ($unit->getCarrierCapacity() > 0) {
+                $carrierCapacity += $unit->getCarrierCapacity() * $quantity;
             }
         }
 
-        $fleet->setCarrierConsumption($carrierSpaceConsumption);
-        $fleet->setCarrierSpace($carrierSpace);
+        $fleet->setCarrierCapacityConsumed($carrierCapacityConsumed);
+        $fleet->setCarrierCapacity($carrierCapacity);
     }
 
     /**
@@ -71,30 +79,33 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
      */
     public function calculateCarrierLossesFor(FleetInterface $fleet, SettingsInterface $settings): void
     {
-        if ($fleet->getCarrierConsumption() <= $fleet->getCarrierSpace()) {
+        if ($fleet->getCarrierCapacityConsumed() <= $fleet->getCarrierCapacity()) {
            return;
         }
 
         foreach ($fleet->getUnits() as $unitId => $quantity) {
-            if ($quantity === 0) {
+            if ($quantity === 0.0) {
                 continue;
             }
 
             $carrierCapacityNeededForUnitType = $settings->getUnitById($unitId)
-                ->getCarrierSpaceConsumption();
+                ->getCarrierCapacityConsumed();
 
             if ($carrierCapacityNeededForUnitType === 0) {
                 continue;
             }
 
-            if ($fleet->getCarrierSpace() === 0) {
-                $fleet->addInsufficientCarrierLosses($unitId, $quantity);
+            if ($fleet->getCarrierCapacity() === 0.0) {
+                $fleet->addInsufficientCarrierCapacityLosses($unitId, $quantity);
                 continue;
             }
 
-            $quantityToLose = ($fleet->getCarrierSpace() / $fleet->getCarrierConsumption()) * ($carrierCapacityNeededForUnitType * $quantity);
+            $quantityLeft = ($fleet->getCarrierCapacity() / $fleet->getCarrierCapacityConsumed()) * ($carrierCapacityNeededForUnitType * $quantity);
 
-            $fleet->addInsufficientCarrierLosses($unitId, (int) round($quantityToLose));
+            $quantityToLose = $quantity - $quantityLeft;
+
+
+            $fleet->addInsufficientCarrierCapacityLosses($unitId, (int) round($quantityToLose));
         }
     }
 }

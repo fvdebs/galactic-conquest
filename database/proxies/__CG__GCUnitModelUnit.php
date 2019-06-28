@@ -540,4 +540,15 @@ class Unit extends \GC\Unit\Model\Unit implements \Doctrine\ORM\Proxy\Proxy
         return parent::addUnitCombatSetting($targetUnit, $distribution, $attackPower);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getUnitCombatSettings(): array
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUnitCombatSettings', []);
+
+        return parent::getUnitCombatSettings();
+    }
+
 }

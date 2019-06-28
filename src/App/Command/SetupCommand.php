@@ -107,7 +107,10 @@ final class SetupCommand extends Command
         $this->executeCommand('orm:generate-proxies', [], true);
 
         $this->style->success('Clearing cache', [], true);
-        $this->executeCommand('app:cache-clear');
+        $this->executeCommand('app:cache-clear', [], true);
+        $this->executeCommand('orm:clear-cache:metadata', [], true);
+        $this->executeCommand('orm:clear-cache:query', [], true);
+        $this->executeCommand('orm:clear-cache:result', [], true);
 
         $this->style->success('Create universe simulation');
         $this->executeCommand('app:doctrine:fixtures');

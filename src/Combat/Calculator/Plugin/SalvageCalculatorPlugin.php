@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace GC\Combat\Calculator\Plugin;
 
 use GC\Combat\Model\BattleInterface;
-use GC\Combat\Model\FleetInterface;
 use GC\Combat\Model\SettingsInterface;
+
+use function array_merge;
 
 final class SalvageCalculatorPlugin implements CalculatorPluginInterface
 {
-    private const KEY_PLAYER_ID = 'playerId';
-
     /**
      * @param \GC\Combat\Model\BattleInterface $before
      * @param \GC\Combat\Model\BattleInterface $after
@@ -21,46 +20,96 @@ final class SalvageCalculatorPlugin implements CalculatorPluginInterface
      */
     public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface
     {
-        foreach ($after->getDefendingFleets() as $fleet) {
-            if (!$fleet->hasUnitsDestroyed()) {
-                continue;
-            }
+        /* @var \GC\Combat\Model\FleetInterface $fleet */
+        $fleets = array_merge($after->getDefendingFleets(), $after->getAttackingFleets());
 
-            $salvageModifier = $settings->getDefenderSalvagePerCentModifier();
-            if ($after->compareFleetDataValueWithTargetDataValue($fleet, static::KEY_PLAYER_ID)) {
-                // is target fleet
-                $salvageModifier = $settings->getTargetSalvagePerCentModifier();
-            }
+        $destroyedMetalTotal = $this->calculateDestroyedMetalTotal(
+            $fleets,
+            $settings
+        );
 
-            $this->calculateSalvageFor($fleet, $settings, $salvageModifier);
-        }
+        $destroyedCrystalTotal = $this->calculateDestroyedCrystalTotal(
+            $fleets,
+            $settings
+        );
+
+        $this->calculateSalvagedResources(
+            $after,
+            $destroyedMetalTotal,
+            $destroyedCrystalTotal,
+            $settings
+        );
 
         return $after;
     }
 
     /**
-     * @param \GC\Combat\Model\FleetInterface $fleet
+     * @param \GC\Combat\Model\BattleInterface $after
+     * @param float $destroyedMetalTotal
+     * @param float $destroyedCrystalTotal
      * @param \GC\Combat\Model\SettingsInterface $settings
-     * @param int $salvageModifier
      *
      * @return void
      */
-    private function calculateSalvageFor(FleetInterface $fleet, SettingsInterface $settings, int $salvageModifier): void
+    private function calculateSalvagedResources(
+        BattleInterface $after,
+        float $destroyedMetalTotal,
+        float $destroyedCrystalTotal,
+        SettingsInterface $settings
+    ): void {
+        foreach ($after->getDefendingFleets() as $fleet) {
+            $salvageRatio = $settings->getDefenderSalvageRatio();
+            if ( $after->isFleetFromTarget($fleet)) {
+                $salvageRatio = $settings->getTargetSalvageRatio();
+            }
+
+            $salvagedMetal = ($destroyedMetalTotal / 100) * $salvageRatio;
+            $salvagedCrystal = ($destroyedCrystalTotal / 100) * $salvageRatio;
+
+            $fleet->setSalvagedMetal($salvagedMetal);
+            $fleet->setSalvagedCrystal($salvagedCrystal);
+        }
+    }
+
+    /**
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
+     * @param \GC\Combat\Model\SettingsInterface $settings
+     *
+     * @return float
+     */
+    private function calculateDestroyedMetalTotal(array $fleets, SettingsInterface $settings): float
     {
-        $salvageMetal = 0;
-        $salvageCrystal = 0;
+        $destroyedMetal = 0;
 
-        foreach ($fleet->getUnitsDestroyed() as $unitId => $quantity) {
-            $unit = $settings->getUnitById($unitId);
+        foreach ($fleets as $fleet) {
+            foreach ($fleet->getUnitsDestroyed() as $unitId => $quantity) {
+                $unit = $settings->getUnitById($unitId);
 
-            $metalCost = $unit->getMetalCost() * $quantity;
-            $crystalCost = $unit->getCrystalCost() * $quantity;
-
-            $salvageMetal += ($metalCost / 100) * $salvageModifier;
-            $salvageCrystal += ($crystalCost / 100) * $salvageModifier;
+                $destroyedMetal += $unit->getMetalCost() * $quantity;
+            }
         }
 
-        $fleet->setSalvageMetal((int) round($salvageMetal));
-        $fleet->setSalvageCrystal((int) round($salvageCrystal));
+        return $destroyedMetal;
+    }
+
+    /**
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
+     * @param \GC\Combat\Model\SettingsInterface $settings
+     *
+     * @return float
+     */
+    private function calculateDestroyedCrystalTotal(array $fleets, SettingsInterface $settings): float
+    {
+        $destroyedCrystal = 0;
+
+        foreach ($fleets as $fleet) {
+            foreach ($fleet->getUnitsDestroyed() as $unitId => $quantity) {
+                $unit = $settings->getUnitById($unitId);
+
+                $destroyedCrystal += $unit->getCrystalCost() * $quantity;
+            }
+        }
+
+        return $destroyedCrystal;
     }
 }

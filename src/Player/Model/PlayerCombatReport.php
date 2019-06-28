@@ -11,7 +11,7 @@ use function substr;
 
 /**
  * @Table(name="player_combat_report")
- * @Entity
+ * @Entity(repositoryClass="GC\Player\Model\PlayerCombatReportRepository")
  */
 class PlayerCombatReport
 {
@@ -52,6 +52,8 @@ class PlayerCombatReport
      * @JoinColumn(name="player_id", referencedColumnName="player_id", nullable=false)
      */
     private $player;
+
+
 
     /**
      * @param string $dataJson

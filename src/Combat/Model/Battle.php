@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace GC\Combat\Model;
 
-use RuntimeException;
+use GC\Combat\Exception\FleetNotFoundException;
 
 use function array_key_exists;
+use function is_object;
+use function is_array;
+use function unserialize;
+use function serialize;
 
 final class Battle implements BattleInterface
 {
+    /** Recommended to set a playerId in each fleet data */
+    public const KEY_PLAYER_ID = 'playerId';
+
     /**
      * @var \GC\Combat\Model\FleetInterface[]
      */
@@ -41,27 +48,27 @@ final class Battle implements BattleInterface
     private $targetData;
 
     /**
-     * @param \GC\Combat\Model\FleetInterface[] $attackingFleets - default: []
+     * @param \GC\Combat\Model\FleetInterface[] $attackingFleets
      * @param \GC\Combat\Model\FleetInterface[] $defendingFleets - default: []
+     * @param int $targetExtractorsMetal - default: 0
+     * @param int $targetExtractorsCrystal - default: 0
      * @param string[] $data - default: []
      * @param string[] $targetData - default: []
-     * @param int $targetExtractorsMetal - default: 0
-     * @param int $targetExtractorsCrystal -  default: 0
      */
     public function __construct(
-        array $attackingFleets = [],
+        array $attackingFleets,
         array $defendingFleets = [],
-        array $targetData = [],
-        array $data = [],
         int $targetExtractorsMetal = 0,
-        int $targetExtractorsCrystal = 0
+        int $targetExtractorsCrystal = 0,
+        array $targetData = [],
+        array $data = []
     ) {
         $this->attackingFleets = $attackingFleets;
         $this->defendingFleets = $defendingFleets;
-        $this->data = $data;
         $this->targetExtractorsMetal = $targetExtractorsMetal;
         $this->targetExtractorsCrystal = $targetExtractorsCrystal;
         $this->targetData = $targetData;
+        $this->data = $data;
     }
 
     /**
@@ -161,20 +168,20 @@ final class Battle implements BattleInterface
     }
 
     /**
-     * @param int $fleetReference
+     * @param int $fleetId
      * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
      * @return \GC\Combat\Model\FleetInterface
      */
-    public function getFleetByReference(int $fleetReference, array $fleets): FleetInterface
+    public function getFleetById(int $fleetId, array $fleets): FleetInterface
     {
         foreach ($fleets as $fleet) {
-            if ($fleet->getFleetReference() === $fleetReference) {
+            if ($fleet->getFleetId() === $fleetId) {
                 return $fleet;
             }
         }
 
-        throw new RuntimeException('fleet with given reference not found: ' . $fleetReference);
+        throw FleetNotFoundException::fromFleetId($fleetId);
     }
 
     /**
@@ -204,24 +211,19 @@ final class Battle implements BattleInterface
     }
 
     /**
-     * Returns true if data value is equal and not null.
-     *
      * @param \GC\Combat\Model\FleetInterface $fleet
-     * @param string $dataKey
+     * @param string $userInfoKey - default: Battle::KEY_PLAYER_ID
      *
      * @return bool
      */
-    public function compareFleetDataValueWithTargetDataValue(FleetInterface $fleet, string $dataKey): bool
+    public function isFleetFromTarget(FleetInterface $fleet, string $userInfoKey = Battle::KEY_PLAYER_ID): bool
     {
-        $targetValue = $this->hasTargetDataValue($dataKey);
-        $fleetValue = $fleet->hasDataValue($dataKey);
-
-        if (!$targetValue || !$fleetValue) {
+        if (!$this->hasTargetDataValue($userInfoKey) || !$fleet->hasDataValue($userInfoKey)) {
             return false;
         }
 
-        $targetValue = $this->getTargetDataValue($dataKey);
-        $fleetValue = $fleet->getDataValue($dataKey);
+        $targetValue = $this->getTargetDataValue($userInfoKey);
+        $fleetValue = $fleet->getDataValue($userInfoKey);
 
         return !($targetValue === null || $targetValue !== $fleetValue);
     }
@@ -232,7 +234,7 @@ final class Battle implements BattleInterface
     public function __clone()
     {
         foreach($this as $key => $val) {
-            if (is_object($val) || (is_array($val))) {
+            if (is_object($val) || is_array($val)) {
                 $this->{$key} = unserialize(serialize($val));
             }
         }

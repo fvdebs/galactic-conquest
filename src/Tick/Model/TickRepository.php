@@ -195,7 +195,7 @@ final class TickRepository
     }
 
     /**
-     * only works with unique constraints.
+     * only works with unique constraint on fleetId and UnitId.
      *
      * @param int $universeId
      *

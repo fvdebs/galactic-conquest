@@ -29,12 +29,12 @@ interface UnitInterface
     /**
      * @return int
      */
-    public function getCarrierSpace(): int;
+    public function getCarrierCapacity(): int;
 
     /**
      * @return int
      */
-    public function getCarrierSpaceConsumption(): int;
+    public function getCarrierCapacityConsumed(): int;
 
     /**
      * @return int
@@ -44,5 +44,5 @@ interface UnitInterface
     /**
      * @return int
      */
-    public function getExtractorGuardAmount(): int;
+    public function getExtractorProtectAmount(): int;
 }

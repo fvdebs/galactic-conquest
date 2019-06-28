@@ -119,8 +119,6 @@ final class CombatTestCommand extends Command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return int
-     * @throws \Throwable
-     *
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -129,10 +127,10 @@ final class CombatTestCommand extends Command
             $battle = $this->createBattle(
                 $this->createAttackingFleets(),
                 $this->createDefendingFleets(),
-                $this->createTargetData(),
-                $this->createEnvironmentData(),
                 100,
-                100
+                100,
+                $this->createTargetData(),
+                $this->createEnvironmentData()
             );
 
             $result = $this->combatService->calculate($battle, $settings);
@@ -141,40 +139,40 @@ final class CombatTestCommand extends Command
             file_put_contents(__DIR__ . '/data.json', $json);
 
         } catch (Exception $e) {
-            echo $e->getMessage() . "\n" . $e->getFile() . ':' . $e->getLine();
+            echo  "\n" . $e->getMessage() . "\n" . $e->getFile() . ':' . $e->getLine() . "\n";
         } catch (Throwable $e) {
-            echo $e->getMessage() . "\n" . $e->getFile() . ':' . $e->getLine();
+            echo  "\n" . $e->getMessage() . "\n" . $e->getFile() . ':' . $e->getLine() . "\n";
         }
 
         return 0;
     }
 
     /**
-     * @param \GC\Combat\Model\FleetInterface[] $attackingFleets - default: []
+     * @param \GC\Combat\Model\FleetInterface[] $attackingFleets
      * @param \GC\Combat\Model\FleetInterface[] $defendingFleets - default: []
-     * @param string[] $targetData
-     * @param string[] $data
-     * @param int $targetExtractorsMetal - default: 100
-     * @param int $targetExtractorsCrystal - default: 100
+     * @param int $targetExtractorsMetal - default: 0
+     * @param int $targetExtractorsCrystal - default: 0
+     * @param string[] $targetData - default: []
+     * @param string[] $data - default: []
      *
      * @return \GC\Combat\Model\BattleInterface
      */
     private function createBattle(
-        $attackingFleets = [],
+        $attackingFleets,
         $defendingFleets = [],
+        int $targetExtractorsMetal = 0,
+        int $targetExtractorsCrystal = 0,
         array $targetData = [],
-        array $data = [],
-        int $targetExtractorsMetal = 100,
-        int $targetExtractorsCrystal = 100
+        array $data = []
     ): BattleInterface
     {
         return new Battle(
             $attackingFleets,
             $defendingFleets,
-            $targetData,
-            $data,
             $targetExtractorsMetal,
-            $targetExtractorsCrystal
+            $targetExtractorsCrystal,
+            $targetData,
+            $data
         );
     }
 
@@ -197,13 +195,13 @@ final class CombatTestCommand extends Command
             $this->createTargetData()
         );
 
+        return $fleets;
+
         $fleets[] = new Fleet(
             static::TARGET_FLEET_FIRST_ID,
             $this->createFleet(),
             $this->createTargetData()
         );
-
-        return $fleets;
 
         $fleets[] = new Fleet(
             static::TARGET_FLEET_SECOND_ID,
@@ -247,7 +245,7 @@ final class CombatTestCommand extends Command
 
         $fleets[] = new Fleet(
             static::ATTACKER_FIRST_FLEET_SECOND_ID,
-            $this->createFleet(),
+            $this->createFleetSecond(),
             $this->createFirstAttackerData()
         );
 
@@ -355,11 +353,11 @@ final class CombatTestCommand extends Command
     private function createFleetStationary(): array
     {
         return [
-            static::UNIT_ID_AJ => 0,
-            static::UNIT_ID_RU => 0,
-            static::UNIT_ID_PU => 0,
-            static::UNIT_ID_CO => 0,
-            static::UNIT_ID_CE => 0,
+            static::UNIT_ID_AJ => 100,
+            static::UNIT_ID_RU => 100,
+            static::UNIT_ID_PU => 100,
+            static::UNIT_ID_CO => 100,
+            static::UNIT_ID_CE => 100,
         ];
     }
 
@@ -369,15 +367,33 @@ final class CombatTestCommand extends Command
     private function createFleet(): array
     {
         return [
-            static::UNIT_ID_JAG => 500,
-            static::UNIT_ID_BOM => 500,
-            static::UNIT_ID_FRE => 500,
-            static::UNIT_ID_ZER => 500,
-            static::UNIT_ID_KRZ => 500,
-            static::UNIT_ID_SS => 500,
-            static::UNIT_ID_TR => 500,
-            static::UNIT_ID_CA => 500,
-            static::UNIT_ID_CL => 500,
+            static::UNIT_ID_JAG => 100,
+            static::UNIT_ID_BOM => 100,
+            static::UNIT_ID_FRE => 100,
+            static::UNIT_ID_ZER => 100,
+            static::UNIT_ID_KRZ => 100,
+            static::UNIT_ID_SS => 100,
+            static::UNIT_ID_TR => 100,
+            static::UNIT_ID_CA => 100100,
+            static::UNIT_ID_CL => 100000,
+        ];
+    }
+
+    /**
+     * @return int[]
+     */
+    private function createFleetSecond(): array
+    {
+        return [
+            static::UNIT_ID_JAG => 100,
+            static::UNIT_ID_BOM => 100,
+            static::UNIT_ID_FRE => 100,
+            static::UNIT_ID_ZER => 100,
+            static::UNIT_ID_KRZ => 100,
+            static::UNIT_ID_SS => 100,
+            static::UNIT_ID_TR => 100,
+            static::UNIT_ID_CA => 100100,
+            static::UNIT_ID_CL => 40000,
         ];
     }
 
@@ -405,38 +421,38 @@ final class CombatTestCommand extends Command
         ];
 
         $unitCombatSettings = [
-            new UnitCombatSetting(static::UNIT_ID_JAG, static::UNIT_ID_CO, 35, 0.0246),
-            new UnitCombatSetting(static::UNIT_ID_JAG, static::UNIT_ID_BOM, 30, 0.3920),
-            new UnitCombatSetting(static::UNIT_ID_JAG, static::UNIT_ID_KRZ, 35, 0.0263),
-            new UnitCombatSetting(static::UNIT_ID_BOM, static::UNIT_ID_CE, 35, 0.0080),
-            new UnitCombatSetting(static::UNIT_ID_BOM, static::UNIT_ID_SS, 35, 0.0100),
-            new UnitCombatSetting(static::UNIT_ID_BOM, static::UNIT_ID_TR, 30, 0.0075),
-            new UnitCombatSetting(static::UNIT_ID_FRE, static::UNIT_ID_AJ, 60, 4.5),
-            new UnitCombatSetting(static::UNIT_ID_FRE, static::UNIT_ID_JAG, 40, 0.85),
-            new UnitCombatSetting(static::UNIT_ID_ZER, static::UNIT_ID_RU, 60, 3.5),
-            new UnitCombatSetting(static::UNIT_ID_ZER, static::UNIT_ID_FRE, 40, 1.2444),
-            new UnitCombatSetting(static::UNIT_ID_KRZ, static::UNIT_ID_PU, 35, 2),
-            new UnitCombatSetting(static::UNIT_ID_KRZ, static::UNIT_ID_ZER, 30, 0.8571),
-            new UnitCombatSetting(static::UNIT_ID_KRZ, static::UNIT_ID_CA, 35, 10),
-            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_CO, 20, 1),
-            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_KRZ, 20, 1.0666),
-            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_SS, 20, 0.4),
-            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_TR, 20, 0.3019),
-            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_CA, 20, 26.6667),
-            new UnitCombatSetting(static::UNIT_ID_TR, static::UNIT_ID_CL, 50, 25),
-            new UnitCombatSetting(static::UNIT_ID_TR, static::UNIT_ID_CA, 50, 14),
-            new UnitCombatSetting(static::UNIT_ID_AJ, static::UNIT_ID_ZER, 40, 0.0114),
-            new UnitCombatSetting(static::UNIT_ID_AJ, static::UNIT_ID_CL, 60, 0.32),
-            new UnitCombatSetting(static::UNIT_ID_RU, static::UNIT_ID_JAG, 60, 0.3),
-            new UnitCombatSetting(static::UNIT_ID_RU, static::UNIT_ID_CL, 40, 1.28),
-            new UnitCombatSetting(static::UNIT_ID_PU, static::UNIT_ID_BOM, 40, 1.2),
-            new UnitCombatSetting(static::UNIT_ID_PU, static::UNIT_ID_FRE, 60, 0.5334),
-            new UnitCombatSetting(static::UNIT_ID_CO, static::UNIT_ID_ZER, 40, 0.9143),
-            new UnitCombatSetting(static::UNIT_ID_CO, static::UNIT_ID_KRZ, 60, 0.5334),
-            new UnitCombatSetting(static::UNIT_ID_CE, static::UNIT_ID_SS, 50, 0.5),
-            new UnitCombatSetting(static::UNIT_ID_CE, static::UNIT_ID_TR, 50, 0.3774),
+            new UnitCombatSetting(static::UNIT_ID_JAG, static::UNIT_ID_CO, 0.35, 0.0246),
+            new UnitCombatSetting(static::UNIT_ID_JAG, static::UNIT_ID_BOM, 0.3, 0.3920),
+            new UnitCombatSetting(static::UNIT_ID_JAG, static::UNIT_ID_KRZ, 0.35, 0.0263),
+            new UnitCombatSetting(static::UNIT_ID_BOM, static::UNIT_ID_CE, 0.3, 0.0080),
+            new UnitCombatSetting(static::UNIT_ID_BOM, static::UNIT_ID_SS, 0.3, 0.0100),
+            new UnitCombatSetting(static::UNIT_ID_BOM, static::UNIT_ID_TR, 0.3, 0.0075),
+            new UnitCombatSetting(static::UNIT_ID_FRE, static::UNIT_ID_AJ, 0.6, 4.5),
+            new UnitCombatSetting(static::UNIT_ID_FRE, static::UNIT_ID_JAG, 0.4, 0.85),
+            new UnitCombatSetting(static::UNIT_ID_ZER, static::UNIT_ID_RU, 0.6, 3.5),
+            new UnitCombatSetting(static::UNIT_ID_ZER, static::UNIT_ID_FRE, 0.4, 1.2444),
+            new UnitCombatSetting(static::UNIT_ID_KRZ, static::UNIT_ID_PU, 0.35, 2),
+            new UnitCombatSetting(static::UNIT_ID_KRZ, static::UNIT_ID_ZER, 0.3, 0.8571),
+            new UnitCombatSetting(static::UNIT_ID_KRZ, static::UNIT_ID_CA, 0.35, 10),
+            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_CO, 0.2, 1),
+            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_KRZ, 0.2, 1.0666),
+            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_SS, 0.2, 0.4),
+            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_TR, 0.2, 0.3019),
+            new UnitCombatSetting(static::UNIT_ID_SS, static::UNIT_ID_CA, 0.2, 26.6667),
+            new UnitCombatSetting(static::UNIT_ID_TR, static::UNIT_ID_CL, 0.5, 25),
+            new UnitCombatSetting(static::UNIT_ID_TR, static::UNIT_ID_CA, 0.5, 14),
+            new UnitCombatSetting(static::UNIT_ID_AJ, static::UNIT_ID_ZER, 0.4, 0.0114),
+            new UnitCombatSetting(static::UNIT_ID_AJ, static::UNIT_ID_CL, 0.6, 0.32),
+            new UnitCombatSetting(static::UNIT_ID_RU, static::UNIT_ID_JAG, 0.6, 0.3),
+            new UnitCombatSetting(static::UNIT_ID_RU, static::UNIT_ID_CL, 0.4, 1.28),
+            new UnitCombatSetting(static::UNIT_ID_PU, static::UNIT_ID_BOM, 0.4, 1.2),
+            new UnitCombatSetting(static::UNIT_ID_PU, static::UNIT_ID_FRE, 0.6, 0.5334),
+            new UnitCombatSetting(static::UNIT_ID_CO, static::UNIT_ID_ZER, 0.4, 0.9143),
+            new UnitCombatSetting(static::UNIT_ID_CO, static::UNIT_ID_KRZ, 0.6, 0.5334),
+            new UnitCombatSetting(static::UNIT_ID_CE, static::UNIT_ID_SS, 0.5, 0.5),
+            new UnitCombatSetting(static::UNIT_ID_CE, static::UNIT_ID_TR, 0.5, 0.3774),
         ];
 
-        return new Settings(10, 40, 20, 5, $units, $unitCombatSettings);
+        return new Settings(0.1, 0.4, 0.2, 5, $units, $unitCombatSettings);
     }
 }
