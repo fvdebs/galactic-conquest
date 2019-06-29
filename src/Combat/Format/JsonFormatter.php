@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace GC\Combat\Format;
 
 use DateTimeImmutable;
-use GC\Combat\Calculator\CalculatorResultInterface;
+use GC\Combat\Calculator\CalculatorResponseInterface;
 use GC\Combat\Model\FleetInterface;
 use GC\Combat\Model\SettingsInterface;
 
@@ -20,50 +20,62 @@ use function is_array;
 
 final class JsonFormatter implements JsonFormatterInterface
 {
-    private const KEY_REPORT = 'report';
-    private const KEY_DATA = 'data';
-    private const KEY_TARGET = 'target';
-    private const KEY_DEFENSE = 'defense';
-    private const KEY_OFFENSE = 'offense';
-    private const KEY_SUMMARY = 'summary';
-    private const KEY_RESOURCE = 'resource';
-    private const KEY_SALVAGED = 'salvaged';
-    private const KEY_EXTRACTOR = 'extractor';
-    private const KEY_PROTECTED = 'protected';
-    private const KEY_EXTRACTOR_LOST = 'lost';
-    private const KEY_EXTRACTOR_STOLEN = 'stolen';
-    private const KEY_METAL = 'metal';
-    private const KEY_CRYSTAL = 'crystal';
-    private const KEY_CARRIER = 'carrier';
-    private const KEY_CARRIER_CAPACITY = 'capacity';
-    private const KEY_CARRIER_CAPACITY_CONSUMED = 'consumed';
-    private const KEY_CARRIER_LOSSES = 'losses';
-    private const KEY_BEFORE = 'before';
-    private const KEY_AFTER = 'after';
-    private const KEY_DESTROYED = 'destroyed';
-    private const KEY_FLEET_ID = 'fleetId';
-    private const KEY_CREATED_AT = 'createdAt';
-    private const KEY_SETTINGS = 'settings';
+    public const KEY_REPORT = 'report';
+    public const KEY_DATA = 'data';
+    public const KEY_TARGET = 'target';
+    public const KEY_DEFENSE = 'defense';
+    public const KEY_OFFENSE = 'offense';
+    public const KEY_SUMMARY = 'summary';
+    public const KEY_RESOURCE = 'resource';
+    public const KEY_SALVAGED = 'salvaged';
+    public const KEY_EXTRACTOR = 'extractor';
+    public const KEY_PROTECTED = 'protected';
+    public const KEY_STEAL_CAPACITY = 'stealCapacity';
+    public const KEY_EXTRACTOR_LOST = 'lost';
+    public const KEY_EXTRACTOR_STOLEN = 'stolen';
+    public const KEY_METAL = 'metal';
+    public const KEY_CRYSTAL = 'crystal';
+    public const KEY_CARRIER = 'carrier';
+    public const KEY_CARRIER_CAPACITY = 'capacity';
+    public const KEY_CARRIER_CAPACITY_CONSUMED = 'consumed';
+    public const KEY_CARRIER_LOSSES = 'losses';
+    public const KEY_BEFORE = 'before';
+    public const KEY_AFTER = 'after';
+    public const KEY_DESTROYED = 'destroyed';
+    public const KEY_FLEET_ID = 'fleetId';
+    public const KEY_CREATED_AT = 'createdAt';
+    public const KEY_SETTINGS = 'settings';
+    public const KEY_COMBAT_TICKS = 'combatTicks';
+    public const KEY_IS_PRE_FIRE_TICK = 'isPreFireTick';
+    public const KEY_IS_LAST_TICK = 'isLastTick';
+    public const KEY_EXTRACTOR_STEAL_RATIO = 'extractorStealRatio';
+    public const KEY_TARGET_SALVAGE_RATIO = 'targetSalvageRatio';
+    public const KEY_DEFENDER_SALVAGE_RATIO = 'defenderSalvageRatio';
+    public const KEY_UNIT_ID = 'unitId';
+    public const KEY_NAME = 'name';
+    public const KEY_GROUP = 'group';
+    public const KEY_EXTRACTOR_PROTECTION_AMOUNT = 'extractorProtectionAmount';
+    public const KEY_EXTRACTOR_STEAL_AMOUNT = 'extractorStealAmount';
+    public const KEY_CARRIER_CAPACITY_RATIO = 'carrierCapacityRatio';
+    public const KEY_CARRIER_CAPACITY_CONSUMED_RATIO = 'carrierCapacityConsumedRatio';
+    public const KEY_ATTACK_POWER = 'attackpower';
+    public const KEY_DISTRIBUTION_RATIO = 'distributionRatio';
+    public const KEY_TARGETS = 'targets';
+    public const KEY_UNITS = 'units';
 
     /**
-     * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
-     * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
      * @param string|null $mergeByDataKey
-     *
-     * @throws
      *
      * @return string
      */
-    public function format(
-        CalculatorResultInterface $calculatorResult,
-        SettingsInterface $settings,
-        ?string $mergeByDataKey = null
-    ) : string {
+    public function format(CalculatorResponseInterface $calculatorResult, ?string $mergeByDataKey = null) : string
+    {
         $data = $this->addReportData([], $calculatorResult);
-        $data = $this->addSettings($data, $settings);
+        $data = $this->addSettings($data, $calculatorResult->getSettings());
         $data = $this->addTargetData($data, $calculatorResult);
-        $data = $this->addDefense($data, $calculatorResult, $settings);
-        $data = $this->addOffense($data, $calculatorResult, $settings);
+        $data = $this->addDefense($data, $calculatorResult, $calculatorResult->getSettings());
+        $data = $this->addOffense($data, $calculatorResult, $calculatorResult->getSettings());
 
         if ($mergeByDataKey !== null) {
            $data[static::KEY_OFFENSE] = $this->mergeByDataValue($data[static::KEY_OFFENSE], $mergeByDataKey);
@@ -129,7 +141,6 @@ final class JsonFormatter implements JsonFormatterInterface
         array $ignoreKeys = [],
         array $simpleMergeKey = []
     ): array {
-
         $summary = [];
 
         foreach ($originalDataToMerge as $originalDataToMergeItemKey => $originalDataToMergeItemValue) {
@@ -174,14 +185,14 @@ final class JsonFormatter implements JsonFormatterInterface
 
     /**
      * @param string[] $data
-     * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
      * @param \GC\Combat\Model\SettingsInterface $settings
      *
      * @return array
      */
     private function addDefense(
         array $data,
-        CalculatorResultInterface $calculatorResult,
+        CalculatorResponseInterface $calculatorResult,
         SettingsInterface $settings
     ): array {
         $beforeFleets = $calculatorResult->getBeforeBattle()->getDefendingFleets();
@@ -203,14 +214,14 @@ final class JsonFormatter implements JsonFormatterInterface
 
     /**
      * @param string[] $data
-     * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
      * @param \GC\Combat\Model\SettingsInterface $settings
      *
      * @return array
      */
     private function addOffense(
         array $data,
-        CalculatorResultInterface $calculatorResult,
+        CalculatorResponseInterface $calculatorResult,
         SettingsInterface $settings
     ): array {
         $beforeFleets = $calculatorResult->getBeforeBattle()->getAttackingFleets();
@@ -239,12 +250,38 @@ final class JsonFormatter implements JsonFormatterInterface
      */
     private function addSettings(array $data, SettingsInterface $settings): array
     {
-        $data[static::KEY_SETTINGS]['combatTicks'] = $settings->getCombatTicks();
-        $data[static::KEY_SETTINGS]['isPreFireTick'] = $settings->isPreFireTick();
-        $data[static::KEY_SETTINGS]['isLastTick'] = $settings->isLastTick();
-        $data[static::KEY_SETTINGS]['extractorStealRatio'] = $settings->getExtractorStealRatio();
-        $data[static::KEY_SETTINGS]['targetSalvageRatio'] = $settings->getTargetSalvageRatio();
-        $data[static::KEY_SETTINGS]['defenderSalvageRatio'] = $settings->getDefenderSalvageRatio();
+        $data[static::KEY_SETTINGS][static::KEY_COMBAT_TICKS] = $settings->getCombatTicks();
+        $data[static::KEY_SETTINGS][static::KEY_IS_PRE_FIRE_TICK] = $settings->isPreFireTick();
+        $data[static::KEY_SETTINGS][static::KEY_IS_LAST_TICK] = $settings->isLastTick();
+        $data[static::KEY_SETTINGS][static::KEY_EXTRACTOR_STEAL_RATIO] = $settings->getExtractorStealRatio();
+        $data[static::KEY_SETTINGS][static::KEY_TARGET_SALVAGE_RATIO] = $settings->getTargetSalvageRatio();
+        $data[static::KEY_SETTINGS][static::KEY_DEFENDER_SALVAGE_RATIO] = $settings->getDefenderSalvageRatio();
+
+        foreach ($settings->getUnits() as $unit) {
+            $currentUnitData = [
+                static::KEY_UNIT_ID => $unit->getUnitId(),
+                static::KEY_NAME => $unit->getName(),
+                static::KEY_GROUP => $unit->getGroup(),
+                static::KEY_METAL => $unit->getMetalCost(),
+                static::KEY_CRYSTAL => $unit->getCrystalCost(),
+                static::KEY_EXTRACTOR_PROTECTION_AMOUNT => $unit->getExtractorProtectAmount(),
+                static::KEY_EXTRACTOR_STEAL_AMOUNT => $unit->getExtractorStealAmount(),
+                static::KEY_CARRIER_CAPACITY_RATIO => $unit->getCarrierCapacity(),
+                static::KEY_CARRIER_CAPACITY_CONSUMED_RATIO => $unit->getCarrierCapacityConsumed(),
+            ];
+
+            foreach ($settings->getUnitCombatSettingTargetsOf($unit->getUnitId()) as $combatSetting) {
+                $currentTargetData = [
+                    static::KEY_UNIT_ID => $combatSetting->getTargetUnitId(),
+                    static::KEY_ATTACK_POWER => $combatSetting->getAttackPower(),
+                    static::KEY_DISTRIBUTION_RATIO => $combatSetting->getDistributionRatio(),
+                ];
+
+                $currentUnitData[static::KEY_TARGETS][] = $currentTargetData;
+            }
+
+            $data[static::KEY_SETTINGS][static::KEY_UNITS][] = $currentUnitData;
+        }
 
         return $data;
     }
@@ -271,6 +308,9 @@ final class JsonFormatter implements JsonFormatterInterface
      */
     private function addExtractorStolenArray(array $fleetArray, FleetInterface $afterFleet): array
     {
+        $fleetArray[static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_STEAL_CAPACITY]
+            = $afterFleet->getExtractorsStealCapacity();
+
         $fleetArray[static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_EXTRACTOR_STOLEN][static::KEY_METAL]
             = $afterFleet->getExtractorStolenMetal();
 
@@ -377,13 +417,25 @@ final class JsonFormatter implements JsonFormatterInterface
 
     /**
      * @param string[] $data
-     * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
      *
      * @return string[]
      */
-    private function addTargetData(array $data, CalculatorResultInterface $calculatorResult): array
+    private function addTargetData(array $data, CalculatorResponseInterface $calculatorResult): array
     {
         $data[static::KEY_TARGET][static::KEY_DATA] = $calculatorResult->getAfterBattle()->getTargetData();
+
+        $data[static::KEY_TARGET][static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_BEFORE][static::KEY_METAL] =
+            $calculatorResult->getBeforeBattle()->getTargetExtractorsMetal();
+
+        $data[static::KEY_TARGET][static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_BEFORE][static::KEY_CRYSTAL] =
+            $calculatorResult->getBeforeBattle()->getTargetExtractorsCrystal();
+
+        $data[static::KEY_TARGET][static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_AFTER][static::KEY_METAL] =
+            $calculatorResult->getAfterBattle()->getTargetExtractorsMetal();
+
+        $data[static::KEY_TARGET][static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_AFTER][static::KEY_CRYSTAL] =
+            $calculatorResult->getAfterBattle()->getTargetExtractorsCrystal();
 
         $data[static::KEY_TARGET][static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_EXTRACTOR_LOST][static::KEY_METAL] = $this->diff(
             $calculatorResult->getBeforeBattle()->getTargetExtractorsMetal(),
@@ -400,13 +452,13 @@ final class JsonFormatter implements JsonFormatterInterface
 
     /**
      * @param string[] $data
-     * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
-     *
-     * @throws
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
      *
      * @return string[]
+     *@throws
+     *
      */
-    private function addReportData(array $data, CalculatorResultInterface $calculatorResult): array
+    private function addReportData(array $data, CalculatorResponseInterface $calculatorResult): array
     {
         $data[static::KEY_REPORT] = $calculatorResult->getAfterBattle()->getData();
         $data[static::KEY_REPORT][static::KEY_CREATED_AT] = (new DateTimeImmutable())->format('Y-m-d H:i:s');

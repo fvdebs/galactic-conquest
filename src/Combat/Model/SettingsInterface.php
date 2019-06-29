@@ -42,6 +42,20 @@ interface SettingsInterface
     public function isPreFireTick(): bool;
 
     /**
+     * @param bool $isLastTick
+     *
+     * @return void
+     */
+    public function setIsLastTick(bool $isLastTick): void;
+
+    /**
+     * @param bool $isPreFireTick
+     *
+     * @return void
+     */
+    public function setIsPreFireTick(bool $isPreFireTick): void;
+
+    /**
      * @param int $unitId
      *
      * @return \GC\Combat\Model\UnitInterface

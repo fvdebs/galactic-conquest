@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Combat\Calculator\Plugin;
 
-use GC\Combat\Model\BattleInterface;
+use GC\Combat\Calculator\CalculatorResponseInterface;
 use GC\Combat\Model\SettingsInterface;
 
 use function floor;
@@ -12,44 +12,54 @@ use function floor;
 final class ExtractorCalculatorPlugin implements CalculatorPluginInterface
 {
     /**
-     * @param \GC\Combat\Model\BattleInterface $before
-     * @param \GC\Combat\Model\BattleInterface $after
-     * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResponse
      *
-     * @return \GC\Combat\Model\BattleInterface - $after
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
-    public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface
+    public function calculate(CalculatorResponseInterface $calculatorResponse): CalculatorResponseInterface
     {
+        $afterBattle = $calculatorResponse->getAfterBattle();
+        $settings = $calculatorResponse->getSettings();
+
         $extractorsProtectedTotal = $this->calculateNumberOfProtectedExtractors(
-            $after->getDefendingFleets(),
+            $afterBattle->getDefendingFleets(),
             $settings
         );
 
         $extractorStealCapacityTotal = $this->calculateNumberOfStealCapacity(
-            $after->getAttackingFleets(),
+            $afterBattle->getAttackingFleets(),
             $settings
         );
 
         if ($extractorStealCapacityTotal === 0.0 || $extractorsProtectedTotal >= $extractorStealCapacityTotal) {
-            return $after;
+            return $calculatorResponse;
         }
 
-        $totalMetalExtractorsToSteal = $after->getTargetExtractorsMetal() *  $settings->getExtractorStealRatio();
-        $totalCrystalExtractorsToSteal = $after->getTargetExtractorsCrystal() *  $settings->getExtractorStealRatio();
+        $totalMetalExtractorsToSteal = $afterBattle->getTargetExtractorsMetal() *  $settings->getExtractorStealRatio();
+        $totalCrystalExtractorsToSteal = $afterBattle->getTargetExtractorsCrystal() *  $settings->getExtractorStealRatio();
 
-        foreach ($after->getAttackingFleets() as $fleet) {
+        foreach ($afterBattle->getAttackingFleets() as $fleet) {
             if ($fleet->getExtractorsStealCapacity() === 0.0) {
                 continue;
             }
 
-            $extractorsStolenMetal = $totalMetalExtractorsToSteal / ($extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
-            $extractorsStolenCrystal = $totalCrystalExtractorsToSteal / ($extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
+            $extractorsStolenMetal =
+                ($totalMetalExtractorsToSteal / $extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
 
-            $fleet->setExtractorStolenMetal((int) floor($extractorsStolenMetal));
-            $fleet->setExtractorStolenCrystal((int) floor($extractorsStolenCrystal));
+            $extractorsStolenCrystal =
+                ($totalCrystalExtractorsToSteal / $extractorStealCapacityTotal) * $fleet->getExtractorsStealCapacity();
+
+            $extractorsStolenMetalFloored = (int) floor($extractorsStolenMetal);
+            $extractorsStolenCrystalFloored = (int) floor($extractorsStolenCrystal);
+
+            $fleet->setExtractorStolenMetal($extractorsStolenMetalFloored);
+            $fleet->setExtractorStolenCrystal($extractorsStolenCrystalFloored);
+
+            $afterBattle->decreaseTargetExtractorsMetal($extractorsStolenMetalFloored);
+            $afterBattle->decreaseTargetExtractorsCrystal($extractorsStolenCrystalFloored);
         }
 
-        return $after;
+        return $calculatorResponse;
     }
 
     /**

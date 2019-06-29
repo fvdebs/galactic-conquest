@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace GC\Combat\Format;
 
-use GC\Combat\Calculator\CalculatorResultInterface;
-use GC\Combat\Model\SettingsInterface;
+use GC\Combat\Calculator\CalculatorResponseInterface;
 
 interface JsonFormatterInterface
 {
     /**
-     * @param \GC\Combat\Calculator\CalculatorResultInterface $calculatorResult
-     * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
      * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function format(
-        CalculatorResultInterface $calculatorResult,
-        SettingsInterface $settings,
-        ?string $mergeByDataKey = null
-    ) : string;
+    public function format(CalculatorResponseInterface $calculatorResult, ?string $mergeByDataKey = null) : string;
 }

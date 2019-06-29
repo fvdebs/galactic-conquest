@@ -45,4 +45,9 @@ interface UnitInterface
      * @return int
      */
     public function getExtractorProtectAmount(): int;
+
+    /**
+     * @return string
+     */
+    public function getGroup(): string;
 }

@@ -13,7 +13,7 @@ interface CalculatorInterface
      * @param \GC\Combat\Model\BattleInterface $battle
      * @param \GC\Combat\Model\SettingsInterface $settings
      *
-     * @return \GC\Combat\Calculator\CalculatorResultInterface
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
-    public function calculate(BattleInterface $battle, SettingsInterface $settings): CalculatorResultInterface;
+    public function calculate(BattleInterface $battle, SettingsInterface $settings): CalculatorResponseInterface;
 }

@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace GC\Combat\Calculator\Plugin;
 
-use GC\Combat\Model\BattleInterface;
-use GC\Combat\Model\SettingsInterface;
+use GC\Combat\Calculator\CalculatorResponseInterface;
 
 interface CalculatorPluginInterface
 {
     /**
-     * @param \GC\Combat\Model\BattleInterface $before
-     * @param \GC\Combat\Model\BattleInterface $after
-     * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResponse
      *
-     * @return \GC\Combat\Model\BattleInterface - $after
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
-    public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface;
+    public function calculate(CalculatorResponseInterface $calculatorResponse): CalculatorResponseInterface;
 }

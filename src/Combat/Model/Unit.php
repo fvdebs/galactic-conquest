@@ -47,6 +47,11 @@ final class Unit implements UnitInterface
     private $extractorProtectAmount;
 
     /**
+     * @var string
+     */
+    private $group;
+
+    /**
      * @param int $unitId
      * @param string $name
      * @param int $metalCost
@@ -55,6 +60,7 @@ final class Unit implements UnitInterface
      * @param int $carrierCapacityConsumed
      * @param int $extractorStealAmount
      * @param int $extractorProtectAmount
+     * @param string $group - default: ''
      */
     public function __construct(
         int $unitId,
@@ -64,7 +70,8 @@ final class Unit implements UnitInterface
         int $carrierCapacity,
         int $carrierCapacityConsumed,
         int $extractorStealAmount,
-        int $extractorProtectAmount
+        int $extractorProtectAmount,
+        string $group = ''
     ) {
         $this->unitId = $unitId;
         $this->name = $name;
@@ -74,6 +81,7 @@ final class Unit implements UnitInterface
         $this->carrierCapacityConsumed = $carrierCapacityConsumed;
         $this->extractorStealAmount = $extractorStealAmount;
         $this->extractorProtectAmount = $extractorProtectAmount;
+        $this->group = $group;
     }
 
     /**
@@ -138,5 +146,13 @@ final class Unit implements UnitInterface
     public function getExtractorProtectAmount(): int
     {
         return $this->extractorProtectAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroup(): string
+    {
+        return $this->group;
     }
 }

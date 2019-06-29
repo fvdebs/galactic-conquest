@@ -22,6 +22,11 @@ interface FleetInterface
     public function getUnits(): array;
 
     /**
+     * @return bool
+     */
+    public function getUnitsLeft(): bool;
+
+    /**
      * @param string $key
      *
      * @return bool

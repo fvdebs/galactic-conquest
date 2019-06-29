@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Combat\Calculator\Plugin;
 
+use GC\Combat\Calculator\CalculatorResponseInterface;
 use GC\Combat\Model\BattleInterface;
 use GC\Combat\Model\SettingsInterface;
 
@@ -12,16 +13,17 @@ use function array_merge;
 final class SalvageCalculatorPlugin implements CalculatorPluginInterface
 {
     /**
-     * @param \GC\Combat\Model\BattleInterface $before
-     * @param \GC\Combat\Model\BattleInterface $after
-     * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResponse
      *
-     * @return \GC\Combat\Model\BattleInterface - $after
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
-    public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface
+    public function calculate(CalculatorResponseInterface $calculatorResponse): CalculatorResponseInterface
     {
+        $afterBattle = $calculatorResponse->getAfterBattle();
+        $settings = $calculatorResponse->getSettings();
+
         /* @var \GC\Combat\Model\FleetInterface $fleet */
-        $fleets = array_merge($after->getDefendingFleets(), $after->getAttackingFleets());
+        $fleets = array_merge($afterBattle->getDefendingFleets(), $afterBattle->getAttackingFleets());
 
         $destroyedMetalTotal = $this->calculateDestroyedMetalTotal(
             $fleets,
@@ -34,13 +36,13 @@ final class SalvageCalculatorPlugin implements CalculatorPluginInterface
         );
 
         $this->calculateSalvagedResources(
-            $after,
+            $afterBattle,
             $destroyedMetalTotal,
             $destroyedCrystalTotal,
             $settings
         );
 
-        return $after;
+        return $calculatorResponse;
     }
 
     /**

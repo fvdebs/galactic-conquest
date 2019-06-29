@@ -2,16 +2,347 @@
   "report": {
     "universe": "Sirius",
     "universeId": 1,
+    "universeRouteName": "sirius",
     "currentTick": 20,
-    "createdAt": "2019-06-28 02:03:59"
+    "createdAt": "2019-06-29 15:11:07"
   },
   "settings": {
     "combatTicks": 5,
     "isPreFireTick": false,
-    "isLastTick": false,
+    "isLastTick": true,
     "extractorStealRatio": 0.1,
     "targetSalvageRatio": 0.4,
-    "defenderSalvageRatio": 0.2
+    "defenderSalvageRatio": 0.2,
+    "units": [
+      {
+        "unitId": 1,
+        "name": "unit.leo",
+        "group": "OFFENSIVE",
+        "metal": 4000,
+        "crystal": 6000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 3,
+        "targets": [
+          {
+            "unitId": 13,
+            "attackpower": 0.0246,
+            "distributionRatio": 0.35
+          },
+          {
+            "unitId": 2,
+            "attackpower": 0.392,
+            "distributionRatio": 0.3
+          },
+          {
+            "unitId": 5,
+            "attackpower": 0.0263,
+            "distributionRatio": 0.35
+          }
+        ]
+      },
+      {
+        "unitId": 2,
+        "name": "unit.aquilae",
+        "group": "OFFENSIVE",
+        "metal": 2000,
+        "crystal": 8000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 3,
+        "targets": [
+          {
+            "unitId": 14,
+            "attackpower": 0.008,
+            "distributionRatio": 0.3
+          },
+          {
+            "unitId": 6,
+            "attackpower": 0.01,
+            "distributionRatio": 0.3
+          },
+          {
+            "unitId": 7,
+            "attackpower": 0.0075,
+            "distributionRatio": 0.3
+          }
+        ]
+      },
+      {
+        "unitId": 3,
+        "name": "unit.fornax",
+        "group": "OFFENSIVE",
+        "metal": 15000,
+        "crystal": 7500,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 10,
+            "attackpower": 4.5,
+            "distributionRatio": 0.6
+          },
+          {
+            "unitId": 1,
+            "attackpower": 0.85,
+            "distributionRatio": 0.4
+          }
+        ]
+      },
+      {
+        "unitId": 4,
+        "name": "unit.draco",
+        "group": "OFFENSIVE",
+        "metal": 40000,
+        "crystal": 30000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 11,
+            "attackpower": 3.5,
+            "distributionRatio": 0.6
+          },
+          {
+            "unitId": 3,
+            "attackpower": 1.2444,
+            "distributionRatio": 0.4
+          }
+        ]
+      },
+      {
+        "unitId": 5,
+        "name": "unit.goron",
+        "group": "OFFENSIVE",
+        "metal": 65000,
+        "crystal": 85000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 12,
+            "attackpower": 2,
+            "distributionRatio": 0.35
+          },
+          {
+            "unitId": 4,
+            "attackpower": 0.8571,
+            "distributionRatio": 0.3
+          },
+          {
+            "unitId": 8,
+            "attackpower": 10,
+            "distributionRatio": 0.35
+          }
+        ]
+      },
+      {
+        "unitId": 6,
+        "name": "unit.pentalin",
+        "group": "OFFENSIVE",
+        "metal": 250000,
+        "crystal": 150000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 13,
+            "attackpower": 1,
+            "distributionRatio": 0.2
+          },
+          {
+            "unitId": 5,
+            "attackpower": 1.0666,
+            "distributionRatio": 0.2
+          },
+          {
+            "unitId": 6,
+            "attackpower": 0.4,
+            "distributionRatio": 0.2
+          },
+          {
+            "unitId": 7,
+            "attackpower": 0.3019,
+            "distributionRatio": 0.2
+          },
+          {
+            "unitId": 8,
+            "attackpower": 26.6667,
+            "distributionRatio": 0.2
+          }
+        ]
+      },
+      {
+        "unitId": 7,
+        "name": "unit.zenit",
+        "group": "OFFENSIVE",
+        "metal": 200000,
+        "crystal": 50000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 100,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 9,
+            "attackpower": 25,
+            "distributionRatio": 0.5
+          },
+          {
+            "unitId": 8,
+            "attackpower": 14,
+            "distributionRatio": 0.5
+          }
+        ]
+      },
+      {
+        "unitId": 9,
+        "name": "unit.cleptor",
+        "group": "OFFENSIVE",
+        "metal": 1500,
+        "crystal": 1000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 1,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0
+      },
+      {
+        "unitId": 8,
+        "name": "unit.cancri",
+        "group": "OFFENSIVE",
+        "metal": 1000,
+        "crystal": 1500,
+        "extractorProtectionAmount": 1,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0
+      },
+      {
+        "unitId": 10,
+        "name": "unit.horus",
+        "group": "DEFENSE",
+        "metal": 1000,
+        "crystal": 1000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 4,
+            "attackpower": 0.0114,
+            "distributionRatio": 0.4
+          },
+          {
+            "unitId": 9,
+            "attackpower": 0.32,
+            "distributionRatio": 0.6
+          }
+        ]
+      },
+      {
+        "unitId": 11,
+        "name": "unit.rubium",
+        "group": "DEFENSE",
+        "metal": 6000,
+        "crystal": 2000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 1,
+            "attackpower": 0.3,
+            "distributionRatio": 0.6
+          },
+          {
+            "unitId": 9,
+            "attackpower": 1.28,
+            "distributionRatio": 0.4
+          }
+        ]
+      },
+      {
+        "unitId": 12,
+        "name": "unit.pulsar",
+        "group": "DEFENSE",
+        "metal": 20000,
+        "crystal": 10000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 2,
+            "attackpower": 1.2,
+            "distributionRatio": 0.4
+          },
+          {
+            "unitId": 3,
+            "attackpower": 0.5334,
+            "distributionRatio": 0.6
+          }
+        ]
+      },
+      {
+        "unitId": 13,
+        "name": "unit.coon",
+        "group": "DEFENSE",
+        "metal": 60000,
+        "crystal": 100000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 4,
+            "attackpower": 0.9143,
+            "distributionRatio": 0.4
+          },
+          {
+            "unitId": 5,
+            "attackpower": 0.5334,
+            "distributionRatio": 0.6
+          }
+        ]
+      },
+      {
+        "unitId": 14,
+        "name": "unit.centurion",
+        "group": "DEFENSE",
+        "metal": 200000,
+        "crystal": 300000,
+        "extractorProtectionAmount": 0,
+        "extractorStealAmount": 0,
+        "carrierCapacityRatio": 0,
+        "carrierCapacityConsumedRatio": 0,
+        "targets": [
+          {
+            "unitId": 6,
+            "attackpower": 0.5,
+            "distributionRatio": 0.5
+          },
+          {
+            "unitId": 7,
+            "attackpower": 0.3774,
+            "distributionRatio": 0.5
+          }
+        ]
+      }
+    ]
   },
   "target": {
     "data": {
@@ -24,160 +355,591 @@
     },
     "resource": {
       "extractor": {
+        "before": {
+          "metal": 100,
+          "crystal": 100
+        },
+        "after": {
+          "metal": 92,
+          "crystal": 92
+        },
         "lost": {
-          "metal": 0,
-          "crystal": 0
+          "metal": 8,
+          "crystal": 8
         }
       }
     }
   },
   "defense": [
     {
-      "data": [
-        {
-          "userId": 1,
-          "playerId": 1,
-          "name": "Tegrat",
-          "galaxyId": 1,
-          "galaxyNumber": 1,
-          "galaxyPosition": 1,
-          "fleetId": 10
-        },
-        {
-          "userId": 1,
-          "playerId": 1,
-          "name": "Tegrat",
-          "galaxyId": 1,
-          "galaxyNumber": 1,
-          "galaxyPosition": 1,
-          "fleetId": 1
-        }
-      ],
+      "data": {
+        "userId": 1,
+        "playerId": 1,
+        "name": "Tegrat",
+        "galaxyId": 1,
+        "galaxyNumber": 1,
+        "galaxyPosition": 1,
+        "fleetId": 10
+      },
       "before": {
-        "unit.interceptor": 100,
+        "unit.horus": 100,
         "unit.rubium": 100,
         "unit.pulsar": 100,
         "unit.coon": 100,
-        "unit.centurion": 100,
-        "unit.fighter": 100,
-        "unit.bomber": 100,
-        "unit.frigate": 100,
-        "unit.destroyer": 100,
-        "unit.cruiser": 100,
-        "unit.battleship": 100,
-        "unit.carrier": 100,
-        "unit.cancri": 100100,
-        "unit.cleptor": 100000
+        "unit.centurion": 100
       },
       "after": {
-        "unit.coon": 61,
-        "unit.centurion": 99,
-        "unit.fighter": 50,
-        "unit.bomber": 80,
-        "unit.frigate": 14,
-        "unit.destroyer": 54,
-        "unit.cruiser": 58,
-        "unit.battleship": 84,
-        "unit.carrier": 88,
-        "unit.cancri": 97161,
-        "unit.cleptor": 97632
+        "unit.centurion": 74
       },
       "destroyed": {
-        "unit.fighter": 57,
-        "unit.bomber": 35,
-        "unit.frigate": 115,
-        "unit.destroyer": 62,
-        "unit.cruiser": 52,
-        "unit.battleship": 33,
-        "unit.carrier": 25,
-        "unit.cleptor": 1204,
-        "unit.cancri": 1736
+        "unit.leo": 3,
+        "unit.aquilae": 9,
+        "unit.fornax": 6,
+        "unit.draco": 9,
+        "unit.goron": 8,
+        "unit.pentalin": 22,
+        "unit.zenit": 16,
+        "unit.cleptor": 14
       },
       "carrier": {
-        "capacity": 8800,
-        "consumed": 390,
+        "capacity": 0,
+        "consumed": 0,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 379920,
-          "crystal": 304220
+          "metal": 837882,
+          "crystal": 715548
         },
         "extractor": {
-          "protected": 97161
+          "protected": 0
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 1,
+        "playerId": 1,
+        "name": "Tegrat",
+        "galaxyId": 1,
+        "galaxyNumber": 1,
+        "galaxyPosition": 1,
+        "fleetId": 1
+      },
+      "before": {
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.leo": 44,
+        "unit.draco": 34,
+        "unit.goron": 41,
+        "unit.pentalin": 78,
+        "unit.zenit": 83,
+        "unit.cancri": 97928,
+        "unit.cleptor": 99631
+      },
+      "destroyed": {
+        "unit.leo": 41,
+        "unit.aquilae": 13,
+        "unit.fornax": 91,
+        "unit.draco": 30,
+        "unit.goron": 25,
+        "unit.pentalin": 9,
+        "unit.zenit": 7,
+        "unit.cancri": 1673,
+        "unit.cleptor": 1168
+      },
+      "carrier": {
+        "capacity": 8300,
+        "consumed": 132,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 837882,
+          "crystal": 715548
+        },
+        "extractor": {
+          "protected": 97928
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 1,
+        "playerId": 1,
+        "name": "Tegrat",
+        "galaxyId": 1,
+        "galaxyNumber": 1,
+        "galaxyPosition": 1,
+        "fleetId": 2
+      },
+      "before": {
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.leo": 44,
+        "unit.draco": 34,
+        "unit.goron": 41,
+        "unit.pentalin": 78,
+        "unit.zenit": 83,
+        "unit.cancri": 97928,
+        "unit.cleptor": 99631
+      },
+      "destroyed": {
+        "unit.leo": 41,
+        "unit.aquilae": 13,
+        "unit.fornax": 91,
+        "unit.draco": 30,
+        "unit.goron": 25,
+        "unit.pentalin": 9,
+        "unit.zenit": 7,
+        "unit.cancri": 1673,
+        "unit.cleptor": 1168
+      },
+      "carrier": {
+        "capacity": 8300,
+        "consumed": 132,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 837882,
+          "crystal": 715548
+        },
+        "extractor": {
+          "protected": 97928
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 1,
+        "playerId": 1,
+        "name": "Tegrat",
+        "galaxyId": 1,
+        "galaxyNumber": 1,
+        "galaxyPosition": 1,
+        "fleetId": 3
+      },
+      "before": {
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.leo": 44,
+        "unit.draco": 34,
+        "unit.goron": 41,
+        "unit.pentalin": 78,
+        "unit.zenit": 83,
+        "unit.cancri": 97928,
+        "unit.cleptor": 99631
+      },
+      "destroyed": {
+        "unit.leo": 41,
+        "unit.aquilae": 13,
+        "unit.fornax": 91,
+        "unit.draco": 30,
+        "unit.goron": 25,
+        "unit.pentalin": 9,
+        "unit.zenit": 7,
+        "unit.cancri": 1673,
+        "unit.cleptor": 1168
+      },
+      "carrier": {
+        "capacity": 8300,
+        "consumed": 132,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 837882,
+          "crystal": 715548
+        },
+        "extractor": {
+          "protected": 97928
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 2,
+        "playerId": 2,
+        "name": "Rednefed1",
+        "galaxyId": 2,
+        "galaxyNumber": 2,
+        "galaxyPosition": 1,
+        "fleetId": 4
+      },
+      "before": {
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.leo": 44,
+        "unit.draco": 34,
+        "unit.goron": 41,
+        "unit.pentalin": 78,
+        "unit.zenit": 83,
+        "unit.cancri": 97928,
+        "unit.cleptor": 99631
+      },
+      "destroyed": {
+        "unit.leo": 41,
+        "unit.aquilae": 13,
+        "unit.fornax": 91,
+        "unit.draco": 30,
+        "unit.goron": 25,
+        "unit.pentalin": 9,
+        "unit.zenit": 7,
+        "unit.cancri": 1673,
+        "unit.cleptor": 1168
+      },
+      "carrier": {
+        "capacity": 8300,
+        "consumed": 132,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 418941,
+          "crystal": 357774
+        },
+        "extractor": {
+          "protected": 97928
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 3,
+        "playerId": 3,
+        "name": "Rednefed2",
+        "galaxyId": 2,
+        "galaxyNumber": 2,
+        "galaxyPosition": 2,
+        "fleetId": 5
+      },
+      "before": {
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.leo": 44,
+        "unit.draco": 34,
+        "unit.goron": 41,
+        "unit.pentalin": 78,
+        "unit.zenit": 83,
+        "unit.cancri": 97928,
+        "unit.cleptor": 99631
+      },
+      "destroyed": {
+        "unit.leo": 41,
+        "unit.aquilae": 13,
+        "unit.fornax": 91,
+        "unit.draco": 30,
+        "unit.goron": 25,
+        "unit.pentalin": 9,
+        "unit.zenit": 7,
+        "unit.cancri": 1673,
+        "unit.cleptor": 1168
+      },
+      "carrier": {
+        "capacity": 8300,
+        "consumed": 132,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 418941,
+          "crystal": 357774
+        },
+        "extractor": {
+          "protected": 97928
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 3,
+        "playerId": 3,
+        "name": "Rednefed2",
+        "galaxyId": 2,
+        "galaxyNumber": 2,
+        "galaxyPosition": 2,
+        "fleetId": 6
+      },
+      "before": {
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.leo": 44,
+        "unit.draco": 34,
+        "unit.goron": 41,
+        "unit.pentalin": 78,
+        "unit.zenit": 83,
+        "unit.cancri": 97928,
+        "unit.cleptor": 99631
+      },
+      "destroyed": {
+        "unit.leo": 41,
+        "unit.aquilae": 13,
+        "unit.fornax": 91,
+        "unit.draco": 30,
+        "unit.goron": 25,
+        "unit.pentalin": 9,
+        "unit.zenit": 7,
+        "unit.cancri": 1673,
+        "unit.cleptor": 1168
+      },
+      "carrier": {
+        "capacity": 8300,
+        "consumed": 132,
+        "losses": []
+      },
+      "resource": {
+        "salvaged": {
+          "metal": 418941,
+          "crystal": 357774
+        },
+        "extractor": {
+          "protected": 97928
         }
       }
     }
   ],
   "offense": [
     {
-      "data": [
-        {
-          "userId": 4,
-          "playerId": 4,
-          "name": "Rekcatta1",
-          "galaxyId": 3,
-          "galaxyNumber": 3,
-          "galaxyPosition": 1,
-          "fleetId": 7
-        },
-        {
-          "userId": 4,
-          "playerId": 4,
-          "name": "Rekcatta1",
-          "galaxyId": 3,
-          "galaxyNumber": 3,
-          "galaxyPosition": 1,
-          "fleetId": 8
-        }
-      ],
+      "data": {
+        "userId": 4,
+        "playerId": 4,
+        "name": "Rekcatta1",
+        "galaxyId": 3,
+        "galaxyNumber": 3,
+        "galaxyPosition": 1,
+        "fleetId": 7
+      },
       "before": {
-        "unit.fighter": 200,
-        "unit.bomber": 200,
-        "unit.frigate": 200,
-        "unit.destroyer": 200,
-        "unit.cruiser": 200,
-        "unit.battleship": 200,
-        "unit.carrier": 200,
-        "unit.cancri": 200200,
-        "unit.cleptor": 140000
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
       },
       "after": {
-        "unit.fighter": 142,
-        "unit.bomber": 162,
-        "unit.frigate": 84,
-        "unit.destroyer": 136,
-        "unit.cruiser": 146,
-        "unit.battleship": 164,
-        "unit.carrier": 172,
-        "unit.cancri": 198462,
-        "unit.cleptor": 138794
+        "unit.leo": 97,
+        "unit.aquilae": 99,
+        "unit.fornax": 55,
+        "unit.draco": 88,
+        "unit.goron": 89,
+        "unit.pentalin": 93,
+        "unit.zenit": 70,
+        "unit.cancri": 99289,
+        "unit.cleptor": 98836
       },
       "destroyed": {
-        "unit.fighter": 48,
-        "unit.bomber": 18,
-        "unit.frigate": 84,
-        "unit.destroyer": 44,
-        "unit.cruiser": 40,
-        "unit.battleship": 14,
-        "unit.carrier": 10,
-        "unit.cancri": 2938,
-        "unit.cleptor": 2366,
-        "unit.interceptor": 100,
-        "unit.rubium": 100,
-        "unit.pulsar": 100,
-        "unit.coon": 38
+        "unit.leo": 26,
+        "unit.aquilae": 5,
+        "unit.fornax": 37,
+        "unit.draco": 24,
+        "unit.goron": 21,
+        "unit.pentalin": 8,
+        "unit.zenit": 6,
+        "unit.cancri": 1467,
+        "unit.cleptor": 1095,
+        "unit.horus": 8,
+        "unit.rubium": 6,
+        "unit.pulsar": 6,
+        "unit.coon": 5
       },
       "carrier": {
-        "capacity": 17200,
-        "consumed": 912,
+        "capacity": 7000,
+        "consumed": 588,
         "losses": []
       },
       "resource": {
         "extractor": {
+          "stealCapacity": 98836,
           "stolen": {
-            "metal": 9,
-            "crystal": 9
+            "metal": 1,
+            "crystal": 1
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 4,
+        "playerId": 4,
+        "name": "Rekcatta1",
+        "galaxyId": 3,
+        "galaxyNumber": 3,
+        "galaxyPosition": 1,
+        "fleetId": 8
+      },
+      "before": {
+        "unit.leo": 10440,
+        "unit.aquilae": 10440,
+        "unit.fornax": 1040,
+        "unit.draco": 1400,
+        "unit.goron": 1400,
+        "unit.pentalin": 1040,
+        "unit.zenit": 2,
+        "unit.cancri": 1040100,
+        "unit.cleptor": 404000
+      },
+      "after": {
+        "unit.leo": 10192,
+        "unit.aquilae": 10350,
+        "unit.fornax": 576,
+        "unit.draco": 1233,
+        "unit.goron": 1259,
+        "unit.pentalin": 974,
+        "unit.zenit": 1,
+        "unit.cancri": 1031680,
+        "unit.cleptor": 399300
+      },
+      "destroyed": {
+        "unit.leo": 278,
+        "unit.aquilae": 588,
+        "unit.fornax": 525,
+        "unit.draco": 344,
+        "unit.goron": 310,
+        "unit.pentalin": 112,
+        "unit.zenit": 84,
+        "unit.cancri": 10095,
+        "unit.cleptor": 21,
+        "unit.horus": 83,
+        "unit.rubium": 87,
+        "unit.pulsar": 87,
+        "unit.coon": 89,
+        "unit.centurion": 24
+      },
+      "carrier": {
+        "capacity": 100,
+        "consumed": 61626,
+        "losses": {
+          "unit.leo": 10142,
+          "unit.aquilae": 10300
+        }
+      },
+      "resource": {
+        "extractor": {
+          "stealCapacity": 399300,
+          "stolen": {
+            "metal": 6,
+            "crystal": 6
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "userId": 5,
+        "playerId": 5,
+        "name": "Rekcatta2",
+        "galaxyId": 3,
+        "galaxyNumber": 3,
+        "galaxyPosition": 2,
+        "fleetId": 9
+      },
+      "before": {
+        "unit.leo": 100,
+        "unit.aquilae": 100,
+        "unit.fornax": 100,
+        "unit.draco": 100,
+        "unit.goron": 100,
+        "unit.pentalin": 100,
+        "unit.zenit": 100,
+        "unit.cancri": 100100,
+        "unit.cleptor": 100000
+      },
+      "after": {
+        "unit.leo": 97,
+        "unit.aquilae": 99,
+        "unit.fornax": 55,
+        "unit.draco": 88,
+        "unit.goron": 89,
+        "unit.pentalin": 93,
+        "unit.zenit": 70,
+        "unit.cancri": 99289,
+        "unit.cleptor": 98836
+      },
+      "destroyed": {
+        "unit.leo": 26,
+        "unit.aquilae": 5,
+        "unit.fornax": 37,
+        "unit.draco": 24,
+        "unit.goron": 21,
+        "unit.pentalin": 8,
+        "unit.zenit": 6,
+        "unit.cancri": 1467,
+        "unit.cleptor": 1095,
+        "unit.horus": 8,
+        "unit.rubium": 6,
+        "unit.pulsar": 6,
+        "unit.coon": 5
+      },
+      "carrier": {
+        "capacity": 7000,
+        "consumed": 588,
+        "losses": []
+      },
+      "resource": {
+        "extractor": {
+          "stealCapacity": 98836,
+          "stolen": {
+            "metal": 1,
+            "crystal": 1
           }
         }
       }
@@ -203,60 +965,102 @@
           "galaxyNumber": 1,
           "galaxyPosition": 1,
           "fleetId": 1
+        },
+        {
+          "userId": 1,
+          "playerId": 1,
+          "name": "Tegrat",
+          "galaxyId": 1,
+          "galaxyNumber": 1,
+          "galaxyPosition": 1,
+          "fleetId": 2
+        },
+        {
+          "userId": 1,
+          "playerId": 1,
+          "name": "Tegrat",
+          "galaxyId": 1,
+          "galaxyNumber": 1,
+          "galaxyPosition": 1,
+          "fleetId": 3
+        },
+        {
+          "userId": 2,
+          "playerId": 2,
+          "name": "Rednefed1",
+          "galaxyId": 2,
+          "galaxyNumber": 2,
+          "galaxyPosition": 1,
+          "fleetId": 4
+        },
+        {
+          "userId": 3,
+          "playerId": 3,
+          "name": "Rednefed2",
+          "galaxyId": 2,
+          "galaxyNumber": 2,
+          "galaxyPosition": 2,
+          "fleetId": 5
+        },
+        {
+          "userId": 3,
+          "playerId": 3,
+          "name": "Rednefed2",
+          "galaxyId": 2,
+          "galaxyNumber": 2,
+          "galaxyPosition": 2,
+          "fleetId": 6
         }
       ],
       "before": {
-        "unit.interceptor": 100,
+        "unit.horus": 100,
         "unit.rubium": 100,
         "unit.pulsar": 100,
         "unit.coon": 100,
         "unit.centurion": 100,
-        "unit.fighter": 100,
-        "unit.bomber": 100,
-        "unit.frigate": 100,
-        "unit.destroyer": 100,
-        "unit.cruiser": 100,
-        "unit.battleship": 100,
-        "unit.carrier": 100,
-        "unit.cancri": 100100,
-        "unit.cleptor": 100000
+        "unit.leo": 600,
+        "unit.aquilae": 600,
+        "unit.fornax": 600,
+        "unit.draco": 600,
+        "unit.goron": 600,
+        "unit.pentalin": 600,
+        "unit.zenit": 600,
+        "unit.cancri": 600600,
+        "unit.cleptor": 600000
       },
       "after": {
-        "unit.coon": 61,
-        "unit.centurion": 99,
-        "unit.fighter": 50,
-        "unit.bomber": 80,
-        "unit.frigate": 14,
-        "unit.destroyer": 54,
-        "unit.cruiser": 58,
-        "unit.battleship": 84,
-        "unit.carrier": 88,
-        "unit.cancri": 97161,
-        "unit.cleptor": 97632
+        "unit.centurion": 74,
+        "unit.leo": 264,
+        "unit.draco": 204,
+        "unit.goron": 246,
+        "unit.pentalin": 468,
+        "unit.zenit": 498,
+        "unit.cancri": 587568,
+        "unit.cleptor": 597786
       },
       "destroyed": {
-        "unit.fighter": 57,
-        "unit.bomber": 35,
-        "unit.frigate": 115,
-        "unit.destroyer": 62,
-        "unit.cruiser": 52,
-        "unit.battleship": 33,
-        "unit.carrier": 25,
-        "unit.cleptor": 1204,
-        "unit.cancri": 1736
+        "unit.leo": 249,
+        "unit.aquilae": 87,
+        "unit.fornax": 552,
+        "unit.draco": 189,
+        "unit.goron": 158,
+        "unit.pentalin": 76,
+        "unit.zenit": 58,
+        "unit.cleptor": 7022,
+        "unit.cancri": 10038
       },
       "carrier": {
-        "capacity": 8800,
-        "consumed": 390,
+        "capacity": 49800,
+        "consumed": 792,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 379920,
-          "crystal": 304220
+          "metal": 4608351,
+          "crystal": 3935514
         },
         "extractor": {
-          "protected": 97161
+          "protected": 587568
         }
       }
     },
@@ -279,55 +1083,69 @@
           "galaxyNumber": 3,
           "galaxyPosition": 1,
           "fleetId": 8
+        },
+        {
+          "userId": 5,
+          "playerId": 5,
+          "name": "Rekcatta2",
+          "galaxyId": 3,
+          "galaxyNumber": 3,
+          "galaxyPosition": 2,
+          "fleetId": 9
         }
       ],
       "before": {
-        "unit.fighter": 200,
-        "unit.bomber": 200,
-        "unit.frigate": 200,
-        "unit.destroyer": 200,
-        "unit.cruiser": 200,
-        "unit.battleship": 200,
-        "unit.carrier": 200,
-        "unit.cancri": 200200,
-        "unit.cleptor": 140000
+        "unit.leo": 10640,
+        "unit.aquilae": 10640,
+        "unit.fornax": 1240,
+        "unit.draco": 1600,
+        "unit.goron": 1600,
+        "unit.pentalin": 1240,
+        "unit.zenit": 202,
+        "unit.cancri": 1240300,
+        "unit.cleptor": 604000
       },
       "after": {
-        "unit.fighter": 142,
-        "unit.bomber": 162,
-        "unit.frigate": 84,
-        "unit.destroyer": 136,
-        "unit.cruiser": 146,
-        "unit.battleship": 164,
-        "unit.carrier": 172,
-        "unit.cancri": 198462,
-        "unit.cleptor": 138794
+        "unit.leo": 10386,
+        "unit.aquilae": 10548,
+        "unit.fornax": 686,
+        "unit.draco": 1409,
+        "unit.goron": 1437,
+        "unit.pentalin": 1160,
+        "unit.zenit": 141,
+        "unit.cancri": 1230258,
+        "unit.cleptor": 596972
       },
       "destroyed": {
-        "unit.fighter": 48,
-        "unit.bomber": 18,
-        "unit.frigate": 84,
-        "unit.destroyer": 44,
-        "unit.cruiser": 40,
-        "unit.battleship": 14,
-        "unit.carrier": 10,
-        "unit.cancri": 2938,
-        "unit.cleptor": 2366,
-        "unit.interceptor": 100,
-        "unit.rubium": 100,
-        "unit.pulsar": 100,
-        "unit.coon": 38
+        "unit.leo": 330,
+        "unit.aquilae": 598,
+        "unit.fornax": 599,
+        "unit.draco": 392,
+        "unit.goron": 352,
+        "unit.pentalin": 128,
+        "unit.zenit": 96,
+        "unit.cancri": 13029,
+        "unit.cleptor": 2211,
+        "unit.horus": 99,
+        "unit.rubium": 99,
+        "unit.pulsar": 99,
+        "unit.coon": 99,
+        "unit.centurion": 24
       },
       "carrier": {
-        "capacity": 17200,
-        "consumed": 912,
-        "losses": []
+        "capacity": 14100,
+        "consumed": 62802,
+        "losses": {
+          "unit.leo": 10142,
+          "unit.aquilae": 10300
+        }
       },
       "resource": {
         "extractor": {
+          "stealCapacity": 596972,
           "stolen": {
-            "metal": 9,
-            "crystal": 9
+            "metal": 8,
+            "crystal": 8
           }
         }
       }

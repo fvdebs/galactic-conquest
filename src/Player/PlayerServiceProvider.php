@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GC\Player;
 
 use Doctrine\ORM\EntityManager;
+use GC\Combat\Service\CombatServiceInterface;
 use GC\Player\Handler\PlayerCombatReportExternalHandler;
 use GC\Player\Handler\PlayerCombatReportHandler;
 use GC\Player\Handler\PlayerCombatReportListHandler;
@@ -21,9 +22,15 @@ use GC\Player\Handler\PlayerTechnologyListHandler;
 use GC\Player\Handler\PlayerUnitBuildHandler;
 use GC\Player\Handler\PlayerUnitListHandler;
 use GC\Player\Model\Player;
+use GC\Player\Model\PlayerCombatReport;
+use GC\Player\Model\PlayerCombatReportRepository;
 use GC\Player\Model\PlayerRepository;
 use Inferno\Routing\Route\RouteCollection;
+use Inferno\Routing\Router\RouterChain;
+use Inferno\Routing\UrlGenerator\UrlGenerator;
+use Inferno\Routing\UrlGenerator\UrlGeneratorInterface;
 use Pimple\Container;
+use Pimple\Psr11\Container as PsrContainer;
 use Pimple\ServiceProviderInterface;
 
 final class PlayerServiceProvider implements ServiceProviderInterface
@@ -37,6 +44,7 @@ final class PlayerServiceProvider implements ServiceProviderInterface
     {
         $this->providePlayerRoutes($pimple);
         $this->providePlayerRepository($pimple);
+        $this->providePlayerCombatReportRepository($pimple);
     }
 
     /**
@@ -48,7 +56,15 @@ final class PlayerServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
-            $collection->get('/{locale}/report/{externalId}', PlayerCombatReportExternalHandler::class)->addAttribute('public', true);
+            $collection->get('/{locale}/report/{externalCombatReportId}', function(PsrContainer $container) {
+                return new PlayerCombatReportExternalHandler(
+                    $container->get('renderer'),
+                    $container->get(UrlGenerator::class),
+                    $container->get('response-factory'),
+                    $container->get(PlayerCombatReportRepository::class),
+                    $container->get(CombatServiceInterface::class)
+                );
+            })->addAttribute('public', true);
 
             $collection->get('/{locale}/{universe}/overview', PlayerOverviewHandler::class);
             $collection->get('/{locale}/{universe}/technology', PlayerTechnologyListHandler::class);
@@ -79,6 +95,18 @@ final class PlayerServiceProvider implements ServiceProviderInterface
     {
         $container->offsetSet(PlayerRepository::class, function (Container $container) {
             return $container->offsetGet(EntityManager::class)->getRepository(Player::class);
+        });
+    }
+
+    /**
+     * @param \Pimple\Container $container
+     *
+     * @return void
+     */
+    private function providePlayerCombatReportRepository(Container $container): void
+    {
+        $container->offsetSet(PlayerCombatReportRepository::class, function (Container $container) {
+            return $container->offsetGet(EntityManager::class)->getRepository(PlayerCombatReport::class);
         });
     }
 }

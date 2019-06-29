@@ -136,6 +136,26 @@ final class Battle implements BattleInterface
     }
 
     /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseTargetExtractorsMetal(int $number): void
+    {
+        $this->targetExtractorsMetal -= $number;
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseTargetExtractorsCrystal(int $number): void
+    {
+        $this->targetExtractorsCrystal -= $number;
+    }
+
+    /**
      * @return string[]
      */
     public function getTargetData(): array

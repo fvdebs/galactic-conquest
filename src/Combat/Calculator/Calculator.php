@@ -26,17 +26,16 @@ final class Calculator implements CalculatorInterface
      * @param \GC\Combat\Model\BattleInterface $battle
      * @param \GC\Combat\Model\SettingsInterface $settings
      *
-     * @return \GC\Combat\Calculator\CalculatorResultInterface
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
-    public function calculate(BattleInterface $battle, SettingsInterface $settings): CalculatorResultInterface
+    public function calculate(BattleInterface $battle, SettingsInterface $settings): CalculatorResponseInterface
     {
-        $before = $battle;
-        $after = clone $before;
+        $calculatorResponse = new CalculatorResponse($battle, clone $battle, $settings);
 
         foreach ($this->calculatorPlugins as $calculatorPlugin) {
-            $after = $calculatorPlugin->calculate($before, $after, $settings);
+            $calculatorResponse = $calculatorPlugin->calculate($calculatorResponse);
         }
 
-        return new CalculatorResult($before, $after);
+        return $calculatorResponse;
     }
 }

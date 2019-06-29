@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Combat\Calculator\Plugin;
 
-use GC\Combat\Model\BattleInterface;
+use GC\Combat\Calculator\CalculatorResponseInterface;
 use GC\Combat\Model\CombatTickResult;
 use GC\Combat\Model\CombatTickResultInterface;
 use GC\Combat\Model\SettingsInterface;
@@ -19,23 +19,24 @@ use function count;
 final class CombatCalculatorPlugin implements CalculatorPluginInterface
 {
     /**
-     * @param \GC\Combat\Model\BattleInterface $before
-     * @param \GC\Combat\Model\BattleInterface $after
-     * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResponse
      *
-     * @return \GC\Combat\Model\BattleInterface - $after
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
-    public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface
+    public function calculate(CalculatorResponseInterface $calculatorResponse): CalculatorResponseInterface
     {
+        $afterBattle = $calculatorResponse->getAfterBattle();
+        $settings = $calculatorResponse->getSettings();
+
         $defenderFleets = [];
         $aggressorFleets = [];
 
         for ($currentCombatTick = 1; $currentCombatTick <= $settings->getCombatTicks(); $currentCombatTick++) {
-            $defenderFleets = $after->getDefendingFleets();
-            $aggressorFleets = $after->getAttackingFleets();
+            $defenderFleets = $afterBattle->getDefendingFleets();
+            $aggressorFleets = $afterBattle->getAttackingFleets();
 
-            $unitTotalDefender = $after->getUnitSumFromFleets($defenderFleets);
-            $unitTotalAggressor = $after->getUnitSumFromFleets($aggressorFleets);
+            $unitTotalDefender = $afterBattle->getUnitSumFromFleets($defenderFleets);
+            $unitTotalAggressor = $afterBattle->getUnitSumFromFleets($aggressorFleets);
 
             $combatTickResultDefender = $this->calculateCombatTick($unitTotalDefender, $unitTotalAggressor, $settings);
             $combatTickResultAggressor = $this->calculateCombatTick($unitTotalAggressor, $unitTotalDefender, $settings);
@@ -70,7 +71,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
             $fleet->floorUnitQuantities();
         }
 
-        return $after;
+        return $calculatorResponse;
     }
 
     /**

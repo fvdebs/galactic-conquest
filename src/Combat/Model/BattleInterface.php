@@ -46,6 +46,20 @@ interface BattleInterface
     public function getTargetExtractorsCrystal(): int;
 
     /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseTargetExtractorsMetal(int $number): void;
+
+    /**
+     * @param int $number
+     *
+     * @return void
+     */
+    public function decreaseTargetExtractorsCrystal(int $number): void;
+
+    /**
      * @return string[]
      */
     public function getTargetData(): array;

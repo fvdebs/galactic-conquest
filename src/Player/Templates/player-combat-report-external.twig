@@ -1,0 +1,31 @@
+{% extends "@App/layout/page-layout.twig" %}
+
+{% block body %}
+    <section class="section" canvas="container" id="sidebar-content-wrapper">
+        <div class="columns is-centered">
+            <div class="column is-narrow">
+                <h1 class="title is-4 has-text-centered">
+                    {{ 'combat.report' | trans }}
+                </h1>
+                <h2 class="subtitle is-5 has-text-centered">
+                    {{ response.getReportData['universe'] }}
+                </h2>
+                <p class="has-text-centered has-text-grey">
+                    {% if response.isPointOfViewReportTypeOffensive == true %}
+                        {{ 'combat.report.type.offensive' | trans }}
+                    {% else %}
+                        {{ 'combat.report.type.defensive' | trans }}
+                    {% endif %}
+                    <br>{{ 'combat.report.type.from' | trans | format(response.getPointOfViewDisplayName, response.getTargetName) }}
+                </p><br>
+                <p class="has-text-centered has-text-grey">
+                    {{ response.getCreatedAt | date }} -
+                    {{ response.getCreatedAt | time }}
+                </p><br>
+                <div class="table-container">
+                    {{ response.getRenderedHtml | raw }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,142 @@
+<table class="table is-striped is-narrow is-borderless is-hoverable has-no-wrap">
+    <tr class="has-divider-top">
+        <td>{{ 'combat.aggressor' | trans }}</td>
+        <td colspan="7">
+            {% for aggressor in aggressors %}
+                <span>
+                    {{ aggressor[pointOfViewDisplayNameDataKey] }}
+                    {% if aggressor.galaxyNumber is defined and aggressor.galaxyPosition is defined %}
+                        ({{ aggressor.galaxyNumber }}:{{ aggressor.galaxyPosition }})
+                    {% endif %}
+                </span>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'combat.defender' | trans }}</td>
+        <td colspan="7">
+            {% for defender in defenders %}
+                <span>
+                    {{ defender[pointOfViewDisplayNameDataKey] }}
+                    {% if defender.galaxyNumber is defined and defender.galaxyPosition is defined %}
+                        ({{ defender.galaxyNumber }}:{{ defender.galaxyPosition }})
+                    {% endif %}
+                </span>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr class="has-divider-top">
+        <td></td>
+        <td colspan="2">{{ 'combat.aggressor.fleets' | trans }}</td>
+        <td colspan="2">{{ 'combat.defender.fleets' | trans }}</td>
+        <td colspan="3">{{ 'combat.own.fleets' | trans }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'combat.units' | trans }}</td>
+        <td>{{ 'combat.before' | trans }}</td>
+        <td>{{ 'combat.after' | trans }}</td>
+        <td>{{ 'combat.before' | trans }}</td>
+        <td>{{ 'combat.after' | trans }}</td>
+        <td>{{ 'combat.before' | trans }}</td>
+        <td>{{ 'combat.after' | trans }}</td>
+        <td>{{ 'combat.shots' | trans }}</td>
+    </tr>
+    {% for unit in combat.settings.units if unit.group == 'OFFENSIVE' %}
+        <tr>
+            <td>{{ unit.name | trans }}</td>
+            <td>{{ combat.summary.offense.before[unit.name] | default(0) | number }}</td>
+            <td>{{ combat.summary.offense.after[unit.name] | default(0) | number }}</td>
+            <td>{{ combat.summary.defense.before[unit.name] | default(0) | number }}</td>
+            <td>{{ combat.summary.defense.after[unit.name] | default(0) | number }}</td>
+            <td>{{ pointOfViewFleetSumBefore[unit.name] | default(0) | number }}</td>
+            <td>{{ pointOfViewFleetSumAfter[unit.name] | default(0) | number }}</td>
+            <td>{{ pointOfViewFleetSumDestroyed[unit.name] | default(0) | number }}</td>
+        </tr>
+    {% endfor %}
+    <tr class="has-divider-top">
+        <td colspan="1">{{ 'combat.units.defensive' | trans }}</td>
+        <td colspan="8"></td>
+    </tr>
+    {% for unit in combat.settings.units if unit.group == 'DEFENSE' %}
+        <tr>
+            <td>{{ unit.name | trans }}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>{{ combat.summary.defense.before[unit.name] | default(0) | number }}</td>
+            <td>{{ combat.summary.defense.after[unit.name] | default(0) | number }}</td>
+            <td></td>
+            <td></td>
+            <td>-</td>
+        </tr>
+    {% endfor %}
+    <tr class="has-divider-top">
+        <td colspan="8">
+            {{ 'combat.extractors' | trans }}
+            <span class="tag is-light is-small">
+                {{ combat.summary.offense.resource.extractor.stealCapacity | default(0) | number }} {{ 'combat.stealCapacity' | trans }}
+            </span>
+            <span class="tag is-light is-small">
+                {{ combat.summary.defense.resource.extractor.protected | default(0) | number }} {{ 'combat.protected' | trans }}
+            </span>
+            <span class="tag is-light is-small">
+                {{ extractorsUnprotected | default(0) | number }} {{ 'combat.unprotected' | trans }}
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'combat.extractor.metal' | trans }}</td>
+        <td>{{ combat.target.resource.extractor.before.metal }} </td>
+        <td colspan="2">{{ 'combat.extractor.stolen' | trans }}</td>
+        <td colspan="4">
+            {{ combat.target.resource.extractor.lost.metal }}
+            {% if isTypeOffensive == true %}
+                ({{ pointOfViewExtractorStolenMetal }})
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'combat.extractor.crystal' | trans }}</td>
+        <td>{{ combat.target.resource.extractor.before.crystal }}</td>
+        <td colspan="2">{{ 'combat.extractor.stolen' | trans }}</td>
+        <td colspan="4">
+            {{ combat.target.resource.extractor.lost.crystal }}
+            {% if isTypeOffensive == true %}
+                ({{ pointOfViewExtractorStolenCrystal }})
+            {% endif %}
+        </td>
+    </tr>
+    {% if isTypeOffensive == false %}
+        <tr class="has-divider-top">
+            <td colspan="1">{{ 'combat.salvaged' | trans }}</td>
+            <td colspan="7"></td>
+        </tr>
+        <tr>
+            <td>{{ 'combat.salvaged.metal' | trans }}</td>
+            <td colspan="7">{{ pointOfViewSalvagedMetal | number }}</td>
+        </tr>
+        <tr>
+            <td>{{ 'combat.salvaged.crystal' | trans }}</td>
+            <td colspan="7">{{ pointOfViewSalvagedCrystal | number }}</td>
+        </tr>
+    {% endif %}
+    {% if isLastTick == true and pointOfViewFleetSumCarrierLosses is not empty %}
+        <tr class="has-divider-top">
+            <td colspan="8">
+                {{ 'combat.insufficient.carrier.capacity' | trans }}
+                <span class="tag is-light is-small">
+                    {{ pointOfViewCarrierCapacity | default(0) | number }} {{ 'combat.insufficient.carrier.capacity.available' | trans }}
+                </span>
+                <span class="tag is-light is-small">
+                    {{ pointOfViewCarrierCapacityConsumed | number }} {{ 'combat.insufficient.carrier.capacity.consumed' | trans }}
+                </span>
+            </td>
+        </tr>
+        {% for unitName, quantity in pointOfViewFleetSumCarrierLosses %}
+            <tr>
+                <td colspan="8">
+                    {{ 'combat.insufficient.carrier.losses' | trans | format(quantity | number, unitName | trans) }}
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</table>

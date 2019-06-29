@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GC\Combat\Calculator\Plugin;
 
-use GC\Combat\Model\BattleInterface;
+use GC\Combat\Calculator\CalculatorResponseInterface;
 use GC\Combat\Model\FleetInterface;
 use GC\Combat\Model\SettingsInterface;
 
@@ -12,21 +12,20 @@ use function array_merge;
 
 final class CarrierCalculatorPlugin implements CalculatorPluginInterface
 {
-    private const KEY_PLAYER_ID = 'playerId';
-
     /**
-     * @param \GC\Combat\Model\BattleInterface $before
-     * @param \GC\Combat\Model\BattleInterface $after
-     * @param \GC\Combat\Model\SettingsInterface $settings
+     * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResponse
      *
-     * @return \GC\Combat\Model\BattleInterface - $after
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
-    public function calculate(BattleInterface $before, BattleInterface $after, SettingsInterface $settings): BattleInterface
+    public function calculate(CalculatorResponseInterface $calculatorResponse): CalculatorResponseInterface
     {
-        foreach (array_merge($after->getAttackingFleets(), $after->getDefendingFleets()) as $fleet) {
+        $afterBattle = $calculatorResponse->getAfterBattle();
+        $settings = $calculatorResponse->getSettings();
+
+        foreach (array_merge($afterBattle->getAttackingFleets(), $afterBattle->getDefendingFleets()) as $fleet) {
             $this->calculateCarrierCapacitiesFor($fleet, $settings);
 
-            if ($after->isFleetFromTarget($fleet)) {
+            if ($afterBattle->isFleetFromTarget($fleet)) {
                 continue;
             }
 
@@ -37,7 +36,7 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
             $this->calculateCarrierLossesFor($fleet, $settings);
         }
 
-        return $after;
+        return $calculatorResponse;
     }
 
     /**

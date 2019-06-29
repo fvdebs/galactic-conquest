@@ -53,8 +53,6 @@ class PlayerCombatReport
      */
     private $player;
 
-
-
     /**
      * @param string $dataJson
      * @param \GC\Player\Model\Player $player

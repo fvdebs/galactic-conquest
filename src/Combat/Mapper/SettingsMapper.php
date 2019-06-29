@@ -10,19 +10,19 @@ use GC\Combat\Model\Unit;
 use GC\Combat\Model\UnitCombatSetting;
 use GC\Universe\Model\Universe;
 
-final class Mapper implements MapperInterface
+final class SettingsMapper implements SettingsMapperInterface
 {
     /**
      * @param \GC\Universe\Model\Universe $universe
      *
      * @return \GC\Combat\Model\SettingsInterface
      */
-    public function mapSettings(Universe $universe): SettingsInterface
+    public function mapFrom(Universe $universe): SettingsInterface
     {
         return new Settings(
-            10,
-            40,
-            20,
+            0.1,
+            0.4,
+            0.2,
             5,
             $this->mapUnits($universe->getUnits()),
             $this->mapUnitCombatSettings($universe->getUnits())
@@ -46,11 +46,12 @@ final class Mapper implements MapperInterface
                 $universeUnit->getCarrierSpace(),
                 $universeUnit->getCarrierSpaceConsumption(),
                 $universeUnit->getExtractorStealAmount(),
-                $universeUnit->getExtractorGuardAmount()
+                $universeUnit->getExtractorGuardAmount(),
+                $universeUnit->getGrouping()
             );
         }
 
-        return $combatUnits = [];
+        return $combatUnits;
     }
 
     /**
@@ -66,12 +67,12 @@ final class Mapper implements MapperInterface
                 $combatUnitSettings[] = new UnitCombatSetting(
                     $universeCombatSetting->getSourceUnit()->getUnitId(),
                     $universeCombatSetting->getTargetUnit()->getUnitId(),
-                    $universeCombatSetting->getDistribution(),
+                    ($universeCombatSetting->getDistribution() / 100),
                     (float) $universeCombatSetting->getAttackPower()
                 );
             }
         }
 
-        return $combatUnitSettings = [];
+        return $combatUnitSettings;
     }
 }

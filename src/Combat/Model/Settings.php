@@ -133,6 +133,26 @@ final class Settings implements SettingsInterface
     }
 
     /**
+     * @param bool $isLastTick
+     *
+     * @return void
+     */
+    public function setIsLastTick(bool $isLastTick): void
+    {
+        $this->isLastTick = $isLastTick;
+    }
+
+    /**
+     * @param bool $isPreFireTick
+     *
+     * @return void
+     */
+    public function setIsPreFireTick(bool $isPreFireTick): void
+    {
+        $this->isPreFireTick = $isPreFireTick;
+    }
+
+    /**
      * @param int $unitId
      *
      * @return \GC\Combat\Model\UnitInterface

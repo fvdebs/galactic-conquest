@@ -84,7 +84,7 @@ final class CombatTestCommand extends Command
 
     private const ATTACKER_SECOND_USER_ID = 5;
     private const ATTACKER_SECOND_PLAYER_ID = 5;
-    private const ATTACKER_SECOND_NAME = 'Rekcatta1';
+    private const ATTACKER_SECOND_NAME = 'Rekcatta2';
     private const ATTACKER_SECOND_FLEET_FIRST_ID = 9;
     private const ATTACKER_SECOND_GALAXY_ID = 3;
     private const ATTACKER_SECOND_GALAXY_NUMBER = 3;
@@ -133,8 +133,9 @@ final class CombatTestCommand extends Command
                 $this->createEnvironmentData()
             );
 
-            $result = $this->combatService->calculate($battle, $settings);
-            $json = $this->combatService->formatJson($result, $settings, static::DATA_KEY_PLAYER_ID);
+            $calculatorResponse = $this->combatService->calculate($battle, $settings);
+
+            $json = $this->combatService->formatToJson($calculatorResponse/*, static::DATA_KEY_PLAYER_ID*/);
 
             file_put_contents(__DIR__ . '/data.json', $json);
 
@@ -195,8 +196,6 @@ final class CombatTestCommand extends Command
             $this->createTargetData()
         );
 
-        return $fleets;
-
         $fleets[] = new Fleet(
             static::TARGET_FLEET_FIRST_ID,
             $this->createFleet(),
@@ -249,8 +248,6 @@ final class CombatTestCommand extends Command
             $this->createFirstAttackerData()
         );
 
-        return $fleets;
-
         $fleets[] = new Fleet(
             static::ATTACKER_SECOND_FLEET_FIRST_ID,
             $this->createFleet(),
@@ -268,6 +265,7 @@ final class CombatTestCommand extends Command
         return [
             'universe' => 'Sirius',
             'universeId' => 1,
+            'universeRouteName' => 'sirius',
             'currentTick' => 20,
         ];
     }
@@ -385,15 +383,15 @@ final class CombatTestCommand extends Command
     private function createFleetSecond(): array
     {
         return [
-            static::UNIT_ID_JAG => 100,
-            static::UNIT_ID_BOM => 100,
-            static::UNIT_ID_FRE => 100,
-            static::UNIT_ID_ZER => 100,
-            static::UNIT_ID_KRZ => 100,
-            static::UNIT_ID_SS => 100,
-            static::UNIT_ID_TR => 100,
-            static::UNIT_ID_CA => 100100,
-            static::UNIT_ID_CL => 40000,
+            static::UNIT_ID_JAG => 10440,
+            static::UNIT_ID_BOM => 10440,
+            static::UNIT_ID_FRE => 1040,
+            static::UNIT_ID_ZER => 1400,
+            static::UNIT_ID_KRZ => 1400,
+            static::UNIT_ID_SS => 1040,
+            static::UNIT_ID_TR => 2,
+            static::UNIT_ID_CA => 1040100,
+            static::UNIT_ID_CL => 404000,
         ];
     }
 
@@ -404,20 +402,20 @@ final class CombatTestCommand extends Command
     private function createSettings(): SettingsInterface
     {
         $units = [
-            new Unit(static::UNIT_ID_JAG, 'unit.fighter', 4000, 6000, 0, 3, 0, 0),
-            new Unit(static::UNIT_ID_BOM, 'unit.bomber', 2000, 8000, 0, 3, 0, 0),
-            new Unit(static::UNIT_ID_FRE, 'unit.frigate', 15000, 7500, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_ZER, 'unit.destroyer', 40000, 30000, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_KRZ, 'unit.cruiser', 65000, 85000, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_SS, 'unit.battleship', 250000, 150000, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_TR, 'unit.carrier', 200000, 50000, 100, 0, 0, 0),
-            new Unit(static::UNIT_ID_CL, 'unit.cleptor', 1500, 1000, 0, 0, 1, 0),
-            new Unit(static::UNIT_ID_CA, 'unit.cancri', 1000, 1500, 0, 0, 0, 1),
-            new Unit(static::UNIT_ID_AJ, 'unit.interceptor', 1000, 1000, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_RU, 'unit.rubium', 6000, 2000, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_PU, 'unit.pulsar', 20000, 10000, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_CO, 'unit.coon', 60000, 100000, 0, 0, 0, 0),
-            new Unit(static::UNIT_ID_CE, 'unit.centurion', 200000, 300000, 0, 0, 0, 0),
+            new Unit(static::UNIT_ID_JAG, 'unit.leo', 4000, 6000, 0, 3, 0, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_BOM, 'unit.aquilae', 2000, 8000, 0, 3, 0, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_FRE, 'unit.fornax', 15000, 7500, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_ZER, 'unit.draco', 40000, 30000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_KRZ, 'unit.goron', 65000, 85000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_SS, 'unit.pentalin', 250000, 150000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_TR, 'unit.zenit', 200000, 50000, 100, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_CL, 'unit.cleptor', 1500, 1000, 0, 0, 1, 0, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_CA, 'unit.cancri', 1000, 1500, 0, 0, 0, 1, \GC\Unit\Model\Unit::GROUPING_OFFENSIVE),
+            new Unit(static::UNIT_ID_AJ, 'unit.horus', 1000, 1000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_DEFENSE),
+            new Unit(static::UNIT_ID_RU, 'unit.rubium', 6000, 2000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_DEFENSE),
+            new Unit(static::UNIT_ID_PU, 'unit.pulsar', 20000, 10000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_DEFENSE),
+            new Unit(static::UNIT_ID_CO, 'unit.coon', 60000, 100000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_DEFENSE),
+            new Unit(static::UNIT_ID_CE, 'unit.centurion', 200000, 300000, 0, 0, 0, 0, \GC\Unit\Model\Unit::GROUPING_DEFENSE),
         ];
 
         $unitCombatSettings = [
@@ -453,6 +451,6 @@ final class CombatTestCommand extends Command
             new UnitCombatSetting(static::UNIT_ID_CE, static::UNIT_ID_TR, 0.5, 0.3774),
         ];
 
-        return new Settings(0.1, 0.4, 0.2, 5, $units, $unitCombatSettings);
+        return new Settings(0.1, 0.4, 0.2, 5, $units, $unitCombatSettings, true);
     }
 }

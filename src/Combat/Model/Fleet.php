@@ -123,6 +123,20 @@ final class Fleet implements FleetInterface
     }
 
     /**
+     * @return bool
+     */
+    public function getUnitsLeft(): bool
+    {
+        foreach ($this->units as $unitId => $quantity) {
+            if ($quantity > 0.0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $key
      *
      * @return bool
