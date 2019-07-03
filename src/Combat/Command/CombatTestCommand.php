@@ -129,13 +129,12 @@ final class CombatTestCommand extends Command
                 $this->createDefendingFleets(),
                 100,
                 100,
-                $this->createTargetData(),
                 $this->createEnvironmentData()
             );
 
             $calculatorResponse = $this->combatService->calculate($battle, $settings);
 
-            $json = $this->combatService->formatToJson($calculatorResponse/*, static::DATA_KEY_PLAYER_ID*/);
+            $json = $this->combatService->formatToJson($calculatorResponse);
 
             file_put_contents(__DIR__ . '/data.json', $json);
 
@@ -153,7 +152,6 @@ final class CombatTestCommand extends Command
      * @param \GC\Combat\Model\FleetInterface[] $defendingFleets - default: []
      * @param int $targetExtractorsMetal - default: 0
      * @param int $targetExtractorsCrystal - default: 0
-     * @param string[] $targetData - default: []
      * @param string[] $data - default: []
      *
      * @return \GC\Combat\Model\BattleInterface
@@ -163,7 +161,6 @@ final class CombatTestCommand extends Command
         $defendingFleets = [],
         int $targetExtractorsMetal = 0,
         int $targetExtractorsCrystal = 0,
-        array $targetData = [],
         array $data = []
     ): BattleInterface
     {
@@ -172,7 +169,6 @@ final class CombatTestCommand extends Command
             $defendingFleets,
             $targetExtractorsMetal,
             $targetExtractorsCrystal,
-            $targetData,
             $data
         );
     }

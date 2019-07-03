@@ -143,7 +143,7 @@ final class CombatReportGenerator implements CombatReportGeneratorInterface
 
             foreach ($fleet[JsonFormatter::KEY_BEFORE] as $unitName => $quantity) {
                 if (!array_key_exists($unitName, $fleetSum)) {
-                    $fleetSum[$unitName] = 0;
+                    $fleetSum[$unitName] = 0.0;
                 }
 
                 $fleetSum[$unitName] += $quantity;
@@ -203,7 +203,7 @@ final class CombatReportGenerator implements CombatReportGeneratorInterface
 
             foreach ($fleet[JsonFormatter::KEY_AFTER] as $unitName => $quantity) {
                 if (!array_key_exists($unitName, $fleetSum)) {
-                    $fleetSum[$unitName] = 0;
+                    $fleetSum[$unitName] = 0.0;
                 }
 
                 $fleetSum[$unitName] += $quantity;
@@ -237,7 +237,7 @@ final class CombatReportGenerator implements CombatReportGeneratorInterface
 
             foreach ($fleet[JsonFormatter::KEY_DESTROYED] as $unitName => $quantity) {
                 if (!array_key_exists($unitName, $fleetSum)) {
-                    $fleetSum[$unitName] = 0;
+                    $fleetSum[$unitName] = 0.0;
                 }
 
                 $fleetSum[$unitName] += $quantity;
@@ -429,7 +429,7 @@ final class CombatReportGenerator implements CombatReportGeneratorInterface
 
             foreach ($fleet[JsonFormatter::KEY_CARRIER][JsonFormatter::KEY_CARRIER_LOSSES] as $unitName => $quantity) {
                 if (!array_key_exists($unitName, $carrierLosses)) {
-                    $carrierLosses[$unitName] = 0;
+                    $carrierLosses[$unitName] = 0.0;
                 }
 
                 $carrierLosses[$unitName] += $quantity;
@@ -454,7 +454,7 @@ final class CombatReportGenerator implements CombatReportGeneratorInterface
             $dataToSearchFor = $data[JsonFormatter::KEY_OFFENSE];
         }
 
-        $carrierCapacity = 0;
+        $carrierCapacity = 0.0;
 
         foreach ($dataToSearchFor as $fleet) {
             if ($fleet[JsonFormatter::KEY_DATA][$pointOfViewDataKey] !== $pointOfView) {

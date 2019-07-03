@@ -20,10 +20,10 @@ final class SettingsMapper implements SettingsMapperInterface
     public function mapFrom(Universe $universe): SettingsInterface
     {
         return new Settings(
-            0.1,
-            0.4,
-            0.2,
-            5,
+            $universe->getExtractorStealRatio(),
+            $universe->getSalvageTargetRatio(),
+            $universe->getSalvageDefenderRatio(),
+            $universe->getNumberOfCombatTicks(),
             $this->mapUnits($universe->getUnits()),
             $this->mapUnitCombatSettings($universe->getUnits())
         );

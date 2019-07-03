@@ -14,10 +14,14 @@ gc.form = Class.extend({
         let that = this;
 
         $('form').on('submit', function(event) {
+            let form = $(this);
+            if (form.hasClass('no-gc')) {
+                return;
+            }
+
             event.preventDefault() ;
             event.stopPropagation();
 
-            let form = $(this);
             form.find('button').addClass('is-loading');
 
             $.post(form.attr('action'), form.serialize(), function(result) {

@@ -14,9 +14,6 @@ use function serialize;
 
 final class Battle implements BattleInterface
 {
-    /** Recommended to set a playerId in each fleet data */
-    public const KEY_PLAYER_ID = 'playerId';
-
     /**
      * @var \GC\Combat\Model\FleetInterface[]
      */
@@ -53,22 +50,54 @@ final class Battle implements BattleInterface
      * @param int $targetExtractorsMetal - default: 0
      * @param int $targetExtractorsCrystal - default: 0
      * @param string[] $data - default: []
-     * @param string[] $targetData - default: []
+     * @param array $targetData - default: []
      */
     public function __construct(
         array $attackingFleets,
         array $defendingFleets = [],
         int $targetExtractorsMetal = 0,
         int $targetExtractorsCrystal = 0,
-        array $targetData = [],
-        array $data = []
+        array $data = [],
+        array $targetData = []
     ) {
         $this->attackingFleets = $attackingFleets;
         $this->defendingFleets = $defendingFleets;
         $this->targetExtractorsMetal = $targetExtractorsMetal;
         $this->targetExtractorsCrystal = $targetExtractorsCrystal;
-        $this->targetData = $targetData;
         $this->data = $data;
+        $this->targetData = $targetData;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTargetData(): array
+    {
+        return $this->targetData;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasTargetDataValue(string $key): bool
+    {
+        return array_key_exists($key, $this->targetData);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getTargetDataValue(string $key)
+    {
+        if ($this->hasTargetDataValue($key)) {
+            return $this->targetData[$key];
+        }
+
+        return null;
     }
 
     /**
@@ -120,6 +149,22 @@ final class Battle implements BattleInterface
     }
 
     /**
+     * @param \GC\Combat\Model\FleetInterface $fleet
+     */
+    public function addAttackingFleet(FleetInterface $fleet): void
+    {
+        $this->attackingFleets[] = $fleet;
+    }
+
+    /**
+     * @param \GC\Combat\Model\FleetInterface $fleet
+     */
+    public function addDefendingFleet(FleetInterface $fleet): void
+    {
+        $this->defendingFleets[] = $fleet;
+    }
+
+    /**
      * @return int
      */
     public function getTargetExtractorsMetal(): int
@@ -156,35 +201,20 @@ final class Battle implements BattleInterface
     }
 
     /**
-     * @return string[]
-     */
-    public function getTargetData(): array
-    {
-        return $this->targetData;
-    }
-
-    /**
-     * @param string $key
+     * @param int $fleetId
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
      * @return bool
      */
-    public function hasTargetDataValue(string $key): bool
+    public function hasFleetById(int $fleetId, array $fleets): bool
     {
-        return array_key_exists($key, $this->targetData);
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return mixed|null
-     */
-    public function getTargetDataValue(string $key)
-    {
-        if ($this->hasTargetDataValue($key)) {
-            return $this->targetData[$key];
+        foreach ($fleets as $fleet) {
+            if ($fleet->getFleetId() === $fleetId) {
+                return true;
+            }
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -201,7 +231,7 @@ final class Battle implements BattleInterface
             }
         }
 
-        throw FleetNotFoundException::fromFleetId($fleetId);
+        throw FleetNotFoundException::fromFleetReference($fleetId);
     }
 
     /**
@@ -215,12 +245,12 @@ final class Battle implements BattleInterface
 
         foreach ($fleets as $fleet) {
             foreach ($fleet->getUnits() as $unitId => $quantity) {
-                if ($quantity === 0) {
+                if ($quantity === 0.0) {
                     continue;
                 }
 
                 if (!array_key_exists($unitId, $summary)) {
-                    $summary[$unitId] = 0;
+                    $summary[$unitId] = 0.0;
                 }
 
                 $summary[$unitId] += $quantity;
@@ -231,21 +261,29 @@ final class Battle implements BattleInterface
     }
 
     /**
-     * @param \GC\Combat\Model\FleetInterface $fleet
-     * @param string $userInfoKey - default: Battle::KEY_PLAYER_ID
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
-     * @return bool
+     * @return float[]
      */
-    public function isFleetFromTarget(FleetInterface $fleet, string $userInfoKey = Battle::KEY_PLAYER_ID): bool
+    public function getUnitLossesSumFromFleets(array $fleets): array
     {
-        if (!$this->hasTargetDataValue($userInfoKey) || !$fleet->hasDataValue($userInfoKey)) {
-            return false;
+        $summary = [];
+
+        foreach ($fleets as $fleet) {
+            foreach ($fleet->getUnitsLost() as $unitId => $quantity) {
+                if ($quantity === 0.0) {
+                    continue;
+                }
+
+                if (!array_key_exists($unitId, $summary)) {
+                    $summary[$unitId] = 0.0;
+                }
+
+                $summary[$unitId] += $quantity;
+            }
         }
 
-        $targetValue = $this->getTargetDataValue($userInfoKey);
-        $fleetValue = $fleet->getDataValue($userInfoKey);
-
-        return !($targetValue === null || $targetValue !== $fleetValue);
+        return $summary;
     }
 
     /**

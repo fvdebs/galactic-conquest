@@ -4,7 +4,7 @@
     "universeId": 1,
     "universeRouteName": "sirius",
     "currentTick": 20,
-    "createdAt": "2019-06-29 15:11:07"
+    "createdAt": "2019-07-02 02:51:06"
   },
   "settings": {
     "combatTicks": 5,
@@ -345,14 +345,6 @@
     ]
   },
   "target": {
-    "data": {
-      "userId": 1,
-      "playerId": 1,
-      "name": "Tegrat",
-      "galaxyId": 1,
-      "galaxyNumber": 1,
-      "galaxyPosition": 1
-    },
     "resource": {
       "extractor": {
         "before": {
@@ -392,14 +384,14 @@
         "unit.centurion": 74
       },
       "destroyed": {
-        "unit.leo": 3,
-        "unit.aquilae": 9,
-        "unit.fornax": 6,
-        "unit.draco": 9,
-        "unit.goron": 8,
-        "unit.pentalin": 22,
-        "unit.zenit": 16,
-        "unit.cleptor": 14
+        "unit.leo": 18,
+        "unit.aquilae": 48,
+        "unit.fornax": 32,
+        "unit.draco": 37,
+        "unit.goron": 32,
+        "unit.pentalin": 25,
+        "unit.zenit": 19,
+        "unit.cleptor": 70
       },
       "carrier": {
         "capacity": 0,
@@ -408,8 +400,8 @@
       },
       "resource": {
         "salvaged": {
-          "metal": 837882,
-          "crystal": 715548
+          "metal": 5652600,
+          "crystal": 5686400
         },
         "extractor": {
           "protected": 0
@@ -438,37 +430,37 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 44,
-        "unit.draco": 34,
-        "unit.goron": 41,
+        "unit.leo": 30,
+        "unit.draco": 31,
+        "unit.goron": 40,
         "unit.pentalin": 78,
-        "unit.zenit": 83,
-        "unit.cancri": 97928,
-        "unit.cleptor": 99631
+        "unit.zenit": 84,
+        "unit.cancri": 97829,
+        "unit.cleptor": 99579
       },
       "destroyed": {
-        "unit.leo": 41,
-        "unit.aquilae": 13,
-        "unit.fornax": 91,
-        "unit.draco": 30,
-        "unit.goron": 25,
-        "unit.pentalin": 9,
-        "unit.zenit": 7,
-        "unit.cancri": 1673,
-        "unit.cleptor": 1168
+        "unit.leo": 85,
+        "unit.aquilae": 18,
+        "unit.fornax": 124,
+        "unit.draco": 39,
+        "unit.goron": 28,
+        "unit.pentalin": 10,
+        "unit.zenit": 8,
+        "unit.cancri": 1907,
+        "unit.cleptor": 1250
       },
       "carrier": {
-        "capacity": 8300,
-        "consumed": 132,
+        "capacity": 8400,
+        "consumed": 90,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 837882,
-          "crystal": 715548
+          "metal": 6748100,
+          "crystal": 5642400
         },
         "extractor": {
-          "protected": 97928
+          "protected": 97829
         }
       }
     },
@@ -494,37 +486,37 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 44,
-        "unit.draco": 34,
-        "unit.goron": 41,
+        "unit.leo": 30,
+        "unit.draco": 31,
+        "unit.goron": 40,
         "unit.pentalin": 78,
-        "unit.zenit": 83,
-        "unit.cancri": 97928,
-        "unit.cleptor": 99631
+        "unit.zenit": 84,
+        "unit.cancri": 97829,
+        "unit.cleptor": 99579
       },
       "destroyed": {
-        "unit.leo": 41,
-        "unit.aquilae": 13,
-        "unit.fornax": 91,
-        "unit.draco": 30,
-        "unit.goron": 25,
-        "unit.pentalin": 9,
-        "unit.zenit": 7,
-        "unit.cancri": 1673,
-        "unit.cleptor": 1168
+        "unit.leo": 85,
+        "unit.aquilae": 18,
+        "unit.fornax": 124,
+        "unit.draco": 39,
+        "unit.goron": 28,
+        "unit.pentalin": 10,
+        "unit.zenit": 8,
+        "unit.cancri": 1907,
+        "unit.cleptor": 1250
       },
       "carrier": {
-        "capacity": 8300,
-        "consumed": 132,
+        "capacity": 8400,
+        "consumed": 90,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 837882,
-          "crystal": 715548
+          "metal": 6748100,
+          "crystal": 5642400
         },
         "extractor": {
-          "protected": 97928
+          "protected": 97829
         }
       }
     },
@@ -550,37 +542,37 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 44,
-        "unit.draco": 34,
-        "unit.goron": 41,
+        "unit.leo": 30,
+        "unit.draco": 31,
+        "unit.goron": 40,
         "unit.pentalin": 78,
-        "unit.zenit": 83,
-        "unit.cancri": 97928,
-        "unit.cleptor": 99631
+        "unit.zenit": 84,
+        "unit.cancri": 97829,
+        "unit.cleptor": 99579
       },
       "destroyed": {
-        "unit.leo": 41,
-        "unit.aquilae": 13,
-        "unit.fornax": 91,
-        "unit.draco": 30,
-        "unit.goron": 25,
-        "unit.pentalin": 9,
-        "unit.zenit": 7,
-        "unit.cancri": 1673,
-        "unit.cleptor": 1168
+        "unit.leo": 85,
+        "unit.aquilae": 18,
+        "unit.fornax": 124,
+        "unit.draco": 39,
+        "unit.goron": 28,
+        "unit.pentalin": 10,
+        "unit.zenit": 8,
+        "unit.cancri": 1907,
+        "unit.cleptor": 1250
       },
       "carrier": {
-        "capacity": 8300,
-        "consumed": 132,
+        "capacity": 8400,
+        "consumed": 90,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 837882,
-          "crystal": 715548
+          "metal": 6748100,
+          "crystal": 5642400
         },
         "extractor": {
-          "protected": 97928
+          "protected": 97829
         }
       }
     },
@@ -606,37 +598,37 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 44,
-        "unit.draco": 34,
-        "unit.goron": 41,
+        "unit.leo": 30,
+        "unit.draco": 31,
+        "unit.goron": 40,
         "unit.pentalin": 78,
-        "unit.zenit": 83,
-        "unit.cancri": 97928,
-        "unit.cleptor": 99631
+        "unit.zenit": 84,
+        "unit.cancri": 97829,
+        "unit.cleptor": 99579
       },
       "destroyed": {
-        "unit.leo": 41,
-        "unit.aquilae": 13,
-        "unit.fornax": 91,
-        "unit.draco": 30,
-        "unit.goron": 25,
-        "unit.pentalin": 9,
-        "unit.zenit": 7,
-        "unit.cancri": 1673,
-        "unit.cleptor": 1168
+        "unit.leo": 85,
+        "unit.aquilae": 18,
+        "unit.fornax": 124,
+        "unit.draco": 39,
+        "unit.goron": 28,
+        "unit.pentalin": 10,
+        "unit.zenit": 8,
+        "unit.cancri": 1907,
+        "unit.cleptor": 1250
       },
       "carrier": {
-        "capacity": 8300,
-        "consumed": 132,
+        "capacity": 8400,
+        "consumed": 90,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 418941,
-          "crystal": 357774
+          "metal": 6748100,
+          "crystal": 5642400
         },
         "extractor": {
-          "protected": 97928
+          "protected": 97829
         }
       }
     },
@@ -662,37 +654,37 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 44,
-        "unit.draco": 34,
-        "unit.goron": 41,
+        "unit.leo": 30,
+        "unit.draco": 31,
+        "unit.goron": 40,
         "unit.pentalin": 78,
-        "unit.zenit": 83,
-        "unit.cancri": 97928,
-        "unit.cleptor": 99631
+        "unit.zenit": 84,
+        "unit.cancri": 97829,
+        "unit.cleptor": 99579
       },
       "destroyed": {
-        "unit.leo": 41,
-        "unit.aquilae": 13,
-        "unit.fornax": 91,
-        "unit.draco": 30,
-        "unit.goron": 25,
-        "unit.pentalin": 9,
-        "unit.zenit": 7,
-        "unit.cancri": 1673,
-        "unit.cleptor": 1168
+        "unit.leo": 85,
+        "unit.aquilae": 18,
+        "unit.fornax": 124,
+        "unit.draco": 39,
+        "unit.goron": 28,
+        "unit.pentalin": 10,
+        "unit.zenit": 8,
+        "unit.cancri": 1907,
+        "unit.cleptor": 1250
       },
       "carrier": {
-        "capacity": 8300,
-        "consumed": 132,
+        "capacity": 8400,
+        "consumed": 90,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 418941,
-          "crystal": 357774
+          "metal": 6748100,
+          "crystal": 5642400
         },
         "extractor": {
-          "protected": 97928
+          "protected": 97829
         }
       }
     },
@@ -718,37 +710,37 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 44,
-        "unit.draco": 34,
-        "unit.goron": 41,
+        "unit.leo": 30,
+        "unit.draco": 31,
+        "unit.goron": 40,
         "unit.pentalin": 78,
-        "unit.zenit": 83,
-        "unit.cancri": 97928,
-        "unit.cleptor": 99631
+        "unit.zenit": 84,
+        "unit.cancri": 97829,
+        "unit.cleptor": 99579
       },
       "destroyed": {
-        "unit.leo": 41,
-        "unit.aquilae": 13,
-        "unit.fornax": 91,
-        "unit.draco": 30,
-        "unit.goron": 25,
-        "unit.pentalin": 9,
-        "unit.zenit": 7,
-        "unit.cancri": 1673,
-        "unit.cleptor": 1168
+        "unit.leo": 85,
+        "unit.aquilae": 18,
+        "unit.fornax": 124,
+        "unit.draco": 39,
+        "unit.goron": 28,
+        "unit.pentalin": 10,
+        "unit.zenit": 8,
+        "unit.cancri": 1907,
+        "unit.cleptor": 1250
       },
       "carrier": {
-        "capacity": 8300,
-        "consumed": 132,
+        "capacity": 8400,
+        "consumed": 90,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 418941,
-          "crystal": 357774
+          "metal": 6748100,
+          "crystal": 5642400
         },
         "extractor": {
-          "protected": 97928
+          "protected": 97829
         }
       }
     }
@@ -776,39 +768,39 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 97,
+        "unit.leo": 95,
         "unit.aquilae": 99,
-        "unit.fornax": 55,
-        "unit.draco": 88,
-        "unit.goron": 89,
+        "unit.fornax": 37,
+        "unit.draco": 83,
+        "unit.goron": 87,
         "unit.pentalin": 93,
-        "unit.zenit": 70,
-        "unit.cancri": 99289,
-        "unit.cleptor": 98836
+        "unit.zenit": 67,
+        "unit.cancri": 99177,
+        "unit.cleptor": 98747
       },
       "destroyed": {
-        "unit.leo": 26,
-        "unit.aquilae": 5,
-        "unit.fornax": 37,
-        "unit.draco": 24,
-        "unit.goron": 21,
+        "unit.leo": 34,
+        "unit.aquilae": 6,
+        "unit.fornax": 38,
+        "unit.draco": 26,
+        "unit.goron": 22,
         "unit.pentalin": 8,
         "unit.zenit": 6,
-        "unit.cancri": 1467,
-        "unit.cleptor": 1095,
+        "unit.cancri": 1583,
+        "unit.cleptor": 1250,
         "unit.horus": 8,
         "unit.rubium": 6,
         "unit.pulsar": 6,
         "unit.coon": 5
       },
       "carrier": {
-        "capacity": 7000,
-        "consumed": 588,
+        "capacity": 6700,
+        "consumed": 582,
         "losses": []
       },
       "resource": {
         "extractor": {
-          "stealCapacity": 98836,
+          "stealCapacity": 98747,
           "stolen": {
             "metal": 1,
             "crystal": 1
@@ -838,43 +830,43 @@
         "unit.cleptor": 404000
       },
       "after": {
-        "unit.leo": 10192,
-        "unit.aquilae": 10350,
-        "unit.fornax": 576,
-        "unit.draco": 1233,
-        "unit.goron": 1259,
-        "unit.pentalin": 974,
+        "unit.leo": 9922,
+        "unit.aquilae": 10287,
+        "unit.fornax": 387,
+        "unit.draco": 1161,
+        "unit.goron": 1225,
+        "unit.pentalin": 967,
         "unit.zenit": 1,
-        "unit.cancri": 1031680,
-        "unit.cleptor": 399300
+        "unit.cancri": 1030507,
+        "unit.cleptor": 398936
       },
       "destroyed": {
-        "unit.leo": 278,
-        "unit.aquilae": 588,
+        "unit.leo": 354,
+        "unit.aquilae": 589,
         "unit.fornax": 525,
-        "unit.draco": 344,
-        "unit.goron": 310,
-        "unit.pentalin": 112,
-        "unit.zenit": 84,
-        "unit.cancri": 10095,
-        "unit.cleptor": 21,
-        "unit.horus": 83,
-        "unit.rubium": 87,
-        "unit.pulsar": 87,
+        "unit.draco": 360,
+        "unit.goron": 318,
+        "unit.pentalin": 115,
+        "unit.zenit": 86,
+        "unit.cancri": 10461,
+        "unit.cleptor": 25,
+        "unit.horus": 84,
+        "unit.rubium": 88,
+        "unit.pulsar": 88,
         "unit.coon": 89,
-        "unit.centurion": 24
+        "unit.centurion": 25
       },
       "carrier": {
         "capacity": 100,
-        "consumed": 61626,
+        "consumed": 60627,
         "losses": {
-          "unit.leo": 10142,
-          "unit.aquilae": 10300
+          "unit.leo": 9873,
+          "unit.aquilae": 10236
         }
       },
       "resource": {
         "extractor": {
-          "stealCapacity": 399300,
+          "stealCapacity": 398936,
           "stolen": {
             "metal": 6,
             "crystal": 6
@@ -904,39 +896,39 @@
         "unit.cleptor": 100000
       },
       "after": {
-        "unit.leo": 97,
+        "unit.leo": 95,
         "unit.aquilae": 99,
-        "unit.fornax": 55,
-        "unit.draco": 88,
-        "unit.goron": 89,
+        "unit.fornax": 37,
+        "unit.draco": 83,
+        "unit.goron": 87,
         "unit.pentalin": 93,
-        "unit.zenit": 70,
-        "unit.cancri": 99289,
-        "unit.cleptor": 98836
+        "unit.zenit": 67,
+        "unit.cancri": 99177,
+        "unit.cleptor": 98747
       },
       "destroyed": {
-        "unit.leo": 26,
-        "unit.aquilae": 5,
-        "unit.fornax": 37,
-        "unit.draco": 24,
-        "unit.goron": 21,
+        "unit.leo": 34,
+        "unit.aquilae": 6,
+        "unit.fornax": 38,
+        "unit.draco": 26,
+        "unit.goron": 22,
         "unit.pentalin": 8,
         "unit.zenit": 6,
-        "unit.cancri": 1467,
-        "unit.cleptor": 1095,
+        "unit.cancri": 1583,
+        "unit.cleptor": 1250,
         "unit.horus": 8,
         "unit.rubium": 6,
         "unit.pulsar": 6,
         "unit.coon": 5
       },
       "carrier": {
-        "capacity": 7000,
-        "consumed": 588,
+        "capacity": 6700,
+        "consumed": 582,
         "losses": []
       },
       "resource": {
         "extractor": {
-          "stealCapacity": 98836,
+          "stealCapacity": 98747,
           "stolen": {
             "metal": 1,
             "crystal": 1
@@ -1030,37 +1022,37 @@
       },
       "after": {
         "unit.centurion": 74,
-        "unit.leo": 264,
-        "unit.draco": 204,
-        "unit.goron": 246,
+        "unit.leo": 180,
+        "unit.draco": 186,
+        "unit.goron": 240,
         "unit.pentalin": 468,
-        "unit.zenit": 498,
-        "unit.cancri": 587568,
-        "unit.cleptor": 597786
+        "unit.zenit": 504,
+        "unit.cancri": 586974,
+        "unit.cleptor": 597474
       },
       "destroyed": {
-        "unit.leo": 249,
-        "unit.aquilae": 87,
-        "unit.fornax": 552,
-        "unit.draco": 189,
-        "unit.goron": 158,
-        "unit.pentalin": 76,
-        "unit.zenit": 58,
-        "unit.cleptor": 7022,
-        "unit.cancri": 10038
+        "unit.leo": 528,
+        "unit.aquilae": 156,
+        "unit.fornax": 776,
+        "unit.draco": 271,
+        "unit.goron": 200,
+        "unit.pentalin": 85,
+        "unit.zenit": 67,
+        "unit.cleptor": 7570,
+        "unit.cancri": 11442
       },
       "carrier": {
-        "capacity": 49800,
-        "consumed": 792,
+        "capacity": 50400,
+        "consumed": 540,
         "losses": []
       },
       "resource": {
         "salvaged": {
-          "metal": 4608351,
-          "crystal": 3935514
+          "metal": 46141200,
+          "crystal": 39540800
         },
         "extractor": {
-          "protected": 587568
+          "protected": 586974
         }
       }
     },
@@ -1106,43 +1098,43 @@
         "unit.cleptor": 604000
       },
       "after": {
-        "unit.leo": 10386,
-        "unit.aquilae": 10548,
-        "unit.fornax": 686,
-        "unit.draco": 1409,
-        "unit.goron": 1437,
-        "unit.pentalin": 1160,
-        "unit.zenit": 141,
-        "unit.cancri": 1230258,
-        "unit.cleptor": 596972
+        "unit.leo": 10112,
+        "unit.aquilae": 10485,
+        "unit.fornax": 461,
+        "unit.draco": 1327,
+        "unit.goron": 1399,
+        "unit.pentalin": 1153,
+        "unit.zenit": 135,
+        "unit.cancri": 1228861,
+        "unit.cleptor": 596430
       },
       "destroyed": {
-        "unit.leo": 330,
-        "unit.aquilae": 598,
-        "unit.fornax": 599,
-        "unit.draco": 392,
-        "unit.goron": 352,
-        "unit.pentalin": 128,
-        "unit.zenit": 96,
-        "unit.cancri": 13029,
-        "unit.cleptor": 2211,
-        "unit.horus": 99,
-        "unit.rubium": 99,
-        "unit.pulsar": 99,
+        "unit.leo": 422,
+        "unit.aquilae": 601,
+        "unit.fornax": 601,
+        "unit.draco": 412,
+        "unit.goron": 362,
+        "unit.pentalin": 131,
+        "unit.zenit": 98,
+        "unit.cancri": 13627,
+        "unit.cleptor": 2525,
+        "unit.horus": 100,
+        "unit.rubium": 100,
+        "unit.pulsar": 100,
         "unit.coon": 99,
-        "unit.centurion": 24
+        "unit.centurion": 25
       },
       "carrier": {
-        "capacity": 14100,
-        "consumed": 62802,
+        "capacity": 13500,
+        "consumed": 61791,
         "losses": {
-          "unit.leo": 10142,
-          "unit.aquilae": 10300
+          "unit.leo": 9873,
+          "unit.aquilae": 10236
         }
       },
       "resource": {
         "extractor": {
-          "stealCapacity": 596972,
+          "stealCapacity": 596430,
           "stolen": {
             "metal": 8,
             "crystal": 8

@@ -227,4 +227,34 @@
             button.removeClass('is-loading');
         }, 'json');
     });
+
+    /***************************************
+     * helper
+     ****************************************/
+
+    // submit form with action
+    $('.form-submit').on('click', function (event) {
+        let button = $(this);
+        let action = button.data('action');
+        let formSelector = button.data('form-selector');
+
+        console.log(formSelector);
+        console.log(action);
+        let form = $(formSelector);
+
+        form.attr('action', action);
+        form.submit();
+    });
+
+    $('.toggle-button').on('click', function (event) {
+        let button = $(this);
+        console.log(button.data('content-selector'));
+        let toggle = $(button.data('content-selector'));
+
+        if (toggle.hasClass('is-hidden')) {
+            toggle.removeClass('is-hidden')
+        } else {
+            toggle.addClass('is-hidden');
+        }
+    });
 })(jQuery);

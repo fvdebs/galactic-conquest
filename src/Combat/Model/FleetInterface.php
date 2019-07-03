@@ -202,7 +202,19 @@ interface FleetInterface
     /**
      * @return void
      */
-    public function floorUnitQuantities(): void;
+    public function normalizeUnitQuantities(): void;
+
+    /**
+     * @return bool
+     */
+    public function isTarget(): bool;
+
+    /**
+     * @param bool $isTarget
+     *
+     * @return void
+     */
+    public function setIsTarget(bool $isTarget): void;
 
     /**
      * @return void

@@ -253,6 +253,34 @@ class Universe
     private $factions;
 
     /**
+     * @var float
+     *
+     * @Column(name="extractor_steal_ratio", type="float", nullable=false)
+     */
+    private $extractorStealRatio;
+
+    /**
+     * @var float
+     *
+     * @Column(name="salvage_target_ratio", type="float", nullable=false)
+     */
+    private $salvageTargetRatio;
+
+    /**
+     * @var float
+     *
+     * @Column(name="salvage_defender_ratio", type="float", nullable=false)
+     */
+    private $salvageDefenderRatio;
+
+    /**
+     * @var int
+     *
+     * @Column(name="combat_ticks", type="integer", nullable=false)
+     */
+    private $combatTicks;
+
+    /**
      * @param string $name
      *
      * @throws \Exception
@@ -283,11 +311,15 @@ class Universe
         $this->extractorCrystalIncome = 50;
         $this->extractorStartCost = 65;
         $this->extractorPoints = 15000;
+        $this->extractorStealRatio = 0.1;
+        $this->salvageTargetRatio = 0.4;
+        $this->salvageDefenderRatio = 0.2;
         $this->resourcePointsDivider = 10;
         $this->isActive = false;
         $this->isClosed = false;
         $this->rankingInterval = 12;
         $this->isRegistrationAllowed = true;
+        $this->combatTicks = 5;
     }
 
     /**
@@ -700,6 +732,38 @@ class Universe
     public function setExtractorCrystalIncome(int $extractorCrystalIncome): void
     {
         $this->extractorCrystalIncome = $extractorCrystalIncome;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCombatTicks(): int
+    {
+        return $this->combatTicks;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalvageTargetRatio(): float
+    {
+        return $this->salvageTargetRatio;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalvageDefenderRatio(): float
+    {
+        return $this->salvageDefenderRatio;
+    }
+
+    /**
+     * @return float
+     */
+    public function getExtractorStealRatio(): float
+    {
+        return $this->extractorStealRatio;
     }
 
     /**

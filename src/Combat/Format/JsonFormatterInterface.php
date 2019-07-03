@@ -10,9 +10,8 @@ interface JsonFormatterInterface
 {
     /**
      * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
-     * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function format(CalculatorResponseInterface $calculatorResult, ?string $mergeByDataKey = null) : string;
+    public function format(CalculatorResponseInterface $calculatorResult) : string;
 }

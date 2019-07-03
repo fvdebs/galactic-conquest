@@ -13,28 +13,61 @@ use function array_merge;
 final class CarrierCalculatorPlugin implements CalculatorPluginInterface
 {
     /**
+     * @var \GC\Combat\Calculator\CalculatorResponseInterface
+     */
+    private $calculatorResponse;
+
+    /**
      * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResponse
      *
      * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
     public function calculate(CalculatorResponseInterface $calculatorResponse): CalculatorResponseInterface
     {
+        $this->calculatorResponse = $calculatorResponse;
+
         $afterBattle = $calculatorResponse->getAfterBattle();
         $settings = $calculatorResponse->getSettings();
 
+        $this->debug('Carrier Calculator Plugin');
+
         foreach (array_merge($afterBattle->getAttackingFleets(), $afterBattle->getDefendingFleets()) as $fleet) {
+            /** @var $fleet \GC\Combat\Model\FleetInterface */
             $this->calculateCarrierCapacitiesFor($fleet, $settings);
 
-            if ($afterBattle->isFleetFromTarget($fleet)) {
+            if (!$settings->isLastTick()) {
+                $this->debug(sprintf('%s: Skipping carrier losses calculation (It´s not the last tick.).', $fleet->getFleetId()));
+                $this->debug();
                 continue;
             }
 
-            if (!$settings->isLastTick()) {
-               continue;
+            if ($fleet->isTarget()) {
+                $this->debug(sprintf('%s: Skipping carrier losses calculation (It´s a fleet of the target).', $fleet->getFleetId()));
+                $this->debug();
+                continue;
             }
 
+            $this->debug(
+                sprintf('%s: Is losses calculation needed? [%s < %s].',
+                    $fleet->getFleetId(),
+                    $fleet->getCarrierCapacityConsumed(),
+                    $fleet->getCarrierCapacity()
+                )
+            );
+
+            if ($fleet->getCarrierCapacityConsumed() <= $fleet->getCarrierCapacity()) {
+                $this->debug(sprintf('%s: Skipping carrier losses calculation - Capacity is sufficient.', $fleet->getFleetId()));
+                $this->debug();
+                continue;
+            }
+
+            $this->debug(sprintf('%s: Calculating carrier capacity losses.', $fleet->getFleetId()));
+
             $this->calculateCarrierLossesFor($fleet, $settings);
+            $this->debug();
         }
+
+        $this->debug();
 
         return $calculatorResponse;
     }
@@ -47,8 +80,8 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
      */
     public function calculateCarrierCapacitiesFor(FleetInterface $fleet, SettingsInterface $settings): void
     {
-        $carrierCapacityConsumed = 0;
-        $carrierCapacity = 0;
+        $carrierCapacityConsumed = 0.0;
+        $carrierCapacity = 0.0;
 
         foreach ($fleet->getUnits() as $unitId => $quantity) {
             if ($quantity === 0.0) {
@@ -66,6 +99,9 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
             }
         }
 
+        $this->debug(sprintf('%s: Carrier Capacity - %s', $fleet->getFleetId(), $carrierCapacity));
+        $this->debug(sprintf('%s: Carrier Capacity Consumed - %s', $fleet->getFleetId(), $carrierCapacityConsumed));
+
         $fleet->setCarrierCapacityConsumed($carrierCapacityConsumed);
         $fleet->setCarrierCapacity($carrierCapacity);
     }
@@ -78,33 +114,63 @@ final class CarrierCalculatorPlugin implements CalculatorPluginInterface
      */
     public function calculateCarrierLossesFor(FleetInterface $fleet, SettingsInterface $settings): void
     {
-        if ($fleet->getCarrierCapacityConsumed() <= $fleet->getCarrierCapacity()) {
-           return;
-        }
-
         foreach ($fleet->getUnits() as $unitId => $quantity) {
             if ($quantity === 0.0) {
                 continue;
             }
 
-            $carrierCapacityNeededForUnitType = $settings->getUnitById($unitId)
-                ->getCarrierCapacityConsumed();
+            $unit = $settings->getUnitById($unitId);
+            $carrierCapacityNeededForUnitType = $unit->getCarrierCapacityConsumed();
 
             if ($carrierCapacityNeededForUnitType === 0) {
                 continue;
             }
 
-            if ($fleet->getCarrierCapacity() === 0.0) {
-                $fleet->addInsufficientCarrierCapacityLosses($unitId, $quantity);
-                continue;
-            }
+            $this->debug(sprintf('%s: %s - carrierCapacityNeededPerUnit: %s, quantityInFleet: %s (Calculating losses in relation to quantityInFleet)',
+                $fleet->getFleetId(),
+                $settings->getUnitById($unitId)->getName(),
+                $carrierCapacityNeededForUnitType,
+                $quantity
+            ));
 
-            $quantityLeft = ($fleet->getCarrierCapacity() / $fleet->getCarrierCapacityConsumed()) * ($carrierCapacityNeededForUnitType * $quantity);
+            $quantityToLose = $quantity - (($fleet->getCarrierCapacity() / $fleet->getCarrierCapacityConsumed()) * ($carrierCapacityNeededForUnitType * $quantity));
 
-            $quantityToLose = $quantity - $quantityLeft;
+            $quantityToLoseRounded = (int) round($quantityToLose);
 
+            $this->debug(sprintf('%s: %s - [quantity - ((carrierCapacity / carrierCapacityConsumed) * (carrierCapacityNeededPerUnit * quantity)) = quantityToLose (rounded)]',
+                $fleet->getFleetId(),
+                $unit->getName()
+            ));
 
-            $fleet->addInsufficientCarrierCapacityLosses($unitId, (int) round($quantityToLose));
+            $this->debug(sprintf('%s: %s - [%s - ((%s / %s) * (%s * %s)) = %s (%s)]',
+                $fleet->getFleetId(),
+                $unit->getName(),
+                $quantity,
+                $fleet->getCarrierCapacity(),
+                $fleet->getCarrierCapacityConsumed(),
+                $carrierCapacityNeededForUnitType,
+                $quantity,
+                $quantityToLose,
+                $quantityToLoseRounded
+            ));
+
+            $this->debug(sprintf('%s: %s - Losing %s',
+                $fleet->getFleetId(),
+                $unit->getName(),
+                $quantityToLoseRounded
+            ));
+
+            $fleet->addInsufficientCarrierCapacityLosses($unitId, $quantityToLoseRounded);
         }
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return void
+     */
+    private function debug(string $message = "\n"): void
+    {
+        $this->calculatorResponse->addMessage($message);
     }
 }

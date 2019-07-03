@@ -4,10 +4,300 @@
     <section class="section" canvas="container" id="sidebar-content-wrapper">
         <div class="columns is-centered">
             <div class="column is-narrow">
-                <div class="table-container">
-                    {{ response.getRenderedHtml | raw }}
+
+                {% set selfRoute = url('combat.simulator', {'universe' : currentUniverse.getRouteName}) %}
+
+                <div class="has-text-centered has-margin">
+                    <a class="button is-light form-submit" data-form-selector="#fleetForm" data-action="{{ selfRoute }}?addFleet">
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>
+                             {{ 'combat.simulator.fleet.add' | trans }}
+                        </span>
+                    </a>
+                    <a class="button is-light form-submit" data-form-selector="#fleetForm" data-action="{{ selfRoute }}?removeFleet">
+                        <span class="icon is-small">
+                            <i class="fas fa-minus"></i>
+                        </span>
+                        <span>
+                            {{ 'combat.simulator.fleet.remove' | trans }}
+                        </span>
+                    </a>
                 </div>
+
+                <form action="{{ selfRoute }}?simulate" method="post" id="fleetForm" class="no-gc has-margin">
+                    <div class="table-container">
+                        <table class="table is-narrow is-borderless has-no-wrap">
+                            <tr>
+                                <td></td>
+                                {% for fleetIndex, fleet in fleets %}
+                                    <td>
+                                        {{ fleet.fleetReference }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>{{ 'combat.simulator.reference' | trans }}</td>
+                                {% for fleetIndex, fleet in fleets %}
+                                    <td>
+                                        <input class="input is-small" type="text" name="fleets[{{ fleetIndex }}][fleetReference]" value="{{ fleet.fleetReference | default('') }}">
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>{{ 'combat.simulator.tick.start' | trans }}</td>
+                                {% for fleetIndex, fleet in fleets %}
+                                    <td>
+                                        {% if loop.index == 1 %}
+                                            ∞
+                                            <input type="hidden" name="fleets[{{ fleetIndex }}][incomingTick]" value="1">
+                                        {% else %}
+                                            <div class="select is-small">
+                                                <select name="fleets[{{ fleetIndex }}][incomingTick]">
+                                                    {% for i in 1..30 %}
+                                                        <option value="{{ i }}" {% if fleet.incomingTick | default(1) == i %}selected="selected"{% endif %}>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>{{ 'combat.simulator.tick.duration' | trans }}</td>
+                                {% for fleetIndex, fleet in fleets %}
+                                    <td>
+                                        {% if loop.index == 1 %}
+                                            ∞
+                                            <input type="hidden" name="fleets[{{ fleetIndex }}][durationTicks]" value="99">
+                                        {% else %}
+                                            <div class="select is-small">
+                                                <select name="fleets[{{ fleetIndex }}][durationTicks]">
+                                                    {% for i in 1..30 %}
+                                                        <option value="{{ i }}" {% if fleet.durationTicks | default(1) == i %}selected="selected"{% endif %}>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>{{ 'combat.simulator.fleet.type' | trans }}</td>
+                                {% for fleetIndex, fleet in fleets %}
+                                    <td>
+                                        {% if loop.index == 1 %}
+                                            {{ 'combat.defender' | trans }}
+                                            <input type="hidden" name="fleets[{{ fleetIndex }}][type]" value="defensive">
+                                        {% else %}
+                                            <div class="select is-small">
+                                                <select name="fleets[{{ fleetIndex }}][type]">
+                                                    <option value="defensive" {% if fleet.type == 'defensive' %}selected="selected"{% endif %}>{{ 'combat.defender' | trans }}</option>
+                                                    <option value="offensive" {% if fleet.type == 'offensive' %}selected="selected"{% endif %}>{{ 'combat.aggressor' | trans }}</option>
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% for unit in settings.getUnits if unit.getGroup == 'OFFENSIVE' %}
+                                <tr>
+                                    <td>{{ unit.getName | trans }}</td>
+                                    {% for fleetIndex, fleet in fleets %}
+                                        <td>
+                                            <input class="input is-small" type="text" name="fleets[{{ fleetIndex }}][units][{{ unit.getUnitId }}]" value="{{ fleet.units[unit.getUnitId] | default(0) }}">
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            {% for unit in settings.getUnits if unit.getGroup == 'DEFENSE' %}
+                                <tr>
+                                    <td>{{ unit.getName | trans }}</td>
+                                    {% for fleetIndex, fleet in fleets %}
+                                        {% if loop.index == 1%}
+                                            <td>
+                                                <input class="input is-small" type="text" name="fleets[{{ fleetIndex }}][units][{{ unit.getUnitId }}]" value="{{ fleet.units[unit.getUnitId] | default(0) }}">
+                                            </td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>{{ 'combat.extractor.metal' | trans }}</td>
+                                <td>
+                                    <input class="input is-small" type="text" name="targetExtractorsMetal" value="{{ targetExtractorsMetal }}">
+                                </td>
+                                {% if fleets | length > 1 %}
+                                    <td colspan="{{ fleets | length - 1 }}"></td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td>{{ 'combat.extractor.crystal' | trans }}</td>
+                                <td>
+                                    <input class="input is-small" type="text" name="targetExtractorsCrystal" value="{{ targetExtractorsCrystal }}">
+                                </td>
+                                {% if fleets | length > 1 %}
+                                    <td colspan="{{ fleets | length - 1 }}"></td>
+                                {% endif %}
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="has-text-centered">
+                        <div class="select is-rounded">
+                            <select name="calculationTicks">
+                                {% for i in 1..99 %}
+                                    <option value="{{ i }}" {% if calculationTicks == i %}selected="selected"{% endif %}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="button is-primary">
+                            {{ 'combat.simulate' |trans }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
+
+        {% for response in responses %}
+            <div class="columns is-centered">
+                <div class="column is-narrow ">
+                    <h5 class="is-size-5 has-text-centered has-margin">
+                        {{ 'combat.tick' | trans }} {{ loop.index }}
+                    </h5>
+                    <div class="table-container">
+                        <table class="table is-striped is-narrow is-borderless is-hoverable has-no-wrap">
+                            <tr>
+                                <td></td>
+                                <td colspan="2">{{ 'combat.defender.sum' | trans }}</td>
+                                <td colspan="2">{{ 'combat.aggressor.sum' | trans }}</td>
+                                {% if response.getAfterBattle.getDefendingFleets | length > 0 %}
+                                    <td colspan="{{ response.getAfterBattle.getDefendingFleets | length * 2 }}">{{ 'combat.defender' | trans }}</td>
+                                {% endif %}
+
+                                {% if response.getAfterBattle.getAttackingFleets | length > 0 %}
+                                    <td colspan="{{ response.getAfterBattle.getAttackingFleets | length * 2 }}">{{ 'combat.aggressor' | trans }}</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                {% for fleet in response.getAfterBattle.getDefendingFleets %}
+                                    <td colspan="2">{{ fleet.getDataValue('fleetReference') }}</td>
+                                {% endfor %}
+                                {% for fleet in response.getAfterBattle.getAttackingFleets %}
+                                    <td colspan="2">{{ fleet.getDataValue('fleetReference') }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>{{ 'combat.units' |trans }}</td>
+                                <td>{{ 'combat.before' |trans }}</td>
+                                <td>{{ 'combat.after' |trans }}</td>
+                                <td>{{ 'combat.before' |trans }}</td>
+                                <td>{{ 'combat.after' |trans }}</td>
+                                {% for fleet in response.getAfterBattle.getDefendingFleets %}
+                                    <td>{{ 'combat.before' |trans }}</td>
+                                    <td>{{ 'combat.after' |trans }}</td>
+                                {% endfor %}
+                                {% for fleet in response.getAfterBattle.getAttackingFleets %}
+                                    <td>{{ 'combat.before' |trans }}</td>
+                                    <td>{{ 'combat.after' |trans }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% for unit in settings.getUnits if unit.getGroup == 'OFFENSIVE' %}
+                                {% set beforeDefending = response.getBeforeBattle.getUnitSumFromFleets(response.getBeforeBattle.getDefendingFleets) %}
+                                {% set afterDefending  = response.getAfterBattle.getUnitSumFromFleets(response.getAfterBattle.getDefendingFleets) %}
+
+                                {% set beforeAttacking = response.getBeforeBattle.getUnitSumFromFleets(response.getBeforeBattle.getAttackingFleets) %}
+                                {% set afterAttacking  = response.getAfterBattle.getUnitSumFromFleets(response.getAfterBattle.getAttackingFleets) %}
+
+                                <tr>
+                                    <td>{{ unit.name | trans }}</td>
+                                    <td>{{ beforeDefending[unit.getUnitId] | default(0) | number }}</td>
+                                    <td>{{ afterDefending[unit.getUnitId] | default(0) | number }}</td>
+                                    <td>{{ beforeAttacking[unit.getUnitId] | default(0) | number }}</td>
+                                    <td>{{ afterAttacking[unit.getUnitId] | default(0) | number }}</td>
+
+                                    {% for fleet in response.getBeforeBattle.getDefendingFleets %}
+                                        <td>{{ fleet.getQuantityOf(unit.getUnitId) | default(0) | number }}</td>
+                                        <td>{{ response.getAfterBattle.getFleetById(fleet.getFleetId, response.getAfterBattle.getDefendingFleets).getQuantityOf(unit.getUnitId) | default(0) | number }}</td>
+                                    {% endfor %}
+
+                                    {% for fleet in response.getBeforeBattle.getAttackingFleets %}
+                                        <td>{{ fleet.getQuantityOf(unit.getUnitId) | default(0) | number }}</td>
+                                        <td>{{ response.getAfterBattle.getFleetById(fleet.getFleetId, response.getAfterBattle.getAttackingFleets).getQuantityOf(unit.getUnitId) | default(0) | number }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+
+                            {% for unit in settings.getUnits if unit.getGroup == 'DEFENSE' %}
+                                {% set beforeDefending = response.getBeforeBattle.getUnitSumFromFleets(response.getBeforeBattle.getDefendingFleets) %}
+                                {% set afterDefending = response.getAfterBattle.getUnitSumFromFleets(response.getAfterBattle.getDefendingFleets) %}
+
+                                <tr>
+                                    <td>{{ unit.name | trans }}</td>
+                                    <td>{{ beforeDefending[unit.getUnitId] | default(0) | number }}</td>
+                                    <td>{{ afterDefending[unit.getUnitId] | default(0) | number }}</td>
+
+                                    <td colspan="{{ response.getAfterBattle.getDefendingFleets | length * 2 + 1}}"></td>
+                                    <td colspan="{{ response.getAfterBattle.getAttackingFleets | length * 2 + 1}}"></td>
+                                </tr>
+                            {% endfor %}
+
+                            <tr class="has-divider-top">
+                                <td>{{ 'combat.extractor.metal' | trans }}</td>
+                                <td>{{ response.getBeforeBattle.getTargetExtractorsMetal }}</td>
+                                <td>{{ response.getAfterBattle.getTargetExtractorsMetal }}</td>
+                                <td></td>
+                                <td>0</td>
+                                {% for fleet in response.getAfterBattle.getDefendingFleets %}
+                                    <td colspan="2"></td>
+                                {% endfor %}
+                                {% for fleet in response.getAfterBattle.getAttackingFleets %}
+                                    <td></td>
+                                    <td>{{ fleet.getExtractorStolenMetal | default(0) | number }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>{{ 'combat.extractor.crystal' | trans }}</td>
+                                <td>{{ response.getBeforeBattle.getTargetExtractorsCrystal }}</td>
+                                <td>{{ response.getAfterBattle.getTargetExtractorsCrystal }}</td>
+                                <td></td>
+                                <td>0</td>
+                                {% for fleet in response.getAfterBattle.getDefendingFleets %}
+                                    <td colspan="2"></td>
+                                {% endfor %}
+                                {% for fleet in response.getAfterBattle.getAttackingFleets %}
+                                    <td></td>
+                                    <td>{{ fleet.getExtractorStolenCrystal | default(0) | number }}</td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="has-text-centered">
+                    <a class="button is-light toggle-button" data-content-selector="#log_{{ loop.index }}">
+                         <span class="icon is-small">
+                            <i class="fas fa-bug"></i>
+                        </span>
+                        <span>
+                            {{ 'combat.simulator.log' | trans }}
+                        </span>
+                    </a>
+                </div>
+                <div class="box is-hidden has-margin" id="log_{{ loop.index }}">
+                    <p>
+                        {{ response.getMessages | join('<br>') | raw }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="has-margin"></div>
     </section>
 {% endblock %}

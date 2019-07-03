@@ -22,11 +22,10 @@ interface CombatServiceInterface
 
     /**
      * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
-     * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function formatToJson(CalculatorResponseInterface $calculatorResult, ?string $mergeByDataKey = null) : string;
+    public function formatToJson(CalculatorResponseInterface $calculatorResult) : string;
 
     /**
      * @param string $json
@@ -49,4 +48,11 @@ interface CombatServiceInterface
      * @return \GC\Combat\Model\SettingsInterface
      */
     public function mapSettingsFromUniverse(Universe $universe): SettingsInterface;
+
+    /**
+     * @param \GC\Combat\Service\CombatSimulationRequestInterface $simulationRequest
+     *
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface[]
+     */
+    public function simulate(CombatSimulationRequestInterface $simulationRequest): array;
 }

@@ -10,7 +10,6 @@ use GC\Combat\Model\FleetInterface;
 use GC\Combat\Model\SettingsInterface;
 
 use function json_encode;
-use function array_merge;
 use function array_key_exists;
 use function array_filter;
 use function ksort;
@@ -65,22 +64,16 @@ final class JsonFormatter implements JsonFormatterInterface
 
     /**
      * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
-     * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function format(CalculatorResponseInterface $calculatorResult, ?string $mergeByDataKey = null) : string
+    public function format(CalculatorResponseInterface $calculatorResult) : string
     {
         $data = $this->addReportData([], $calculatorResult);
         $data = $this->addSettings($data, $calculatorResult->getSettings());
         $data = $this->addTargetData($data, $calculatorResult);
         $data = $this->addDefense($data, $calculatorResult, $calculatorResult->getSettings());
         $data = $this->addOffense($data, $calculatorResult, $calculatorResult->getSettings());
-
-        if ($mergeByDataKey !== null) {
-           $data[static::KEY_OFFENSE] = $this->mergeByDataValue($data[static::KEY_OFFENSE], $mergeByDataKey);
-           $data[static::KEY_DEFENSE] = $this->mergeByDataValue($data[static::KEY_DEFENSE], $mergeByDataKey);
-        }
 
         $data[static::KEY_SUMMARY][static::KEY_DEFENSE] = $this->createMergedSummary(
             $data[static::KEY_DEFENSE], [], [static::KEY_DATA]
@@ -90,43 +83,7 @@ final class JsonFormatter implements JsonFormatterInterface
             $data[static::KEY_OFFENSE], [], [static::KEY_DATA]
         );
 
-        if ($mergeByDataKey !== null) {
-            $data[static::KEY_SUMMARY][static::KEY_DEFENSE][static::KEY_DATA] = array_merge(
-                ...$data[static::KEY_SUMMARY][static::KEY_DEFENSE][static::KEY_DATA]
-            );
-
-            $data[static::KEY_SUMMARY][static::KEY_OFFENSE][static::KEY_DATA] = array_merge(
-                ...$data[static::KEY_SUMMARY][static::KEY_OFFENSE][static::KEY_DATA]
-            );
-        }
-
         return $this->toJson($data);
-    }
-
-    /**
-     * @param array $originalDataToMerge
-     * @param string $mergeByDataKey
-     *
-     * @return string[]
-     */
-    private function mergeByDataValue(array $originalDataToMerge, string $mergeByDataKey): array
-    {
-        $groupedFleetArray = [];
-        $mergedFleetArray = [];
-
-        foreach ($originalDataToMerge as $originalDataToMergeItem) {
-            if (!array_key_exists($mergeByDataKey, $originalDataToMergeItem[static::KEY_DATA])) {
-                continue;
-            }
-
-            $groupedFleetArray[$originalDataToMergeItem[static::KEY_DATA][$mergeByDataKey]][] = $originalDataToMergeItem;
-        }
-
-        foreach ($groupedFleetArray as $groupedByKey => $groupedFleetArrays) {
-            $mergedFleetArray[] = $this->createMergedSummary($groupedFleetArrays, [], [static::KEY_DATA]);
-        }
-
-        return $mergedFleetArray;
     }
 
     /**
@@ -423,8 +380,6 @@ final class JsonFormatter implements JsonFormatterInterface
      */
     private function addTargetData(array $data, CalculatorResponseInterface $calculatorResult): array
     {
-        $data[static::KEY_TARGET][static::KEY_DATA] = $calculatorResult->getAfterBattle()->getTargetData();
-
         $data[static::KEY_TARGET][static::KEY_RESOURCE][static::KEY_EXTRACTOR][static::KEY_BEFORE][static::KEY_METAL] =
             $calculatorResult->getBeforeBattle()->getTargetExtractorsMetal();
 

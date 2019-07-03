@@ -19,57 +19,85 @@ use function count;
 final class CombatCalculatorPlugin implements CalculatorPluginInterface
 {
     /**
+     * @var \GC\Combat\Calculator\CalculatorResponseInterface
+     */
+    private $calculatorResponse;
+
+    /**
      * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResponse
      *
      * @return \GC\Combat\Calculator\CalculatorResponseInterface
      */
     public function calculate(CalculatorResponseInterface $calculatorResponse): CalculatorResponseInterface
     {
+        $this->calculatorResponse = $calculatorResponse;
+
         $afterBattle = $calculatorResponse->getAfterBattle();
         $settings = $calculatorResponse->getSettings();
 
-        $defenderFleets = [];
-        $aggressorFleets = [];
+        $this->debug('Combat Calculator Plugin');
 
-        for ($currentCombatTick = 1; $currentCombatTick <= $settings->getCombatTicks(); $currentCombatTick++) {
-            $defenderFleets = $afterBattle->getDefendingFleets();
-            $aggressorFleets = $afterBattle->getAttackingFleets();
+        $defenderFleets = $afterBattle->getDefendingFleets();
+        $aggressorFleets = $afterBattle->getAttackingFleets();
 
-            $unitTotalDefender = $afterBattle->getUnitSumFromFleets($defenderFleets);
-            $unitTotalAggressor = $afterBattle->getUnitSumFromFleets($aggressorFleets);
+        $unitTotalDefender = $afterBattle->getUnitSumFromFleets($defenderFleets);
+        $unitTotalAggressor = $afterBattle->getUnitSumFromFleets($aggressorFleets);
 
-            $combatTickResultDefender = $this->calculateCombatTick($unitTotalDefender, $unitTotalAggressor, $settings);
-            $combatTickResultAggressor = $this->calculateCombatTick($unitTotalAggressor, $unitTotalDefender, $settings);
+        $this->debug();
+        $this->debug('Defenders are firing at Aggressors');
+        $this->debug('+++++++++++++++++++++++');
+        $combatTickResultDefender = $this->calculateCombatTick($unitTotalDefender, $unitTotalAggressor, $settings);
 
-            $this->increaseUnitDestroyedQuantityProportionallyFor(
-                $defenderFleets,
-                $combatTickResultDefender,
-                $unitTotalDefender
-            );
+        $this->debug();
+        $this->debug('Aggressors are firing at Defenders');
+        $this->debug('+++++++++++++++++++++++');
+        $combatTickResultAggressor = $this->calculateCombatTick($unitTotalAggressor, $unitTotalDefender, $settings);
 
-            $this->increaseUnitDestroyedQuantityProportionallyFor(
-                $aggressorFleets,
-                $combatTickResultAggressor,
-                $unitTotalAggressor
-            );
+        $this->increaseUnitDestroyedQuantityProportionallyFor(
+            $defenderFleets,
+            $combatTickResultDefender,
+            $unitTotalDefender
+        );
 
-            $this->decreaseUnitQuantityProportionallyFrom(
-                $defenderFleets,
-                $combatTickResultAggressor,
-                $unitTotalDefender
-            );
+        $this->increaseUnitDestroyedQuantityProportionallyFor(
+            $aggressorFleets,
+            $combatTickResultAggressor,
+            $unitTotalAggressor
+        );
 
-            $this->decreaseUnitQuantityProportionallyFrom(
-                $aggressorFleets,
-                $combatTickResultDefender,
-                $unitTotalAggressor
-            );
-        }
+        $this->decreaseUnitQuantityProportionallyFrom(
+            $defenderFleets,
+            $combatTickResultAggressor,
+            $unitTotalDefender
+        );
+
+        $this->decreaseUnitQuantityProportionallyFrom(
+            $aggressorFleets,
+            $combatTickResultDefender,
+            $unitTotalAggressor
+        );
+
+        $unitTotalDefenderAfter = $afterBattle->getUnitSumFromFleets($defenderFleets);
+        $unitLossesTotalDefenderAfter = $afterBattle->getUnitLossesSumFromFleets($defenderFleets);
+
+        $unitTotalAggressorAfter = $afterBattle->getUnitSumFromFleets($aggressorFleets);
+        $unitLossesTotalAggressorAfter = $afterBattle->getUnitLossesSumFromFleets($aggressorFleets);
+
+        $this->debugFleet('Defenders before', $unitTotalDefender, $settings);
+        $this->debugFleet('Defenders after', $unitTotalDefenderAfter, $settings);
+        $this->debugFleet('Defenders lost', $unitLossesTotalDefenderAfter, $settings);
+
+        $this->debugFleet('Aggressors before', $unitTotalAggressor, $settings);
+        $this->debugFleet('Aggressors after', $unitTotalAggressorAfter, $settings);
+        $this->debugFleet('Aggressors lost', $unitLossesTotalAggressorAfter, $settings);
 
         foreach (array_merge($defenderFleets, $aggressorFleets) as $fleet) {
             /* @var \GC\Combat\Model\FleetInterface $fleet */
-            $fleet->floorUnitQuantities();
+            $fleet->normalizeUnitQuantities();
         }
+
+        $this->debug();
+        $this->debug();
 
         return $calculatorResponse;
     }
@@ -85,69 +113,129 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
     {
         $combatTickResult = new CombatTickResult();
 
-        foreach ($unitSumAttacking as $unitIdWhichCurrentlyFiring => $unitQuantityWhichCurrentlyFiring) {
-            if ($unitQuantityWhichCurrentlyFiring === 0.0) {
-                continue;
-            }
+        for ($currentCombatTick = 1; $currentCombatTick <= $settings->getCombatTicks(); $currentCombatTick++) {
 
-            $combatSettingsForCurrentUnit = $settings->getUnitCombatSettingTargetsOf(
-                $unitIdWhichCurrentlyFiring
-            );
+            $this->debug();
+            $this->debug(sprintf('************* Combat Tick %s *************', $currentCombatTick));
+            $this->debug();
 
-            if (count($combatSettingsForCurrentUnit) === 0.0) {
-                continue;
-            }
-
-            $targetUnitIds = $this->getTargetUnitIdsFrom($combatSettingsForCurrentUnit);
-
-            $targetUnitsSum = $this->getUnitsByIdsFrom(
-                $targetUnitIds,
-                $unitSumDefending
-            );
-
-            if (count($targetUnitsSum) === 0.0) {
-                continue;
-            }
-
-            $unitIdDistributionsFireCalculated = $this->calculateDistributionFireForUnitIds(
-                $this->getDistributionRatiosFrom($combatSettingsForCurrentUnit),
-                $targetUnitsSum
-            );
-
-            $unitIdAttackPowers = $this->getAttackPowersFrom(
-                $combatSettingsForCurrentUnit
-            );
-
-            // fight
-            foreach ($targetUnitsSum as $targetUnitId => $targetUnitQuantity) {
-                $attackPowerForCurrentTarget = $unitIdAttackPowers[$targetUnitId];
-                $distributionForCurrentTarget = $unitIdDistributionsFireCalculated[$targetUnitId];
-
-                // calculate distribution power percentage
-                $attackPowerForCurrentTargetDistributed = $attackPowerForCurrentTarget * $distributionForCurrentTarget;
-
-                // reduce attack power by number of combat ticks
-                $attackPowerForCurrentTargetDistributedTick = $attackPowerForCurrentTargetDistributed / $settings->getCombatTicks();
-
-                // calculate destroyed units
-                $destroyedQuantity = $unitQuantityWhichCurrentlyFiring * $attackPowerForCurrentTargetDistributedTick;
-
-                // add
-                if ($destroyedQuantity > $targetUnitQuantity) {
-                    $destroyedQuantity = $targetUnitQuantity;
-                }
-
-                $destroyableLeft = $unitSumDefending[$targetUnitId] - $combatTickResult->getDestroyedUnitQuantityOf($targetUnitId);
-                if ($destroyedQuantity >= $destroyableLeft) {
-                    $destroyedQuantity = $destroyableLeft;
-                }
-
-                if ($destroyedQuantity === 0.0) {
+            foreach ($unitSumAttacking as $unitIdWhichCurrentlyFiring => $unitQuantityWhichCurrentlyFiring) {
+                if ($unitQuantityWhichCurrentlyFiring === 0.0) {
                     continue;
                 }
 
-                $combatTickResult->addDestroyedUnit($targetUnitId, $destroyedQuantity);
-                $combatTickResult->addDestroyedByUnit($unitIdWhichCurrentlyFiring, $targetUnitId, $destroyedQuantity);
+                $combatSettingsForCurrentUnit = $settings->getUnitCombatSettingTargetsOf(
+                    $unitIdWhichCurrentlyFiring
+                );
+
+                if (count($combatSettingsForCurrentUnit) === 0.0) {
+                    continue;
+                }
+
+                $targetUnitIds = $this->getTargetUnitIdsFrom($combatSettingsForCurrentUnit);
+
+                $targetUnitsSum = $this->getUnitsByIdsFrom(
+                    $targetUnitIds,
+                    $unitSumDefending
+                );
+
+                if (count($targetUnitsSum) === 0) {
+                    continue;
+                }
+
+                $unitIdDistributionsFireCalculated = $this->calculateDistributionFireForUnitIds(
+                    $this->getDistributionRatiosFrom($combatSettingsForCurrentUnit),
+                    $targetUnitsSum
+                );
+
+                $unitIdAttackPowers = $this->getAttackPowersFrom(
+                    $combatSettingsForCurrentUnit
+                );
+
+                $this->debug(sprintf('%s is Firing', $this->getUnitName($unitIdWhichCurrentlyFiring, $settings)));
+                $this->debug('-------------------------');
+                $this->debug();
+
+                // fight
+                foreach ($targetUnitsSum as $targetUnitId => $targetUnitQuantity) {
+                    $this->debug(sprintf('Firing at %s', $this->getUnitName($targetUnitId, $settings)));
+
+                    $attackPowerForCurrentTarget = $unitIdAttackPowers[$targetUnitId];
+                    $distributionForCurrentTarget = $unitIdDistributionsFireCalculated[$targetUnitId];
+
+                    // calculate distribution
+                    $attackPowerForCurrentTargetDistributed = $attackPowerForCurrentTarget * $distributionForCurrentTarget;
+
+                    $this->debug(sprintf('%s distributionValue',
+                        $distributionForCurrentTarget
+                    ));
+
+                    $this->debug(sprintf('%s attackPower',
+                        $attackPowerForCurrentTarget
+                    ));
+
+                    // reduce attack power by number of combat ticks
+                    $attackPowerForCurrentTargetDistributedTick = $attackPowerForCurrentTargetDistributed / $settings->getCombatTicks();
+
+                    $this->debug('Calculate attack power: [(attackPower * distribution) / combatTicks = attackPowerForCombatTick]');
+                    $this->debug(
+                        sprintf('Calculate attack power: [(%s * %s) / %s = %s]',
+                            $attackPowerForCurrentTarget,
+                            $distributionForCurrentTarget,
+                            $settings->getCombatTicks(),
+                            $attackPowerForCurrentTargetDistributedTick
+                        )
+                    );
+
+                    // calculate destroyed units
+                    $destroyedQuantity = $unitQuantityWhichCurrentlyFiring * $attackPowerForCurrentTargetDistributedTick;
+                    $destroyedQuantityTemp = $destroyedQuantity;
+
+                    // add
+                    if ($destroyedQuantity > $targetUnitQuantity) {
+                        $destroyedQuantity = $targetUnitQuantity;
+                    }
+
+                    $destroyableLeft = $unitSumDefending[$targetUnitId] - $combatTickResult->getDestroyedUnitQuantityOf($targetUnitId);
+                    if ($destroyedQuantity >= $destroyableLeft) {
+                        $destroyedQuantity = $destroyableLeft;
+                    }
+
+                    $this->debug(
+                        sprintf('%s %s firing at %s %s',
+                            $unitQuantityWhichCurrentlyFiring,
+                            $this->getUnitName($unitIdWhichCurrentlyFiring, $settings),
+                            $targetUnitQuantity,
+                            $this->getUnitName($targetUnitId, $settings)
+                        )
+                    );
+
+                    $this->debug(
+                        sprintf('distribution: %s | attack power: %s | maxkill: %s | left: %s | killed: %s',
+                            $distributionForCurrentTarget,
+                            $attackPowerForCurrentTargetDistributedTick,
+                            $destroyedQuantityTemp,
+                            $destroyableLeft,
+                            $destroyedQuantity
+                        )
+                    );
+
+                    $this->debug(
+                        sprintf("Calculation: [%s * %s = %s]",
+                            $unitQuantityWhichCurrentlyFiring,
+                            $attackPowerForCurrentTargetDistributedTick,
+                            $destroyedQuantity
+                        )
+                    );
+
+                    if ($destroyedQuantity === 0.0) {
+                        continue;
+                    }
+
+                    $combatTickResult->addDestroyedUnit($targetUnitId, $destroyedQuantity);
+                    $combatTickResult->addDestroyedByUnit($unitIdWhichCurrentlyFiring, $targetUnitId, $destroyedQuantity);
+                    $this->debug();
+                }
             }
         }
 
@@ -183,7 +271,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
 
             $distributionRatioCalculated = $distributionRatioForCurrentUnit /  $distributionUsed;
 
-            $unitIdDistributionRatiosCalculated[$unitId] = $distributionRatioCalculated;
+            $unitIdDistributionRatiosCalculated[$unitId] = round($distributionRatioCalculated, 2);
         }
 
         return $unitIdDistributionRatiosCalculated;
@@ -311,7 +399,7 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
         $filteredUnitSum = [];
 
         foreach ($unitSum as $unitId => $quantity) {
-            if (!in_array($unitId, $unitIds, true)) {
+            if (!in_array($unitId, $unitIds, true) || $quantity === 0.0) {
                 continue;
             }
 
@@ -319,5 +407,45 @@ final class CombatCalculatorPlugin implements CalculatorPluginInterface
         }
 
         return $filteredUnitSum;
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return void
+     */
+    private function debug(string $message = "\n"): void
+    {
+        $this->calculatorResponse->addMessage($message);
+    }
+
+    /**
+     * @param string $title
+     * @param int[] $unitIdArray
+     * @param \GC\Combat\Model\SettingsInterface $settings
+     *
+     * @return void
+     */
+    private function debugFleet(string $title, array $unitIdArray, SettingsInterface $settings): void
+    {
+        $string = "$title\n";
+
+        foreach ($unitIdArray as $unitId => $quantity) {
+            $unit = $settings->getUnitById($unitId);
+            $string .= sprintf("- %s: %s\n",$unit->getName(), $quantity);
+        }
+
+        $this->debug("\n" . $string);
+    }
+
+    /**
+     * @param int $unitId
+     * @param \GC\Combat\Model\SettingsInterface $settings
+     *
+     * @return string
+     */
+    private function getUnitName(int $unitId, SettingsInterface $settings): string
+    {
+        return $settings->getUnitById($unitId)->getName();
     }
 }

@@ -11,13 +11,13 @@ use function sprintf;
 class FleetNotFoundException extends Exception implements CombatExceptionInterface
 {
     /**
-     * @param int $unitId
+     * @param mixed $fleetReference
      *
      * @return \GC\Combat\Exception\FleetNotFoundException
      */
-    public static function fromFleetId(int $unitId): FleetNotFoundException
+    public static function fromFleetReference($fleetReference): FleetNotFoundException
     {
-        $message = sprintf('Fleet with the given id "%s" not found.', $unitId);
+        $message = sprintf('Fleet with the given reference "%s" not found.', $fleetReference);
 
         return new static($message);
     }

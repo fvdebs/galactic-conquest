@@ -12,7 +12,6 @@ use function is_object;
 use function is_array;
 use function unserialize;
 use function serialize;
-use function floor;
 
 final class Fleet implements FleetInterface
 {
@@ -32,6 +31,11 @@ final class Fleet implements FleetInterface
     private $data;
 
     /**
+     * @var bool
+     */
+    private $isTarget = false;
+
+    /**
      * @var float[]
      */
     private $unitsLost = [];
@@ -44,32 +48,32 @@ final class Fleet implements FleetInterface
     /**
      * @var float
      */
-    private $extractorStolenMetal = 0;
+    private $extractorStolenMetal = 0.0;
 
     /**
      * @var float
      */
-    private $extractorStolenCrystal = 0;
+    private $extractorStolenCrystal = 0.0;
 
     /**
      * @var float
      */
-    private $salvagedMetal = 0;
+    private $salvagedMetal = 0.0;
 
     /**
      * @var float
      */
-    private $salvagedCrystal = 0;
+    private $salvagedCrystal = 0.0;
 
     /**
      * @var float
      */
-    private $extractorsProtected = 0;
+    private $extractorsProtected = 0.0;
 
     /**
      * @var float
      */
-    private $extractorsStealCapacity = 0;
+    private $extractorsStealCapacity = 0.0;
 
     /**
      * @var float[]
@@ -79,12 +83,12 @@ final class Fleet implements FleetInterface
     /**
      * @var float
      */
-    private $carrierCapacity = 0;
+    private $carrierCapacity = 0.0;
 
     /**
      * @var float
      */
-    private $carrierCapacityConsumed = 0;
+    private $carrierCapacityConsumed = 0.0;
 
     /**
      * @param int $fleetId
@@ -94,8 +98,27 @@ final class Fleet implements FleetInterface
     public function __construct(int $fleetId, array $units = [], array $data = [])
     {
         $this->fleetId = $fleetId;
-        $this->units = $units;
+        $this->units = $this->clearEmptyAndRemoveNonNumericValues($units);
         $this->data = $data;
+    }
+
+    /**
+     * @param string[] $unitData
+     *
+     * @return int[]
+     */
+    private function clearEmptyAndRemoveNonNumericValues(array $unitData): array
+    {
+        foreach ($unitData as $unitId => $quantity) {
+            $quantity = (float) $quantity;
+            if (!is_numeric($quantity) || $quantity === 0.0) {
+                unset($unitData[$unitId]);
+            }
+
+            $unitData[$unitId] = (float) $quantity;
+        }
+
+        return $unitData;
     }
 
     /**
@@ -171,7 +194,7 @@ final class Fleet implements FleetInterface
         $this->decreaseUnitQuantity($unitId, $quantity);
 
         if (!array_key_exists($unitId, $this->unitsLost)) {
-            $this->unitsLost[$unitId] = 0;
+            $this->unitsLost[$unitId] = 0.0;
         }
 
         $this->unitsLost[$unitId] += $quantity;
@@ -207,12 +230,12 @@ final class Fleet implements FleetInterface
      */
     public function getQuantityOf(int $unitId): float
     {
-        $quantity = 0;
+        $quantity = 0.0;
         if ($this->hasUnit($unitId)) {
             $quantity = $this->units[$unitId];
         }
 
-        return $quantity;
+        return (float) $quantity;
     }
 
     /**
@@ -240,7 +263,7 @@ final class Fleet implements FleetInterface
     public function addUnitDestroyedQuantity(int $unitId, float $quantity): void
     {
         if (!array_key_exists($unitId, $this->unitsDestroyed)) {
-            $this->unitsDestroyed[$unitId] = 0;
+            $this->unitsDestroyed[$unitId] = 0.0;
         }
 
         $this->unitsDestroyed[$unitId] += $quantity;
@@ -399,7 +422,7 @@ final class Fleet implements FleetInterface
     public function addInsufficientCarrierCapacityLosses(int $unitId, float $quantity): void
     {
         if (!array_key_exists($unitId, $this->insufficientCarrierCapacityLosses)) {
-            $this->insufficientCarrierCapacityLosses[$unitId] = 0;
+            $this->insufficientCarrierCapacityLosses[$unitId] = 0.0;
         }
 
         $this->insufficientCarrierCapacityLosses[$unitId] += $quantity;
@@ -444,11 +467,11 @@ final class Fleet implements FleetInterface
     /**
      * @return void
      */
-    public function floorUnitQuantities(): void
+    public function normalizeUnitQuantities(): void
     {
-        $this->units = $this->floorArrayValues($this->units);
-        $this->unitsLost = $this->floorArrayValues($this->unitsLost);
-        $this->unitsDestroyed = $this->floorArrayValues($this->unitsDestroyed);
+        $this->units = $this->normalizeArrayValues($this->units);
+        $this->unitsLost = $this->normalizeArrayValues($this->unitsLost);
+        $this->unitsDestroyed = $this->normalizeArrayValues($this->unitsDestroyed);
     }
 
     /**
@@ -456,15 +479,33 @@ final class Fleet implements FleetInterface
      *
      * @return float[]
      */
-    private function floorArrayValues(array $array): array
+    private function normalizeArrayValues(array $array): array
     {
         $rounded = [];
 
         foreach ($array as $index => $value) {
-            $rounded[$index] = floor($value);
+            $rounded[$index] = round($value);
         }
 
         return $rounded;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTarget(): bool
+    {
+        return $this->isTarget;
+    }
+
+    /**
+     * @param bool $isTarget
+     *
+     * @return void
+     */
+    public function setIsTarget(bool $isTarget): void
+    {
+        $this->isTarget = $isTarget;
     }
 
     /**

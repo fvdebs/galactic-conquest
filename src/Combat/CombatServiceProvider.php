@@ -13,6 +13,7 @@ use GC\Combat\Calculator\Plugin\ExtractorCalculatorPlugin;
 use GC\Combat\Calculator\Plugin\SalvageCalculatorPlugin;
 use GC\Combat\Format\JsonFormatter;
 use GC\Combat\Format\JsonFormatterInterface;
+use GC\Combat\Handler\CombatSimulationHandler;
 use GC\Combat\Handler\CombatSimulatorHandler;
 use GC\Combat\Mapper\SettingsMapper;
 use GC\Combat\Mapper\SettingsMapperInterface;
@@ -57,15 +58,14 @@ final class CombatServiceProvider implements ServiceProviderInterface
     {
         $container->extend(RouteCollection::class, function (RouteCollection $collection, Container $container)
         {
-            $collection->get('/{locale}/{universe}/simulator', function(PsrContainer $container) {
+            $collection->any('/{locale}/{universe}/simulator', function(PsrContainer $container) {
                 return new CombatSimulatorHandler(
                     $container->get('renderer'),
                     $container->get('response-factory'),
                     $container->get(CombatServiceInterface::class)
                 );
-            })
-                ->addAttribute('public', true)
-                ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);
+            })->addAttribute('public', true)
+              ->addAttribute(AuthorizationUniverseMiddleware::SKIP_UNIVERSE_AUTH, true);
 
             return $collection;
         });

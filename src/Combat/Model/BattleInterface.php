@@ -9,6 +9,25 @@ interface BattleInterface
     /**
      * @return string[]
      */
+    public function getTargetData(): array;
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasTargetDataValue(string $key): bool;
+
+    /**
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getTargetDataValue(string $key);
+
+    /**
+     * @return string[]
+     */
     public function getData(): array;
 
     /**
@@ -36,6 +55,16 @@ interface BattleInterface
     public function getDefendingFleets(): array;
 
     /**
+     * @param \GC\Combat\Model\FleetInterface $fleet
+     */
+    public function addAttackingFleet(FleetInterface $fleet): void;
+
+    /**
+     * @param \GC\Combat\Model\FleetInterface $fleet
+     */
+    public function addDefendingFleet(FleetInterface $fleet): void;
+
+    /**
      * @return int
      */
     public function getTargetExtractorsMetal(): int;
@@ -60,23 +89,12 @@ interface BattleInterface
     public function decreaseTargetExtractorsCrystal(int $number): void;
 
     /**
-     * @return string[]
-     */
-    public function getTargetData(): array;
-
-    /**
-     * @param string $key
+     * @param int $fleetId
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
      * @return bool
      */
-    public function hasTargetDataValue(string $key): bool;
-
-    /**
-     * @param string $key
-     *
-     * @return mixed|null
-     */
-    public function getTargetDataValue(string $key);
+    public function hasFleetById(int $fleetId, array $fleets): bool;
 
     /**
      * @param int $fleetId
@@ -94,12 +112,11 @@ interface BattleInterface
     public function getUnitSumFromFleets(array $fleets): array;
 
     /**
-     * @param \GC\Combat\Model\FleetInterface $fleet
-     * @param string $userInfoKey - default: Battle::KEY_PLAYER_ID
+     * @param \GC\Combat\Model\FleetInterface[] $fleets
      *
-     * @return bool
+     * @return float[]
      */
-    public function isFleetFromTarget(FleetInterface $fleet, string $userInfoKey = Battle::KEY_PLAYER_ID): bool;
+    public function getUnitLossesSumFromFleets(array $fleets): array;
 
     /**
      * @return void

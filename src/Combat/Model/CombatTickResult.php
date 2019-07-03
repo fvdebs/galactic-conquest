@@ -35,7 +35,7 @@ final class CombatTickResult implements CombatTickResultInterface
     public function addDestroyedUnit(int $unitId, float $quantity): void
     {
         if (!$this->hasDestroyedUnit($unitId)) {
-            $this->destroyedUnit[$unitId] = 0;
+            $this->destroyedUnit[$unitId] = 0.0;
         }
 
         $this->destroyedUnit[$unitId] += $quantity;
@@ -85,7 +85,7 @@ final class CombatTickResult implements CombatTickResultInterface
         if (!array_key_exists($attackingUnitId, $this->destroyedByUnit) ||
             !array_key_exists($targetUnitId, $this->destroyedByUnit[$attackingUnitId])) {
 
-            $this->destroyedByUnit[$attackingUnitId][$targetUnitId] = 0;
+            $this->destroyedByUnit[$attackingUnitId][$targetUnitId] = 0.0;
         }
 
         $this->destroyedByUnit[$attackingUnitId][$targetUnitId] += $quantity;

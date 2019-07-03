@@ -8,7 +8,9 @@ use GC\Combat\Calculator\CalculatorInterface;
 use GC\Combat\Calculator\CalculatorResponseInterface;
 use GC\Combat\Format\JsonFormatterInterface;
 use GC\Combat\Mapper\SettingsMapperInterface;
+use GC\Combat\Model\Battle;
 use GC\Combat\Model\BattleInterface;
+use GC\Combat\Model\Fleet;
 use GC\Combat\Model\SettingsInterface;
 use GC\Combat\Report\CombatReportGeneratorInterface;
 use GC\Combat\Report\CombatReportGeneratorResponseInterface;
@@ -67,13 +69,12 @@ final class CombatService implements CombatServiceInterface
 
     /**
      * @param \GC\Combat\Calculator\CalculatorResponseInterface $calculatorResult
-     * @param string|null $mergeByDataKey
      *
      * @return string
      */
-    public function formatToJson(CalculatorResponseInterface $calculatorResult, ?string $mergeByDataKey = null): string
+    public function formatToJson(CalculatorResponseInterface $calculatorResult): string
     {
-        return $this->jsonFormatter->format($calculatorResult, $mergeByDataKey);
+        return $this->jsonFormatter->format($calculatorResult);
     }
 
     /**
@@ -106,5 +107,91 @@ final class CombatService implements CombatServiceInterface
     public function mapSettingsFromUniverse(Universe $universe): SettingsInterface
     {
         return $this->settingsMapper->mapFrom($universe);
+    }
+
+    /**
+     * @param \GC\Combat\Service\CombatSimulationRequestInterface $simulationRequest
+     *
+     * @return \GC\Combat\Calculator\CalculatorResponseInterface[]
+     */
+    public function simulate(CombatSimulationRequestInterface $simulationRequest): array
+    {
+        $calculatorResults = [];
+
+        $battle = null;
+
+        for ($tick = 1; $tick <= $simulationRequest->getTicksToSimulate(); $tick++) {
+            $battle = $this->createBattleForTick($simulationRequest, $battle, $tick);
+
+            if ($tick >= $simulationRequest->getTicksToSimulate()) {
+                $simulationRequest->getSettings()->setIsLastTick(true);
+            }
+
+            $calculatorResult = $this->calculate($battle, $simulationRequest->getSettings());
+            $battle = $calculatorResult->getAfterBattle();
+            $calculatorResults[] = $calculatorResult;
+        }
+
+        return $calculatorResults;
+    }
+
+    /**
+     * @param \GC\Combat\Service\CombatSimulationRequestInterface $simulationRequest
+     * @param \GC\Combat\Model\BattleInterface|null $before
+     * @param int $tick
+     *
+     * @return \GC\Combat\Model\BattleInterface
+     */
+    private function createBattleForTick(CombatSimulationRequestInterface $simulationRequest, ?BattleInterface $before = null, int $tick = 1): BattleInterface
+    {
+        $extractorsMetal = $simulationRequest->getTargetExtractorsMetal();
+        $extractorsCrystal = $simulationRequest->getTargetExtractorsCrystal();
+
+        if ($before !== null) {
+            $extractorsMetal = $before->getTargetExtractorsMetal();
+            $extractorsCrystal = $before->getTargetExtractorsCrystal();
+        }
+
+        $battle = new Battle(
+            [],
+            [],
+            $extractorsMetal,
+            $extractorsCrystal,
+            $simulationRequest->getData()
+        );
+
+        foreach ($simulationRequest->getAttackingFleets() as $fleet) {
+            if (! $simulationRequest->isFleetInTick($fleet->getFleetId(), $tick)) {
+                continue;
+            }
+
+            if ($before !== null && $before->hasFleetById($fleet->getFleetId(), $before->getAttackingFleets())) {
+                $beforeFleet = $before->getFleetById($fleet->getFleetId(), $before->getAttackingFleets());
+                $battle->addAttackingFleet(
+                    new Fleet($fleet->getFleetId(), $beforeFleet->getUnits(), $beforeFleet->getData())
+                );
+                continue;
+            }
+
+            $battle->addAttackingFleet(clone $fleet);
+        }
+
+        foreach ($simulationRequest->getDefendingFleets() as $fleet) {
+            if (! $simulationRequest->isFleetInTick($fleet->getFleetId(), $tick)) {
+                continue;
+            }
+
+            if ($before !== null && $before->hasFleetById($fleet->getFleetId(), $before->getDefendingFleets())) {
+                $beforeFleet = $before->getFleetById($fleet->getFleetId(), $before->getDefendingFleets());
+                $battle->addDefendingFleet(
+                    new Fleet($fleet->getFleetId(), $beforeFleet->getUnits(), $beforeFleet->getData())
+                );
+                continue;
+            }
+
+            $battle->addDefendingFleet(clone $fleet);
+        }
+
+        return $battle;
     }
 }
