@@ -1,8 +1,9 @@
-composer.lock
+node_modules
 vendor
 build
 .idea/
 .DS_Store
+
 
 # App
 /data/cache/*

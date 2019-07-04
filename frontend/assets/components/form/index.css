@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+.input.has-length-small {
+    max-width: 65px;
+    min-width: 65px;
+}
+
+.input.has-length-medium {
+    max-width: 100px;
+    min-width: 65px;
+}
+
+.field-label.is-narrow {
+    flex-grow: 0;
+}
+
+/**
+ * No scss vars for this in Bulma.
+ */
+input.input {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-width: 1px;
+
+    transition: border-color ease-in-out .3s;
+}
+
+input.input:hover {
+    transition: border-color ease-in .3s;
+}

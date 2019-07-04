@@ -1,0 +1,26 @@
+{
+  "name": "gc",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.9.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "bulma": "^0.7.5",
+    "bulma-timeline": "^3.0.4",
+    "bulma-utilities": "^0.3.6",
+    "copy-webpack-plugin": "^5.0.3",
+    "css-loader": "^3.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^4.0.0",
+    "mini-css-extract-plugin": "^0.7.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
+  }
+}

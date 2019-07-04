@@ -6,38 +6,29 @@
 Follow the instructions here:\
 https://github.com/galactic-conquest/devbox.
 
-## App commands
-Get a list of possible commands
+## App
+List commands
 ```
 vendor/bin/inferno list
 ```
 
- Update project dependencies.
+Update frontend and backend dependencies
 ```
+npm install
 composer update
 ```
 
-Project setup
+Setup
 ```
 vendor/bin/inferno app:setup
 ```
 
-Create a new handler
+Frontend build
 ```
-vendor/bin/inferno app:create:handler ModuleDir HandlerName
-```
-
-Clear cache data
-```
-vendor/bin/inferno app:cache-clear
+npm run build
 ```
 
-Run static code analyzer
-```
-composer analyze
-```
-
-## Other commands
+## Tick
 
 Executes a tick.
 ```
@@ -49,8 +40,15 @@ Executes a tick. Ignores universe tick interval.
 vendor/bin/inferno app:tick:run --force
 ```
 
-## Config
+## Configs
 ```
 /config/config.php
 /config/app.php
+```
+
+## Test
+
+Run static code analyzer
+```
+composer analyze
 ```

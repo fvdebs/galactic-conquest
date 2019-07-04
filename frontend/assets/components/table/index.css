@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+.table.has-valigned-cells td {
+    vertical-align: middle;
+}
+
+.has-min-width-150 {
+    min-width: 150px;
+}
+
+.table tr.has-divider-top {
+    border-top: 2px solid #00d1b2;
+}
+
+.table tr td.has-divider-right {
+    border-right: 2px solid #00d1b2;
+}
