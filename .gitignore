@@ -6,5 +6,6 @@ build
 
 
 # App
+/data/profile/*
 /data/cache/*
 /data/logs/*

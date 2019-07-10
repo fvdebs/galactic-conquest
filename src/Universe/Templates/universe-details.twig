@@ -1,41 +1,39 @@
 {% extends "@App/layout/account-layout.twig" %}
 
 {% block content %}
-    <div class="container">
-        {% include "@App/layout/partial/breadcrumb.twig"
-            with {
+    <section class="section">
+        <div class="container">
+            {% include "@App/layout/partial/breadcrumb.twig"
+                with {
                 'items': [
                     {'name': 'app.home', 'url': url('universe.select'), 'icon': 'fas fa-home has-text-primary'},
-                    {'name': universe.getName, 'icon': 'fas fa-atom has-text-primary'},
+                    {'name': universe.getName, 'icon': 'fas fa-meteor has-text-primary'},
                 ]
             }
-        %}
-
-        {% include "@App/layout/partial/page-title.twig"
-            with {
-                'title': universe.getName,
-            }
-        %}
-
-        <h2 class="subtitle">
-            {% if universe.isClosed %}
-                <span class="tag is-light">{{ 'universe.status.closed' | trans }}</span>
-            {% endif %}
-
-            {% if universe.isActive %}
-                <span class="tag is-light">{{ 'universe.status.active' | trans }}</span>
-            {% endif %}
-
-            {% if universe.isRegistrationAllowed %}
-                <span class="tag is-light">{{ 'universe.status.joinable' | trans }}</span>
-            {% endif %}
-        </h2>
-
-        <p>{{ universe.getDescription }}</p>
-    </div>
-
-    <div class="container has-margin">
-        <h3 class="title is-4">{{ 'universe.settings' | trans }}</h3>
-        {% include '@Universe/partial/universe-table-settings.twig' %}
-    </div>
+            %}
+            <h1 class="title is-3">{{ universe.getName }}</h1>
+            <div class="border-divider is-primary">
+                <div class="border-divider-inner"></div>
+            </div>
+        </div>
+        <div class="container">
+            <p>{{ universe.getDescription }}</p>
+        </div>
+    </section>
+    
+    <section class="section">
+        <div class="container">
+            <h2 class="title">{{ 'universe.settings' | trans }}</h2>
+            <div class="border-divider is-primary">
+                <div class="border-divider-inner"></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="columns">
+                <div class="column has-layer">
+                    {% include '@Universe/partial/universe-table-settings.twig' %}
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

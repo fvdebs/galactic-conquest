@@ -134,7 +134,8 @@ final class SetupCommand extends Command
     protected function dropAndCreateDatabase(): void
     {
         // connect
-        $pdo = new PDO(sprintf('mysql:host=%s;dbname=%s;', $this->dbHost, $this->dbName), $this->dbUser, $this->dbPassword);
+        // dbname=%s;
+        $pdo = new PDO(sprintf('mysql:host=%s;', $this->dbHost), $this->dbUser, $this->dbPassword);
 
         $pdo->exec(sprintf('DROP DATABASE IF EXISTS %s', $this->dbName));
         $pdo->exec(sprintf('CREATE DATABASE %s', $this->dbName));

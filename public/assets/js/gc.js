@@ -14,7 +14,8 @@
 
         // Toggle the Slidebar with id 'id-1'
         controller.toggle( 'id-1' );
-    } );
+        $('.navbar-burger').toggleClass('is-active');
+    });
 
     // close all active on content click.
     $('#sidebar-content-wrapper').on('click', function (event) {
@@ -22,6 +23,7 @@
             event.preventDefault();
             event.stopPropagation();
             controller.close();
+            $('.navbar-burger').toggleClass('is-active');
         }
     });
 
@@ -31,8 +33,54 @@
             event.preventDefault();
             event.stopPropagation();
             controller.close();
+            $('.navbar-burger').toggleClass('is-active');
         }
     };
+/*
+    $('nav .navbar-item').click(function() {
+        $('.navbar-burger').removeClass('is-active');
+        $('.navbar-item').removeClass('is-active');
+        $(this).addClass('is-active');
+    });
+*/
+    /***************************************
+     * Scrollspy
+     ***************************************/
+
+// Cache selectors
+    let lastId,
+        menuItems = $("a[href^='#']"),
+        // Anchors corresponding to menu items
+        scrollItems = menuItems.map(function() {
+            let id = $(this).attr("href");
+            if (id != '#' && $(id).length > 0) {
+                return $(id);
+            }
+        });
+
+    $('#sidebar-content-wrapper').scroll(function() {
+        let fromTop = $(this).scrollTop();
+
+        if (controller.getActiveSlidebar() ) {
+            controller.close();
+            $('.navbar-burger').toggleClass('is-active');
+        }
+
+        let cur = scrollItems.map(function() {
+            if ($(this).offset().top < fromTop && $(this).offset().top <= 40) {
+                return this;
+            }
+        });
+
+        cur = cur[cur.length - 1];
+        let id = cur && cur.length ? cur[0].id : "";
+        if (lastId !== id) {
+            lastId = id;
+            menuItems.removeClass('is-active')
+                .filter("[href='#" + id + "']")
+                .addClass('is-active');
+        }
+    });
 
     /***************************************
      * Bulma

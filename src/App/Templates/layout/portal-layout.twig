@@ -1,0 +1,12 @@
+{% extends "@App/layout/page-layout.twig" %}
+
+{% block body %}
+    <div class="custom-duration-200" off-canvas="id-1 left push">
+        {% include '@App/layout/partial/portal-navigation-left.twig' %}
+    </div>
+    <div class="has-navbar-fixed-top is-paddingless-b" canvas="container" id="sidebar-content-wrapper">
+        {% include '@App/layout/partial/portal-navigation-top.twig' %}
+        {% block content %}{% endblock %}
+        {% include '@App/layout/partial/footer.twig' %}
+    </div>
+{% endblock %}

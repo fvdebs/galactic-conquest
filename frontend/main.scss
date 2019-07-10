@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 // Import Google fonts
-@import url('https://fonts.googleapis.com/css?family=Lato|Orbitron:400,700|Barlow');
+@import url('https://fonts.googleapis.com/css?family=Lato|Barlow');
 
 // BULMA
 // DEFAULTS
@@ -44,10 +44,10 @@ $blue-custom-light: rgba(0, 174, 255, 0.4);
 $grey-custom: #7e888d;
 $white-custom: #e2faf0;
 $white-custom-darker: #e2faf0;
+$black-custom: #13151a;
 
 // TYPO
 $title-color: hsl(0, 0%, 96%);
-$title-family: "Orbitron";
 $subtitle-color: hsl(0, 0%, 96%);
 $family-sans-serif: "Barlow", "Lato", sans-serif;
 $text: $white-custom;
@@ -81,10 +81,10 @@ $input-hover-border-color: $primary;
 $input-focus-color: $text;
 $input-focus-border-color: $primary;
 $input-focus-box-shadow-size: none;
-$input-icon-color: $primary;
 $input-icon-active-color: $primary;
 $input-radius: 0;
-$label-color: $grey-custom;
+$label-color: $text;
+$label-weight: 300;
 
 // BUTTON
 $button-text-color: $text;
@@ -93,7 +93,7 @@ $button-text-hover-color: $primary;
 
 // CARD
 $card-color: $text;
-$card-background-color: rgba(0, 0, 0, 0.5);
+$card-background-color: #2b3c46;
 $card-header-background-color: transparent;
 $card-header-color: $text;
 $card-header-shadow: none;
@@ -115,7 +115,7 @@ $table-striped-row-even-background-color: $blue-custom-darker;
 $table-striped-row-even-hover-background-color: $blue-custom-lighter;
 
 // NAVBAR
-$navbar-background-color: $white;
+$navbar-background-color: #1e2a31;
 $navbar-box-shadow-size: 0 2px 0 0;
 $navbar-box-shadow-color: $background;
 $navbar-height: 3.25rem;
@@ -124,42 +124,48 @@ $navbar-padding-horizontal: 2rem;
 $navbar-z: 30;
 $navbar-fixed-z: 30;
 
-$navbar-item-color: $grey-dark;
-$navbar-item-hover-color: $link;
-$navbar-item-hover-background-color: $white-bis;
-$navbar-item-active-color: $black;
-$navbar-item-active-background-color: transparent;
+$navbar-item-color: $text; // 1
+$navbar-item-hover-color: $primary;
+$navbar-item-hover-background-color: #2b3c46;
+$navbar-item-active-color: $primary;
+$navbar-item-active-background-color: #2b3c46;
 $navbar-item-img-max-height: 1.75rem;
-
 $navbar-burger-color: $navbar-item-color;
-
-$navbar-tab-hover-background-color: transparent;
 $navbar-tab-hover-border-bottom-color: $link;
 $navbar-tab-active-color: $link;
-$navbar-tab-active-background-color: transparent;
 $navbar-tab-active-border-bottom-color: $link;
-$navbar-tab-active-border-bottom-style: solid;
-$navbar-tab-active-border-bottom-width: 3px;
-
-$navbar-dropdown-background-color: $white;
-$navbar-dropdown-border-top: 2px solid $border;
+$navbar-dropdown-background-color: rgba(0, 0, 0, 0.5); //1
+$navbar-dropdown-border-top: 2px solid $primary; // 1
 $navbar-dropdown-offset: -4px;
-$navbar-dropdown-arrow: $link;
-$navbar-dropdown-radius: $radius-large;
+$navbar-dropdown-arrow: $primary; // 1
+$navbar-dropdown-radius: 10px;
 $navbar-dropdown-z: 20;
-
 $navbar-dropdown-boxed-radius: $radius-large;
 $navbar-dropdown-boxed-shadow: 0 8px 8px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
-
-$navbar-dropdown-item-hover-color: $black;
-$navbar-dropdown-item-hover-background-color: $background;
-$navbar-dropdown-item-active-color: $link;
-$navbar-dropdown-item-active-background-color: $background;
-
-$navbar-divider-background-color: $background;
+$navbar-dropdown-item-hover-color: $primary;
+$navbar-dropdown-item-hover-background-color: $blue-custom-light;
+$navbar-dropdown-item-active-color: $primary;
+$navbar-dropdown-item-active-background-color: $blue-custom-light;
+$navbar-divider-background-color: $primary;
 $navbar-divider-height: 2px;
-
 $navbar-bottom-box-shadow-size: 0 -2px 0 0;
+
+// MENU
+$menu-item-color: $text;
+$menu-item-radius: 0;
+$menu-item-hover-color: $primary;
+$menu-item-hover-background-color: $blue-custom-lighter;
+$menu-item-active-color: $primary;
+$menu-item-active-background-color: $blue-custom-light;
+$menu-list-border-left: 1px solid $primary;
+$menu-label-color: $primary;
+$menu-label-letter-spacing: 0.2em;
+$menu-label-spacing: 1.5em;
+
+// FOOTER
+$footer-background-color: #1e2a31; // #13151a
+$footer-color: $text;
+$footer-padding: 3rem 1.5rem 2rem;
 
 // BULMA EXTENSIONS
 // TIMELINE

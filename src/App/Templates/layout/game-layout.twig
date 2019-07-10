@@ -1,24 +1,20 @@
 {% extends "@App/layout/page-layout.twig" %}
 
 {% block body %}
-    {% include '@App/layout/partial/game-navigation-top.twig' %}
-
-    <section class="section custom-duration-200 has-margin" off-canvas="id-1 left push">
+    <div class="custom-duration-200" off-canvas="id-1 left push">
         {% include '@App/layout/partial/game-navigation-left.twig' %}
-    </section>
-
-    <section class="section" canvas="container" id="sidebar-content-wrapper">
+    </div>
+    <div class="has-navbar-fixed-top is-paddingless-b" canvas="container" id="sidebar-content-wrapper">
+        {% include '@App/layout/partial/game-navigation-top.twig' %}
         <div class="columns">
-            <div class="column is-one-fifth is-hidden-touch">
+            <div class="column is-one-fifth is-hidden-touch has-layer">
                 {% include '@App/layout/partial/game-navigation-left.twig' %}
             </div>
             <div class="column is-four-fifth">
-
                 {% include '@Player/partial/player-callout-fleet-incoming.twig' %}
-
                 {% block content %}{% endblock %}
             </div>
         </div>
         {% include '@App/layout/partial/footer.twig' %}
-    </section>
+    </div>
 {% endblock %}

@@ -4,6 +4,8 @@
   "main": "webpack.config.js",
   "license": "MIT",
   "scripts": {
+    "dev": "webpack --mode development",
+    "dev-watch": "webpack --mode development --watch",
     "build": "webpack --mode production"
   },
   "devDependencies": {
@@ -22,5 +24,8 @@
     "style-loader": "^0.23.1",
     "webpack": "^4.35.2",
     "webpack-cli": "^3.3.5"
+  },
+  "dependencies": {
+    "hamburgers": "^1.1.3"
   }
 }

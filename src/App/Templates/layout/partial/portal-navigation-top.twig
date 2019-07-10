@@ -1,0 +1,63 @@
+<nav class="navbar is-sticky-top" role="navigation">
+    <div class="navbar-brand left-burger">
+        <a class="navbar-item navbar-burger burger toggle-id-1 is-hidden-desktop" role="button">
+            <span></span>
+            <span></span>
+            <span></span>
+        </a>
+        <p class="navbar-item">
+            <a href="{{ url('home') }}">
+                <img src="/assets/images/logo/gc_white.png" alt="{{ 'app.galactic.conquest' | trans }}" >
+            </a>
+        </p>
+        <p class="navbar-item">
+            <span>{{ 'app.galactic.conquest' | trans }}</span>
+        </p>
+    </div>
+
+    <div class="navbar-menu is-hidden-mobile">
+        <div class="navbar-start">
+            <a class="navbar-item is-hoverable" href="#start">
+                <span class="icon"><i class="fas fa-globe"></i></span>
+                <span>{{ 'Start' | trans }}</span>
+            </a>
+            <a class="navbar-item" href="#universes">
+                <span class="icon"><i class="fas fa-meteor"></i></span>
+                <span>{{ 'Universes' | trans }}</span>
+            </a>
+
+            <a class="navbar-item is-hoverable" href="#game">
+                <span class="icon"><i class="fab fa-fulcrum"></i></span>
+                <span>{{ 'Facts' | trans }}</span>
+            </a>
+
+            <a class="navbar-item is-hoverable" href="#halloffame">
+                <span class="icon"><i class="fas fa-award"></i></span>
+                <span>{{ 'Hall of Fame' | trans }}</span>
+            </a>
+
+            <a class="navbar-item is-hoverable" href="#support">
+                <span class="icon"><i class="far fa-question-circle"></i></span>
+                <span>{{ 'Support' | trans }}</span>
+            </a>
+        </div>
+        <div class="navbar-end">
+            <a class="navbar-item" href="{{ url('home', {'locale': 'de'}) }}">
+                <figure class="image">
+                    <img class="is-rounded" src="/assets/images/flags/de-DE.png" alt="{{ 'app.de-DE' | trans }}" >
+                </figure>
+            </a>
+            <a class="navbar-item" href="{{ url('home', {'locale': 'en'}) }}">
+                <figure class="image">
+                    <img class="is-rounded" src="/assets/images/flags/en_EN.png" alt="{{ 'app.en_EN' | trans }}" >
+                </figure>
+            </a>
+            {% if isLoggedIn %}
+                <a class="navbar-item" href="{{ url('user.logout') }}">
+                    <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                    <span>{{ 'app.logout' | trans }}</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

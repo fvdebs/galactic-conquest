@@ -1,61 +1,76 @@
 {% extends "@App/layout/account-layout.twig" %}
 
 {% block content %}
-    <div class="container">
-        {% include "@App/layout/partial/breadcrumb.twig"
-            with {
-            'items': [
-                {'name': 'app.home', 'icon': 'fas fa-home has-text-primary'},
-            ]
-        }
-        %}
-
-        {% include "@App/layout/partial/page-title.twig"
-            with {
-                'title': 'universe.welcome' | trans | format(currentUser.getName),
-                'subtitle': 'universe.dashboard.description' | trans,
+    <section class="section">
+        <div class="container">
+            {% include "@App/layout/partial/breadcrumb.twig"
+                with {
+                'items': [
+                    {'name': 'app.home', 'icon': 'fas fa-home has-text-primary'},
+                ]
             }
-        %}
+            %}
 
-        {% include '@App/layout/partial/flashes.twig' %}
-    </div>
+            <h1 class="title is-3">{{ 'universe.welcome' | trans | format(currentUser.getName) }}</h1>
+            <h2 class="subtitle">{{ 'universe.dashboard.description' | trans }}</h2>
+
+            {% include '@App/layout/partial/flashes.twig' %}
+        </div>
+    </section>
 
     {% if playableUniverses | length > 0 %}
-        <div class="container has-margin">
-            <h2 class="title">{{ 'universe.my.universes' | trans }}</h2>
-            <div class="columns is-desktop">
-                {% for universe in playableUniverses %}
-                    <div class="column">
-                        {% include '@Universe/partial/universe-card.twig' %}
-                    </div>
-                {% endfor %}
+        <section class="section">
+            <div class="container">
+                <h2 class="title">{{ 'universe.my.universes' | trans }}</h2>
+                <div class="border-divider is-primary">
+                    <div class="border-divider-inner"></div>
+                </div>
             </div>
-        </div>
+
+            <div class="container">
+                <div class="columns is-desktop">
+                    {% for universe in playableUniverses %}
+                        <div class="column">
+                            {% include '@Universe/partial/universe-card.twig' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
     {% endif %}
 
     {% if joinableUniverses | length > 0 %}
-        <div class="container has-margin">
-            <h3 class="title">{{ 'universe.joinable' | trans }}</h3>
-            <div class="columns is-desktop">
-                {% for universe in joinableUniverses %}
-                    <div class="column">
-                        {% include '@Universe/partial/universe-card.twig' %}
-                    </div>
-                {% endfor %}
+        <section class="section">
+            <div class="container">
+                <h3 class="title">{{ 'universe.joinable' | trans }}</h3>
+                <div class="border-divider is-primary">
+                    <div class="border-divider-inner"></div>
+                </div>
             </div>
-        </div>
+            <div class="container">
+                <div class="columns is-desktop">
+                    {% for universe in joinableUniverses %}
+                        <div class="column">
+                            {% include '@Universe/partial/universe-card.twig' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
     {% endif %}
 
     {% if closedUniverses | length > 0 %}
-        <div class="container has-margin">
-            <h1 class="title">{{ 'universe.closed' | trans }}</h1>
-            <div class="columns is-desktop">
-                {% for universe in closedUniverses %}
-                    <div class="column">
-                        {% include '@Universe/partial/universe-card.twig' %}
-                    </div>
-                {% endfor %}
+        <section class="section">
+            <div class="container">
+                <h1 class="title">{{ 'universe.closed' | trans }}</h1>
+                <div class="columns is-desktop">
+                    {% for universe in closedUniverses %}
+                        <div class="column">
+                            {% include '@Universe/partial/universe-card.twig' %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        </section>
     {% endif %}
 {% endblock %}

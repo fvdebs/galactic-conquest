@@ -5,7 +5,7 @@
   "type": "project",
   "description": "Galactic Conquest",
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.3",
     "ext-json": "*",
     "ext-pdo": "*",
     "fzaninotto/faker": "^1.8",
@@ -27,5 +27,15 @@
   "minimum-stability": "dev",
   "config": {
     "sort-packages": true
+  },
+  "scripts": {
+    "setup": [
+      "vendor/bin/inferno app:setup 5",
+      "npm install",
+      "npm run dev"
+    ],
+    "test": [
+      "vendor/bin/phpstan analyze src/ -l 7"
+    ]
   }
 }

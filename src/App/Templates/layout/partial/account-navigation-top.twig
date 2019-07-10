@@ -1,4 +1,4 @@
-<nav class="navbar is-primary" role="navigation">
+<nav class="navbar is-sticky-top" role="navigation">
     <div class="navbar-brand left-burger">
         <a class="navbar-item navbar-burger burger toggle-id-1 is-hidden-desktop" role="button">
             <span></span>
@@ -6,14 +6,28 @@
             <span></span>
         </a>
         <p class="navbar-item">
-            <img src="/assets/images/logo/atomic_white_small.png" alt="{{ 'app.galactic.conquest' | trans }}" >
+            <a href="{{ url('home') }}">
+                <img src="/assets/images/logo/gc_white.png" alt="{{ 'app.galactic.conquest' | trans }}" >
+            </a>
         </p>
         <p class="navbar-item">
-            <span>{{ currentUser.getName }}</span>
+            <span>{{ 'app.galactic.conquest' | trans }}</span>
         </p>
     </div>
 
     <div class="navbar-menu is-hidden-mobile">
+        <div class="navbar-start">
+            <a class="navbar-item is-hoverable" href="{{ url('universe.select') }}">
+                <span class="icon"><i class="fas fa-home"></i></span>
+                <span>{{ 'app.home' | trans }}</span>
+            </a>
+            {% for player in currentUser.getPlayers() %}
+                <a class="navbar-item is-hoverable" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
+                    <span class="icon"><i class="fas fa-meteor"></i></span>
+                    <span>{{ player.getUniverse.getName }}</span>
+                </a>
+            {% endfor %}
+        </div>
         <div class="navbar-end">
             <a class="navbar-item" href="{{ url('universe.select', {'locale': 'de'}) }}">
                 <figure class="image">
@@ -24,17 +38,6 @@
                 <figure class="image">
                     <img class="is-rounded" src="/assets/images/flags/en_EN.png" alt="{{ 'app.en_EN' | trans }}" >
                 </figure>
-            </a>
-            {% for player in currentUser.getPlayers() %}
-                <a class="navbar-item is-hoverable" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
-                    <span class="icon"><i class="fas fa-atom"></i></span>
-                    <span>{{ player.getUniverse.getName }}</span>
-                </a>
-            {% endfor %}
-
-            <a class="navbar-item is-hoverable" href="{{ url('universe.select') }}">
-                <span class="icon"><i class="fas fa-home"></i></span>
-                <span>{{ 'app.home' | trans }}</span>
             </a>
             <a class="navbar-item" href="{{ url('user.logout') }}">
                 <span class="icon"><i class="fas fa-sign-out-alt"></i></span>

@@ -1,22 +1,22 @@
-<aside class="menu">
-    <p class="menu-label is-hidden-desktop">{{ 'player.nav.user' | trans }}</p>
+<aside class="menu has-margin-t-1 has-padding-t-4 has-margin-b-5">
+    <p class="menu-label is-hidden-desktop has-padding-l-5">{{ 'player.nav.user' | trans }}</p>
     <ul class="menu-list is-hidden-desktop">
         <li>
-            <a href="{{ url('universe.select') }}">
+            <a class="has-padding-l-3" href="{{ url('universe.select') }}">
                 <span class="icon"><i class="fas fa-home has-text-primary"></i></span>
                 <span>{{ 'app.home' | trans }}</span>
             </a>
         </li>
         {% for player in currentUser.getPlayers() %}
             <li>
-                <a href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
+                <a  class="has-padding-l-3" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
                     <span class="icon"><i class="fas fa-atom has-text-primary"></i></span>
                     <span>{{ player.getUniverse.getName }}</span>
                 </a>
             </li>
         {% endfor %}
         <li>
-            <a href="{{ url('user.logout') }}">
+            <a class="has-padding-l-3" href="{{ url('user.logout') }}">
                 <span class="icon"><i class="fas fa-sign-out-alt has-text-primary"></i></span>
                 <span>{{ 'app.logout' | trans }}</span>
             </a>

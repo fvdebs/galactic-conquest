@@ -1,107 +1,107 @@
-<aside class="menu">
-    <p class="menu-label is-hidden-tablet">{{ 'player.nav.stats' | trans }}</p>
-    <ul class="menu-list is-hidden-tablet has-text-grey-dark">
+<aside class="menu has-margin-t-1 has-padding-t-4 has-margin-b-5">
+    <p class="menu-label is-hidden-tablet has-padding-l-5">{{ 'player.nav.stats' | trans }}</p>
+    <ul class="menu-list is-hidden-tablet">
         <li>
-            <a>
+            <a class="has-padding-l-3">
                 <span class="icon"><i class="fas fa-medal has-text-primary"></i></span>
                 <span>{{ currentPlayer.getRankingPosition | number }}</span>
             </a>
         </li>
         <li>
-            <a>
+            <a class="has-padding-l-3">
                 <span class="icon"><i class="fas fa-star has-text-primary"></i></span>
                 <span>{{ currentPlayer.getPoints | number }}</span>
             </a>
         </li>
         <li>
-            <a>
+            <a class="has-padding-l-3">
                 <span class="icon"><i class="fas fa-bolt has-text-primary"></i></span>
                 <span class="countdown" data-interval="{{ currentUniverse.getTickInterval }}" data-countdown="{{ currentUniverse.getNextTick | countdown }}"></span>
             </a>
         </li>
     </ul>
-    <p class="menu-label">{{ 'player.nav.general' | trans }}</p>
+    <p class="menu-label has-padding-l-5">{{ 'player.nav.general' | trans }}</p>
     <ul class="menu-list">
         <li>
-            <a href="{{ url('player.overview') }}">
+            <a class="has-padding-l-3" href="{{ url('player.overview') }}">
                 <span class="icon"><i class="fas fa-user has-text-primary"></i></span>
                 <span>{{ 'player.overview' | trans }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ url('universe.ranking') }}">
+            <a class="has-padding-l-3" href="{{ url('universe.ranking') }}">
                 <span class="icon"><i class="fas fa-medal has-text-primary"></i></span>
                 <span>{{ 'player.nav.general.ranking' | trans }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ url('galaxy.galaxies', [currentPlayer.getGalaxy.getNumber]) }}">
+            <a class="has-padding-l-3" href="{{ url('galaxy.galaxies', [currentPlayer.getGalaxy.getNumber]) }}">
                 <span class="icon"><i class="fas fa-project-diagram has-text-primary"></i></span>
                 <span>{{ 'player.nav.general.galaxies' | trans }}</span>
             </a>
         </li>
     </ul>
-    <p class="menu-label">{{ 'player.nav.alliance' | trans }}</p>
+    <p class="menu-label has-padding-l-5">{{ 'player.nav.alliance' | trans }}</p>
     <ul class="menu-list">
         <li>
-            <a href="{{ url('alliance.alliance') }}">
+            <a class="has-padding-l-3" href="{{ url('alliance.alliance') }}">
                 <span class="icon"><i class="fas fa-globe has-text-primary"></i></span>
                 <span>{{ 'player.nav.alliance' | trans }}</span>
             </a>
         </li>
     </ul>
-    <p class="menu-label">{{ 'player.nav.galaxy' | trans }}</p>
+    <p class="menu-label has-padding-l-5">{{ 'player.nav.galaxy' | trans }}</p>
     <ul class="menu-list">
         <li>
-            <a href="{{ url('galaxy.settings') }}">
+            <a class="has-padding-l-3" href="{{ url('galaxy.settings') }}">
                 <span class="icon"><i class="fas fa-tools has-text-primary"></i></span>
                 <span>{{ 'player.nav.galaxy' | trans }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ url('galaxy.tactic') }}">
+            <a class="has-padding-l-3" href="{{ url('galaxy.tactic') }}">
                 <span class="icon"><i class="fas fa-home has-text-primary"></i></span>
                 <span>{{ 'player.nav.galaxy.tactic' | trans }}</span>
             </a>
         </li>
     </ul>
-    <p class="menu-label">{{ 'player.nav.planet' | trans }}</p>
+    <p class="menu-label has-padding-l-5">{{ 'player.nav.planet' | trans }}</p>
     <ul class="menu-list">
         <li>
-            <a href="{{ url('player.resources') }}">
+            <a class="has-padding-l-3" href="{{ url('player.resources') }}">
                 <span class="icon"><i class="fas fa-gem has-text-primary"></i></span>
                 <span>{{ 'player.nav.planet.resources' | trans }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ url('player.unit.list') }}">
-                <span class="icon"><i class="fas fa-industry  has-text-primary"></i></span>
+            <a class="has-padding-l-3" href="{{ url('player.unit.list') }}">
+                <span class="icon"><i class="fas fa-industry has-text-primary"></i></span>
                 <span>{{ 'player.nav.planet.units' | trans }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ url('player.technology.list') }}">
+            <a class="has-padding-l-3" href="{{ url('player.technology.list') }}">
                 <span class="icon"><i class="fas fa-flask has-text-primary"></i></span>
                 <span>{{ 'player.nav.planet.technology' | trans }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ url('player.scans') }}">
+            <a class="has-padding-l-3" href="{{ url('player.scans') }}">
                 <span class="icon"><i class="fas fa-satellite-dish has-text-primary"></i></span>
                 <span>{{ 'player.nav.planet.recon' | trans }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ url('player.fleet') }}">
+            <a class="has-padding-l-3" href="{{ url('player.fleet') }}">
                 <span class="icon"><i class="fas fa-space-shuttle has-text-primary"></i></span>
                 <span>{{ 'player.nav.planet.fleet' | trans }}</span>
             </a>
         </li>
     </ul>
-    <p class="menu-label is-hidden-desktop">{{ 'player.nav.user' | trans }}</p>
+    <p class="menu-label is-hidden-desktop has-padding-l-5">{{ 'player.nav.user' | trans }}</p>
     <ul class="menu-list is-hidden-desktop">
         <li>
-            <a href="{{ url('universe.select') }}">
+            <a class="has-padding-l-3" href="{{ url('universe.select') }}">
                 <span class="icon"><i class="fas fa-home has-text-primary"></i></span>
                 <span>{{ 'app.home' | trans }}</span>
             </a>
@@ -109,7 +109,7 @@
         {% for player in currentUser.getPlayers() %}
             {% if currentUniverse.getUniverseId != player.getUniverse.getUniverseId %}
                 <li>
-                    <a href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
+                    <a class="has-padding-l-3" href="{{ url('player.overview', {'universe' : player.getUniverse.getRouteName}) }}">
                         <span class="icon"><i class="fas fa-atom has-text-primary"></i></span>
                         <span>{{ player.getUniverse.getName }}</span>
                     </a>
@@ -117,10 +117,10 @@
             {% endif %}
         {% endfor %}
         <li>
-            <a href="{{ url('user.logout') }}">
+            <a class="has-padding-l-3" href="{{ url('user.logout') }}">
                 <span class="icon"><i class="fas fa-sign-out-alt has-text-primary"></i></span>
                 <span>{{ 'app.logout' | trans }}</span>
             </a>
         </li>
     </ul>
-</aside><br><br><br><br>
+</aside>

@@ -153,17 +153,3 @@ html, body {
         display: none !important;
     }
 }
-
-/**
-* Custom
-*/
-
-.custom-duration-400 {
-    -webkit-transition-duration: 400ms;
-    transition-duration: 400ms;
-}
-
-.custom-duration-600 {
-    -webkit-transition-duration: 600ms;
-    transition-duration: 600ms;
-}
